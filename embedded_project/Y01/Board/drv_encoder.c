@@ -201,7 +201,7 @@ void encoder_data_process(void)
     // 统一更新编码器数据, 需根据实际编码器1、2接口读取的编码器数据更新电机端、负载端编码器数据
     encoder_data[ENCODER_ID_MOTOR].single_cnt = encoder_data[ENCODER_ID_1].motor_single_raw;
     encoder_data[ENCODER_ID_MOTOR].multi_turns = 0;
-    encoder_data[ENCODER_ID_LOAD].single_cnt = 0;
+    encoder_data[ENCODER_ID_LOAD].single_cnt = encoder_data[ENCODER_ID_1].motor_single_raw;
     encoder_data[ENCODER_ID_LOAD].multi_turns = 0;
 }
 
