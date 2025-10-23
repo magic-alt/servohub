@@ -1,0 +1,18 @@
+{
+   "version": "2.0.0",
+   "tasks": [
+       {
+           "label": "CompilationTask",
+           "options": {
+                "cwd": "${workspaceFolder}"
+           },
+           "type": "shell",
+           "command": "${workspaceFolder}/../mingw64/bin/cmake.exe",
+           "args": [
+               "--build",
+               "${workspaceFolder}/out/build/servo_hil_demo"
+           ],
+           "group": "build"
+       }
+   ]
+}

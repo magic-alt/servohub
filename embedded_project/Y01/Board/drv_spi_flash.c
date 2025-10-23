@@ -1,0 +1,95 @@
+#include "drv_spi_flash.h"
+
+/* KVDB object */
+static fdb_err_t fdb_err_code = FDB_NO_ERR;
+static struct fdb_kvdb kvdb = {0};
+static struct fdb_default_kv default_kv;
+static struct fdb_default_kv_node default_kv_table[FLASHDB_KEYS_NUM];
+
+/**
+  * @brief Flashdb初始化
+  * @param void
+  * @retval fdb_err_t
+  * @note
+  */
+fdb_err_t flashdb_init(void)
+{
+    default_kv.kvs = default_kv_table;
+    default_kv.num = FLASHDB_KEYS_NUM;
+    /* set the lock and unlock function if you want */
+    /* Key-Value database initialization
+         *
+         *       &kvdb: database object
+         *   "YuanHub": database name
+         *  "kv_param": The flash partition name base on FAL. Please make sure it's in FAL partition table.
+         *              Please change to YOUR partition name.
+         * &default_kv: The default KV nodes. It will auto add to KVDB when first initialize successfully.
+         *        NULL: The user data if you need, now is empty.
+         */
+    return fdb_kvdb_init(&kvdb, "YuanHub", "kv_param", &default_kv, NULL);
+}
+/**
+  * @brief Flashdb数据读取
+  * @param index: 目标数据键值索引
+  * @retval fdb_err_t
+  * @note
+  */
+fdb_err_t flashdb_read(FLASHDB_KEY_INDEX const index)
+{
+    struct fdb_blob blob;
+
+    size_t read_size = fdb_kv_get_blob(&kvdb, default_kv_table[index].key, \
+        fdb_blob_make(&blob, default_kv_table[index].value, default_kv_table[index].value_len));
+
+    if (read_size != 0)
+    {
+        return FDB_NO_ERR;
+    }
+    return FDB_READ_ERR;
+}
+
+/**
+  * @brief Flashdb数据写入
+  * @param index: 目标数据键值索引
+  * @retval fdb_err_t
+  * @note
+  */
+fdb_err_t flashdb_write(FLASHDB_KEY_INDEX const index)
+{
+    struct fdb_blob blob;
+
+    return fdb_kv_set_blob(&kvdb, default_kv_table[index].key, \
+        fdb_blob_make(&blob, default_kv_table[index].value, default_kv_table[index].value_len));
+}
+
+/**
+  * @brief Flashdb注册键值
+  * @param index: 目标数据键值索引
+  * @param key: 目标数据键值
+  * @param value: 目标数据地址
+  * @param value_len: 目标数据长度
+  * @retval fdb_err_t
+  * @note
+  */
+fdb_err_t flashdb_key_register(FLASHDB_KEY_INDEX const index, char *key, void *value, size_t value_len)
+{
+    if (index > FLASHDB_KEY_INDEX_MAX)
+    {
+        return FDB_WRITE_ERR;
+    }
+    default_kv_table[index].key = key;
+    default_kv_table[index].value = value;
+    default_kv_table[index].value_len = value_len;
+    return FDB_NO_ERR;
+}
+
+/**
+  * @brief Flashdb数据删除
+  * @param index: 目标数据键值索引
+  * @retval FLASHDB_STATUS
+  * @note
+  */
+fdb_err_t flashdb_key_delete(FLASHDB_KEY_INDEX const index)
+{
+    return fdb_kv_del(&kvdb, default_kv_table[index].key);
+}

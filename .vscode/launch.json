@@ -1,0 +1,55 @@
+{
+   "version": "0.2.0",
+   "configurations": [
+       {
+           "name": "camke debug",
+           "type": "cppdbg",
+           "request": "launch",
+           "program": "${workspaceFolder}\\out\\build\\servo_hil_demo\\ServoHubSil.exe",
+           "args": [],
+           "stopAtEntry": false,
+           "cwd": "${workspaceFolder}",
+           "environment": [],
+           "externalConsole": true,
+           "MIMode": "gdb",
+           "miDebuggerPath": "${workspaceFolder}\\..\\mingw64\\bin\\gdb.exe",
+           "setupCommands": [
+               {
+                   "description": "cmake debug",
+                   "text": "-enable-pretty-printing",
+                   "ignoreFailures": true
+               }
+           ],
+           "preLaunchTask": "CompilationTask"
+       },
+        {
+            "name": "Debug with GDBServer",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}\\out\\build\\servo_hil_demo\\ServoHubSil.exe", // 替换为你的可执行文件路径
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "${workspaceFolder}\\..\\mingw64\\bin\\gdb.exe", // 替换为你本地的 gdb-multiarch 或 gdb 路径
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "",
+            "miDebuggerServerAddress": "localhost:3333", // 替换为你的 GDBServer 地址和端口
+            "logging": {
+                "traceResponse": "verbose"
+            },
+            "serverStarted": "Listening on port .*\\d+",
+            "filterStderr": true,
+            "filterStdout": false,
+            // "sourceLanguages": ["c", "cpp"]
+        }
+   ]
+}

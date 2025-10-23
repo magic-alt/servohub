@@ -1,0 +1,913 @@
+#include "app_status_check.h"
+#include "motor_ctl_loop.h"
+#include "yuanhub_math.h"
+
+static Axis *const axis = &kAxis; // 引用电机对象实例化
+AppCheckVal app_check =
+{
+    .error.all = 0,
+    .warning.all = 0,
+    .status.all = 0,
+    .p_bsp_error = NULL,
+    .scan_ring_num = 0,
+    .error_record_latch_flag = false,
+    .error_record_addr = NULL,
+    .pre_ctrl_word = APP_CTRL_DISABLE,
+    .now_ctrl_word = APP_CTRL_DISABLE,
+    .dt = 0,
+    .dt_1ms = 0,
+    .idq_now = {0, 0},
+    .idq_squared_now = 0,
+    .i_rated_squared = 0,
+    .i_peak_squared_threshold = 0,
+    .overload_heat_threshold_now = 0,
+    .drive_heat_now = 0,
+    .drive_temp_now = 0,
+    .motor_temp_now = 0,
+    .mcu_temp_now = 0,
+    .motor_rpm_now = 0,
+    .load_rpm_now = 0,
+    .pos_error_now = 0,
+    .pos_diff_now = 0,
+    .vel_diff_now = 0,
+    .trq_diff_now = 0,
+    .over_current_threshold = 0,
+    .iabc_now = {0, 0, 0},
+    .can_mg_counts_now = 0,
+    .can_mg_counts_last = 0,
+};
+
+// 错误检测函数声明
+static inline bool app_drive_over_peak_current_error_check(void);
+static inline bool app_drive_overload_error_check(void);
+static inline bool app_DC_link_over_voltage_error_check(void);
+static inline bool app_DC_link_under_voltage_error_check(void);
+static inline bool app_excess_temperature_drive_error_check(void);
+static inline bool app_too_low_temperature_drive_error_check(void);
+static inline bool app_over_speed_error_check(void);
+static inline bool app_position_following_error_check(void);
+static inline bool app_load_encoder_error_check(void);
+static inline bool app_motor_encoder_error_check(void);
+static inline bool app_flash_init_error_check(void);
+static inline bool app_drv_init_error_check(void);
+static inline bool app_current_sample_error_check(void);
+static inline bool app_Nfault_error_check(void);
+static inline bool app_driver_over_current_error_check(void);
+static inline bool app_bus_voltage_error_check(void);
+static inline bool app_can_bus_disconnection_error_check(void);
+static inline bool app_excess_temperature_motor_error_check(void);
+static inline bool app_too_low_temperature_motor_error_check(void);
+static inline bool app_excess_temperature_mcu_error_check(void);
+static inline bool app_too_low_temperature_mcu_error_check(void);
+
+// 错误检测函数数组注册
+static const CheckFunctionList CheckTable[] =
+{
+    {app_drive_over_peak_current_error_check, false},
+    {app_drive_overload_error_check, false},
+    {app_DC_link_over_voltage_error_check, true},
+    {app_DC_link_under_voltage_error_check, false},
+    {app_excess_temperature_drive_error_check, false},
+    {app_too_low_temperature_drive_error_check, false},
+    {app_over_speed_error_check, false},
+    {app_position_following_error_check, false},
+
+    {app_load_encoder_error_check, true},
+    {app_motor_encoder_error_check, true},
+    {app_flash_init_error_check, true},
+    {app_drv_init_error_check, true},
+    {app_current_sample_error_check, true},
+    {app_Nfault_error_check, true},
+    {app_driver_over_current_error_check, true},
+    {app_bus_voltage_error_check, true},
+
+    {app_can_bus_disconnection_error_check, false},
+    {app_excess_temperature_motor_error_check, false},
+    {app_too_low_temperature_motor_error_check, false},
+    {app_excess_temperature_mcu_error_check, false},
+    {app_too_low_temperature_mcu_error_check, false},
+};
+
+#pragma region 错误检测函数定义
+static inline bool app_load_encoder_error_check(void)
+{
+    return app_check.p_bsp_error->bit_band.error_encoder_load;
+}
+
+static inline bool app_motor_encoder_error_check(void)
+{
+    return app_check.p_bsp_error->bit_band.error_encoder_motor;
+}
+
+static inline bool app_flash_init_error_check(void)
+{
+    return app_check.p_bsp_error->bit_band.error_flash_init;
+}
+
+static inline bool app_drv_init_error_check(void)
+{
+    return app_check.p_bsp_error->bit_band.error_drv_init;
+}
+
+static inline bool app_current_sample_error_check(void)
+{
+    return app_check.p_bsp_error->bit_band.error_current_sample;
+}
+
+static inline bool app_Nfault_error_check(void)
+{
+    return app_check.p_bsp_error->bit_band.error_nfault;
+}
+
+static inline bool app_bus_voltage_error_check(void)
+{
+    return app_check.p_bsp_error->bit_band.error_bus_voltage;
+}
+
+/**
+ * @brief 检查驱动电流是否超过峰值电流阈值，并处理错误状态及冷却时间。
+ *
+ * 该函数用于检测实际电流是否超过峰值电流的90%阈值（i_peak * 0.9），
+ * 若超过则开始计时，持续超过设定时长则返回错误并启动冷却时间（30秒）。
+ * 在冷却时间内持续返回错误，冷却时间结束后恢复正常。
+ *
+ * @return true  如果检测到峰值电流错误或处于冷却时间内
+ * @return false 正常，无峰值电流错误
+ */
+static inline bool app_drive_over_peak_current_error_check(void)
+{
+    static float time_count[2] = {0, 0};
+
+    // 超过峰值电流阈值，计时
+    if (app_check.idq_squared_now > app_check.i_peak_squared_threshold)
+    {
+        time_count[0] += app_check.dt_1ms;
+        if (time_count[0] >= get_app_Drive_peak_current_duration())
+        {
+            time_count[0] = get_app_Drive_peak_current_duration();
+            time_count[1] = DRIVE_OVER_PEAK_COOLING_TIME; // 启用冷却时间30秒
+            return true;
+        }
+    }
+    else
+    {
+        time_count[0] = 0;
+    }
+
+    // 冷却时间未结束，持续报错
+    if (time_count[1] > 0)
+    {
+        time_count[1] -= app_check.dt_1ms; // 冷却中
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * @brief 检查驱动器是否发生过载错误。
+ *
+ * 此函数通过累积电流的热量积分，判断驱动器是否达到过载阈值。
+ * 具体做法是计算实际d轴和q轴电流的平方和，并与电机额定电流的平方做差，
+ * 按时间步长累加到热量变量heat中。当heat超过过载热量阈值时，判定为过载错误。
+ *
+ * @return 如果发生过载错误，返回true；否则返回false。
+ *
+ * @note
+ * - heat为静态变量，记录累计热量。
+ * - 当heat小于0时会被重置为0。
+ * - 当heat超过阈值时会被限制在阈值，并返回过载错误。
+ * - 会调用set_app_Drive_accumulated_heat()设置累计热量。
+ */
+static inline bool app_drive_overload_error_check(void)
+{
+    app_check.overload_heat_threshold_now = app_check.i_rated_squared * get_app_Drive_overload_current_duration();
+    app_check.drive_heat_now += (app_check.idq_squared_now - app_check.i_rated_squared) * app_check.dt_1ms;
+    if (app_check.drive_heat_now < 0)
+    {
+        app_check.drive_heat_now = 0;
+    }
+    set_app_Drive_accumulated_heat(app_check.drive_heat_now);
+
+    if (app_check.drive_heat_now >= app_check.overload_heat_threshold_now)
+    {
+        app_check.drive_heat_now = app_check.overload_heat_threshold_now;
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @brief 检查直流母线电压是否过高。
+ * @return 如果检测到直流母线过压错误，返回 true；否则返回 false。
+ */
+static inline bool app_DC_link_over_voltage_error_check(void)
+{
+    if (get_app_DC_link_circuit_voltage() > get_app_Bus_over_voltage_threshold())
+    {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @brief 检查直流母线电压是否低于欠压阈值，并判断是否产生欠压错误。
+ *
+ * 此函数会持续检测直流母线电压，如果电压低于欠压阈值，则会累积低电压持续时间。
+ * 当累计时间达到或超过 0.2 秒时，返回 true，表示发生欠压错误。
+ * 如果电压恢复正常，则累计时间清零。
+ *
+ * @return 如果检测到直流母线欠压错误，返回 true；否则返回 false。
+ */
+static inline bool app_DC_link_under_voltage_error_check(void)
+{
+    static float time_count = 0;
+
+    if (get_app_DC_link_circuit_voltage() < get_app_Bus_under_voltage_threshold())
+    {
+        time_count += app_check.dt_1ms;
+        if (time_count >= DC_BUS_UNDER_VOLTAGE_CHECK_TIME)
+        {
+            time_count = DC_BUS_UNDER_VOLTAGE_CHECK_TIME;
+            return true;
+        }
+    }
+    else
+    {
+        time_count = 0;
+    }
+    return false;
+}
+
+/**
+ * @brief 检查驱动器是否因温度过高而产生故障。
+ *
+ * 此函数会持续检测驱动器温度是否超过高温故障阈值。
+ * 如果温度超过阈值，并且持续时间超过设定的阈值时间，则返回true，表示发生过温故障。
+ * 如果温度未超过阈值，则计时器重置为0。
+ *
+ * @return 如果检测到过温故障，返回true；否则返回false。
+ */
+static inline bool app_excess_temperature_drive_error_check(void)
+{
+    static float time_count = 0;
+
+    if (app_check.drive_temp_now > get_app_Drive_high_temperature_warning_threshold()) // 警告
+    {
+        app_check.warning.bits.over_temperature_drive = true;
+    }
+    else
+    {
+        app_check.warning.bits.over_temperature_drive = false;
+    }
+
+    if (app_check.drive_temp_now > get_app_Drive_high_temperature_fault_threshold())
+    {
+        time_count += app_check.dt_1ms;
+        if (time_count >= get_app_Drive_temperature_threshold_time())
+        {
+            time_count = get_app_Drive_temperature_threshold_time();
+            return true;
+        }
+    }
+    else
+    {
+        time_count = 0;
+    }
+    return false;
+}
+
+/**
+ * @brief 检查驱动器温度是否过低并产生错误。
+ *
+ * 此函数用于检测驱动器的温度是否低于设定的故障阈值，并在温度低于阈值持续一段设定时间后返回错误。
+ * 如果温度恢复正常，则计时器会被重置。
+ *
+ * @return 如果检测到温度过低且持续时间超过阈值，返回true，否则返回false。
+ */
+static inline bool app_too_low_temperature_drive_error_check(void)
+{
+    static float time_count = 0;
+
+    if (app_check.drive_temp_now < get_app_Drive_low_temperature_warning_threshold()) // 警告
+    {
+        app_check.warning.bits.under_temperature_drive = true;
+    }
+    else
+    {
+        app_check.warning.bits.under_temperature_drive = false;
+    }
+
+    if (app_check.drive_temp_now < get_app_Drive_low_temperature_fault_threshold())
+    {
+        time_count += app_check.dt_1ms;
+        if (time_count >= get_app_Drive_temperature_threshold_time())
+        {
+            time_count = get_app_Drive_temperature_threshold_time();
+            return true;
+        }
+    }
+    else
+    {
+        time_count = 0;
+    }
+    return false;
+}
+
+/**
+ * @brief 检查当前速度是否超过超速阈值。
+ *
+ * 此函数获取当前速度和超速阈值，并判断当前速度（绝对值）是否超过超速阈值。
+ *
+ * @return 如果当前速度超过超速阈值，返回 true；否则返回 false。
+ */
+static inline bool app_over_speed_error_check(void)
+{
+    app_check.motor_rpm_now = get_app_Motor_velocity_actual_value();
+    if (MATH_ABS(app_check.motor_rpm_now) > get_app_Overspeed_threshold())
+    {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @brief 位置误差持续超过设定时间
+ * @return 如果位置误差持续超过设定时间，返回true；否则返回false。
+ */
+static inline bool app_position_following_error_check(void)
+{
+    static float time_count = 0;
+
+    // 处于使能状态且处于位置模式
+    if ((axis->motor_ctl_sm_output.state != MOTOR_CTL_SM_STATE_ENABLE) ||
+        (axis->motor_ctl_sm_config.mode != MOTOR_CTL_SM_MODE_POSITION))
+    {
+        return false;
+    }
+
+    app_check.pos_error_now = get_app_Following_error_actual_value();
+    if (MATH_ABS(app_check.pos_error_now) > get_app_Following_error_window())
+    {
+        time_count += app_check.dt_1ms;
+        if (time_count >= get_app_Following_error_time_out())
+        {
+            time_count = get_app_Following_error_time_out();
+            return true;
+        }
+    }
+    else
+    {
+        time_count = 0;
+    }
+    return false;
+}
+
+/**
+ * @brief 检查三相电流任意一相电流是否产生了过流错误。
+ *
+ * @return  ，返回 true；否则返回 false。
+ */
+static inline bool app_driver_over_current_error_check(void)
+{
+
+    app_check.iabc_now[0] = get_app_U_current_actual_value(); // 获取当前三相电流
+    app_check.iabc_now[1] = get_app_V_current_actual_value(); // 获取当前三相电流
+    app_check.iabc_now[2] = get_app_W_current_actual_value(); // 获取当前三相电流
+    app_check.over_current_threshold = get_app_Drive_overcurrent_threshold();
+
+    if (MATH_ABS(app_check.iabc_now[0]) > app_check.over_current_threshold ||
+        MATH_ABS(app_check.iabc_now[1]) > app_check.over_current_threshold ||
+        MATH_ABS(app_check.iabc_now[2]) > app_check.over_current_threshold)
+    {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @brief 检查CAN总线掉线错误
+ *
+ * 从接收到 第一条CAN消息开始 进行消息记录，默认0.5s没有接收到新的CAN消息则报错
+ *
+ * @return 掉线，返回 true；否则返回 false。
+ */
+static inline bool app_can_bus_disconnection_error_check(void)
+{
+    static float time_count = 0;
+
+    app_check.can_mg_counts_now = bsp_get_can_mg_counts();
+
+    if (0 == app_check.can_mg_counts_now && 0 == app_check.can_mg_counts_last) // 未接受到CAN消息
+    {
+        app_check.can_mg_counts_last = app_check.can_mg_counts_now;
+        return false;
+    }
+    if (app_check.can_mg_counts_last == app_check.can_mg_counts_now) // 没有接收到 新的CAN消息 累计记录时间
+    {
+        time_count += app_check.dt_1ms;
+        if (time_count >= get_app_Can_timeout()) // 超时报错
+        {
+            time_count = get_app_Can_timeout();
+            return true;
+        }
+    }
+    else
+    {
+        time_count = 0.0f;
+    }
+    app_check.can_mg_counts_last = app_check.can_mg_counts_now;
+    return false;
+}
+
+/**
+ * @brief 电机温度过高检测
+ *
+ *
+ * @return 过温，返回 true；否则返回 false。
+ */
+static inline bool app_excess_temperature_motor_error_check(void)
+{
+    if (app_check.motor_temp_now > MOTOR_NTC_FAULT_C) // NTC警告
+    {
+        app_check.warning.bits.motor_temperature_ntc = true;
+        return false; //非正常温度值，不再检测错误
+    }
+
+    if (app_check.motor_temp_now > get_app_Motor_high_temperature_warning_threshold()) // 警告
+    {
+        app_check.warning.bits.over_temperature_motor = true;
+    }
+    else
+    {
+        app_check.warning.bits.over_temperature_motor = false;
+    }
+
+    if (app_check.motor_temp_now > get_app_Motor_high_temperature_fault_threshold()) // 错误
+    {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * @brief  电机温度过低检测
+ *
+ *
+ *
+ * @return 欠温，返回 true；否则返回 false。
+ */
+static inline bool app_too_low_temperature_motor_error_check(void)
+{
+    if (app_check.motor_temp_now < get_app_Motor_low_temperature_warning_threshold()) // 警告
+    {
+        app_check.warning.bits.under_temperature_motor = true;
+    }
+    else
+    {
+        app_check.warning.bits.under_temperature_motor = false;
+    }
+
+    if (app_check.motor_temp_now < get_app_Motor_low_temperature_fault_threshold()) // 错误
+    {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * @brief 检查mcu是否因温度过高而产生故障。
+ *
+ * 此函数会持续检测mcu温度是否超过高温故障阈值。
+ * 如果温度超过阈值，并且持续时间超过设定的阈值时间，则返回true，表示发生过温故障。
+ * 如果温度未超过阈值，则计时器重置为0。
+ *
+ * @return 如果检测到过温故障，返回true；否则返回false。
+ */
+static inline bool app_excess_temperature_mcu_error_check(void)
+{
+    static float time_count = 0;
+
+    if (app_check.mcu_temp_now > get_app_Mcu_high_temperature_warning_threshold()) // 警告
+    {
+        app_check.warning.bits.over_temperature_mcu = true;
+    }
+    else
+    {
+        app_check.warning.bits.over_temperature_mcu = false;
+    }
+    if (app_check.mcu_temp_now > get_app_Mcu_high_temperature_fault_threshold())
+    {
+        time_count += app_check.dt_1ms;
+        if (time_count >= get_app_Mcu_temperature_threshold_time())
+        {
+            time_count = get_app_Mcu_temperature_threshold_time();
+            return true;
+        }
+    }
+    else
+    {
+        time_count = 0;
+    }
+    return false;
+}
+
+/**
+ * @brief 检查mcu温度是否过低并产生错误。
+ *
+ * 此函数用于检测mcu的温度是否低于设定的故障阈值，并在温度低于阈值持续一段设定时间后返回错误。
+ * 如果温度恢复正常，则计时器会被重置。
+ *
+ * @return 如果检测到温度过低且持续时间超过阈值，返回true，否则返回false。
+ */
+static inline bool app_too_low_temperature_mcu_error_check(void)
+{
+    static float time_count = 0;
+
+    if (app_check.mcu_temp_now < get_app_Mcu_low_temperature_warning_threshold()) // 警告
+    {
+        app_check.warning.bits.under_temperature_mcu = true;
+    }
+    else
+    {
+        app_check.warning.bits.under_temperature_mcu = false;
+    }
+
+    if (app_check.mcu_temp_now < get_app_Mcu_low_temperature_fault_threshold())
+    {
+        time_count += app_check.dt_1ms;
+        if (time_count >= get_app_Mcu_temperature_threshold_time())
+        {
+            time_count = get_app_Mcu_temperature_threshold_time();
+            return true;
+        }
+    }
+    else
+    {
+        time_count = 0;
+    }
+    return false;
+}
+
+#pragma endregion
+
+#pragma region 状态检测函数定义
+bool app_motor_enable_state_check(void)
+{
+    // 同步控制层的使能状态
+    if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_STATE_ENABLE)
+    {
+        app_check.status.bits.motor_enable_state = true;
+        return true;
+    }
+    app_check.status.bits.motor_enable_state = false;
+    return false;
+}
+
+/**
+ * @brief 检查目标是否已到达状态
+ *
+ * 此函数用于判断当前速度是否低于设定的速度阈值，并在持续低于该阈值一段设定时间后，
+ * 返回true表示目标已到达。否则返回false。若速度高于阈值，则计时器重置。
+ *
+ * @return 如果目标到达状态返回true，否则返回false。
+ */
+bool app_target_reached_state_check(void)
+{
+    // 控制字暂停，所有模式均检测速度是否为0,更新目标到达状态
+    app_check.status.bits.target_reached = app_check.status.bits.velocity_zero;
+
+    return app_check.status.bits.target_reached;
+}
+
+/**
+ * @brief 检查速度是否为零状态
+ *
+ * 此函数用于判断当前速度是否低于设定的速度阈值，并在持续低于该阈值一段设定时间后，
+ * 返回true表示速度为零。否则返回false。若速度高于阈值，则计时器重置。
+ *
+ * @return 如果速度为零状态返回true，否则返回false。
+ */
+bool app_velocity_zero_state_check(void)
+{
+    static float time_count = 0;
+
+    if (MATH_ABS(app_check.load_rpm_now) <= get_app_Velocity_threshold())
+    {
+        time_count += app_check.dt_1ms;
+        if (time_count >= get_app_Velocity_threshold_time())
+        {
+            time_count = get_app_Velocity_threshold_time();
+            app_check.status.bits.velocity_zero = true;
+            return true;
+        }
+    }
+    else
+    {
+        time_count = 0;
+    }
+    app_check.status.bits.velocity_zero = false;
+    return false;
+}
+
+/**
+ * @brief 检测回零是否达到状态
+ *
+ * 目前仅支持35号回零
+ *
+ * @return 如果达到回零状态返回true，否则返回false。
+ */
+bool app_homing_attained_state_check(void)
+{
+    if (get_app_Homing_method() == 35 && get_app_Controlword() == APP_CTRL_ENABLE)
+    {
+        app_check.status.bits.homing_attained = true;
+    }
+    else
+    {
+        app_check.status.bits.homing_attained = false;
+    }
+
+    return app_check.status.bits.homing_attained;
+}
+
+/**
+ * @brief 检查位置是否达到目标状态
+ *
+ * 此函数用于判断当前位置是否与目标位置接近，并在持续接近一段时间后，
+ * 返回true表示位置达到目标。否则返回false。若位置与目标位置相差超过设定的窗口值，
+ * 则计时器重置。
+ *
+ * @return 如果位置达到目标状态返回true，否则返回false。
+ */
+bool app_position_target_reached_state_check(void)
+{
+    static float time_count = 0;
+
+    app_check.pos_diff_now = get_app_Target_position() - get_app_Position_actual_value();
+    app_check.pos_diff_now = MATH_ABS(app_check.pos_diff_now);
+    if (app_check.pos_diff_now > 0x7FFFFFFF)
+    {
+        app_check.pos_diff_now = 0x7FFFFFFF;
+    }
+    if (app_check.pos_diff_now <= get_app_Position_window())
+    {
+        time_count += app_check.dt;
+        if (time_count >= get_app_Position_window_time())
+        {
+            time_count = get_app_Position_window_time();
+            app_check.status.bits.position_target_reached = true;
+            return true;
+        }
+    }
+    else
+    {
+        time_count = 0;
+    }
+    app_check.status.bits.position_target_reached = false;
+    return false;
+}
+void app_position_target_reached_state_clear(void)
+{
+    app_check.status.bits.position_target_reached = false;
+}
+
+/**
+ * @brief 检查速度是否达到目标状态
+ *
+ * 此函数用于判断当前速度是否与目标速度接近，并在持续接近一段时间后，
+ * 返回true表示速度达到目标。否则返回false。若速度与目标速度相差超过设定的窗口值，
+ * 则计时器重置。
+ *
+ * @return 如果速度达到目标状态返回true，否则返回false。
+ */
+bool app_velocity_target_reached_state_check(void)
+{
+    static float time_count = 0;
+
+    app_check.vel_diff_now = get_app_Target_velocity() - get_app_Velocity_actual_value();
+    if (MATH_ABS(app_check.vel_diff_now) <= get_app_Velocity_window())
+    {
+        time_count += app_check.dt;
+        if (time_count >= get_app_Velocity_window_time())
+        {
+            time_count = get_app_Velocity_window_time();
+            app_check.status.bits.velocity_target_reached = true;
+            return true;
+        }
+    }
+    else
+    {
+        time_count = 0;
+    }
+    app_check.status.bits.velocity_target_reached = false;
+    return false;
+}
+void app_velocity_target_reached_state_clear(void)
+{
+    app_check.status.bits.velocity_target_reached = false;
+}
+
+/**
+ * @brief 检查目标转矩是否达到状态
+ *
+ * 此函数用于判断规划的转矩是否到达
+ *
+ * @return 如果目标转矩达到状态返回true，否则返回false。
+ */
+bool app_target_torque_reached_state_check(void)
+{
+    app_check.trq_diff_now = get_app_Target_torque() - get_app_Torque_demand_value();
+    if (MATH_ABS(app_check.trq_diff_now) <= 0.0001f) // 判断目标转矩和指令规划转矩指令相等
+    {
+        app_check.status.bits.target_torque_reached = true;
+        return true;
+    }
+    app_check.status.bits.target_torque_reached = false;
+    return false;
+}
+void app_target_torque_reached_state_clear(void)
+{
+    app_check.status.bits.target_torque_reached = false;
+}
+
+#pragma endregion
+
+#pragma region 外部接口函数定义
+uint32_t app_get_check_error_val(void)
+{
+    return app_check.error.all;
+}
+
+uint32_t app_get_check_warning_val(void)
+{
+    return app_check.warning.all;
+}
+
+uint32_t app_get_check_status_val(void)
+{
+    return app_check.status.all;
+}
+
+/**
+ * @brief 应用错误状态检测初始化
+ *
+ *
+ * @note
+ */
+void app_status_scan_init(void)
+{
+    app_check.scan_ring_num = MATH_ARRAY_SIZE(CheckTable);
+    sys_get_bsp_error_state(&app_check.p_bsp_error);
+    app_check.error_record_addr = get_app_Error_records_list_addr();
+    app_check.dt = axis->pmsm_config.tp_s;
+    app_check.dt_1ms = TASK_PERIOD_1MS;
+    app_check.i_rated_squared = DRIVER_RATED_CURRENT_A * DRIVER_RATED_CURRENT_A;
+    app_check.i_peak_squared_threshold = 0.81f * DRIVER_PEAK_CURRENT_A * DRIVER_PEAK_CURRENT_A;
+}
+
+/**
+ * @brief 应用错误状态快速检测与更新
+ *
+ * 1. 若上次控制字为APP_CTRL_DISABLE且当前为APP_CTRL_CLEAR_ERROR，则清除所有错误标志。
+ * 2. 遍历CheckErrorTable，调用各错误检测函数，检测到错误则设置对应bit。
+ * 3. 发生错误,直接发送控制字失能
+ *
+ * @note 应周期性调用本函数以监测和更新错误状态。
+ */
+void app_status_scan_fast(void)
+{
+    app_check.now_ctrl_word = get_app_Controlword();
+    // 控制字发送0->3，清错
+    if (app_check.pre_ctrl_word == APP_CTRL_DISABLE &&
+        (app_check.now_ctrl_word == APP_CTRL_CLEAR_ERROR))
+    {
+        if (app_check.p_bsp_error->bit_band.error_bus_voltage) // 母线电压错误无法被清除  只能复位
+        {
+            ;;;
+        }
+        else
+        {
+            app_check.error.all = 0;
+            app_check.p_bsp_error->code = 0;
+        }
+    }
+    app_check.pre_ctrl_word = app_check.now_ctrl_word;
+
+    // 遍历错误检测函数
+    for (uint8_t i = 0; i < app_check.scan_ring_num; i++)
+    {
+        if (CheckTable[i].scan_fast == true)
+        {
+            app_check.error.all |= (CheckTable[i].check_func() << i); // 对应bit置1
+        }
+    }
+
+    // 发生错误失能电机
+    if (app_check.error.all != 0)
+    {
+        // TODO：根据不同错误类型执行不同保护动作，目前统一失能
+        set_app_Controlword(APP_CTRL_DISABLE);
+    }
+
+    app_motor_enable_state_check();
+}
+
+/**
+ * @brief 应用错误状态慢速检测与更新
+ *
+ * 1. 遍历CheckErrorTable，调用各错误检测函数，检测到错误则设置对应bit。
+ * 2. 发生错误,直接发送控制字失能
+ * 3. 记录错误并保存到Flash
+ *
+ * @note 应周期性调用本函数以监测和更新错误状态。
+ */
+void app_status_scan_slow(void)
+{
+    // 部分通用检测数据更新
+    app_check.idq_now[0] = get_app_D_current_actual_value();
+    app_check.idq_now[1] = get_app_Current_actual_value();
+    app_check.idq_squared_now = app_check.idq_now[0] * app_check.idq_now[0] + app_check.idq_now[1] * app_check.idq_now[1];
+    app_check.drive_temp_now = get_app_Drive_temperature();
+    app_check.motor_temp_now = get_app_Motor_temperature();
+    app_check.mcu_temp_now = get_app_Mcu_temperature();
+    app_check.load_rpm_now = get_app_Velocity_actual_value();
+
+    // 遍历错误检测函数
+    for (uint8_t i = 0; i < app_check.scan_ring_num; i++)
+    {
+        if (CheckTable[i].scan_fast == false)
+        {
+            app_check.error.all |= (CheckTable[i].check_func() << i); // 对应bit置1
+        }
+    }
+
+    // 发生错误失能电机
+    if (app_check.error.all != 0)
+    {
+        // TODO：根据不同错误类型执行不同保护动作，目前统一失能
+        set_app_Controlword(APP_CTRL_DISABLE);
+
+        // 低速进行错误记录存储兼容高速部分
+        if (app_check.error_record_addr[0] != app_check.error.all) // 错误中，再新增其它错误再加入新记录
+        {
+            app_check.error_record_latch_flag = false;
+        }
+        if (app_check.error_record_latch_flag == false)
+        {
+            if (get_app_Storage_status() != FLASH_STORE_STATUS_BUSY)    // 等待Flash空闲
+            {
+                // 数组FIFO，更新错误记录，低优先级更新避免重复记录错误
+                for (uint8_t i = ERROR_RECORD_NUM - 1; i > 0; i--)
+                {
+                    app_check.error_record_addr[i] = app_check.error_record_addr[i - 1];
+                }
+                app_check.error_record_addr[0] = app_check.error.all;
+                app_check.error_record_latch_flag = true;
+                set_app_Storage_cmd(FLASH_STORE_CMD_WRITE_ERROR);
+            }
+        }
+    }
+    else
+    {
+        app_check.error_record_latch_flag = false;
+    }
+
+    // 检查速度是否为零状态
+    app_velocity_zero_state_check();
+    app_target_reached_state_check();
+}
+
+/**
+ * @brief 更新 LED 状态  1ms 周期调用
+ * 正常运行 0.5s 闪烁一次 run led
+ * 错误状态 error led 常亮  run led  0.1s 闪烁一次
+ * @note  应周期性调用本函数以监测和更新 LED 状态。
+ */
+void app_led_state_updata_1ms(void)
+{
+    static uint16_t run_led_times_count = 0; // 运行LED闪烁计数
+    static uint16_t run_led_blink_period = LED_NORMAL_STATE_PERIOD; // 运行LED闪烁周期
+
+    if (app_get_check_error_val() != 0) // 有错误
+    {
+        bsp_set_error_led_state(1); // 错误LED常亮
+        run_led_blink_period = LED_ERROR_STATE_PERIOD;
+    }
+    else
+    {
+        bsp_set_error_led_state(0); // 错误LED常灭
+        run_led_blink_period = LED_NORMAL_STATE_PERIOD;
+    }
+
+    // 运行LED闪烁逻辑
+    if (run_led_times_count++ >= run_led_blink_period)
+    {
+        run_led_times_count = 0;        // 重置计数
+        bsp_set_run_led_toggle(); // 翻转运行LED状态
+    }
+}
+
+#pragma endregion

@@ -1,0 +1,59 @@
+#ifndef BSP_SPI_FLASH_H
+#define BSP_SPI_FLASH_H
+
+#include <fal.h>
+#include "board.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifndef FAL_USING_NOR_FLASH_DEV_NAME
+#define FAL_USING_NOR_FLASH_DEV_NAME    "norflash0"
+#endif
+
+/* Nor Flash GD25Q64ESIG 命令定义 */
+#define GD25Q64_CMD_WRITE_ENABLE        0x06
+#define GD25Q64_CMD_WRITE_DISABLE       0x04
+#define GD25Q64_CMD_READ_STATUS_REG1    0x05
+#define GD25Q64_CMD_READ_STATUS_REG2    0x35
+#define GD25Q64_CMD_WRITE_STATUS_REG    0x01
+#define GD25Q64_CMD_PAGE_PROGRAM        0x02
+#define GD25Q64_CMD_QUAD_PAGE_PROGRAM   0x32
+#define GD25Q64_CMD_READ_DATA           0x03
+#define GD25Q64_CMD_FAST_READ           0x0B
+#define GD25Q64_CMD_SECTOR_ERASE        0x20
+#define GD25Q64_CMD_BLOCK_ERASE_32K     0x52
+#define GD25Q64_CMD_BLOCK_ERASE_64K     0xD8
+#define GD25Q64_CMD_CHIP_ERASE          0xC7
+#define GD25Q64_CMD_POWER_DOWN          0xB9
+#define GD25Q64_CMD_RELEASE_POWER_DOWN  0xAB
+#define GD25Q64_CMD_READ_ID             0x9F
+
+/* Nor Flash GD25Q64ESIG 参数 */
+#define GD25Q64_PAGE_SIZE               256
+#define GD25Q64_SECTOR_SIZE             4096
+#define GD25Q64_BLOCK_32K_SIZE          (32 * 1024)
+#define GD25Q64_BLOCK_64K_SIZE          (64 * 1024)
+#define GD25Q64_TOTAL_SIZE              (8 * 1024 * 1024)
+
+
+/* Nor Flash SPI操作函数 */
+static uint8_t spi_transfer(uint8_t data);
+static void spi_transfer_bulk(uint8_t *tx_data, uint8_t *rx_data, size_t size);
+static int wait_for_ready(void);
+static int write_enable(void);
+static uint8_t read_status_register(void);
+static int chip_erase(void);
+
+/* FlashDB 标准接口接口 */
+static int init(void);
+static int read(long offset, uint8_t *buf, size_t size);
+static int write(long offset, const uint8_t *buf, size_t size);
+static int erase(long offset, size_t size);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* BSP_SPI_FLASH_H */
