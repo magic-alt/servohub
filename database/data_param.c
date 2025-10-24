@@ -43,6 +43,13 @@ void app_param_init(void)
     kAppStatusInfo.Statusword = 0;                   // 状态字
     kAppStatusInfo.Error_word = 0;                   // 错误码
     kAppStatusInfo.Alarm_word = 0;                   // 警告码
+    kAppStatusInfo.DC_link_circuit_voltage = 0.0f;   // 母线电压当前值
+    kAppStatusInfo.Drive_accumulated_heat = 0.0f;    // 驱动器热量累计值
+    kAppStatusInfo.Drive_temperature = 0.0f;         // 驱动器当前温度
+    kAppStatusInfo.Motor_temperature = 0.0f;         // 电机当前温度
+    kAppStatusInfo.Mcu_temperature = 0.0f;           // MCU当前温度
+
+    // 初始化运动信息
     kAppMotionInfo.Position_demand_value = 0;        // 位置指令值
     kAppMotionInfo.Position_actual_value_inc = 0;    // 负载端位置当前值
     kAppMotionInfo.Position_actual_value = 0;        // 位置当前值
@@ -52,23 +59,43 @@ void app_param_init(void)
     kAppMotionInfo.Torque_demand_value = 0.0f;       // 力矩指令值
     kAppMotionInfo.Torque_actual_value = 0.0f;       // 力矩当前值
     kAppMotionInfo.Current_actual_value = 0.0f;      // 电流当前值
-    kAppStatusInfo.DC_link_circuit_voltage = 0.0f;   // 母线电压当前值
-    kAppBaseConfig.Home_position_offset_value = 0;   // 回零完成位置偏移值
-    kAppStatusInfo.Drive_accumulated_heat = 0.0f;    // 驱动器热量累计值
-    kAppStatusInfo.Drive_temperature = 0.0f;         // 驱动器当前温度
     kAppMotionInfo.D_current_actual_value = 0.0f;    // D轴电流当前值
-    kAppStatusInfo.Motor_temperature = 0.0f;         // 电机当前温度
-    kAppStatusInfo.Mcu_temperature = 0.0f;           // MCU当前温度
 
     // 初始化操作模式
     kAppOpMode.Modes_of_operation = 0; // 运行模式
 
     // 初始化基础配置  恢复出厂的默认配置
+    kAppBaseConfig.Home_position_offset_value = 0;                                              // 回零完成位置偏移值
+    kAppBaseConfig.Polarity = 0;                                                                // 运动极性
+    kAppBaseConfig.Can_id = 0X15;                                                               // CAN ID
+    kAppBaseConfig.Can_baudrate = 1000000;                                                      // CAN 波特率
+    kAppBaseConfig.Quick_stop_option_code = 2;                                                  // 快速停机方式选择
+    kAppBaseConfig.Brake_engage_time = BRAKE_ENGAGE_TIME;                                       // 抱闸延迟时间
+    kAppBaseConfig.Brake_release_time = BRAKE_RELEASE_TIME;                                     // 松闸延迟时间
+    kAppBaseConfig.Dynamic_brake_speed_threshold = DYNAMIC_BRAKE_SPEED_THRESHOLD;               // 抱闸制动速度阈值
+    kAppBaseConfig.Brake_release_hold_voltage = BRAKE_RELEASE_HOLD_VOLTAGE;                     // 松闸保持电压
+
+    // 初始化编码器配置
     kAppEncoderConfig.Load_encoder_resolution = PMSM_LOAD_ENC_LINE_P_N;                            // 负载端位置反馈分辨率
     kAppEncoderConfig.Motor_encoder_resolution = PMSM_ENC_LINE_P_N;                                // 电机端位置反馈分辨率
-    kAppBaseConfig.Polarity = 0;                                                                // 运动极性
+    kAppEncoderConfig.Encoder_options = 0;                                                         // 编码器选项
+    kAppEncoderConfig.Load_pps_2_rpm = 60.0f / (float)PMSM_LOAD_ENC_LINE_P_N;                      // 负载端速度P/s转换RPM系数
+    kAppEncoderConfig.Load_rpm_2_pps = (float)PMSM_LOAD_ENC_LINE_P_N / 60.0f;                      // 负载端速度RPM转换P/s系数
+    
+    // 初始化电机配置
     kAppMotorConfig.Motor_rated_current = PMSM_RATED_CURRENT;                                    // 电机额定电流
     kAppMotorConfig.Motor_rated_torque = 0.0f;                                                   // 电机额定力矩/推力
+    kAppMotorConfig.Motor_peak_current = PMSM_PEAK_CURRENT;                                      // 电机峰值电流
+    kAppMotorConfig.Motor_pole_pairs = PMSM_PN;                                                  // 电机极对数（旋转电机）
+    kAppMotorConfig.Motor_maximum_speed = PMSM_SPEED_MAX_RPM;                                    // 电机最大转速/速度
+    kAppMotorConfig.Resistance = PMSM_Rp2p;                                                      // 电机相间电阻
+    kAppMotorConfig.Inductance = PMSM_Lp2p;                                                      // 电机相间电感
+    kAppMotorConfig.Reduction_ratio_num = GEAR_RATIO_NUM;                                        // 减速比分子
+    kAppMotorConfig.Reduction_ratio_den = GEAR_RATIO_DEN;                                        // 减速比分母
+    kAppMotorConfig.Torque_constant = PMSM_TORQUE_CONSTANT_MNM_A;                                // 转矩常数 mNm/A
+    kAppMotorConfig.Reduction_ratio_inv = (float)GEAR_RATIO_DEN / (float)GEAR_RATIO_NUM;         // 减速比倒数
+    
+    // 初始化保护配置
     kAppProtectConfig.Bus_under_voltage_threshold = UNDER_VOLTAGE_PROTECTION_V;                    // 母线欠压阈值
     kAppProtectConfig.Bus_over_voltage_threshold = OVER_VOLTAGE_PROTECTION_V;                      // 母线过压阈值
     kAppProtectConfig.Drive_overload_current_duration = 2.0f;                                      // 驱动器过流持续时间
@@ -77,29 +104,13 @@ void app_param_init(void)
     kAppProtectConfig.Drive_low_temperature_fault_threshold = UNDER_TEMP_PROTECTION_C;             // 驱动器低温报错阈值
     kAppProtectConfig.Drive_high_temperature_fault_threshold = OVER_TEMP_PROTECTION_C;             // 驱动器高温报错阈值
     kAppProtectConfig.Overspeed_threshold = PMSM_SPEED_MAX_RPM * 1.2f;                             // 过速阈值
-    kAppMotorConfig.Motor_peak_current = PMSM_PEAK_CURRENT;                                      // 电机峰值电流
-    kAppMotorConfig.Motor_pole_pairs = PMSM_PN;                                                  // 电机极对数（旋转电机）
-    kAppMotorConfig.Motor_maximum_speed = PMSM_SPEED_MAX_RPM;                                    // 电机最大转速/速度
-    kAppMotorConfig.Resistance = PMSM_Rp2p;                                                      // 电机相间电阻
-    kAppMotorConfig.Inductance = PMSM_Lp2p;                                                      // 电机相间电感
     kAppProtectConfig.Drive_overcurrent_threshold = DRIVER_OVERCURRENT_LIMIT_A;                    // 驱动器过流保护阈值 软件检测过流
     kAppProtectConfig.Protection_enable = 0xFFFF;                                                  // 软件保护 默认全部生效
-    kAppPermissionConfig.Comm_control_authority = COMM_CONTROL_BUS;                                   // 默认开启进入总线控制
-    kAppMotorConfig.Reduction_ratio_num = GEAR_RATIO_NUM;                                        // 减速比分子
-    kAppMotorConfig.Reduction_ratio_den = GEAR_RATIO_DEN;                                        // 减速比分母
-    kAppBaseConfig.Can_id = 0X15;                                                               // CAN ID
-    kAppBaseConfig.Can_baudrate = 1000000;                                                      // CAN 波特率
-    kAppMotorConfig.Torque_constant = PMSM_TORQUE_CONSTANT_MNM_A;                                // 转矩常数 mNm/A
     kAppProtectConfig.Motor_high_temperature_fault_threshold = MOTOR_HIGH_TEMP_FAULT_THRESHOLD;    // 电机过温保护
     kAppProtectConfig.Motor_low_temperature_fault_threshold = MOTOR_LOW_TEMP_FAULT_THRESHOLD;      // 电机低温保护
     kAppProtectConfig.Can_timeout = 0.5f;                                                          // CAN通讯超时时间
-    kAppBaseConfig.Quick_stop_option_code = 2;                                                  // 快速停机方式选择
     kAppProtectConfig.Motor_low_temperature_warning_threshold = MOTOR_LOW_TEMP_WARING_THRESHOLD;   // 电机过温警告
     kAppProtectConfig.Motor_high_temperature_warning_threshold = MOTOR_HIGH_TEMP_WARING_THRESHOLD; // 电机低温警告
-    kAppBaseConfig.Brake_engage_time = BRAKE_ENGAGE_TIME;                                       // 抱闸延迟时间
-    kAppBaseConfig.Brake_release_time = BRAKE_RELEASE_TIME;                                     // 松闸延迟时间
-    kAppBaseConfig.Dynamic_brake_speed_threshold = DYNAMIC_BRAKE_SPEED_THRESHOLD;               // 抱闸制动速度阈值
-    kAppBaseConfig.Brake_release_hold_voltage = BRAKE_RELEASE_HOLD_VOLTAGE;                     // 松闸保持电压
     kAppProtectConfig.Mcu_temperature_threshold_time = 2.0f;                                       // MCU温度保护阈值时间
     kAppProtectConfig.Mcu_low_temperature_fault_threshold = UNDER_TEMP_PROTECTION_C;               // MCU低温报错阈值
     kAppProtectConfig.Mcu_high_temperature_fault_threshold = OVER_TEMP_PROTECTION_C;               // MCU高温报错阈值
@@ -107,7 +118,6 @@ void app_param_init(void)
     kAppProtectConfig.Mcu_high_temperature_warning_threshold = OVER_TEMP_WARNING_C;                // MCU高温警告阈值
     kAppProtectConfig.Drive_low_temperature_warning_threshold = UNDER_TEMP_WARNING_C;              // 驱动器低温警告阈值
     kAppProtectConfig.Drive_high_temperature_warning_threshold = OVER_TEMP_WARNING_C;              // 驱动器高温警告阈值
-    kAppEncoderConfig.Encoder_options = 0;                                                         // 编码器选项
 
     // 初始化运动参数
     kAppMotionParam.Target_position = 0;                              // 位置目标值
@@ -120,7 +130,6 @@ void app_param_init(void)
     kAppMotionParam.Homing_method = 0;                                // 回零方法
     kAppMotionParam.Target_velocity = 0.0f;                           // 速度目标值
     kAppMotionParam.Target_torque = 0.0f;                             // 力矩目标值
-    kAppRestrictParam.Max_current = kAppMotorConfig.Motor_rated_current; // 应用电流限制相对值
     kAppMotionParam.Torque_slope = 1.0f;                              // 力矩上升斜率
     kAppMotionParam.MIT_max_current = PMSM_PEAK_CURRENT;              // 电机峰值电流
     kAppMotionParam.MIT_kp = 0.01f;                                   // MIT位置刚度
@@ -135,6 +144,7 @@ void app_param_init(void)
     kAppRestrictParam.Max_motor_speed = kAppMotorConfig.Motor_maximum_speed;                // 电机最大转速/速度(RPM)
     kAppRestrictParam.Max_acceleration = (float)(0xFFFFFFFF) * kAppEncoderConfig.Load_pps_2_rpm;   // 应用加速度限制
     kAppRestrictParam.Max_deceleration = (float)(0xFFFFFFFF) * kAppEncoderConfig.Load_pps_2_rpm;   // 应用减速度限制
+    kAppRestrictParam.Max_current = kAppMotorConfig.Motor_rated_current; // 应用电流限制相对值
 
     // 初始化窗口参数
     kAppWindowParam.Following_error_window = 10000;   // 位置跟随误差阈值
@@ -148,6 +158,9 @@ void app_param_init(void)
 
     // 初始化系统指令
     kSystemCmd.Sys_cmd = APP_SYSTEM_CMD_NONE;        // 系统指令
+
+    // 初始化控制权限
+    kAppPermissionConfig.Comm_control_authority = COMM_CONTROL_BUS;    // 默认开启进入总线控制
 
     // 其它参数初始化
     kEncoderCalibrationCmd.Calibration_time = 5;    // 校准时间(S)
