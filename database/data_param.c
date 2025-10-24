@@ -2968,6 +2968,39 @@ uint32_t set_app_Sys_cmd(uint8_t val)
     /* USER CODE END set_app_Sys_cmd 0 */
     kSystemCmd.Sys_cmd = val;
     /* USER CODE BEGIN set_app_Sys_cmd 1 */
+    switch (val)
+    {
+    case APP_SYSTEM_CMD_NONE:
+        // Do nothing
+        break;
+    case APP_SYSTEM_CMD_HOMING:
+        // 设置当前位置为系统零点
+        // 负载端累计的绝对位置
+        // 设置当前目标位置为0
+        kAppBaseConfig.Home_position_offset_value = axis->load_pos_sensor_output.enc_sum_p;
+        set_app_Target_position(0);
+
+        break;
+    case APP_SYSTEM_CMD_SAVE_CONFIG:
+        set_app_Storage_cmd(FLASH_STORE_CMD_WRITE_PARAM);
+        break;
+    case APP_SYSTEM_CMD_REBOOT:
+        bsp_system_reset();
+        break;
+    case APP_SYSTEM_CMD_ERROR_RECORD_CLEAR:
+        set_app_Storage_cmd(FLASH_STORE_CMD_ERASE_ERROR);
+        break;
+    case APP_SYSTEM_CMD_FACTORY_RESET:
+        if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+        {
+            return APP_PARAM_WRITE_STATE_ERROR;
+        }
+        set_app_Storage_cmd(FLASH_STORE_CMD_ERASE_PARAM);
+        break;
+    default:
+        break;
+    }
+
     /* USER CODE END set_app_Sys_cmd 1 */
     return APP_PARAM_SUCCESS;
 }
