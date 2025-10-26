@@ -46,17 +46,20 @@ void BspInit(void)
     HAL_ADC_Stop_DMA(&DC_BUS_VOLTAGE_HANDLE);
 
     // 启动 ADC 校准
-    if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_U_HANDLE, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED) == HAL_ERROR)
+    if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_U_HANDLE, \
+        ADC_CALIB_OFFSET_LINEARITY, ADC_SINGLE_ENDED) != HAL_OK)
     {
-        Error_Handler();
+        set_bsp_error_state(ERROR_CURRENT_SAMPLE, ERROR_SET);
     }
-    if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_V_HANDLE, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED) == HAL_ERROR)
+    else if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_V_HANDLE, \
+        ADC_CALIB_OFFSET_LINEARITY, ADC_SINGLE_ENDED) != HAL_OK)
     {
-        Error_Handler();
+        set_bsp_error_state(ERROR_CURRENT_SAMPLE, ERROR_SET);
     }
-    if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_W_HANDLE, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED) == HAL_ERROR)
+    else if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_W_HANDLE, \
+        ADC_CALIB_OFFSET_LINEARITY, ADC_SINGLE_ENDED) != HAL_OK)
     {
-        Error_Handler();
+        set_bsp_error_state(ERROR_CURRENT_SAMPLE, ERROR_SET);
     }
 
     HAL_ADC_Start_DMA(&DC_BUS_VOLTAGE_HANDLE, (uint32_t *)kBspData.adc1_raw_buffer, ADC1_REGULAR_RANK_NUMBER);
