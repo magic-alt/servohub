@@ -3,7 +3,7 @@
 #include "motor_ctl_loop.h"
 
 //DATABASE_CODE_START_1
-const InterVarStruct kParamDataBase[374] = {
+const InterVarStruct kParamDataBase[370] = {
     {1, &kAxis.pmsm_config.b, kTypeFloat32},
     {2, &kAxis.pmsm_config.fc, kTypeFloat32},
     {3, &kAxis.pmsm_config.flux, kTypeFloat32},
@@ -102,16 +102,12 @@ const InterVarStruct kParamDataBase[374] = {
     {131, &kAxis.speed_obs_pll_config.enc_line_inv_p_n, kTypeFloat32},
     {133, &kAxis.speed_obs_pll_config.speed_obs_max_rad_s, kTypeFloat32},
     {134, &kAxis.pos_speed_ctl_input.speed_now_rad_s, kTypeFloat32},
-//    {136, &kAxis.elec_angle_id_input.id_now_A, kTypeFloat32},
-//    {137, &kAxis.elec_angle_id_config.id_sin_amp_A, kTypeFloat32},
+    {137, &kAxis.elec_angle_id_config.id_max_A, kTypeFloat32},
     {138, &kAxis.elec_angle_id_output.id_tar_A, kTypeFloat32},
     {139, &kAxis.elec_angle_id_input.pos_now_rad, kTypeFloat32},
     {140, &kAxis.elec_angle_id_output.elec_bias_rad, kTypeFloat32},
-//    {141, &kAxis.elec_angle_id_output.pearson_r, kTypeFloat32},
     {142, &kAxis.elec_angle_id_output.state_now, kTypeInt8},
     {143, &kAxis.elec_angle_id_config.dt_s, kTypeFloat32},
-//    {144, &kAxis.elec_angle_id_config.id_sin_w_Hz, kTypeFloat32},
-//    {145, &kAxis.elec_angle_id_config.search_gain, kTypeFloat32},
     {146, &kAxis.pos_speed_ctl_config.mode, kTypeFloat32},
     {147, &kAxis.direction_id_input.enc_counts_sum_p, kTypeInt64},
     {148, &kAxis.direction_id_config.elec_angle_add_rad, kTypeFloat32},

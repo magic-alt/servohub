@@ -1,14 +1,12 @@
 #pragma once
 // MESSAGE ElecAngleIdConfig PACKING
 
-#define MAVLINK_MSG_ID_ElecAngleIdConfig 42
+#define MAVLINK_MSG_ID_ElecAngleIdConfig 41
 
 
 typedef struct __mavlink_elecangleidconfig_t {
- float id_sin_amp_A; /*<  */
+ float id_max_A; /*<  */
  float dt_s; /*<  */
- float id_sin_w_Hz; /*<  */
- float search_gain; /*<  */
  float angle_add_rad; /*<  */
  float wait_time_s; /*<  */
  float test_angle_rad; /*<  */
@@ -16,45 +14,41 @@ typedef struct __mavlink_elecangleidconfig_t {
  uint8_t method; /*<  */
 } mavlink_elecangleidconfig_t;
 
-#define MAVLINK_MSG_ID_ElecAngleIdConfig_LEN 33
-#define MAVLINK_MSG_ID_ElecAngleIdConfig_MIN_LEN 33
-#define MAVLINK_MSG_ID_42_LEN 33
-#define MAVLINK_MSG_ID_42_MIN_LEN 33
+#define MAVLINK_MSG_ID_ElecAngleIdConfig_LEN 25
+#define MAVLINK_MSG_ID_ElecAngleIdConfig_MIN_LEN 25
+#define MAVLINK_MSG_ID_41_LEN 25
+#define MAVLINK_MSG_ID_41_MIN_LEN 25
 
-#define MAVLINK_MSG_ID_ElecAngleIdConfig_CRC 207
-#define MAVLINK_MSG_ID_42_CRC 207
+#define MAVLINK_MSG_ID_ElecAngleIdConfig_CRC 112
+#define MAVLINK_MSG_ID_41_CRC 112
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ElecAngleIdConfig { \
-    42, \
+    41, \
     "ElecAngleIdConfig", \
-    9, \
-    {  { "id_sin_amp_A", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_elecangleidconfig_t, id_sin_amp_A) }, \
+    7, \
+    {  { "id_max_A", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_elecangleidconfig_t, id_max_A) }, \
          { "dt_s", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_elecangleidconfig_t, dt_s) }, \
-         { "id_sin_w_Hz", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_elecangleidconfig_t, id_sin_w_Hz) }, \
-         { "search_gain", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_elecangleidconfig_t, search_gain) }, \
-         { "method", NULL, MAVLINK_TYPE_UINT8_T, 0, 32, offsetof(mavlink_elecangleidconfig_t, method) }, \
-         { "angle_add_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_elecangleidconfig_t, angle_add_rad) }, \
-         { "wait_time_s", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_elecangleidconfig_t, wait_time_s) }, \
-         { "test_angle_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 24, offsetof(mavlink_elecangleidconfig_t, test_angle_rad) }, \
-         { "current_slope_percentage", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_elecangleidconfig_t, current_slope_percentage) }, \
+         { "method", NULL, MAVLINK_TYPE_UINT8_T, 0, 24, offsetof(mavlink_elecangleidconfig_t, method) }, \
+         { "angle_add_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_elecangleidconfig_t, angle_add_rad) }, \
+         { "wait_time_s", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_elecangleidconfig_t, wait_time_s) }, \
+         { "test_angle_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_elecangleidconfig_t, test_angle_rad) }, \
+         { "current_slope_percentage", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_elecangleidconfig_t, current_slope_percentage) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_ElecAngleIdConfig { \
     "ElecAngleIdConfig", \
-    9, \
-    {  { "id_sin_amp_A", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_elecangleidconfig_t, id_sin_amp_A) }, \
+    7, \
+    {  { "id_max_A", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_elecangleidconfig_t, id_max_A) }, \
          { "dt_s", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_elecangleidconfig_t, dt_s) }, \
-         { "id_sin_w_Hz", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_elecangleidconfig_t, id_sin_w_Hz) }, \
-         { "search_gain", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_elecangleidconfig_t, search_gain) }, \
-         { "method", NULL, MAVLINK_TYPE_UINT8_T, 0, 32, offsetof(mavlink_elecangleidconfig_t, method) }, \
-         { "angle_add_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_elecangleidconfig_t, angle_add_rad) }, \
-         { "wait_time_s", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_elecangleidconfig_t, wait_time_s) }, \
-         { "test_angle_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 24, offsetof(mavlink_elecangleidconfig_t, test_angle_rad) }, \
-         { "current_slope_percentage", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_elecangleidconfig_t, current_slope_percentage) }, \
+         { "method", NULL, MAVLINK_TYPE_UINT8_T, 0, 24, offsetof(mavlink_elecangleidconfig_t, method) }, \
+         { "angle_add_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_elecangleidconfig_t, angle_add_rad) }, \
+         { "wait_time_s", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_elecangleidconfig_t, wait_time_s) }, \
+         { "test_angle_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_elecangleidconfig_t, test_angle_rad) }, \
+         { "current_slope_percentage", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_elecangleidconfig_t, current_slope_percentage) }, \
          } \
 }
 #endif
@@ -65,10 +59,8 @@ typedef struct __mavlink_elecangleidconfig_t {
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param id_sin_amp_A  
+ * @param id_max_A  
  * @param dt_s  
- * @param id_sin_w_Hz  
- * @param search_gain  
  * @param method  
  * @param angle_add_rad  
  * @param wait_time_s  
@@ -77,27 +69,23 @@ typedef struct __mavlink_elecangleidconfig_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_elecangleidconfig_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               float id_sin_amp_A, float dt_s, float id_sin_w_Hz, float search_gain, uint8_t method, float angle_add_rad, float wait_time_s, float test_angle_rad, float current_slope_percentage)
+                               float id_max_A, float dt_s, uint8_t method, float angle_add_rad, float wait_time_s, float test_angle_rad, float current_slope_percentage)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_ElecAngleIdConfig_LEN];
-    _mav_put_float(buf, 0, id_sin_amp_A);
+    _mav_put_float(buf, 0, id_max_A);
     _mav_put_float(buf, 4, dt_s);
-    _mav_put_float(buf, 8, id_sin_w_Hz);
-    _mav_put_float(buf, 12, search_gain);
-    _mav_put_float(buf, 16, angle_add_rad);
-    _mav_put_float(buf, 20, wait_time_s);
-    _mav_put_float(buf, 24, test_angle_rad);
-    _mav_put_float(buf, 28, current_slope_percentage);
-    _mav_put_uint8_t(buf, 32, method);
+    _mav_put_float(buf, 8, angle_add_rad);
+    _mav_put_float(buf, 12, wait_time_s);
+    _mav_put_float(buf, 16, test_angle_rad);
+    _mav_put_float(buf, 20, current_slope_percentage);
+    _mav_put_uint8_t(buf, 24, method);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_ElecAngleIdConfig_LEN);
 #else
     mavlink_elecangleidconfig_t packet;
-    packet.id_sin_amp_A = id_sin_amp_A;
+    packet.id_max_A = id_max_A;
     packet.dt_s = dt_s;
-    packet.id_sin_w_Hz = id_sin_w_Hz;
-    packet.search_gain = search_gain;
     packet.angle_add_rad = angle_add_rad;
     packet.wait_time_s = wait_time_s;
     packet.test_angle_rad = test_angle_rad;
@@ -118,10 +106,8 @@ static inline uint16_t mavlink_msg_elecangleidconfig_pack(uint8_t system_id, uin
  * @param status MAVLink status structure
  * @param msg The MAVLink message to compress the data into
  *
- * @param id_sin_amp_A  
+ * @param id_max_A  
  * @param dt_s  
- * @param id_sin_w_Hz  
- * @param search_gain  
  * @param method  
  * @param angle_add_rad  
  * @param wait_time_s  
@@ -130,27 +116,23 @@ static inline uint16_t mavlink_msg_elecangleidconfig_pack(uint8_t system_id, uin
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_elecangleidconfig_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               float id_sin_amp_A, float dt_s, float id_sin_w_Hz, float search_gain, uint8_t method, float angle_add_rad, float wait_time_s, float test_angle_rad, float current_slope_percentage)
+                               float id_max_A, float dt_s, uint8_t method, float angle_add_rad, float wait_time_s, float test_angle_rad, float current_slope_percentage)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_ElecAngleIdConfig_LEN];
-    _mav_put_float(buf, 0, id_sin_amp_A);
+    _mav_put_float(buf, 0, id_max_A);
     _mav_put_float(buf, 4, dt_s);
-    _mav_put_float(buf, 8, id_sin_w_Hz);
-    _mav_put_float(buf, 12, search_gain);
-    _mav_put_float(buf, 16, angle_add_rad);
-    _mav_put_float(buf, 20, wait_time_s);
-    _mav_put_float(buf, 24, test_angle_rad);
-    _mav_put_float(buf, 28, current_slope_percentage);
-    _mav_put_uint8_t(buf, 32, method);
+    _mav_put_float(buf, 8, angle_add_rad);
+    _mav_put_float(buf, 12, wait_time_s);
+    _mav_put_float(buf, 16, test_angle_rad);
+    _mav_put_float(buf, 20, current_slope_percentage);
+    _mav_put_uint8_t(buf, 24, method);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_ElecAngleIdConfig_LEN);
 #else
     mavlink_elecangleidconfig_t packet;
-    packet.id_sin_amp_A = id_sin_amp_A;
+    packet.id_max_A = id_max_A;
     packet.dt_s = dt_s;
-    packet.id_sin_w_Hz = id_sin_w_Hz;
-    packet.search_gain = search_gain;
     packet.angle_add_rad = angle_add_rad;
     packet.wait_time_s = wait_time_s;
     packet.test_angle_rad = test_angle_rad;
@@ -174,10 +156,8 @@ static inline uint16_t mavlink_msg_elecangleidconfig_pack_status(uint8_t system_
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
- * @param id_sin_amp_A  
+ * @param id_max_A  
  * @param dt_s  
- * @param id_sin_w_Hz  
- * @param search_gain  
  * @param method  
  * @param angle_add_rad  
  * @param wait_time_s  
@@ -187,27 +167,23 @@ static inline uint16_t mavlink_msg_elecangleidconfig_pack_status(uint8_t system_
  */
 static inline uint16_t mavlink_msg_elecangleidconfig_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   float id_sin_amp_A,float dt_s,float id_sin_w_Hz,float search_gain,uint8_t method,float angle_add_rad,float wait_time_s,float test_angle_rad,float current_slope_percentage)
+                                   float id_max_A,float dt_s,uint8_t method,float angle_add_rad,float wait_time_s,float test_angle_rad,float current_slope_percentage)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_ElecAngleIdConfig_LEN];
-    _mav_put_float(buf, 0, id_sin_amp_A);
+    _mav_put_float(buf, 0, id_max_A);
     _mav_put_float(buf, 4, dt_s);
-    _mav_put_float(buf, 8, id_sin_w_Hz);
-    _mav_put_float(buf, 12, search_gain);
-    _mav_put_float(buf, 16, angle_add_rad);
-    _mav_put_float(buf, 20, wait_time_s);
-    _mav_put_float(buf, 24, test_angle_rad);
-    _mav_put_float(buf, 28, current_slope_percentage);
-    _mav_put_uint8_t(buf, 32, method);
+    _mav_put_float(buf, 8, angle_add_rad);
+    _mav_put_float(buf, 12, wait_time_s);
+    _mav_put_float(buf, 16, test_angle_rad);
+    _mav_put_float(buf, 20, current_slope_percentage);
+    _mav_put_uint8_t(buf, 24, method);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_ElecAngleIdConfig_LEN);
 #else
     mavlink_elecangleidconfig_t packet;
-    packet.id_sin_amp_A = id_sin_amp_A;
+    packet.id_max_A = id_max_A;
     packet.dt_s = dt_s;
-    packet.id_sin_w_Hz = id_sin_w_Hz;
-    packet.search_gain = search_gain;
     packet.angle_add_rad = angle_add_rad;
     packet.wait_time_s = wait_time_s;
     packet.test_angle_rad = test_angle_rad;
@@ -231,7 +207,7 @@ static inline uint16_t mavlink_msg_elecangleidconfig_pack_chan(uint8_t system_id
  */
 static inline uint16_t mavlink_msg_elecangleidconfig_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_elecangleidconfig_t* elecangleidconfig)
 {
-    return mavlink_msg_elecangleidconfig_pack(system_id, component_id, msg, elecangleidconfig->id_sin_amp_A, elecangleidconfig->dt_s, elecangleidconfig->id_sin_w_Hz, elecangleidconfig->search_gain, elecangleidconfig->method, elecangleidconfig->angle_add_rad, elecangleidconfig->wait_time_s, elecangleidconfig->test_angle_rad, elecangleidconfig->current_slope_percentage);
+    return mavlink_msg_elecangleidconfig_pack(system_id, component_id, msg, elecangleidconfig->id_max_A, elecangleidconfig->dt_s, elecangleidconfig->method, elecangleidconfig->angle_add_rad, elecangleidconfig->wait_time_s, elecangleidconfig->test_angle_rad, elecangleidconfig->current_slope_percentage);
 }
 
 /**
@@ -245,7 +221,7 @@ static inline uint16_t mavlink_msg_elecangleidconfig_encode(uint8_t system_id, u
  */
 static inline uint16_t mavlink_msg_elecangleidconfig_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_elecangleidconfig_t* elecangleidconfig)
 {
-    return mavlink_msg_elecangleidconfig_pack_chan(system_id, component_id, chan, msg, elecangleidconfig->id_sin_amp_A, elecangleidconfig->dt_s, elecangleidconfig->id_sin_w_Hz, elecangleidconfig->search_gain, elecangleidconfig->method, elecangleidconfig->angle_add_rad, elecangleidconfig->wait_time_s, elecangleidconfig->test_angle_rad, elecangleidconfig->current_slope_percentage);
+    return mavlink_msg_elecangleidconfig_pack_chan(system_id, component_id, chan, msg, elecangleidconfig->id_max_A, elecangleidconfig->dt_s, elecangleidconfig->method, elecangleidconfig->angle_add_rad, elecangleidconfig->wait_time_s, elecangleidconfig->test_angle_rad, elecangleidconfig->current_slope_percentage);
 }
 
 /**
@@ -259,17 +235,15 @@ static inline uint16_t mavlink_msg_elecangleidconfig_encode_chan(uint8_t system_
  */
 static inline uint16_t mavlink_msg_elecangleidconfig_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_elecangleidconfig_t* elecangleidconfig)
 {
-    return mavlink_msg_elecangleidconfig_pack_status(system_id, component_id, _status, msg,  elecangleidconfig->id_sin_amp_A, elecangleidconfig->dt_s, elecangleidconfig->id_sin_w_Hz, elecangleidconfig->search_gain, elecangleidconfig->method, elecangleidconfig->angle_add_rad, elecangleidconfig->wait_time_s, elecangleidconfig->test_angle_rad, elecangleidconfig->current_slope_percentage);
+    return mavlink_msg_elecangleidconfig_pack_status(system_id, component_id, _status, msg,  elecangleidconfig->id_max_A, elecangleidconfig->dt_s, elecangleidconfig->method, elecangleidconfig->angle_add_rad, elecangleidconfig->wait_time_s, elecangleidconfig->test_angle_rad, elecangleidconfig->current_slope_percentage);
 }
 
 /**
  * @brief Send a elecangleidconfig message
  * @param chan MAVLink channel to send the message
  *
- * @param id_sin_amp_A  
+ * @param id_max_A  
  * @param dt_s  
- * @param id_sin_w_Hz  
- * @param search_gain  
  * @param method  
  * @param angle_add_rad  
  * @param wait_time_s  
@@ -278,27 +252,23 @@ static inline uint16_t mavlink_msg_elecangleidconfig_encode_status(uint8_t syste
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_elecangleidconfig_send(mavlink_channel_t chan, float id_sin_amp_A, float dt_s, float id_sin_w_Hz, float search_gain, uint8_t method, float angle_add_rad, float wait_time_s, float test_angle_rad, float current_slope_percentage)
+static inline void mavlink_msg_elecangleidconfig_send(mavlink_channel_t chan, float id_max_A, float dt_s, uint8_t method, float angle_add_rad, float wait_time_s, float test_angle_rad, float current_slope_percentage)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_ElecAngleIdConfig_LEN];
-    _mav_put_float(buf, 0, id_sin_amp_A);
+    _mav_put_float(buf, 0, id_max_A);
     _mav_put_float(buf, 4, dt_s);
-    _mav_put_float(buf, 8, id_sin_w_Hz);
-    _mav_put_float(buf, 12, search_gain);
-    _mav_put_float(buf, 16, angle_add_rad);
-    _mav_put_float(buf, 20, wait_time_s);
-    _mav_put_float(buf, 24, test_angle_rad);
-    _mav_put_float(buf, 28, current_slope_percentage);
-    _mav_put_uint8_t(buf, 32, method);
+    _mav_put_float(buf, 8, angle_add_rad);
+    _mav_put_float(buf, 12, wait_time_s);
+    _mav_put_float(buf, 16, test_angle_rad);
+    _mav_put_float(buf, 20, current_slope_percentage);
+    _mav_put_uint8_t(buf, 24, method);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ElecAngleIdConfig, buf, MAVLINK_MSG_ID_ElecAngleIdConfig_MIN_LEN, MAVLINK_MSG_ID_ElecAngleIdConfig_LEN, MAVLINK_MSG_ID_ElecAngleIdConfig_CRC);
 #else
     mavlink_elecangleidconfig_t packet;
-    packet.id_sin_amp_A = id_sin_amp_A;
+    packet.id_max_A = id_max_A;
     packet.dt_s = dt_s;
-    packet.id_sin_w_Hz = id_sin_w_Hz;
-    packet.search_gain = search_gain;
     packet.angle_add_rad = angle_add_rad;
     packet.wait_time_s = wait_time_s;
     packet.test_angle_rad = test_angle_rad;
@@ -317,7 +287,7 @@ static inline void mavlink_msg_elecangleidconfig_send(mavlink_channel_t chan, fl
 static inline void mavlink_msg_elecangleidconfig_send_struct(mavlink_channel_t chan, const mavlink_elecangleidconfig_t* elecangleidconfig)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_elecangleidconfig_send(chan, elecangleidconfig->id_sin_amp_A, elecangleidconfig->dt_s, elecangleidconfig->id_sin_w_Hz, elecangleidconfig->search_gain, elecangleidconfig->method, elecangleidconfig->angle_add_rad, elecangleidconfig->wait_time_s, elecangleidconfig->test_angle_rad, elecangleidconfig->current_slope_percentage);
+    mavlink_msg_elecangleidconfig_send(chan, elecangleidconfig->id_max_A, elecangleidconfig->dt_s, elecangleidconfig->method, elecangleidconfig->angle_add_rad, elecangleidconfig->wait_time_s, elecangleidconfig->test_angle_rad, elecangleidconfig->current_slope_percentage);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ElecAngleIdConfig, (const char *)elecangleidconfig, MAVLINK_MSG_ID_ElecAngleIdConfig_MIN_LEN, MAVLINK_MSG_ID_ElecAngleIdConfig_LEN, MAVLINK_MSG_ID_ElecAngleIdConfig_CRC);
 #endif
@@ -331,27 +301,23 @@ static inline void mavlink_msg_elecangleidconfig_send_struct(mavlink_channel_t c
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_elecangleidconfig_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float id_sin_amp_A, float dt_s, float id_sin_w_Hz, float search_gain, uint8_t method, float angle_add_rad, float wait_time_s, float test_angle_rad, float current_slope_percentage)
+static inline void mavlink_msg_elecangleidconfig_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float id_max_A, float dt_s, uint8_t method, float angle_add_rad, float wait_time_s, float test_angle_rad, float current_slope_percentage)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_float(buf, 0, id_sin_amp_A);
+    _mav_put_float(buf, 0, id_max_A);
     _mav_put_float(buf, 4, dt_s);
-    _mav_put_float(buf, 8, id_sin_w_Hz);
-    _mav_put_float(buf, 12, search_gain);
-    _mav_put_float(buf, 16, angle_add_rad);
-    _mav_put_float(buf, 20, wait_time_s);
-    _mav_put_float(buf, 24, test_angle_rad);
-    _mav_put_float(buf, 28, current_slope_percentage);
-    _mav_put_uint8_t(buf, 32, method);
+    _mav_put_float(buf, 8, angle_add_rad);
+    _mav_put_float(buf, 12, wait_time_s);
+    _mav_put_float(buf, 16, test_angle_rad);
+    _mav_put_float(buf, 20, current_slope_percentage);
+    _mav_put_uint8_t(buf, 24, method);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ElecAngleIdConfig, buf, MAVLINK_MSG_ID_ElecAngleIdConfig_MIN_LEN, MAVLINK_MSG_ID_ElecAngleIdConfig_LEN, MAVLINK_MSG_ID_ElecAngleIdConfig_CRC);
 #else
     mavlink_elecangleidconfig_t *packet = (mavlink_elecangleidconfig_t *)msgbuf;
-    packet->id_sin_amp_A = id_sin_amp_A;
+    packet->id_max_A = id_max_A;
     packet->dt_s = dt_s;
-    packet->id_sin_w_Hz = id_sin_w_Hz;
-    packet->search_gain = search_gain;
     packet->angle_add_rad = angle_add_rad;
     packet->wait_time_s = wait_time_s;
     packet->test_angle_rad = test_angle_rad;
@@ -369,11 +335,11 @@ static inline void mavlink_msg_elecangleidconfig_send_buf(mavlink_message_t *msg
 
 
 /**
- * @brief Get field id_sin_amp_A from elecangleidconfig message
+ * @brief Get field id_max_A from elecangleidconfig message
  *
  * @return  
  */
-static inline float mavlink_msg_elecangleidconfig_get_id_sin_amp_A(const mavlink_message_t* msg)
+static inline float mavlink_msg_elecangleidconfig_get_id_max_A(const mavlink_message_t* msg)
 {
     return _MAV_RETURN_float(msg,  0);
 }
@@ -389,33 +355,13 @@ static inline float mavlink_msg_elecangleidconfig_get_dt_s(const mavlink_message
 }
 
 /**
- * @brief Get field id_sin_w_Hz from elecangleidconfig message
- *
- * @return  
- */
-static inline float mavlink_msg_elecangleidconfig_get_id_sin_w_Hz(const mavlink_message_t* msg)
-{
-    return _MAV_RETURN_float(msg,  8);
-}
-
-/**
- * @brief Get field search_gain from elecangleidconfig message
- *
- * @return  
- */
-static inline float mavlink_msg_elecangleidconfig_get_search_gain(const mavlink_message_t* msg)
-{
-    return _MAV_RETURN_float(msg,  12);
-}
-
-/**
  * @brief Get field method from elecangleidconfig message
  *
  * @return  
  */
 static inline uint8_t mavlink_msg_elecangleidconfig_get_method(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  32);
+    return _MAV_RETURN_uint8_t(msg,  24);
 }
 
 /**
@@ -425,7 +371,7 @@ static inline uint8_t mavlink_msg_elecangleidconfig_get_method(const mavlink_mes
  */
 static inline float mavlink_msg_elecangleidconfig_get_angle_add_rad(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  16);
+    return _MAV_RETURN_float(msg,  8);
 }
 
 /**
@@ -435,7 +381,7 @@ static inline float mavlink_msg_elecangleidconfig_get_angle_add_rad(const mavlin
  */
 static inline float mavlink_msg_elecangleidconfig_get_wait_time_s(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  20);
+    return _MAV_RETURN_float(msg,  12);
 }
 
 /**
@@ -445,7 +391,7 @@ static inline float mavlink_msg_elecangleidconfig_get_wait_time_s(const mavlink_
  */
 static inline float mavlink_msg_elecangleidconfig_get_test_angle_rad(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  24);
+    return _MAV_RETURN_float(msg,  16);
 }
 
 /**
@@ -455,7 +401,7 @@ static inline float mavlink_msg_elecangleidconfig_get_test_angle_rad(const mavli
  */
 static inline float mavlink_msg_elecangleidconfig_get_current_slope_percentage(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  28);
+    return _MAV_RETURN_float(msg,  20);
 }
 
 /**
@@ -467,10 +413,8 @@ static inline float mavlink_msg_elecangleidconfig_get_current_slope_percentage(c
 static inline void mavlink_msg_elecangleidconfig_decode(const mavlink_message_t* msg, mavlink_elecangleidconfig_t* elecangleidconfig)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    elecangleidconfig->id_sin_amp_A = mavlink_msg_elecangleidconfig_get_id_sin_amp_A(msg);
+    elecangleidconfig->id_max_A = mavlink_msg_elecangleidconfig_get_id_max_A(msg);
     elecangleidconfig->dt_s = mavlink_msg_elecangleidconfig_get_dt_s(msg);
-    elecangleidconfig->id_sin_w_Hz = mavlink_msg_elecangleidconfig_get_id_sin_w_Hz(msg);
-    elecangleidconfig->search_gain = mavlink_msg_elecangleidconfig_get_search_gain(msg);
     elecangleidconfig->angle_add_rad = mavlink_msg_elecangleidconfig_get_angle_add_rad(msg);
     elecangleidconfig->wait_time_s = mavlink_msg_elecangleidconfig_get_wait_time_s(msg);
     elecangleidconfig->test_angle_rad = mavlink_msg_elecangleidconfig_get_test_angle_rad(msg);

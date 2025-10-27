@@ -1,39 +1,36 @@
 #pragma once
 // MESSAGE ElecAngleIdInput PACKING
 
-#define MAVLINK_MSG_ID_ElecAngleIdInput 41
+#define MAVLINK_MSG_ID_ElecAngleIdInput 43
 
 
 typedef struct __mavlink_elecangleidinput_t {
- float id_now_A; /*<  */
  float pos_now_rad; /*<  */
 } mavlink_elecangleidinput_t;
 
-#define MAVLINK_MSG_ID_ElecAngleIdInput_LEN 8
-#define MAVLINK_MSG_ID_ElecAngleIdInput_MIN_LEN 8
-#define MAVLINK_MSG_ID_41_LEN 8
-#define MAVLINK_MSG_ID_41_MIN_LEN 8
+#define MAVLINK_MSG_ID_ElecAngleIdInput_LEN 4
+#define MAVLINK_MSG_ID_ElecAngleIdInput_MIN_LEN 4
+#define MAVLINK_MSG_ID_43_LEN 4
+#define MAVLINK_MSG_ID_43_MIN_LEN 4
 
-#define MAVLINK_MSG_ID_ElecAngleIdInput_CRC 84
-#define MAVLINK_MSG_ID_41_CRC 84
+#define MAVLINK_MSG_ID_ElecAngleIdInput_CRC 156
+#define MAVLINK_MSG_ID_43_CRC 156
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ElecAngleIdInput { \
-    41, \
+    43, \
     "ElecAngleIdInput", \
-    2, \
-    {  { "id_now_A", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_elecangleidinput_t, id_now_A) }, \
-         { "pos_now_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_elecangleidinput_t, pos_now_rad) }, \
+    1, \
+    {  { "pos_now_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_elecangleidinput_t, pos_now_rad) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_ElecAngleIdInput { \
     "ElecAngleIdInput", \
-    2, \
-    {  { "id_now_A", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_elecangleidinput_t, id_now_A) }, \
-         { "pos_now_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_elecangleidinput_t, pos_now_rad) }, \
+    1, \
+    {  { "pos_now_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_elecangleidinput_t, pos_now_rad) }, \
          } \
 }
 #endif
@@ -44,22 +41,19 @@ typedef struct __mavlink_elecangleidinput_t {
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param id_now_A  
  * @param pos_now_rad  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_elecangleidinput_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               float id_now_A, float pos_now_rad)
+                               float pos_now_rad)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_ElecAngleIdInput_LEN];
-    _mav_put_float(buf, 0, id_now_A);
-    _mav_put_float(buf, 4, pos_now_rad);
+    _mav_put_float(buf, 0, pos_now_rad);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_ElecAngleIdInput_LEN);
 #else
     mavlink_elecangleidinput_t packet;
-    packet.id_now_A = id_now_A;
     packet.pos_now_rad = pos_now_rad;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_ElecAngleIdInput_LEN);
@@ -76,22 +70,19 @@ static inline uint16_t mavlink_msg_elecangleidinput_pack(uint8_t system_id, uint
  * @param status MAVLink status structure
  * @param msg The MAVLink message to compress the data into
  *
- * @param id_now_A  
  * @param pos_now_rad  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_elecangleidinput_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               float id_now_A, float pos_now_rad)
+                               float pos_now_rad)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_ElecAngleIdInput_LEN];
-    _mav_put_float(buf, 0, id_now_A);
-    _mav_put_float(buf, 4, pos_now_rad);
+    _mav_put_float(buf, 0, pos_now_rad);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_ElecAngleIdInput_LEN);
 #else
     mavlink_elecangleidinput_t packet;
-    packet.id_now_A = id_now_A;
     packet.pos_now_rad = pos_now_rad;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_ElecAngleIdInput_LEN);
@@ -111,23 +102,20 @@ static inline uint16_t mavlink_msg_elecangleidinput_pack_status(uint8_t system_i
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
- * @param id_now_A  
  * @param pos_now_rad  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_elecangleidinput_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   float id_now_A,float pos_now_rad)
+                                   float pos_now_rad)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_ElecAngleIdInput_LEN];
-    _mav_put_float(buf, 0, id_now_A);
-    _mav_put_float(buf, 4, pos_now_rad);
+    _mav_put_float(buf, 0, pos_now_rad);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_ElecAngleIdInput_LEN);
 #else
     mavlink_elecangleidinput_t packet;
-    packet.id_now_A = id_now_A;
     packet.pos_now_rad = pos_now_rad;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_ElecAngleIdInput_LEN);
@@ -147,7 +135,7 @@ static inline uint16_t mavlink_msg_elecangleidinput_pack_chan(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_elecangleidinput_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_elecangleidinput_t* elecangleidinput)
 {
-    return mavlink_msg_elecangleidinput_pack(system_id, component_id, msg, elecangleidinput->id_now_A, elecangleidinput->pos_now_rad);
+    return mavlink_msg_elecangleidinput_pack(system_id, component_id, msg, elecangleidinput->pos_now_rad);
 }
 
 /**
@@ -161,7 +149,7 @@ static inline uint16_t mavlink_msg_elecangleidinput_encode(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_elecangleidinput_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_elecangleidinput_t* elecangleidinput)
 {
-    return mavlink_msg_elecangleidinput_pack_chan(system_id, component_id, chan, msg, elecangleidinput->id_now_A, elecangleidinput->pos_now_rad);
+    return mavlink_msg_elecangleidinput_pack_chan(system_id, component_id, chan, msg, elecangleidinput->pos_now_rad);
 }
 
 /**
@@ -175,29 +163,26 @@ static inline uint16_t mavlink_msg_elecangleidinput_encode_chan(uint8_t system_i
  */
 static inline uint16_t mavlink_msg_elecangleidinput_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_elecangleidinput_t* elecangleidinput)
 {
-    return mavlink_msg_elecangleidinput_pack_status(system_id, component_id, _status, msg,  elecangleidinput->id_now_A, elecangleidinput->pos_now_rad);
+    return mavlink_msg_elecangleidinput_pack_status(system_id, component_id, _status, msg,  elecangleidinput->pos_now_rad);
 }
 
 /**
  * @brief Send a elecangleidinput message
  * @param chan MAVLink channel to send the message
  *
- * @param id_now_A  
  * @param pos_now_rad  
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_elecangleidinput_send(mavlink_channel_t chan, float id_now_A, float pos_now_rad)
+static inline void mavlink_msg_elecangleidinput_send(mavlink_channel_t chan, float pos_now_rad)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_ElecAngleIdInput_LEN];
-    _mav_put_float(buf, 0, id_now_A);
-    _mav_put_float(buf, 4, pos_now_rad);
+    _mav_put_float(buf, 0, pos_now_rad);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ElecAngleIdInput, buf, MAVLINK_MSG_ID_ElecAngleIdInput_MIN_LEN, MAVLINK_MSG_ID_ElecAngleIdInput_LEN, MAVLINK_MSG_ID_ElecAngleIdInput_CRC);
 #else
     mavlink_elecangleidinput_t packet;
-    packet.id_now_A = id_now_A;
     packet.pos_now_rad = pos_now_rad;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ElecAngleIdInput, (const char *)&packet, MAVLINK_MSG_ID_ElecAngleIdInput_MIN_LEN, MAVLINK_MSG_ID_ElecAngleIdInput_LEN, MAVLINK_MSG_ID_ElecAngleIdInput_CRC);
@@ -212,7 +197,7 @@ static inline void mavlink_msg_elecangleidinput_send(mavlink_channel_t chan, flo
 static inline void mavlink_msg_elecangleidinput_send_struct(mavlink_channel_t chan, const mavlink_elecangleidinput_t* elecangleidinput)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_elecangleidinput_send(chan, elecangleidinput->id_now_A, elecangleidinput->pos_now_rad);
+    mavlink_msg_elecangleidinput_send(chan, elecangleidinput->pos_now_rad);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ElecAngleIdInput, (const char *)elecangleidinput, MAVLINK_MSG_ID_ElecAngleIdInput_MIN_LEN, MAVLINK_MSG_ID_ElecAngleIdInput_LEN, MAVLINK_MSG_ID_ElecAngleIdInput_CRC);
 #endif
@@ -226,17 +211,15 @@ static inline void mavlink_msg_elecangleidinput_send_struct(mavlink_channel_t ch
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_elecangleidinput_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float id_now_A, float pos_now_rad)
+static inline void mavlink_msg_elecangleidinput_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float pos_now_rad)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_float(buf, 0, id_now_A);
-    _mav_put_float(buf, 4, pos_now_rad);
+    _mav_put_float(buf, 0, pos_now_rad);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ElecAngleIdInput, buf, MAVLINK_MSG_ID_ElecAngleIdInput_MIN_LEN, MAVLINK_MSG_ID_ElecAngleIdInput_LEN, MAVLINK_MSG_ID_ElecAngleIdInput_CRC);
 #else
     mavlink_elecangleidinput_t *packet = (mavlink_elecangleidinput_t *)msgbuf;
-    packet->id_now_A = id_now_A;
     packet->pos_now_rad = pos_now_rad;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ElecAngleIdInput, (const char *)packet, MAVLINK_MSG_ID_ElecAngleIdInput_MIN_LEN, MAVLINK_MSG_ID_ElecAngleIdInput_LEN, MAVLINK_MSG_ID_ElecAngleIdInput_CRC);
@@ -250,23 +233,13 @@ static inline void mavlink_msg_elecangleidinput_send_buf(mavlink_message_t *msgb
 
 
 /**
- * @brief Get field id_now_A from elecangleidinput message
- *
- * @return  
- */
-static inline float mavlink_msg_elecangleidinput_get_id_now_A(const mavlink_message_t* msg)
-{
-    return _MAV_RETURN_float(msg,  0);
-}
-
-/**
  * @brief Get field pos_now_rad from elecangleidinput message
  *
  * @return  
  */
 static inline float mavlink_msg_elecangleidinput_get_pos_now_rad(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  4);
+    return _MAV_RETURN_float(msg,  0);
 }
 
 /**
@@ -278,7 +251,6 @@ static inline float mavlink_msg_elecangleidinput_get_pos_now_rad(const mavlink_m
 static inline void mavlink_msg_elecangleidinput_decode(const mavlink_message_t* msg, mavlink_elecangleidinput_t* elecangleidinput)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    elecangleidinput->id_now_A = mavlink_msg_elecangleidinput_get_id_now_A(msg);
     elecangleidinput->pos_now_rad = mavlink_msg_elecangleidinput_get_pos_now_rad(msg);
 #else
         uint8_t len = msg->len < MAVLINK_MSG_ID_ElecAngleIdInput_LEN? msg->len : MAVLINK_MSG_ID_ElecAngleIdInput_LEN;

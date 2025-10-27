@@ -55,9 +55,9 @@ mavlink_notchfilterconfig_t notch_filter_config_t;
 mavlink_speedobspllinput_t speed_obs_pll_input_t;
 mavlink_speedobspllconfig_t speed_obs_pll_config_t;
 mavlink_speedobsplloutput_t speed_obs_pll_output_t;
-mavlink_elecangleidinput_t elec_angle_id_input_t;
 mavlink_elecangleidconfig_t elec_angle_id_config_t;
 mavlink_elecangleidoutput_t elec_angle_id_output_t;
+mavlink_elecangleidinput_t elec_angle_id_input_t;
 mavlink_directionidinput_t direction_id_input_t;
 mavlink_directionidconfig_t direction_id_config_t;
 mavlink_directionidoutput_t direction_id_output_t;
@@ -359,16 +359,9 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 speed_obs_pll_output_t.ev_rad_s = axis->speed_obs_pll_output.ev_rad_s;
                 mavlink_msg_speedobsplloutput_encode(0, 0, &send_msg, (mavlink_speedobsplloutput_t *)&speed_obs_pll_output_t);
                 break;
-            case MAVLINK_MSG_ID_ElecAngleIdInput:
-                //elec_angle_id_input_t.id_now_A = axis->elec_angle_id_input.id_now_A;
-                elec_angle_id_input_t.pos_now_rad = axis->elec_angle_id_input.pos_now_rad;
-                mavlink_msg_elecangleidinput_encode(0, 0, &send_msg, (mavlink_elecangleidinput_t *)&elec_angle_id_input_t);
-                break;
             case MAVLINK_MSG_ID_ElecAngleIdConfig:
-                //elec_angle_id_config_t.id_sin_amp_A = axis->elec_angle_id_config.id_sin_amp_A;
+                elec_angle_id_config_t.id_max_A = axis->elec_angle_id_config.id_max_A;
                 elec_angle_id_config_t.dt_s = axis->elec_angle_id_config.dt_s;
-//                elec_angle_id_config_t.id_sin_w_Hz = axis->elec_angle_id_config.id_sin_w_Hz;
-//                elec_angle_id_config_t.search_gain = axis->elec_angle_id_config.search_gain;
                 elec_angle_id_config_t.method = axis->elec_angle_id_config.method;
                 elec_angle_id_config_t.angle_add_rad = axis->elec_angle_id_config.angle_add_rad;
                 elec_angle_id_config_t.wait_time_s = axis->elec_angle_id_config.wait_time_s;
@@ -379,11 +372,14 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
             case MAVLINK_MSG_ID_ElecAngleIdOutput:
                 elec_angle_id_output_t.id_tar_A = axis->elec_angle_id_output.id_tar_A;
                 elec_angle_id_output_t.elec_bias_rad = axis->elec_angle_id_output.elec_bias_rad;
-                //elec_angle_id_output_t.pearson_r = axis->elec_angle_id_output.pearson_r;
                 elec_angle_id_output_t.state_now = axis->elec_angle_id_output.state_now;
                 memcpy(&elec_angle_id_output_t.elec_bias_buff_rad, axis->elec_angle_id_output.elec_bias_buff_rad, sizeof(elec_angle_id_output_t.elec_bias_buff_rad));
                 elec_angle_id_output_t.step_num = axis->elec_angle_id_output.step_num;
                 mavlink_msg_elecangleidoutput_encode(0, 0, &send_msg, (mavlink_elecangleidoutput_t *)&elec_angle_id_output_t);
+                break;
+            case MAVLINK_MSG_ID_ElecAngleIdInput:
+                elec_angle_id_input_t.pos_now_rad = axis->elec_angle_id_input.pos_now_rad;
+                mavlink_msg_elecangleidinput_encode(0, 0, &send_msg, (mavlink_elecangleidinput_t *)&elec_angle_id_input_t);
                 break;
             case MAVLINK_MSG_ID_DirectionIdInput:
                 direction_id_input_t.enc_counts_sum_p = axis->direction_id_input.enc_counts_sum_p;
@@ -1012,18 +1008,10 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->speed_obs_pll_output.ev_rad_s = speed_obs_pll_output_t.ev_rad_s;}
                 mavlink_msg_speedobsplloutput_encode(0, 0, &send_msg, (mavlink_speedobsplloutput_t *)&speed_obs_pll_output_t);
                 break;
-            case MAVLINK_MSG_ID_ElecAngleIdInput:
-                mavlink_msg_elecangleidinput_decode(&msg, (mavlink_elecangleidinput_t *)&elec_angle_id_input_t);
-                // if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_input.id_now_A = elec_angle_id_input_t.id_now_A;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_input.pos_now_rad = elec_angle_id_input_t.pos_now_rad;}
-                mavlink_msg_elecangleidinput_encode(0, 0, &send_msg, (mavlink_elecangleidinput_t *)&elec_angle_id_input_t);
-                break;
             case MAVLINK_MSG_ID_ElecAngleIdConfig:
                 mavlink_msg_elecangleidconfig_decode(&msg, (mavlink_elecangleidconfig_t *)&elec_angle_id_config_t);
-                // if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_config.id_sin_amp_A = elec_angle_id_config_t.id_sin_amp_A;}
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_config.id_max_A = elec_angle_id_config_t.id_max_A;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_config.dt_s = elec_angle_id_config_t.dt_s;}
-                // if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_config.id_sin_w_Hz = elec_angle_id_config_t.id_sin_w_Hz;}
-                // if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_config.search_gain = elec_angle_id_config_t.search_gain;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_config.method = elec_angle_id_config_t.method;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_config.angle_add_rad = elec_angle_id_config_t.angle_add_rad;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_config.wait_time_s = elec_angle_id_config_t.wait_time_s;}
@@ -1035,11 +1023,15 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 mavlink_msg_elecangleidoutput_decode(&msg, (mavlink_elecangleidoutput_t *)&elec_angle_id_output_t);
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_output.id_tar_A = elec_angle_id_output_t.id_tar_A;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_output.elec_bias_rad = elec_angle_id_output_t.elec_bias_rad;}
-                // if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_output.pearson_r = elec_angle_id_output_t.pearson_r;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_output.state_now = elec_angle_id_output_t.state_now;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->elec_angle_id_output.elec_bias_buff_rad, elec_angle_id_output_t.elec_bias_buff_rad, sizeof(elec_angle_id_output_t.elec_bias_buff_rad));}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_output.step_num = elec_angle_id_output_t.step_num;}
                 mavlink_msg_elecangleidoutput_encode(0, 0, &send_msg, (mavlink_elecangleidoutput_t *)&elec_angle_id_output_t);
+                break;
+            case MAVLINK_MSG_ID_ElecAngleIdInput:
+                mavlink_msg_elecangleidinput_decode(&msg, (mavlink_elecangleidinput_t *)&elec_angle_id_input_t);
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_input.pos_now_rad = elec_angle_id_input_t.pos_now_rad;}
+                mavlink_msg_elecangleidinput_encode(0, 0, &send_msg, (mavlink_elecangleidinput_t *)&elec_angle_id_input_t);
                 break;
             case MAVLINK_MSG_ID_DirectionIdInput:
                 mavlink_msg_directionidinput_decode(&msg, (mavlink_directionidinput_t *)&direction_id_input_t);
@@ -1586,10 +1578,9 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 mavlink_msg_simplantconfig_encode(0, 0, &send_msg, (mavlink_simplantconfig_t *)&sim_plant_config_t);
                 break;
             case MAVLINK_MSG_ID_AppDebugParam:
-                // todo:脚本需要处理应用层数组
                 mavlink_msg_appdebugparam_decode(&msg, (mavlink_appdebugparam_t *)&app_debug_param_t);
-                memcpy(kAppDebugParam.Debug_float, app_debug_param_t.Debug_float, sizeof(app_debug_param_t.Debug_float));
-                memcpy(kAppDebugParam.Debug_uint32, app_debug_param_t.Debug_uint32, sizeof(app_debug_param_t.Debug_uint32));
+                memcpy(get_app_Debug_float_addr(), app_debug_param_t.Debug_float, sizeof(app_debug_param_t.Debug_float));
+                memcpy(get_app_Debug_uint32_addr(), app_debug_param_t.Debug_uint32, sizeof(app_debug_param_t.Debug_uint32));
                 mavlink_msg_appdebugparam_encode(0, 0, &send_msg, (mavlink_appdebugparam_t *)&app_debug_param_t);
                 break;
 //DATABASE_CODE_STOP_3

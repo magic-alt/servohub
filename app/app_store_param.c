@@ -128,9 +128,38 @@ void flash_param_update(void)
     kFlashStorage.app_protect_config_Drive_high_temperature_warning_threshold = kAppProtectConfig.Drive_high_temperature_warning_threshold;
     kFlashStorage.app_encoder_config_Encoder_options = kAppEncoderConfig.Encoder_options;
     kFlashStorage.app_motor_config_Motor_rotor_inertia = kAppMotorConfig.Motor_rotor_inertia;
-    // todo:需要处理应用层数组
-    // kFlashStorage.app_debug_param_Debug_float = kAppDebugParam.Debug_float;
-    // kFlashStorage.app_debug_param_Debug_uint32 = kAppDebugParam.Debug_uint32;
+    kFlashStorage.app_debug_param_Debug_float[0] = kAppDebugParam.Debug_float[0];
+    kFlashStorage.app_debug_param_Debug_float[1] = kAppDebugParam.Debug_float[1];
+    kFlashStorage.app_debug_param_Debug_float[2] = kAppDebugParam.Debug_float[2];
+    kFlashStorage.app_debug_param_Debug_float[3] = kAppDebugParam.Debug_float[3];
+    kFlashStorage.app_debug_param_Debug_float[4] = kAppDebugParam.Debug_float[4];
+    kFlashStorage.app_debug_param_Debug_float[5] = kAppDebugParam.Debug_float[5];
+    kFlashStorage.app_debug_param_Debug_float[6] = kAppDebugParam.Debug_float[6];
+    kFlashStorage.app_debug_param_Debug_float[7] = kAppDebugParam.Debug_float[7];
+    kFlashStorage.app_debug_param_Debug_float[8] = kAppDebugParam.Debug_float[8];
+    kFlashStorage.app_debug_param_Debug_float[9] = kAppDebugParam.Debug_float[9];
+    kFlashStorage.app_debug_param_Debug_float[10] = kAppDebugParam.Debug_float[10];
+    kFlashStorage.app_debug_param_Debug_float[11] = kAppDebugParam.Debug_float[11];
+    kFlashStorage.app_debug_param_Debug_float[12] = kAppDebugParam.Debug_float[12];
+    kFlashStorage.app_debug_param_Debug_float[13] = kAppDebugParam.Debug_float[13];
+    kFlashStorage.app_debug_param_Debug_float[14] = kAppDebugParam.Debug_float[14];
+    kFlashStorage.app_debug_param_Debug_float[15] = kAppDebugParam.Debug_float[15];
+    kFlashStorage.app_debug_param_Debug_uint32[0] = kAppDebugParam.Debug_uint32[0];
+    kFlashStorage.app_debug_param_Debug_uint32[1] = kAppDebugParam.Debug_uint32[1];
+    kFlashStorage.app_debug_param_Debug_uint32[2] = kAppDebugParam.Debug_uint32[2];
+    kFlashStorage.app_debug_param_Debug_uint32[3] = kAppDebugParam.Debug_uint32[3];
+    kFlashStorage.app_debug_param_Debug_uint32[4] = kAppDebugParam.Debug_uint32[4];
+    kFlashStorage.app_debug_param_Debug_uint32[5] = kAppDebugParam.Debug_uint32[5];
+    kFlashStorage.app_debug_param_Debug_uint32[6] = kAppDebugParam.Debug_uint32[6];
+    kFlashStorage.app_debug_param_Debug_uint32[7] = kAppDebugParam.Debug_uint32[7];
+    kFlashStorage.app_debug_param_Debug_uint32[8] = kAppDebugParam.Debug_uint32[8];
+    kFlashStorage.app_debug_param_Debug_uint32[9] = kAppDebugParam.Debug_uint32[9];
+    kFlashStorage.app_debug_param_Debug_uint32[10] = kAppDebugParam.Debug_uint32[10];
+    kFlashStorage.app_debug_param_Debug_uint32[11] = kAppDebugParam.Debug_uint32[11];
+    kFlashStorage.app_debug_param_Debug_uint32[12] = kAppDebugParam.Debug_uint32[12];
+    kFlashStorage.app_debug_param_Debug_uint32[13] = kAppDebugParam.Debug_uint32[13];
+    kFlashStorage.app_debug_param_Debug_uint32[14] = kAppDebugParam.Debug_uint32[14];
+    kFlashStorage.app_debug_param_Debug_uint32[15] = kAppDebugParam.Debug_uint32[15];
 }
 
 void flash_param_init(void)
@@ -255,9 +284,38 @@ void flash_param_init(void)
     kAppProtectConfig.Drive_high_temperature_warning_threshold = kFlashStorage.app_protect_config_Drive_high_temperature_warning_threshold;
     kAppEncoderConfig.Encoder_options = kFlashStorage.app_encoder_config_Encoder_options;
     kAppMotorConfig.Motor_rotor_inertia = kFlashStorage.app_motor_config_Motor_rotor_inertia;
-    // todo:需要处理应用层数组
-    // kAppDebugParam.Debug_float = kFlashStorage.app_debug_param_Debug_float;
-    // kAppDebugParam.Debug_uint32 = kFlashStorage.app_debug_param_Debug_uint32;
+    kAppDebugParam.Debug_float[0] = kFlashStorage.app_debug_param_Debug_float[0];
+    kAppDebugParam.Debug_float[1] = kFlashStorage.app_debug_param_Debug_float[1];
+    kAppDebugParam.Debug_float[2] = kFlashStorage.app_debug_param_Debug_float[2];
+    kAppDebugParam.Debug_float[3] = kFlashStorage.app_debug_param_Debug_float[3];
+    kAppDebugParam.Debug_float[4] = kFlashStorage.app_debug_param_Debug_float[4];
+    kAppDebugParam.Debug_float[5] = kFlashStorage.app_debug_param_Debug_float[5];
+    kAppDebugParam.Debug_float[6] = kFlashStorage.app_debug_param_Debug_float[6];
+    kAppDebugParam.Debug_float[7] = kFlashStorage.app_debug_param_Debug_float[7];
+    kAppDebugParam.Debug_float[8] = kFlashStorage.app_debug_param_Debug_float[8];
+    kAppDebugParam.Debug_float[9] = kFlashStorage.app_debug_param_Debug_float[9];
+    kAppDebugParam.Debug_float[10] = kFlashStorage.app_debug_param_Debug_float[10];
+    kAppDebugParam.Debug_float[11] = kFlashStorage.app_debug_param_Debug_float[11];
+    kAppDebugParam.Debug_float[12] = kFlashStorage.app_debug_param_Debug_float[12];
+    kAppDebugParam.Debug_float[13] = kFlashStorage.app_debug_param_Debug_float[13];
+    kAppDebugParam.Debug_float[14] = kFlashStorage.app_debug_param_Debug_float[14];
+    kAppDebugParam.Debug_float[15] = kFlashStorage.app_debug_param_Debug_float[15];
+    kAppDebugParam.Debug_uint32[0] = kFlashStorage.app_debug_param_Debug_uint32[0];
+    kAppDebugParam.Debug_uint32[1] = kFlashStorage.app_debug_param_Debug_uint32[1];
+    kAppDebugParam.Debug_uint32[2] = kFlashStorage.app_debug_param_Debug_uint32[2];
+    kAppDebugParam.Debug_uint32[3] = kFlashStorage.app_debug_param_Debug_uint32[3];
+    kAppDebugParam.Debug_uint32[4] = kFlashStorage.app_debug_param_Debug_uint32[4];
+    kAppDebugParam.Debug_uint32[5] = kFlashStorage.app_debug_param_Debug_uint32[5];
+    kAppDebugParam.Debug_uint32[6] = kFlashStorage.app_debug_param_Debug_uint32[6];
+    kAppDebugParam.Debug_uint32[7] = kFlashStorage.app_debug_param_Debug_uint32[7];
+    kAppDebugParam.Debug_uint32[8] = kFlashStorage.app_debug_param_Debug_uint32[8];
+    kAppDebugParam.Debug_uint32[9] = kFlashStorage.app_debug_param_Debug_uint32[9];
+    kAppDebugParam.Debug_uint32[10] = kFlashStorage.app_debug_param_Debug_uint32[10];
+    kAppDebugParam.Debug_uint32[11] = kFlashStorage.app_debug_param_Debug_uint32[11];
+    kAppDebugParam.Debug_uint32[12] = kFlashStorage.app_debug_param_Debug_uint32[12];
+    kAppDebugParam.Debug_uint32[13] = kFlashStorage.app_debug_param_Debug_uint32[13];
+    kAppDebugParam.Debug_uint32[14] = kFlashStorage.app_debug_param_Debug_uint32[14];
+    kAppDebugParam.Debug_uint32[15] = kFlashStorage.app_debug_param_Debug_uint32[15];
 }
 /* USER CODE BEGIN AREA 1 */
 static HistoricalInfo kFlashHistoricalInfo;
