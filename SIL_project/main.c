@@ -1,5 +1,4 @@
 #include "main.h"
-#include <zmq.h>
 #include "motor_ctl_loop.h"
 #include "data_param.h"
 #include "zmq_handler.h"
@@ -14,7 +13,6 @@ int main(void)
     app_param_init();
     MotorCtrlInit();
     app_init();
-    //storage_param_init();
 
     RegisterSetAppCallback(set_app);
     RegisterCheckErrorCallback(app_get_check_error_val);
@@ -38,7 +36,7 @@ int main(void)
     HighPrecisionTimer* zmq_recv_timer = CreateHighPrecisionTimer(ZmqRecvTimerCallback, &kAxis);
     StartHighPrecisionTimer(zmq_recv_timer, 0, 1);
 
-    printf("Timer is running, press Enter to stop...\n");
+    printf("The virtual driver and motor are running, press Enter to stop...\n");
     getchar();
 
     DestroyHighPrecisionTimer(motor_ctrl_timer);
