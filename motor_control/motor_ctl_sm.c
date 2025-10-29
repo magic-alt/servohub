@@ -61,24 +61,27 @@ void MotorCtlSmInit(Axis *const axis, AxisDw *const axis_dw)
    axis->current_ctl_config.pwm_duty_cycle_max = 0.9F;
    axis->current_ctl_config.phase_dir = 1;
 
+   float wn = 1.0f / (2.12f * axis->pmsm_config.tc_s) * axis->current_ctl_config.bandwidth_percentage * 0.01f; // 电流环闭环带宽
+   float delta = 8.0f;                                                                                         // 速度环阻尼因子
+
    axis->pos_speed_ctl_config.aff = 0.0F;
    axis->pos_speed_ctl_config.vff = 1.0F;
    axis->pos_speed_ctl_config.enc_line_inv_p_n = 1.0f / axis->pmsm_config.enc_line_p_n; // 编码器分辨率倒数
-   axis->pos_speed_ctl_config.j_kt = axis->pmsm_config.j / (0.05f);                     // kt = 0.05
-   axis->pos_speed_ctl_config.ki_s = 12.0f;
-   axis->pos_speed_ctl_config.kp_p = 200.0F;
-   axis->pos_speed_ctl_config.kp_s = 0.0151f;
+   axis->pos_speed_ctl_config.j_kt = axis->pmsm_config.j / axis->pmsm_config.kt;        // kt = 0.05
+   axis->pos_speed_ctl_config.ki_s = wn / (delta * delta);
+   axis->pos_speed_ctl_config.kp_s = delta * axis->pos_speed_ctl_config.ki_s * axis->pos_speed_ctl_config.j_kt;
+   axis->pos_speed_ctl_config.kp_p = delta * axis->pos_speed_ctl_config.ki_s * 0.25f * 0.5f;
    axis->pos_speed_ctl_config.speed_max_rad_s = 300.0F;
-   axis->pos_speed_ctl_config.tp_s = 0.0001F;
+   axis->pos_speed_ctl_config.tp_s = axis->current_ctl_config.dt_s;
    axis->pos_speed_ctl_config.dob_wn_Hz = 400.0F;
    axis->pos_speed_ctl_config.dob_enable = 0;
 
-   axis->speed_obs_pll_config.tp_s = 0.0001F;
-   axis->speed_obs_pll_config.wn_Hz = 400.0F;
+   axis->speed_obs_pll_config.tp_s = axis->pmsm_config.tp_s;
+   axis->speed_obs_pll_config.wn_Hz = 800.0F; // 默认速度观测器带宽 800Hz
    axis->speed_obs_pll_config.enc_line_inv_p_n = 1.0f / 4000.0f;
    axis->speed_obs_pll_config.speed_obs_max_rad_s = 400.0F;
 
-   axis->elec_id_sin_config.dt_s = 0.0001F;
+   axis->elec_id_sin_config.dt_s = axis->pmsm_config.tp_s;
    axis->elec_id_sin_config.end_fs_Hz = 1.0F;
    axis->elec_id_sin_config.i_max_A = 1.0F;
    axis->elec_id_sin_config.init_fs_Hz = 500.0F;
@@ -86,7 +89,7 @@ void MotorCtlSmInit(Axis *const axis, AxisDw *const axis_dw)
    axis->elec_id_sin_config.u_max_V = 12.0F;
    axis->elec_id_sin_config.wait_time_s = 0.2F;
 
-   axis->mec_id_config.dt_s = 0.0001F;
+   axis->mec_id_config.dt_s = axis->pmsm_config.tp_s;
    axis->mec_id_config.end_fs_Hz = 1000.0F;
    axis->mec_id_config.start_fs_Hz = 5.0F;
    axis->mec_id_config.target_time_s = 0.4F;
@@ -104,7 +107,7 @@ void MotorCtlSmInit(Axis *const axis, AxisDw *const axis_dw)
    axis->motor_ctl_sm_config.position_following_error_protection = 100000;
 
    axis->elec_angle_id_config.id_max_A = axis->pmsm_config.rated_current;
-   axis->elec_angle_id_config.dt_s = 0.0001F;
+   axis->elec_angle_id_config.dt_s = axis->pmsm_config.tp_s;
    axis->elec_angle_id_config.method = 0U;
    axis->elec_angle_id_config.angle_add_rad = 0.0001F;
    axis->elec_angle_id_config.wait_time_s = 1.0F;
