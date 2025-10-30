@@ -9,8 +9,8 @@ extern "C"
 #include "servo_hub_database_type.h"
 #include "data_type_define.h"
 
-extern Axis kAxis; 
-extern AxisDw kAxisDw;  
+extern Axis kAxis;
+extern AxisDw kAxisDw;
 
 void MotorCtrlInit(void);
 void UnrealTimeBase1ms(void);

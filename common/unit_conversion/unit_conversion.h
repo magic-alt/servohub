@@ -30,4 +30,4 @@ int conver_den_div_num(int64_t *src, int64_t *dec, UNIT_CONVERSION_TYPE type);
 }
 #endif
 
-#endif
+#endif //UNIT_CONVERSION_H

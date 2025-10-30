@@ -10,17 +10,6 @@
 #include "motor_parameter.h"
 #include "version.h"
 
-//#include "motor_ctl_sm.h"
-//#include "app_scheduler.h"
-//#include "servo_hub_database_define.h"
-//#include "bsp_api.h"
-//#include "board.h"
-//#include "coordinate_conversion.h"
-//#include "app_store_param.h"
-//#include "system_timer.h"
-//#include "yuanhub_math.h"
-
-
 typedef enum
 {
     APP_SYSTEM_CMD_NONE = 0,                    // 无指令

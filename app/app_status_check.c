@@ -1,6 +1,5 @@
 #include "app_status_check.h"
 #include "motor_ctl_loop.h"
-#include "yuanhub_math.h"
 
 static Axis *const axis = &kAxis; // 引用电机对象实例化
 AppCheckVal app_check =
@@ -460,6 +459,12 @@ static inline bool app_excess_temperature_motor_error_check(void)
  */
 static inline bool app_too_low_temperature_motor_error_check(void)
 {
+    if (app_check.motor_temp_now > MOTOR_NTC_FAULT_C) // NTC警告
+    {
+        app_check.warning.bits.motor_temperature_ntc = true;
+        return false; //非正常温度值，不再检测错误
+    }
+
     if (app_check.motor_temp_now < get_app_Motor_low_temperature_warning_threshold()) // 警告
     {
         app_check.warning.bits.under_temperature_motor = true;

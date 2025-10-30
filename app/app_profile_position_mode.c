@@ -67,7 +67,7 @@ AppResult pp_mode_run()
         else
         {
             pp_mode.traj.profile_speed = get_app_Profile_velocity() * get_app_Load_rpm_2_pps() * \
-                                            get_app_Reduction_ratio();   // rpm->pps 单位转换最终做到app_param里去
+                                            get_app_Reduction_ratio();
         }
 
         // 设置规划器参数
@@ -83,9 +83,9 @@ AppResult pp_mode_run()
         pp_mode.traj.pos_tar_p = pp_mode.pos_tar_p_add + get_app_Motor_position_actual_value(); //  转化到内环目标位置
 
         pp_mode.traj.profile_acc = get_app_Profile_acceleration() * get_app_Load_rpm_2_pps() * \
-                                    get_app_Reduction_ratio(); // rpm/s->pps^2 单位转换最终做到app_param里去
+                                    get_app_Reduction_ratio();
         pp_mode.traj.profile_dec = get_app_Profile_deceleration() * get_app_Load_rpm_2_pps() * \
-                                    get_app_Reduction_ratio(); // rpm/s->pps^2 单位转换最终做到app_param里去
+                                    get_app_Reduction_ratio();
 
     }
     else if (pp_mode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
@@ -106,9 +106,9 @@ AppResult pp_mode_run()
         {
             //TODO: 电压限制急停先不实现按正常减速斜率停机
             pp_mode.traj.profile_acc = get_app_Profile_acceleration() * get_app_Load_rpm_2_pps() * \
-                                        get_app_Reduction_ratio(); // rpm/s->pps^2 单位转换最终做到app_param里去
+                                        get_app_Reduction_ratio();
             pp_mode.traj.profile_dec = get_app_Profile_deceleration() * get_app_Load_rpm_2_pps() * \
-                                        get_app_Reduction_ratio(); // rpm/s->pps^2 单位转换最终做到app_param里去
+                                        get_app_Reduction_ratio();
         }
         // 在急停后失能电机模式下，检测到零速后电机失能
         if (pp_mode.emergency_brake_mode <= EMERGENCY_BRAKE_MODE_VOLTAGE_LIMIT)

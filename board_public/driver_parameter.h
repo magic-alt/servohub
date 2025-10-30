@@ -17,7 +17,7 @@ extern "C"
 #define UVW_CURRENT_SAMP_ADC_K (ADC_REFERENCE_V / ADC_RESOLTION / (20.0f * UVW_CURRENT_SAMP_RES))       //电流采样ADC转化系数
 #define DC_BUS_CURRENT_SAMP_ADC_K (ADC_REFERENCE_V / ADC_RESOLTION / (20.0f * DC_BUS_CURRENT_SAMP_RES)) //电流采样ADC转化系数
 #define DC_BUS_ADC_VOLTAGE_K (ADC_REFERENCE_V / ADC_RESOLTION * ((100.f + ADC_REFERENCE_V) / ADC_REFERENCE_V)) //3.3v参考电压，电阻分压比100K/3.3K，16bitADC
-#define DC_BUS_ADC_VOLTAGE_BIAS (0.374f)
+#define DC_BUS_ADC_VOLTAGE_BIAS (0.528f)    // DC_BUS电压校准理论值(基于48V)
 #define DC_BUS_ADC_CURRENT_BIAS (0.100f)
 
 #define UVW_CURRENT_MID_VAL ((ADC_RESOLTION + 1.0f) * 0.5f) // 电流校准理论值（分辨率中间值）
@@ -42,8 +42,8 @@ extern "C"
 
 
 // 硬件保护参数
-#define UNDER_VOLTAGE_PROTECTION_V      (24.0f)     // 低压保护电压
-#define OVER_VOLTAGE_PROTECTION_V       (70.0f)     // 高压保护电压
+#define UNDER_VOLTAGE_PROTECTION_V      (17.0f)     // 低压保护电压
+#define OVER_VOLTAGE_PROTECTION_V       (73.0f)     // 高压保护电压
 
 #define K_LPF_TEMP                      (0.3859f)   // 温度滤波系数  100HZ  1ms周期
 #define MOTOR_NTC_FAULT_C               (600.0f * K_LPF_TEMP)    // 电机温度NTC传感器故障温度阈值

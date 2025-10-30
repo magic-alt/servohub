@@ -2,13 +2,11 @@
 #include "motor_ctl_loop.h"
 #include "data_param.h"
 #include "zmq_handler.h"
-#include "system_timer.h"
 #include "mavlink_callback.h"
 #include "app_scheduler.h"
 
 int main(void)
 {
-    sys_timer_init();
     scope_init();
     app_param_init();
     MotorCtrlInit();
@@ -55,7 +53,6 @@ void MotorCtrlTimerCallback(void* arg)
         SimPlantStep();
         if (position_frq_div == 0)
         {
-      
             PosSpeedLoopCtrl();
             position_frq_div = 1; // 1:10KHZ 位置环   3:5KHZ 位置环
         }
@@ -91,8 +88,8 @@ HighPrecisionTimer* CreateHighPrecisionTimer(TimerCallback callback, void* conte
 }
 
 // 定时器回调函数（由系统调用）
-static VOID CALLBACK TimerAPCProc(LPVOID lpArgToCompletionRoutine, 
-                                 DWORD dwTimerLowValue, 
+static VOID CALLBACK TimerAPCProc(LPVOID lpArgToCompletionRoutine,
+                                 DWORD dwTimerLowValue,
                                  DWORD dwTimerHighValue) {
     HighPrecisionTimer* timer = (HighPrecisionTimer*)lpArgToCompletionRoutine;
     if (timer && timer->callback) {

@@ -64,7 +64,7 @@ AppResult hm_mode_run()
     {
         volatile int64_t offset_last = get_app_Home_position_offset_value();
         set_app_Home_position_offset_value(offset_last + get_app_Position_actual_value());
-        // TODO: 保存参数
+        // TODO: 自动保存回零偏移值
         return APP_RET_SUCCESS;
     }
 

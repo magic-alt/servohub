@@ -1,12 +1,16 @@
 #ifndef __ringbuffer_H
 #define __ringbuffer_H
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 #include <stdint.h>
 #include <string.h>
+
 #define RB_ALIGN_SIZE 4
 #define RB_ALIGN_DOWN(size, align) ((size) & ~((align)-1))
+
 typedef struct ringbuffer {
     uint8_t *buffer_ptr;
     uint16_t read_mirror : 1;

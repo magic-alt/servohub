@@ -21,15 +21,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "system_init.h"
 #include "board.h"
-
 #include "app_scheduler.h"
 #include "app_status_check.h"
 
-//#include "motor_ctl_loop.h"
-//#include "mavlink_callback.h"
-//#include "data_param.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -184,14 +179,14 @@ int main(void)
   MX_I2C1_Init();
   MX_CRC_Init();
   /* USER CODE BEGIN 2 */
-  //临时初始化
-  RegisterSendCallback(mavlink_send_data);
-
+  // 部分应用注册回调函数
   RegisterSetAppCallback(set_app);
   RegisterCheckErrorCallback(app_get_check_error_val);
   RegisterCheckWarningCallback(app_get_check_warning_val);
   RegisterCheckStatusCallback(app_get_check_status_val);
+  RegisterSendCallback(mavlink_send_data);
 
+  // 硬件及应用初始化
   HalInit();
   BspInit();
 

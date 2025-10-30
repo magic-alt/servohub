@@ -1,26 +1,7 @@
 #ifndef SYSTEM_INIT_H
 #define SYSTEM_INIT_H
 
-//#include "data_type_define.h"
-
 #include "board.h"
-
-
-//#include "scope_app.h"
-//#include "app_store_param.h"
-//#include "app_scheduler.h"
-
-//#include "board.h"
-//#include "motor_ctl_loop.h"
-// #include "system_timer.h"
-// #include "mavlink_callback.h"
-
-
-// #include "data_param.h"
-
-// #include "app_status_check.h"
-// #include "version.h"
-
 
 #ifdef __cplusplus
 extern "C" {

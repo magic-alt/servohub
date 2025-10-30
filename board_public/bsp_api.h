@@ -1,10 +1,7 @@
 #ifndef BSP_API_H
 #define BSP_API_H
 
-#include <stdint.h>
-
 #include "data_type_define.h"
-
 
 #ifdef __cplusplus
 extern "C"

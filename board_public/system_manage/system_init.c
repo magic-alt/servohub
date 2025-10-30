@@ -3,7 +3,6 @@
 #include "app_scheduler.h"
 #include "app_store_param.h"
 #include "app_status_check.h"
-#include <stdbool.h>
 
 extern Axis kAxis;
 extern AxisDw kAxisDw;

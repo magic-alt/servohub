@@ -1,10 +1,7 @@
 #ifndef SCOPE_APP_H
 #define SCOPE_APP_H
 
-#include <stdint.h>
-
 #include "ringbuffer.h"
-
 
 #ifdef __cplusplus
 extern "C" {

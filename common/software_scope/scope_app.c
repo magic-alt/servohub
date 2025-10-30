@@ -1,9 +1,7 @@
 #include "scope_app.h"
 
-#include "ringbuffer.h"
 #include "scope_map.h"
-
-
+#include "ringbuffer.h"
 
 ScopeStruct kScopeObject;
 ChannelStruct kChannelObjectArray[SCOPE_CHANNEL_NUM_MAX];
@@ -51,7 +49,7 @@ static uint8_t scope_channel_config() {
 
     //实际采样点数 = 配置采样点数 / 配置采样间隔
     kScopeObject.sample_points_all = kScopeObject.sample_points;
-    
+
     //如果buffer的大小不够，则直接返回
     if(points_max < kScopeObject.sample_points_all){
         return 2;
@@ -135,7 +133,7 @@ static void scope_trigger_catch() {
 
     /* 如果边沿已经触发，则直接退出 */
     if (kTriggerSuccessFlag == kScopeObject.trigger_flag) { return; }
-    
+
     /* 边沿触发判断，需要已经捕捉到了足够的数据 */
     if (trigger_object->catch_count < CATCH_WINDOW_SIZE) {
         get_database_param_val(trigger_object->data_ptr, trigger_object->data_type, &data_val);
@@ -421,7 +419,7 @@ void scope_isr_handle(void) {
         (kScopeObject.status_word != kSampleSuccess)) {
         kScopeObject.status_word = kSampleSuccess;
         kScopeObject.sample_isr_flag = kSampleIsrClose;
-        
+
         sample_complete_deal();
     }
 
@@ -495,7 +493,7 @@ void control_word_write_callback(ScopeControlWord control_word) {
  * @param[out] pdata_ptr 数据指针
  */
 void get_database_param_info(uint32_t index, uint32_t *pdata, uint8_t *type, uint8_t *size, void **pdata_ptr) {
-    
+
     uint32_t array_index_temp = 0;
 
     if (pdata == NULL || type == NULL || size == NULL) {
@@ -552,7 +550,7 @@ void get_database_param_info(uint32_t index, uint32_t *pdata, uint8_t *type, uin
                     *pdata_ptr = ((uint32_t *)kParamDataBase[i].pdata + array_index_temp);
                     *size = 4;
                     return;
-                
+
                 case kTypeInt64:    //离线波形64位数据截取32位数据处理
                     *pdata = (*((int64_t *)kParamDataBase[i].pdata + array_index_temp)) & 0xFFFFFFFF;
                     *pdata_ptr = ((int64_t *)kParamDataBase[i].pdata + array_index_temp);

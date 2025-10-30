@@ -35,12 +35,12 @@ typedef enum
 {
     ERROR_ENCODER_MOTOR = 0,                // 电机端编码器错误
     ERROR_ENCODER_LOAD,                     // 负载端编码器错误
-    ERROR_NFAULT,                           // DRV预驱nFault报错
+    ERROR_NFAULT,                           // Drv预驱nFault报错
     ERROR_BUS_CURRENT_OC,                   // 母线过流错误
     ERROR_BUS_OFFLINE,                      // 母线掉线
-    ERROR_FLASH_STORE,                      // flash存储错误
-    ERROR_ECAT_INIT,                        // eact初始化错误
-    ERROR_DRV_INIT,                         // drv初始化错误
+    ERROR_FLASH_STORE,                      // Flash存储错误
+    ERROR_ECAT_INIT,                        // Ecat初始化错误
+    ERROR_DRV_INIT,                         // Drv初始化错误
     ERROR_BUS_VOLTAGE,                      // 母线电压错误
     ERROR_CURRENT_SAMPLE,                   // 电流采样错误
     ERROR_FIRMWARE,                         // 固件错误
@@ -55,12 +55,12 @@ typedef union
     {
         uint32_t error_encoder_motor : 1;               // 电机端编码器错误
         uint32_t error_encoder_load : 1;                // 负载端编码器错误
-        uint32_t error_nfault : 1;                      // DRV预驱nFault报错
+        uint32_t error_nfault : 1;                      // Drv预驱nFault报错
         uint32_t error_bus_current_oc : 1;              // 母线过流错误
         uint32_t error_bus_offline : 1;                 // 母线掉线
-        uint32_t error_flash_store : 1;                 // flash存储错误
-        uint32_t error_ecat_init : 1;                   // eact初始化错误
-        uint32_t error_drv_init : 1;                    // drv初始化错误
+        uint32_t error_flash_store : 1;                 // Flash存储错误
+        uint32_t error_ecat_init : 1;                   // Ecat初始化错误
+        uint32_t error_drv_init : 1;                    // Drv初始化错误
         uint32_t error_bus_voltage : 1;                 // 母线电压错误
         uint32_t error_current_sample : 1;              // 电流采样错误
         uint32_t error_firmware : 1;                    // 固件错误

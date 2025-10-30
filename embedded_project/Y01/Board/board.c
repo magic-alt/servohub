@@ -11,7 +11,6 @@ __attribute__((section(".RAM_D1"))) BspData kBspData =
     .adc3_raw_buffer[0] = 0,
     .adc3_raw_buffer[1] = 0,
     .adc3_raw_buffer[2] = 0,
-    .adc_regular_sampling_request = true,
     .dc_bus_voltage_val = 0.0f,
     .dc_bus_current_val = 0.0f,
     .motor_temp_val = 20.0f,
@@ -90,9 +89,9 @@ void BspInit(void)
     __HAL_TIM_ENABLE_IT(&PWM_TIM_HANDLE, TIM_IT_BREAK);
 
     // 启动调试软件通讯
+    __HAL_UART_CLEAR_IDLEFLAG(&HOST_UART_HANDLE);
     HAL_UART_Receive_DMA(&HOST_UART_HANDLE, mavlink_rx_buff, MAVLINK_RECV_BUFF_SIZE);
     __HAL_UART_ENABLE_IT(&HOST_UART_HANDLE, UART_IT_IDLE);
-    __HAL_UART_CLEAR_FLAG(&HOST_UART_HANDLE, UART_IT_IDLE);
 
     HAL_Delay(10);
 }
@@ -208,7 +207,8 @@ void HOST_UART_IRQ_TASK(void)
         // 重新启动DMA接收，准备接收下一批数据
         HAL_UART_Receive_DMA(&HOST_UART_HANDLE, mavlink_rx_buff, MAVLINK_RECV_BUFF_SIZE);
     }
-    
+
+    // 及时检查溢出错误(ORE)，清除错误标志并重新启动DMA接收
     if (__HAL_UART_GET_FLAG(&HOST_UART_HANDLE, UART_FLAG_ORE))
     {
         __HAL_UART_CLEAR_FLAG(&HOST_UART_HANDLE, UART_FLAG_ORE);

@@ -54,7 +54,7 @@ void get_waveform_data(int64_t *waveform_data_array) {
         //单个变量的子索引是0，数组子索引(1-n)，访问数组成员时，索引要减一
         array_index_temp = 0;
         if(array_index[i] != 0){
-            array_index_temp = array_index[i] - 1; 
+            array_index_temp = array_index[i] - 1;
         }
         switch (kParamDataBase[struct_index[i]].type) {
             case kTypeUint8:

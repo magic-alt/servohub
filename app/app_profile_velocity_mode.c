@@ -1,5 +1,4 @@
 #include "app_profile_velocity_mode.h"
-#include "yuanhub_math.h"
 
 static PvMode_t pv_mode =
 {
