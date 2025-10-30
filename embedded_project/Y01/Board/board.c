@@ -208,6 +208,13 @@ void HOST_UART_IRQ_TASK(void)
         // 重新启动DMA接收，准备接收下一批数据
         HAL_UART_Receive_DMA(&HOST_UART_HANDLE, mavlink_rx_buff, MAVLINK_RECV_BUFF_SIZE);
     }
+    
+    if (__HAL_UART_GET_FLAG(&HOST_UART_HANDLE, UART_FLAG_ORE))
+    {
+        __HAL_UART_CLEAR_FLAG(&HOST_UART_HANDLE, UART_FLAG_ORE);
+        HAL_UART_DMAStop(&HOST_UART_HANDLE);
+        HAL_UART_Receive_DMA(&HOST_UART_HANDLE, mavlink_rx_buff, MAVLINK_RECV_BUFF_SIZE);
+    }
 }
 
 /**
