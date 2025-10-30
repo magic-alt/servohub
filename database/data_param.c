@@ -94,6 +94,7 @@ void app_param_init(void)
     kAppMotorConfig.Reduction_ratio_den = GEAR_RATIO_DEN;                                        // 减速比分母
     kAppMotorConfig.Torque_constant = PMSM_TORQUE_CONSTANT_MNM_A;                                // 转矩常数 mNm/A
     kAppMotorConfig.Reduction_ratio_inv = (float)GEAR_RATIO_DEN / (float)GEAR_RATIO_NUM;         // 减速比倒数
+    kAppMotorConfig.Motor_rotor_inertia = PMSM_J;                                                // 电机转子惯量
     
     // 初始化保护配置
     kAppProtectConfig.Bus_under_voltage_threshold = UNDER_VOLTAGE_PROTECTION_V;                    // 母线欠压阈值
