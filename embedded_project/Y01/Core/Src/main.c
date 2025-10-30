@@ -193,7 +193,6 @@ int main(void)
   RegisterCheckStatusCallback(app_get_check_status_val);
 
   HalInit();
-  MotorCtrlInit();
   BspInit();
 
   /* USER CODE END 2 */
