@@ -157,6 +157,12 @@ static void scope_trigger_catch() {
                 trigger_object->threshold_uint32 = *(uint32_t*)&kScopeObject.sample_trigger_threshold;
                 trigger_object->catch_data_type = kTypeUint32;
                 break;
+            case kTypeUint64:
+                // todo:暂时不支持64位数据触发采集，强制转为32位数据触发采集
+                trigger_object->catch_window_uint32[trigger_object->catch_count] = *(uint32_t*)(&data_val);
+                trigger_object->threshold_uint32 = *(uint32_t*)&kScopeObject.sample_trigger_threshold;
+                trigger_object->catch_data_type = kTypeUint32;
+                break;
             case kTypeInt8:
                 trigger_object->catch_window_int32[trigger_object->catch_count] = *(int8_t*)(&data_val);
                 trigger_object->threshold_int32 = *(int8_t*)&kScopeObject.sample_trigger_threshold;
@@ -168,6 +174,12 @@ static void scope_trigger_catch() {
                 trigger_object->catch_data_type = kTypeInt32;
                 break;
             case kTypeInt32:
+                trigger_object->catch_window_int32[trigger_object->catch_count] = *(int32_t*)(&data_val);
+                trigger_object->threshold_int32 = *(int32_t*)&kScopeObject.sample_trigger_threshold;
+                trigger_object->catch_data_type = kTypeInt32;
+                break;
+            case kTypeInt64:
+                // todo:暂时不支持64位数据触发采集，强制转为32位数据触发采集
                 trigger_object->catch_window_int32[trigger_object->catch_count] = *(int32_t*)(&data_val);
                 trigger_object->threshold_int32 = *(int32_t*)&kScopeObject.sample_trigger_threshold;
                 trigger_object->catch_data_type = kTypeInt32;
@@ -570,6 +582,9 @@ void get_database_param_info(uint32_t index, uint32_t *pdata, uint8_t *type, uin
  */
 void get_database_param_val(void *pdata_ptr, uint8_t type, uint32_t *pdata)
 {
+    if (pdata_ptr == NULL) {
+        return;
+    }
     switch (type)
     {
         case kTypeUint8:
