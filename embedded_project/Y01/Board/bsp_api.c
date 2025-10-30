@@ -16,6 +16,20 @@ void bsp_system_reset(void)
 
 #pragma region 硬件状态相关
 /**
+ * @brief 设置系统硬件错误状态
+ * @param[in] type 错误类型
+ * @param[in] op 错误操作
+ * @return
+*/
+void sys_set_bsp_error_state(BSP_ERROR_CODE type, BSP_ERROR_OPERATION op)
+{
+#ifdef VIRTUAL_MOTOR_MODEL
+    return;
+#else
+    set_bsp_error_state(type, op);
+#endif
+}
+/**
  * @brief 获取系统硬件自检状态
  * @return bool false:未完成 true:完成
  * @note
@@ -26,19 +40,6 @@ bool sys_get_hardware_self_test_status(void)
     return true;
 #else
     return get_hardware_self_test_status();
-#endif
-}
-/**
- * @brief 获取系统三相电流检测状态
- * @return CURRENT_CALIBRATION_STATUS
- * @note
- */
-CURRENT_CALIBRATION_STATUS sys_get_current_calibration_status(void)
-{
-#ifdef VIRTUAL_MOTOR_MODEL
-    return CURRENT_CALIBRATION_STATUS_OK;
-#else
-    return get_current_calibration_status();
 #endif
 }
 /**
@@ -65,6 +66,33 @@ void sys_current_calibration_step(void)
     return ;
 #else
     CurrentCalibrationStep();
+#endif
+}
+/**
+ * @brief 获取系统三相电流检测状态
+ * @return CURRENT_CALIBRATION_STATUS
+ * @note
+ */
+CURRENT_CALIBRATION_STATUS sys_get_current_calibration_status(void)
+{
+#ifdef VIRTUAL_MOTOR_MODEL
+    return CURRENT_CALIBRATION_STATUS_OK;
+#else
+    return get_current_calibration_status();
+#endif
+}
+/**
+ * @brief 获取UVW三相电流校准值
+ * @param[out] piabc UVW三相电流校准值数组，单位adc值
+ */
+void sys_get_current_calibration_drift(uint16_t *drift)
+{
+#ifdef VIRTUAL_MOTOR_MODEL
+    drift[0] = 32768;
+    drift[1] = 32768;
+    drift[2] = 32768;
+#else
+    get_current_calibration_drift(drift);
 #endif
 }
 /**
@@ -157,20 +185,6 @@ void bsp_set_phase_voltage(const float voltage[3])
 #endif
 }
 /**
- * @brief 获取UVW三相电流校准值
- * @param[out] piabc UVW三相电流校准值数组，单位adc值
- */
-void bsp_get_current_calibration_drift(uint16_t *drift)
-{
-#ifdef VIRTUAL_MOTOR_MODEL
-    drift[0] = 32768;
-    drift[1] = 32768;
-    drift[2] = 32768;
-#else
-    get_current_calibration_drift(drift);
-#endif
-}
-/**
  * @brief 获取UVW三相电流
  * @param[out] piabc UVW三相电流数组，单位A
  */
@@ -183,7 +197,7 @@ void bsp_get_phase_current(float piabc[3])
 #else
     uint16_t drift[3] = {0};
 
-    bsp_get_current_calibration_drift(drift);
+    sys_get_current_calibration_drift(drift);
 
     if (false == bsp_get_pwm_state()) // PWM未准备好，电流采样回读值强制为0
     {

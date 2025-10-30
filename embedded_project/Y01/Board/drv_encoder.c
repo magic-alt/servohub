@@ -115,7 +115,7 @@ void encoder_data_process(void)
             // 检查数据帧是否有效，是否存在异常
             if (SF_HAS_ENCODER_ERR(encoder_data[enc_id].sf))
             {
-                //set_bsp_error_state(ERROR_ENCODER_MOTOR, ERROR_SET);
+                //sys_set_bsp_error_state(ERROR_ENCODER_MOTOR, ERROR_SET);
                 return;
             }
             if (encoder_data[enc_id].check_val != check_cnt_val ||\
@@ -126,7 +126,7 @@ void encoder_data_process(void)
                 if (encoder_data[enc_id].err_cnt >= ENCODER_COMM_ERROR_MAX)
                 {
                     encoder_data[enc_id].err_cnt = ENCODER_COMM_ERROR_MAX;
-                    //set_bsp_error_state(ERROR_ENCODER_MOTOR, ERROR_SET);
+                    //sys_set_bsp_error_state(ERROR_ENCODER_MOTOR, ERROR_SET);
                 }
                 return;
             }
@@ -136,7 +136,7 @@ void encoder_data_process(void)
             }
 
             // 数据无异常，进一步按协议解析数据
-            //set_bsp_error_state(ERROR_ENCODER_MOTOR, ERROR_CLEAR); // 自动清除编码器错误状态
+            //sys_set_bsp_error_state(ERROR_ENCODER_MOTOR, ERROR_CLEAR); // 自动清除编码器错误状态
 
             encoder_data[enc_id].motor_single_raw = encoder_data[enc_id].data_raw[2] + \
                                                 (encoder_data[enc_id].data_raw[3] << 8) + \

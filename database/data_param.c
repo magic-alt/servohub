@@ -2017,7 +2017,7 @@ uint16_t get_app_U_adc_mid_val(void)
 {
     /* USER CODE BEGIN get_app_U_adc_mid_val */
     uint16_t drift[3];
-    bsp_get_current_calibration_drift(drift);
+    sys_get_current_calibration_drift(drift);
     kAppMotionInfo.U_adc_mid_val = drift[0];
     /* USER CODE END get_app_U_adc_mid_val */
     return kAppMotionInfo.U_adc_mid_val;
@@ -2034,7 +2034,7 @@ uint16_t get_app_V_adc_mid_val(void)
 {
     /* USER CODE BEGIN get_app_V_adc_mid_val */
     uint16_t drift[3];
-    bsp_get_current_calibration_drift(drift);
+    sys_get_current_calibration_drift(drift);
     kAppMotionInfo.V_adc_mid_val = drift[1];
     /* USER CODE END get_app_V_adc_mid_val */
     return kAppMotionInfo.V_adc_mid_val;
@@ -2051,7 +2051,7 @@ uint16_t get_app_W_adc_mid_val(void)
 {
     /* USER CODE BEGIN get_app_W_adc_mid_val */
     uint16_t drift[3];
-    bsp_get_current_calibration_drift(drift);
+    sys_get_current_calibration_drift(drift);
     kAppMotionInfo.W_adc_mid_val = drift[2];
     /* USER CODE END get_app_W_adc_mid_val */
     return kAppMotionInfo.W_adc_mid_val;
@@ -3001,17 +3001,28 @@ uint32_t set_app_Sys_cmd(uint8_t val)
 
         break;
     case APP_SYSTEM_CMD_SAVE_CONFIG:
+        if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+        {
+            set_app_Storage_status(FLASH_STORE_STATUS_WARNING);
+            return APP_PARAM_WRITE_STATE_ERROR;
+        }
         set_app_Storage_cmd(FLASH_STORE_CMD_WRITE_PARAM);
         break;
     case APP_SYSTEM_CMD_REBOOT:
         bsp_system_reset();
         break;
     case APP_SYSTEM_CMD_ERROR_RECORD_CLEAR:
+        if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+        {
+            set_app_Storage_status(FLASH_STORE_STATUS_WARNING);
+            return APP_PARAM_WRITE_STATE_ERROR;
+        }
         set_app_Storage_cmd(FLASH_STORE_CMD_ERASE_ERROR);
         break;
     case APP_SYSTEM_CMD_FACTORY_RESET:
         if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
         {
+            set_app_Storage_status(FLASH_STORE_STATUS_WARNING);
             return APP_PARAM_WRITE_STATE_ERROR;
         }
         set_app_Storage_cmd(FLASH_STORE_CMD_ERASE_PARAM);

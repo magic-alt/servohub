@@ -49,17 +49,17 @@ void BspInit(void)
     if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_U_HANDLE, \
         ADC_CALIB_OFFSET_LINEARITY, ADC_SINGLE_ENDED) != HAL_OK)
     {
-        set_bsp_error_state(ERROR_CURRENT_SAMPLE, ERROR_SET);
+        sys_set_bsp_error_state(ERROR_CURRENT_SAMPLE, ERROR_SET);
     }
     else if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_V_HANDLE, \
         ADC_CALIB_OFFSET_LINEARITY, ADC_SINGLE_ENDED) != HAL_OK)
     {
-        set_bsp_error_state(ERROR_CURRENT_SAMPLE, ERROR_SET);
+        sys_set_bsp_error_state(ERROR_CURRENT_SAMPLE, ERROR_SET);
     }
     else if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_W_HANDLE, \
         ADC_CALIB_OFFSET_LINEARITY, ADC_SINGLE_ENDED) != HAL_OK)
     {
-        set_bsp_error_state(ERROR_CURRENT_SAMPLE, ERROR_SET);
+        sys_set_bsp_error_state(ERROR_CURRENT_SAMPLE, ERROR_SET);
     }
 
     HAL_ADC_Start_DMA(&DC_BUS_VOLTAGE_HANDLE, (uint32_t *)kBspData.adc1_raw_buffer, ADC1_REGULAR_RANK_NUMBER);
@@ -173,7 +173,7 @@ void PWM_TIM_BREAK_IRQ_HANDLE(TIM_HandleTypeDef *htim)
         __HAL_TIM_DISABLE_IT(htim, TIM_IT_BREAK);
 
         bsp_set_pwm_state(PWM_DISABLE);
-        //set_bsp_error_state(ERROR_NFAULT, ERROR_SET);
+        sys_set_bsp_error_state(ERROR_NFAULT, ERROR_SET);
     }
 }
 

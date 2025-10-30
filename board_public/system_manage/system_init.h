@@ -35,12 +35,6 @@ extern "C" {
 #define CURRENTCCALIBRATION_TIMES_SHIFT     (10)    //电流采样校准次数移位数
 #define CURRENTCCALIBRATION_TIMES           (1 << CURRENTCCALIBRATION_TIMES_SHIFT)  //电流采样校准次数
 
-typedef enum
-{
-    ERROR_CLEAR = 0,
-    ERROR_SET = 1
-} BSP_ERROR_OPERATION;
-
 typedef struct
 {
     bool start_flag;                    // 当前采样开始标志位 0未开始  1开始

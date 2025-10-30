@@ -325,18 +325,21 @@ static void flashdb_database_init(void)
     if (bsp_flashdb_key_register(FLASHDB_KEY_INDEX_ALL_PARAM, "AllParam", \
             &kFlashStorage, sizeof(kFlashStorage)) != FLASHDB_NO_ERR)
     {
-        return ; //报错
+        sys_set_bsp_error_state(ERROR_FLASH_STORE, ERROR_SET);
+        return;
     }
     if (bsp_flashdb_key_register(FLASHDB_KEY_INDEX_ERROR_RECORD, "ErrorRecord", \
             &kFlashHistoricalInfo.Error_records_list, \
             sizeof(kFlashHistoricalInfo.Error_records_list)) != FLASHDB_NO_ERR)
     {
-        return ; //报错
+        sys_set_bsp_error_state(ERROR_FLASH_STORE, ERROR_SET);
+        return;
     }
 
     if (bsp_flashdb_init() != FLASHDB_NO_ERR)
     {
-        return ; //报错
+        sys_set_bsp_error_state(ERROR_FLASH_STORE, ERROR_SET);
+        return;
     }
 }
 
@@ -363,7 +366,7 @@ void app_store_updata_1ms(void)
     if (store_cmd != FLASH_STORE_CMD_NULL &&
         store_status != FLASH_STORE_STATUS_BUSY)
     {
-        // 实测参数存储耗时约7.6ms
+        // 实测参数存储耗时
         //set_timer_record_start(9);
         uint32_t *p_AppErrorRecordsList = get_app_Error_records_list_addr();
 
@@ -434,7 +437,7 @@ void app_store_updata_1ms(void)
         if (flashdb_status != FLASHDB_NO_ERR)
         {
             set_app_Storage_status(FLASH_STORE_STATUS_ERROR);
-            // TODO: 错误处理
+            sys_set_bsp_error_state(ERROR_FLASH_STORE, ERROR_SET);
         }
         else
         {

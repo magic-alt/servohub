@@ -76,7 +76,7 @@ void cia402_error_code_scan(void)
             set_Error_code(Incremental_sensor_2_fault_error);
             return;
         }
-        if (check_error_val.bits.flash_init_error) {
+        if (check_error_val.bits.flash_store_error) {
             set_Error_code(Non_volatile_data_memory_error);
             return;
         }

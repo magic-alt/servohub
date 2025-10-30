@@ -48,7 +48,7 @@ static inline bool app_over_speed_error_check(void);
 static inline bool app_position_following_error_check(void);
 static inline bool app_load_encoder_error_check(void);
 static inline bool app_motor_encoder_error_check(void);
-static inline bool app_flash_init_error_check(void);
+static inline bool app_flash_store_error_check(void);
 static inline bool app_drv_init_error_check(void);
 static inline bool app_current_sample_error_check(void);
 static inline bool app_Nfault_error_check(void);
@@ -74,7 +74,7 @@ static const CheckFunctionList CheckTable[] =
 
     {app_load_encoder_error_check, true},
     {app_motor_encoder_error_check, true},
-    {app_flash_init_error_check, true},
+    {app_flash_store_error_check, true},
     {app_drv_init_error_check, true},
     {app_current_sample_error_check, true},
     {app_Nfault_error_check, true},
@@ -99,9 +99,9 @@ static inline bool app_motor_encoder_error_check(void)
     return app_check.p_bsp_error->bit_band.error_encoder_motor;
 }
 
-static inline bool app_flash_init_error_check(void)
+static inline bool app_flash_store_error_check(void)
 {
-    return app_check.p_bsp_error->bit_band.error_flash_init;
+    return app_check.p_bsp_error->bit_band.error_flash_store;
 }
 
 static inline bool app_drv_init_error_check(void)
@@ -857,7 +857,8 @@ void app_status_scan_slow(void)
         }
         if (app_check.error_record_latch_flag == false)
         {
-            if (get_app_Storage_status() != FLASH_STORE_STATUS_BUSY)    // 等待Flash空闲
+            if (axis->motor_ctl_sm_output.state != MOTOR_CTL_SM_STATE_ENABLE && \
+                get_app_Storage_status() != FLASH_STORE_STATUS_BUSY)    // 等待Flash空闲
             {
                 // 数组FIFO，更新错误记录，低优先级更新避免重复记录错误
                 for (uint8_t i = ERROR_RECORD_NUM - 1; i > 0; i--)

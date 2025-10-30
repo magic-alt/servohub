@@ -28,7 +28,7 @@ typedef union
 
         uint32_t load_encoder_error : 1;          // 负载端编码器错误
         uint32_t motor_encoder_error : 1;         // 电机端码器错误
-        uint32_t flash_init_error : 1;            // flash初始化错误
+        uint32_t flash_store_error : 1;           // flash存储错误
         uint32_t drv_init_error : 1;              // drv初始化错误
         uint32_t current_sample_error : 1;        // 电流采样错误
         uint32_t nfault_error : 1;                // 硬件短路保护

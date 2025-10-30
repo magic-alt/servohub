@@ -27,12 +27,18 @@ typedef enum
 
 typedef enum
 {
+    ERROR_CLEAR = 0,
+    ERROR_SET = 1
+} BSP_ERROR_OPERATION;
+
+typedef enum
+{
     ERROR_ENCODER_MOTOR = 0,                // 电机端编码器错误
     ERROR_ENCODER_LOAD,                     // 负载端编码器错误
     ERROR_NFAULT,                           // DRV预驱nFault报错
     ERROR_BUS_CURRENT_OC,                   // 母线过流错误
     ERROR_BUS_OFFLINE,                      // 母线掉线
-    ERROR_FLASH_INIT,                       // flash初始化错误
+    ERROR_FLASH_STORE,                      // flash存储错误
     ERROR_ECAT_INIT,                        // eact初始化错误
     ERROR_DRV_INIT,                         // drv初始化错误
     ERROR_BUS_VOLTAGE,                      // 母线电压错误
@@ -52,7 +58,7 @@ typedef union
         uint32_t error_nfault : 1;                      // DRV预驱nFault报错
         uint32_t error_bus_current_oc : 1;              // 母线过流错误
         uint32_t error_bus_offline : 1;                 // 母线掉线
-        uint32_t error_flash_init : 1;                  // flash初始化错误
+        uint32_t error_flash_store : 1;                 // flash存储错误
         uint32_t error_ecat_init : 1;                   // eact初始化错误
         uint32_t error_drv_init : 1;                    // drv初始化错误
         uint32_t error_bus_voltage : 1;                 // 母线电压错误
@@ -183,6 +189,7 @@ typedef enum {
 } FLASH_STORE_CMD;
 typedef enum
 {
+    FLASH_STORE_STATUS_WARNING = -2,    // 存储警告(当前状态不允许操作)
     FLASH_STORE_STATUS_ERROR   = -1,    // 存储失败
     FLASH_STORE_STATUS_IDLE    = 0,     // 空闲状态
     FLASH_STORE_STATUS_BUSY    = 1,     // 存储中

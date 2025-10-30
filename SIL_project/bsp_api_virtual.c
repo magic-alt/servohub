@@ -16,6 +16,16 @@ void bsp_system_reset(void)
 
 #pragma region 硬件状态相关
 /**
+ * @brief 设置系统硬件错误状态
+ * @param[in] type 错误类型
+ * @param[in] op 错误操作
+ * @return
+*/
+void sys_set_bsp_error_state(BSP_ERROR_CODE type, BSP_ERROR_OPERATION op)
+{
+    return;
+}
+/**
  * @brief 获取系统硬件自检状态
  * @return bool false:未完成 true:完成
  * @note
@@ -49,7 +59,7 @@ VOLTAGE_CHECK_STATUS sys_bus_voltage_check(void)
  */
 void sys_current_calibration_step(void)
 {
-    return ;
+    return;
 }
 /**
  * @brief 获取系统BSP错误码地址
@@ -92,7 +102,7 @@ void bsp_set_phase_voltage(const float voltage[3])
  * @brief 获取UVW三相电流校准值
  * @param[out] piabc UVW三相电流校准值数组，单位adc值
  */
-void bsp_get_current_calibration_drift(uint16_t *drift)
+void sys_get_current_calibration_drift(uint16_t *drift)
 {
     drift[0] = 32768;
     drift[1] = 32768;

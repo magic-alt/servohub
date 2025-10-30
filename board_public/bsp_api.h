@@ -25,14 +25,17 @@ void bsp_system_reset(void);
 #pragma endregion
 
 #pragma region 硬件状态相关
+void sys_set_bsp_error_state(BSP_ERROR_CODE type, BSP_ERROR_OPERATION op);
 /* 获取系统硬件自检状态 */
 bool sys_get_hardware_self_test_status(void);
-/* 获取系统三相电流检测状态 */
-CURRENT_CALIBRATION_STATUS sys_get_current_calibration_status(void);
 /* 母线电压检测 */
 VOLTAGE_CHECK_STATUS sys_bus_voltage_check(void);
 /* 三相电流检测 */
 void sys_current_calibration_step(void);
+/* 获取系统三相电流检测状态 */
+CURRENT_CALIBRATION_STATUS sys_get_current_calibration_status(void);
+/* 获取UVW三相电流校准值 */
+void sys_get_current_calibration_drift(uint16_t *drift);
 /* 获取系统BSP错误码地址 */
 void sys_get_bsp_error_state(BspErrorCode_t* *p_bsp_error);
 /* 设置PWM输出状态 */
@@ -41,8 +44,6 @@ void bsp_set_pwm_state(bool state);
 bool bsp_get_pwm_state(void);
 /* 设置UVW三相电压 */
 void bsp_set_phase_voltage(const float voltage[3]);
-/* 获取UVW三相电流校准值 */
-void bsp_get_current_calibration_drift(uint16_t *drift);
 /* 获取UVW三相电流 */
 void bsp_get_phase_current(float piabc[3]);
 /* 读取母线电压 */
