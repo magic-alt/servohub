@@ -887,6 +887,11 @@ uint32_t set_app_Load_encoder_resolution(uint32_t val)
     {
         kAppEncoderConfig.Load_pps_2_rpm = 60.0f / kAppEncoderConfig.Load_encoder_resolution;
         kAppEncoderConfig.Load_rpm_2_pps = kAppEncoderConfig.Load_encoder_resolution / 60.0f;
+
+        // 关联控制层设置
+        axis->load_pos_sensor_config.enc_line_p_n = kAppEncoderConfig.Load_encoder_resolution;
+        // 失能状态下调用，设置此参数时状态先由上位机限制
+        MotorCtlParamSetUpdata(axis);
     }
 
     /* USER CODE END set_app_Load_encoder_resolution 1 */
