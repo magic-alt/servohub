@@ -207,7 +207,7 @@ void PosSpeedLoopCtrl(void)
     }
     else // 失能状态    其他状态都失能电机  包括错误状态
     {
-        bsp_set_pwm_state(PWM_ENABLE);
+        bsp_set_pwm_state(PWM_DISABLE);
     }
 
     // 4. 更新硬件准备状态
