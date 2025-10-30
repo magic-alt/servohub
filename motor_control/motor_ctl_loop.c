@@ -220,6 +220,9 @@ void PosSpeedLoopCtrl(void)
     {
         kAxis.motor_ctl_sm_input.hw_ready_state = 0;
     }
+    // 记录上一次控制层状态机状态
+    kAxis.motor_ctl_sm_output.state_last = kAxis.motor_ctl_sm_output.state;
+
 
     // 同步控制层变量到应用层,实现波形动态刷新和离线波形采集
     app_param_sync_user();

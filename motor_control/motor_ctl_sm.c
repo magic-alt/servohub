@@ -396,7 +396,6 @@ void PosSpeedCtlLoopTask(Axis *const axis, AxisDw *const axis_dw)
 
    // 记录上个周期指令和状态
    axis->motor_ctl_sm_output.motor_enable_last = axis->motor_ctl_sm_input.motor_enable;
-   axis->motor_ctl_sm_output.state_last = axis->motor_ctl_sm_output.state;
 }
 
 #pragma endregion
