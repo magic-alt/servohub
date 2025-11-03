@@ -118,8 +118,12 @@ void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
             bsp_set_timer_record_stop(SYS_TIMER_RECORD_CURRENT_LOOP_TIME_INDEX);
         }
 
-        if (position_frq_div == 0)
+        if (position_frq_div == 0)  //运行位置环  10KHZ
         {
+            bsp_set_timer_record_stop(SYS_TIMER_RECORD_POSITION_LOOP_CYCLE_INDEX); // 测量位置环周期
+            bsp_set_timer_record_start(SYS_TIMER_RECORD_POSITION_LOOP_CYCLE_INDEX);
+
+            bsp_set_timer_record_start(SYS_TIMER_RECORD_POSITION_LOOP_TIME_INDEX); // 测量位置环运行时间
         #ifndef VIRTUAL_MOTOR_MODEL
             if (sys_get_hardware_self_test_status() == false)
             {
@@ -137,6 +141,7 @@ void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
             PosSpeedLoopCtrl();
 
             position_frq_div = 1; // 1:10KHZ 位置环   3:5KHZ 位置环
+            bsp_set_timer_record_stop(SYS_TIMER_RECORD_POSITION_LOOP_TIME_INDEX);
         }
         else
         {
