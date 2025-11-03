@@ -391,7 +391,8 @@ void app_store_updata_1ms(void)
                 break;
             case FLASH_STORE_CMD_ERASE_PARAM:
                 // 先恢复出厂再写入flash，成功后系统复位
-                app_param_init();
+                app_param_init();  //应用层数据库初始化
+                MotorCtrlInit();   //控制层数据库初始化
                 flash_param_update();
 
                 flashdb_status = bsp_flashdb_write(FLASHDB_KEY_INDEX_ALL_PARAM);
