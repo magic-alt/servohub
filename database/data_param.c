@@ -94,7 +94,7 @@ void app_param_init(void)
     kAppMotorConfig.Reduction_ratio_den = GEAR_RATIO_DEN;                                        // 减速比分母
     kAppMotorConfig.Torque_constant = PMSM_TORQUE_CONSTANT_MNM_A;                                // 转矩常数 mNm/A
     kAppMotorConfig.Reduction_ratio_inv = (float)GEAR_RATIO_DEN / (float)GEAR_RATIO_NUM;         // 减速比倒数
-    kAppMotorConfig.Motor_rotor_inertia = PMSM_J;                                                // 电机转子惯量
+    kAppMotorConfig.Motor_rotor_inertia = PMSM_J * 1e4f;                                          // 电机转子惯量
     
     // 初始化保护配置
     kAppProtectConfig.Bus_under_voltage_threshold = UNDER_VOLTAGE_PROTECTION_V;                    // 母线欠压阈值
@@ -2465,7 +2465,7 @@ uint32_t set_app_Torque_constant(float val)
     /* USER CODE BEGIN set_app_Torque_constant 1 */
     // 关联设置控制层参数
     axis->pmsm_config.kt = val * 0.001f;
-
+    MotorCtlParamSetUpdata(axis);
     /* USER CODE END set_app_Torque_constant 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -2512,6 +2512,9 @@ uint32_t set_app_Motor_rotor_inertia(float val)
     /* USER CODE END set_app_Motor_rotor_inertia 0 */
     kAppMotorConfig.Motor_rotor_inertia = val;
     /* USER CODE BEGIN set_app_Motor_rotor_inertia 1 */
+    // 关联设置控制层参数
+    axis->pmsm_config.j = val * 1e-4f;
+    MotorCtlParamSetUpdata(axis);
     /* USER CODE END set_app_Motor_rotor_inertia 1 */
     return APP_PARAM_SUCCESS;
 }
