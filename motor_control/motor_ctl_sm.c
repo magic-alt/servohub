@@ -254,7 +254,8 @@ void MotorCtlParamSetUpdata(Axis *const axis)
 
    // 转矩常数和永磁磁链 关联更新                                              // kt = 1.5*pn*flux
    axis->pmsm_config.flux = axis->pmsm_config.kt / (1.5f * axis->pmsm_config.pn); // flux = kt/(1.5*pn);
-
+   axis->pos_speed_ctl_config.j_kt = axis->pmsm_config.j / axis->pmsm_config.kt;
+   
    // 电机最大转速
    axis->motor_ctl_sm_config.over_speed_protection_rad_s = axis->pmsm_config.speed_max_rpm * MOTOR_CTL_SM_RPM_2_RAD_S * 1.2f;
    axis->pos_speed_ctl_config.speed_max_rad_s = axis->pmsm_config.speed_max_rpm * MOTOR_CTL_SM_RPM_2_RAD_S;
