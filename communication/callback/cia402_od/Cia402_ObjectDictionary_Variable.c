@@ -5,6 +5,8 @@
 #include "coordinate_conversion.h"
 #include "data_param.h"
 
+#include "motor_ctl_loop.h"
+
 //64位转32位，符号位处理
 INTEGER32 limit_64_to_32(int64_t val_64)
 {
@@ -27,7 +29,6 @@ Homing_mode kHoming_mode;
 Position_control_function kPosition_control_function;
 Profile_velocity_mode kProfile_velocity_mode;
 Profile_torque_mode kProfile_torque_mode;
-Manufacturer kManufacturer;
 
 UNS32 set_Controlword(UNS16 val){
     /* USER CODE BEGIN set_Controlword 0 */
@@ -196,13 +197,13 @@ UNS32 set_Position_encoder_resolution_Encoder_increments(UNS32 val){
     /* USER CODE END set_Position_encoder_resolution_Encoder_increments 0 */
     kFactor_group.Position_encoder_resolution_Encoder_increments = val;
     /* USER CODE BEGIN set_Position_encoder_resolution_Encoder_increments 1 */
-    set_app_Load_Encoder_resolution(val);   //设置负载端编码器分辨率
+    set_app_Load_encoder_resolution(val);   //设置负载端编码器分辨率
     /* USER CODE END set_Position_encoder_resolution_Encoder_increments 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
 UNS32 get_Position_encoder_resolution_Encoder_increments(void){
     /* USER CODE BEGIN get_Position_encoder_resolution_Encoder_increments */
-    kFactor_group.Position_encoder_resolution_Encoder_increments = get_app_Load_Encoder_resolution();
+    kFactor_group.Position_encoder_resolution_Encoder_increments = get_app_Load_encoder_resolution();
     /* USER CODE END get_Position_encoder_resolution_Encoder_increments */
     return kFactor_group.Position_encoder_resolution_Encoder_increments;
 }
@@ -212,13 +213,13 @@ UNS32 set_Position_encoder_resolution_Motor_revolutions(UNS32 val){
     /* USER CODE END set_Position_encoder_resolution_Motor_revolutions 0 */
     kFactor_group.Position_encoder_resolution_Motor_revolutions = val;
     /* USER CODE BEGIN set_Position_encoder_resolution_Motor_revolutions 1 */
-    set_app_Motor_Encoder_resolution(val);  //设置电机端编码器分辨率
+    set_app_Motor_encoder_resolution(val);  //设置电机端编码器分辨率
     /* USER CODE END set_Position_encoder_resolution_Motor_revolutions 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
 UNS32 get_Position_encoder_resolution_Motor_revolutions(void){
     /* USER CODE BEGIN get_Position_encoder_resolution_Motor_revolutions */
-    kFactor_group.Position_encoder_resolution_Motor_revolutions = get_app_Motor_Encoder_resolution();
+    kFactor_group.Position_encoder_resolution_Motor_revolutions = get_app_Motor_encoder_resolution();
     /* USER CODE END get_Position_encoder_resolution_Motor_revolutions */
     return kFactor_group.Position_encoder_resolution_Motor_revolutions;
 }
@@ -243,13 +244,13 @@ UNS32 set_Motor_revolutions(UNS32 val){
     kFactor_group.Motor_revolutions = val;
     /* USER CODE BEGIN set_Motor_revolutions 1 */
     //电子齿轮比分母
-    set_app_Reduction_Ratio_den(val);
+    set_app_Reduction_ratio_den(val);
     /* USER CODE END set_Motor_revolutions 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
 UNS32 get_Motor_revolutions(void){
     /* USER CODE BEGIN get_Motor_revolutions */
-    kFactor_group.Motor_revolutions = get_app_Reduction_Ratio_den();
+    kFactor_group.Motor_revolutions = get_app_Reduction_ratio_den();
     /* USER CODE END get_Motor_revolutions */
     return kFactor_group.Motor_revolutions;
 }
@@ -260,13 +261,13 @@ UNS32 set_Shaft_revolutions(UNS32 val){
     kFactor_group.Shaft_revolutions = val;
     /* USER CODE BEGIN set_Shaft_revolutions 1 */
     //电子齿轮比分子
-    set_app_Reduction_Ratio_num(val);
+    set_app_Reduction_ratio_num(val);
     /* USER CODE END set_Shaft_revolutions 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
 UNS32 get_Shaft_revolutions(void){
     /* USER CODE BEGIN get_Shaft_revolutions */
-    kFactor_group.Shaft_revolutions = get_app_Reduction_Ratio_num();
+    kFactor_group.Shaft_revolutions = get_app_Reduction_ratio_num();
     /* USER CODE END get_Shaft_revolutions */
     return kFactor_group.Shaft_revolutions;
 }
@@ -395,21 +396,21 @@ INTEGER32 get_Software_position_limit_Maximal_position_limit(void){
     return kProfile_position_mode.Software_position_limit_Maximal_position_limit;
 }
 
-UNS32 set_Max_Profile_velocity(UNS32 val){
-    /* USER CODE BEGIN set_Max_Profile_velocity 0 */
-    /* USER CODE END set_Max_Profile_velocity 0 */
-    kProfile_position_mode.Max_Profile_velocity = val;
-    /* USER CODE BEGIN set_Max_Profile_velocity 1 */
+UNS32 set_Max_profile_velocity(UNS32 val){
+    /* USER CODE BEGIN set_Max_profile_velocity 0 */
+    /* USER CODE END set_Max_profile_velocity 0 */
+    kProfile_position_mode.Max_profile_velocity = val;
+    /* USER CODE BEGIN set_Max_profile_velocity 1 */
     // P/s转RPM
-    set_app_Max_Profile_velocity((float)val * get_app_Load_pps_2_rpm());
-    /* USER CODE END set_Max_Profile_velocity 1 */
+    set_app_Max_profile_velocity((float)val * get_app_Load_pps_2_rpm());
+    /* USER CODE END set_Max_profile_velocity 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
-UNS32 get_Max_Profile_velocity(void){
-    /* USER CODE BEGIN get_Max_Profile_velocity */
-    kProfile_position_mode.Max_Profile_velocity = get_app_Max_Profile_velocity() * get_app_Load_rpm_2_pps();
-    /* USER CODE END get_Max_Profile_velocity */
-    return kProfile_position_mode.Max_Profile_velocity;
+UNS32 get_Max_profile_velocity(void){
+    /* USER CODE BEGIN get_Max_profile_velocity */
+    kProfile_position_mode.Max_profile_velocity = get_app_Max_profile_velocity() * get_app_Load_rpm_2_pps();
+    /* USER CODE END get_Max_profile_velocity */
+    return kProfile_position_mode.Max_profile_velocity;
 }
 
 UNS32 set_Max_motor_speed(UNS32 val){
@@ -607,20 +608,20 @@ UNS32 get_Following_error_window(void){
     return kPosition_control_function.Following_error_window;
 }
 
-UNS32 set_Following_error_time_Out(UNS16 val){
-    /* USER CODE BEGIN set_Following_error_time_Out 0 */
-    set_app_Following_error_time_Out((float)val * 0.001f);
-    /* USER CODE END set_Following_error_time_Out 0 */
-    kPosition_control_function.Following_error_time_Out = val;
-    /* USER CODE BEGIN set_Following_error_time_Out 1 */
-    /* USER CODE END set_Following_error_time_Out 1 */
+UNS32 set_Following_error_time_out(UNS16 val){
+    /* USER CODE BEGIN set_Following_error_time_out 0 */
+    /* USER CODE END set_Following_error_time_out 0 */
+    kPosition_control_function.Following_error_time_out = val;
+    /* USER CODE BEGIN set_Following_error_time_out 1 */
+    set_app_Following_error_time_out((float)val * 0.001f);
+    /* USER CODE END set_Following_error_time_out 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
-UNS16 get_Following_error_time_Out(void){
-    /* USER CODE BEGIN get_Following_error_time_Out */
-    kPosition_control_function.Following_error_time_Out = get_app_Following_error_time_Out() * 1000;
-    /* USER CODE END get_Following_error_time_Out */
-    return kPosition_control_function.Following_error_time_Out;
+UNS16 get_Following_error_time_out(void){
+    /* USER CODE BEGIN get_Following_error_time_out */
+    kPosition_control_function.Following_error_time_out = get_app_Following_error_time_out() * 1000;
+    /* USER CODE END get_Following_error_time_out */
+    return kPosition_control_function.Following_error_time_out;
 }
 
 UNS32 set_Position_window(UNS32 val){
@@ -792,13 +793,13 @@ UNS32 set_Target_torque(INTEGER16 val){
     kProfile_torque_mode.Target_torque = val;
     /* USER CODE BEGIN set_Target_torque 1 */
     // 额定电流千分比转实际电流
-    set_app_Target_torque((float)val * get_app_Motor_rated_current() * kArms2Apeak * 0.001f);
+    set_app_Target_torque((float)val * get_app_Motor_rated_current() * MATH_ARMS2APEAK * 0.001f);
     /* USER CODE END set_Target_torque 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
 INTEGER16 get_Target_torque(void){
     /* USER CODE BEGIN get_Target_torque */
-    kProfile_torque_mode.Target_torque = get_app_Target_torque() * 1000 / (get_app_Motor_rated_current() * kArms2Apeak);
+    kProfile_torque_mode.Target_torque = get_app_Target_torque() * 1000 / (get_app_Motor_rated_current() * MATH_ARMS2APEAK);
     /* USER CODE END get_Target_torque */
     return kProfile_torque_mode.Target_torque;
 }
@@ -809,13 +810,13 @@ UNS32 set_Max_torque(UNS16 val){
     kProfile_torque_mode.Max_torque = val;
     /* USER CODE BEGIN set_Max_torque 1 */
     // 额定电流千分比转实际电流
-    set_app_Max_current((float)val * get_app_Motor_rated_current() * kArms2Apeak * 0.001f);
+    set_app_Max_current((float)val * get_app_Motor_rated_current() * MATH_ARMS2APEAK * 0.001f);
     /* USER CODE END set_Max_torque 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
 UNS16 get_Max_torque(void){
     /* USER CODE BEGIN get_Max_torque */
-    kProfile_torque_mode.Max_torque = get_app_Max_current() * 1000 / (get_app_Motor_rated_current() * kArms2Apeak);
+    kProfile_torque_mode.Max_torque = get_app_Max_current() * 1000 / (get_app_Motor_rated_current() * MATH_ARMS2APEAK);
     /* USER CODE END get_Max_torque */
     return kProfile_torque_mode.Max_torque;
 }
@@ -825,13 +826,13 @@ UNS32 set_Max_current(UNS16 val){
     /* USER CODE END set_Max_current 0 */
     kProfile_torque_mode.Max_current = val;
     /* USER CODE BEGIN set_Max_current 1 */
-    set_app_Max_current((float)val * get_app_Motor_rated_current() * kArms2Apeak * 0.001f);
+    set_app_Max_current((float)val * get_app_Motor_rated_current() * MATH_ARMS2APEAK * 0.001f);
     /* USER CODE END set_Max_current 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
 UNS16 get_Max_current(void){
     /* USER CODE BEGIN get_Max_current */
-    kProfile_torque_mode.Max_current = get_app_Max_current() * 1000 / (get_app_Motor_rated_current() * kArms2Apeak);
+    kProfile_torque_mode.Max_current = get_app_Max_current() * 1000 / (get_app_Motor_rated_current() * MATH_ARMS2APEAK);
     /* USER CODE END get_Max_current */
     return kProfile_torque_mode.Max_current;
 }
@@ -896,7 +897,7 @@ INTEGER16 get_Torque_actual_value(void){
     /* USER CODE BEGIN get_Torque_actual_value */
     // 实际力矩转为额定力矩千分比
     kProfile_torque_mode.Torque_actual_value = get_app_Current_actual_value() * 1000 \
-                                                / (get_app_Motor_rated_current() * kArms2Apeak);
+                                                / (get_app_Motor_rated_current() * MATH_ARMS2APEAK);
     /* USER CODE END get_Torque_actual_value */
     return kProfile_torque_mode.Torque_actual_value;
 }
@@ -912,7 +913,7 @@ UNS32 set_Current_actual_value(INTEGER16 val){
 INTEGER16 get_Current_actual_value(void){
     /* USER CODE BEGIN get_Current_actual_value */
     kProfile_torque_mode.Current_actual_value = get_app_Current_actual_value() * 1000 \
-                                                / (get_app_Motor_rated_current() * kArms2Apeak);
+                                                / (get_app_Motor_rated_current() * MATH_ARMS2APEAK);
     /* USER CODE END get_Current_actual_value */
     return kProfile_torque_mode.Current_actual_value;
 }
@@ -938,497 +939,14 @@ UNS32 set_Torque_slope(UNS32 val){
     kProfile_torque_mode.Torque_slope = val;
     /* USER CODE BEGIN set_Torque_slope 1 */
     // 千分比转电流
-    set_app_Torque_slope((float)val * get_app_Motor_rated_current() * kArms2Apeak * 0.001f);
+    set_app_Torque_slope((float)val * get_app_Motor_rated_current() * MATH_ARMS2APEAK * 0.001f);
     /* USER CODE END set_Torque_slope 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
 UNS32 get_Torque_slope(void){
     /* USER CODE BEGIN get_Torque_slope */
-    kProfile_torque_mode.Torque_slope = get_app_Torque_slope() * 1000 / (get_app_Motor_rated_current() * kArms2Apeak);
+    kProfile_torque_mode.Torque_slope = get_app_Torque_slope() * 1000 / (get_app_Motor_rated_current() * MATH_ARMS2APEAK);
     /* USER CODE END get_Torque_slope */
     return kProfile_torque_mode.Torque_slope;
-}
-
-UNS32 set_Alarm_word(UNS32 val){
-    /* USER CODE BEGIN set_Alarm_word 0 */
-    /* USER CODE END set_Alarm_word 0 */
-    kManufacturer.Alarm_word = val;
-    /* USER CODE BEGIN set_Alarm_word 1 */
-    /* USER CODE END set_Alarm_word 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS32 get_Alarm_word(void){
-    /* USER CODE BEGIN get_Alarm_word */
-    /* USER CODE END get_Alarm_word */
-    return kManufacturer.Alarm_word;
-}
-
-UNS32 set_MIT_feedforward_torque_current(INTEGER32 val){
-    /* USER CODE BEGIN set_MIT_feedforward_torque_current 0 */
-    /* USER CODE END set_MIT_feedforward_torque_current 0 */
-    kManufacturer.MIT_feedforward_torque_current = val;
-    /* USER CODE BEGIN set_MIT_feedforward_torque_current 1 */
-    set_app_MIT_feedforward_torque_current((float)kManufacturer.MIT_feedforward_torque_current * 0.001);
-    /* USER CODE END set_MIT_feedforward_torque_current 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-INTEGER32 get_MIT_feedforward_torque_current(void){
-    /* USER CODE BEGIN get_MIT_feedforward_torque_current */
-    kManufacturer.MIT_feedforward_torque_current = get_app_MIT_feedforward_torque_current() * 1000.0f;
-    /* USER CODE END get_MIT_feedforward_torque_current */
-    return kManufacturer.MIT_feedforward_torque_current;
-}
-
-UNS32 set_MIT_target_position(INTEGER32 val){
-    /* USER CODE BEGIN set_MIT_target_position 0 */
-    /* USER CODE END set_MIT_target_position 0 */
-    kManufacturer.MIT_target_position = val;
-    /* USER CODE BEGIN set_MIT_target_position 1 */
-    set_app_MIT_target_position(val);
-    /* USER CODE END set_MIT_target_position 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-INTEGER32 get_MIT_target_position(void){
-    /* USER CODE BEGIN get_MIT_target_position */
-    kManufacturer.MIT_target_position = get_app_MIT_target_position();
-    /* USER CODE END get_MIT_target_position */
-    return kManufacturer.MIT_target_position;
-}
-
-UNS32 set_MIT_max_current(INTEGER32 val){
-    /* USER CODE BEGIN set_MIT_max_current 0 */
-    /* USER CODE END set_MIT_max_current 0 */
-    kManufacturer.MIT_max_current = val;
-    /* USER CODE BEGIN set_MIT_max_current 1 */
-    set_app_MIT_max_current((float)kManufacturer.MIT_max_current * 0.001);
-    /* USER CODE END set_MIT_max_current 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-INTEGER32 get_MIT_max_current(void){
-    /* USER CODE BEGIN get_MIT_max_current */
-    kManufacturer.MIT_max_current = get_app_MIT_max_current() * 1000.0f;
-    /* USER CODE END get_MIT_max_current */
-    return kManufacturer.MIT_max_current;
-}
-
-UNS32 set_MIT_target_velocity(INTEGER32 val){
-    /* USER CODE BEGIN set_MIT_target_velocity 0 */
-    /* USER CODE END set_MIT_target_velocity 0 */
-    kManufacturer.MIT_target_velocity = val;
-    /* USER CODE BEGIN set_MIT_target_velocity 1 */
-    set_app_MIT_target_velocity((float)val * get_app_Load_pps_2_rpm());
-    /* USER CODE END set_MIT_target_velocity 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-INTEGER32 get_MIT_target_velocity(void){
-    /* USER CODE BEGIN get_MIT_target_velocity */
-    kManufacturer.MIT_target_velocity = get_app_MIT_target_velocity() * get_app_Load_rpm_2_pps();
-    /* USER CODE END get_MIT_target_velocity */
-    return kManufacturer.MIT_target_velocity;
-}
-
-UNS32 set_MIT_Kp(UNS32 val){
-    /* USER CODE BEGIN set_MIT_Kp 0 */
-    /* USER CODE END set_MIT_Kp 0 */
-    kManufacturer.MIT_Kp = val;
-    /* USER CODE BEGIN set_MIT_Kp 1 */
-    //单位0.001 A/rad
-    set_app_MIT_Kp((float)val * 0.001f);
-    /* USER CODE END set_MIT_Kp 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS32 get_MIT_Kp(void){
-    /* USER CODE BEGIN get_MIT_Kp */
-    kManufacturer.MIT_Kp = get_app_MIT_Kp() * 1000.0f;
-    /* USER CODE END get_MIT_Kp */
-    return kManufacturer.MIT_Kp;
-}
-
-UNS32 set_MIT_Kd(UNS32 val){
-    /* USER CODE BEGIN set_MIT_Kd 0 */
-    /* USER CODE END set_MIT_Kd 0 */
-    kManufacturer.MIT_Kd = val;
-    /* USER CODE BEGIN set_MIT_Kd 1 */
-    //单位0.001 A/(rad/s)
-    set_app_MIT_Kd((float)val * 0.001f);
-    /* USER CODE END set_MIT_Kd 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS32 get_MIT_Kd(void){
-    /* USER CODE BEGIN get_MIT_Kd */
-    kManufacturer.MIT_Kd = get_app_MIT_Kd() * 1000.0f;
-    /* USER CODE END get_MIT_Kd */
-    return kManufacturer.MIT_Kd;
-}
-
-UNS32 set_SysCmd(UNS8 val){
-    /* USER CODE BEGIN set_SysCmd 0 */
-    /* USER CODE END set_SysCmd 0 */
-    kManufacturer.SysCmd = val;
-    /* USER CODE BEGIN set_SysCmd 1 */
-    set_app_SysCmd(val);
-    /* USER CODE END set_SysCmd 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS8 get_SysCmd(void){
-    /* USER CODE BEGIN get_SysCmd */
-    kManufacturer.SysCmd = get_app_SysCmd();
-    /* USER CODE END get_SysCmd */
-    return kManufacturer.SysCmd;
-}
-
-UNS32 set_storage_status(INTEGER8 val){
-    /* USER CODE BEGIN set_storage_status 0 */
-    /* USER CODE END set_storage_status 0 */
-    kManufacturer.storage_status = val;
-    /* USER CODE BEGIN set_storage_status 1 */
-    set_app_storage_status(val);
-    /* USER CODE END set_storage_status 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-INTEGER8 get_storage_status(void){
-    /* USER CODE BEGIN get_storage_status */
-    kManufacturer.storage_status = get_app_storage_status();
-    /* USER CODE END get_storage_status */
-    return kManufacturer.storage_status;
-}
-
-UNS32 set_Notch_filter_frq(uint8_t subindex, UNS16 val){
-    /* USER CODE BEGIN set_Notch_filter_frq 0 */
-    /* USER CODE END set_Notch_filter_frq 0 */
-    kManufacturer.Notch_filter_frq[subindex] = val;
-    /* USER CODE BEGIN set_Notch_filter_frq 1 */
-    //单位：0.1hz
-    kAxis1.notch_filter_config.frq[subindex] = (float)val * 0.1f;
-    /* USER CODE END set_Notch_filter_frq 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Notch_filter_frq(uint8_t subindex){
-    /* USER CODE BEGIN get_Notch_filter_frq */
-    kManufacturer.Notch_filter_frq[subindex] = kAxis1.notch_filter_config.frq[subindex] * 10.0f;
-    /* USER CODE END get_Notch_filter_frq */
-    return kManufacturer.Notch_filter_frq[subindex];
-}
-
-UNS32 set_Notch_filter_width(uint8_t subindex, UNS16 val){
-    /* USER CODE BEGIN set_Notch_filter_width 0 */
-    /* USER CODE END set_Notch_filter_width 0 */
-    kManufacturer.Notch_filter_width[subindex] = val;
-    /* USER CODE BEGIN set_Notch_filter_width 1 */
-    //单位0.1hz
-    kAxis1.notch_filter_config.width[subindex] = (float)val * 0.1f;
-    /* USER CODE END set_Notch_filter_width 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Notch_filter_width(uint8_t subindex){
-    /* USER CODE BEGIN get_Notch_filter_width */
-    kManufacturer.Notch_filter_width[subindex] = kAxis1.notch_filter_config.width[subindex] * 10.0f;
-    /* USER CODE END get_Notch_filter_width */
-    return kManufacturer.Notch_filter_width[subindex];
-}
-
-UNS32 set_Notch_filter_depth(uint8_t subindex, UNS16 val){
-    /* USER CODE BEGIN set_Notch_filter_depth 0 */
-    /* USER CODE END set_Notch_filter_depth 0 */
-    kManufacturer.Notch_filter_depth[subindex] = val;
-    /* USER CODE BEGIN set_Notch_filter_depth 1 */
-    //单位：0.1db
-    kAxis1.notch_filter_config.depth[subindex] = (float)val * 0.1f;
-    /* USER CODE END set_Notch_filter_depth 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Notch_filter_depth(uint8_t subindex){
-    /* USER CODE BEGIN get_Notch_filter_depth */
-    kManufacturer.Notch_filter_depth[subindex] = kAxis1.notch_filter_config.depth[subindex] * 10.0f;
-    /* USER CODE END get_Notch_filter_depth */
-    return kManufacturer.Notch_filter_depth[subindex];
-}
-
-UNS32 set_Input_shaping_wn(UNS16 val){
-    /* USER CODE BEGIN set_Input_shaping_wn 0 */
-    /* USER CODE END set_Input_shaping_wn 0 */
-    kManufacturer.Input_shaping_wn = val;
-    /* USER CODE BEGIN set_Input_shaping_wn 1 */
-    //单位：0.1HZ
-    kAxis1.input_shaping_config.wn_Hz = (float)val * 0.1f;
-    /* USER CODE END set_Input_shaping_wn 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Input_shaping_wn(void){
-    /* USER CODE BEGIN get_Input_shaping_wn */
-    kManufacturer.Input_shaping_wn = kAxis1.input_shaping_config.wn_Hz * 10.0f;
-    /* USER CODE END get_Input_shaping_wn */
-    return kManufacturer.Input_shaping_wn;
-}
-
-UNS32 set_Pos_speed_ctl_aff(UNS16 val){
-    /* USER CODE BEGIN set_Pos_speed_ctl_aff 0 */
-    /* USER CODE END set_Pos_speed_ctl_aff 0 */
-    kManufacturer.Pos_speed_ctl_aff = val;
-    /* USER CODE BEGIN set_Pos_speed_ctl_aff 1 */
-    //单位：0.1%
-    kAxis1.pos_speed_ctl_config.aff = (float)val * 0.001f;
-    /* USER CODE END set_Pos_speed_ctl_aff 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Pos_speed_ctl_aff(void){
-    /* USER CODE BEGIN get_Pos_speed_ctl_aff */
-    kManufacturer.Pos_speed_ctl_aff = kAxis1.pos_speed_ctl_config.aff * 1000.0f;
-    /* USER CODE END get_Pos_speed_ctl_aff */
-    return kManufacturer.Pos_speed_ctl_aff;
-}
-
-UNS32 set_Pos_speed_ctl_vff(UNS16 val){
-    /* USER CODE BEGIN set_Pos_speed_ctl_vff 0 */
-    /* USER CODE END set_Pos_speed_ctl_vff 0 */
-    kManufacturer.Pos_speed_ctl_vff = val;
-    /* USER CODE BEGIN set_Pos_speed_ctl_vff 1 */
-    //单位:0.1%
-    kAxis1.pos_speed_ctl_config.vff = (float)val * 0.001f;
-    /* USER CODE END set_Pos_speed_ctl_vff 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Pos_speed_ctl_vff(void){
-    /* USER CODE BEGIN get_Pos_speed_ctl_vff */
-    kManufacturer.Pos_speed_ctl_vff = kAxis1.pos_speed_ctl_config.vff * 1000.0f;
-    /* USER CODE END get_Pos_speed_ctl_vff */
-    return kManufacturer.Pos_speed_ctl_vff;
-}
-
-UNS32 set_Pos_speed_ctl_j_kt(UNS32 val){
-    /* USER CODE BEGIN set_Pos_speed_ctl_j_kt 0 */
-    /* USER CODE END set_Pos_speed_ctl_j_kt 0 */
-    kManufacturer.Pos_speed_ctl_j_kt = val;
-    /* USER CODE BEGIN set_Pos_speed_ctl_j_kt 1 */
-    //单位：0.00001 kg*m^2/(N*m/A)
-    kAxis1.pos_speed_ctl_config.j_kt = (float)val * 0.00001f;
-    /* USER CODE END set_Pos_speed_ctl_j_kt 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS32 get_Pos_speed_ctl_j_kt(void){
-    /* USER CODE BEGIN get_Pos_speed_ctl_j_kt */
-    kManufacturer.Pos_speed_ctl_j_kt = kAxis1.pos_speed_ctl_config.j_kt * 100000.0f;
-    /* USER CODE END get_Pos_speed_ctl_j_kt */
-    return kManufacturer.Pos_speed_ctl_j_kt;
-}
-
-UNS32 set_Pos_speed_ctl_ki_s(UNS32 val){
-    /* USER CODE BEGIN set_Pos_speed_ctl_ki_s 0 */
-    /* USER CODE END set_Pos_speed_ctl_ki_s 0 */
-    kManufacturer.Pos_speed_ctl_ki_s = val;
-    /* USER CODE BEGIN set_Pos_speed_ctl_ki_s 1 */
-    //单位0.001 A/rad
-    kAxis1.pos_speed_ctl_config.ki_s = (float)val * 0.001f;
-    /* USER CODE END set_Pos_speed_ctl_ki_s 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS32 get_Pos_speed_ctl_ki_s(void){
-    /* USER CODE BEGIN get_Pos_speed_ctl_ki_s */
-    kManufacturer.Pos_speed_ctl_ki_s = kAxis1.pos_speed_ctl_config.ki_s * 1000.0f;
-    /* USER CODE END get_Pos_speed_ctl_ki_s */
-    return kManufacturer.Pos_speed_ctl_ki_s;
-}
-
-UNS32 set_Pos_speed_ctl_kp_p(UNS16 val){
-    /* USER CODE BEGIN set_Pos_speed_ctl_kp_p 0 */
-    /* USER CODE END set_Pos_speed_ctl_kp_p 0 */
-    kManufacturer.Pos_speed_ctl_kp_p = val;
-    /* USER CODE BEGIN set_Pos_speed_ctl_kp_p 1 */
-    //单位：0.1hz
-    kAxis1.pos_speed_ctl_config.kp_p = (float)val * 0.1f;
-    /* USER CODE END set_Pos_speed_ctl_kp_p 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Pos_speed_ctl_kp_p(void){
-    /* USER CODE BEGIN get_Pos_speed_ctl_kp_p */
-    kManufacturer.Pos_speed_ctl_kp_p = kAxis1.pos_speed_ctl_config.kp_p * 10.0f;
-    /* USER CODE END get_Pos_speed_ctl_kp_p */
-    return kManufacturer.Pos_speed_ctl_kp_p;
-}
-
-UNS32 set_Pos_speed_ctl_kp_s(UNS32 val){
-    /* USER CODE BEGIN set_Pos_speed_ctl_kp_s 0 */
-    /* USER CODE END set_Pos_speed_ctl_kp_s 0 */
-    kManufacturer.Pos_speed_ctl_kp_s = val;
-    /* USER CODE BEGIN set_Pos_speed_ctl_kp_s 1 */
-    //单位：0.001 A/(rad/s)
-    kAxis1.pos_speed_ctl_config.kp_s = (float)val * 0.001f;
-    /* USER CODE END set_Pos_speed_ctl_kp_s 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS32 get_Pos_speed_ctl_kp_s(void){
-    /* USER CODE BEGIN get_Pos_speed_ctl_kp_s */
-    kManufacturer.Pos_speed_ctl_kp_s = kAxis1.pos_speed_ctl_config.kp_s * 1000.0f;
-    /* USER CODE END get_Pos_speed_ctl_kp_s */
-    return kManufacturer.Pos_speed_ctl_kp_s;
-}
-
-UNS32 set_Pos_speed_ctl_dob_wn(UNS16 val){
-    /* USER CODE BEGIN set_Pos_speed_ctl_dob_wn 0 */
-    /* USER CODE END set_Pos_speed_ctl_dob_wn 0 */
-    kManufacturer.Pos_speed_ctl_dob_wn = val;
-    /* USER CODE BEGIN set_Pos_speed_ctl_dob_wn 1 */
-    //单位：0.1hz
-    kAxis1.pos_speed_ctl_config.dob_wn_Hz =  (float)val * 0.1f;
-    /* USER CODE END set_Pos_speed_ctl_dob_wn 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Pos_speed_ctl_dob_wn(void){
-    /* USER CODE BEGIN get_Pos_speed_ctl_dob_wn */
-    kManufacturer.Pos_speed_ctl_dob_wn = kAxis1.pos_speed_ctl_config.dob_wn_Hz * 10.0f;
-    /* USER CODE END get_Pos_speed_ctl_dob_wn */
-    return kManufacturer.Pos_speed_ctl_dob_wn;
-}
-
-UNS32 set_Pos_speed_ctl_dob_enable(UNS8 val){
-    /* USER CODE BEGIN set_Pos_speed_ctl_dob_enable 0 */
-    /* USER CODE END set_Pos_speed_ctl_dob_enable 0 */
-    kManufacturer.Pos_speed_ctl_dob_enable = val;
-    /* USER CODE BEGIN set_Pos_speed_ctl_dob_enable 1 */
-    kAxis1.pos_speed_ctl_config.dob_enable = val;
-    /* USER CODE END set_Pos_speed_ctl_dob_enable 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS8 get_Pos_speed_ctl_dob_enable(void){
-    /* USER CODE BEGIN get_Pos_speed_ctl_dob_enable */
-    kManufacturer.Pos_speed_ctl_dob_enable = kAxis1.pos_speed_ctl_config.dob_enable;
-    /* USER CODE END get_Pos_speed_ctl_dob_enable */
-    return kManufacturer.Pos_speed_ctl_dob_enable;
-}
-
-UNS32 set_Current_ctl_i_noise(UNS16 val){
-    /* USER CODE BEGIN set_Current_ctl_i_noise 0 */
-    /* USER CODE END set_Current_ctl_i_noise 0 */
-    kManufacturer.Current_ctl_i_noise = val;
-    /* USER CODE BEGIN set_Current_ctl_i_noise 1 */
-    //单位:0.001A
-    kAxis1.current_ctl_config.i_noise_A = (float)val * 0.001f;
-    /* USER CODE END set_Current_ctl_i_noise 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Current_ctl_i_noise(void){
-    /* USER CODE BEGIN get_Current_ctl_i_noise */
-    kManufacturer.Current_ctl_i_noise = kAxis1.current_ctl_config.i_noise_A * 1000.0f;
-    /* USER CODE END get_Current_ctl_i_noise */
-    return kManufacturer.Current_ctl_i_noise;
-}
-
-UNS32 set_Current_ctl_comp_du(UNS16 val){
-    /* USER CODE BEGIN set_Current_ctl_comp_du 0 */
-    /* USER CODE END set_Current_ctl_comp_du 0 */
-    kManufacturer.Current_ctl_comp_du = val;
-    /* USER CODE BEGIN set_Current_ctl_comp_du 1 */
-    //单位:0.001V
-    kAxis1.current_ctl_config.comp_du_V = (float)val * 0.001f;
-    /* USER CODE END set_Current_ctl_comp_du 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Current_ctl_comp_du(void){
-    /* USER CODE BEGIN get_Current_ctl_comp_du */
-    kManufacturer.Current_ctl_comp_du = kAxis1.current_ctl_config.comp_du_V * 1000.0f;
-    /* USER CODE END get_Current_ctl_comp_du */
-    return kManufacturer.Current_ctl_comp_du;
-}
-
-UNS32 set_Current_ctl_bandwidth_percentage(UNS16 val){
-    /* USER CODE BEGIN set_Current_ctl_bandwidth_percentage 0 */
-    /* USER CODE END set_Current_ctl_bandwidth_percentage 0 */
-    kManufacturer.Current_ctl_bandwidth_percentage = val;
-    /* USER CODE BEGIN set_Current_ctl_bandwidth_percentage 1 */
-    //单位：0.1 %
-    kAxis1.current_ctl_config.bandwidth_percentage = (float)val * 0.1f;
-    /* USER CODE END set_Current_ctl_bandwidth_percentage 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Current_ctl_bandwidth_percentage(void){
-    /* USER CODE BEGIN get_Current_ctl_bandwidth_percentage */
-    kManufacturer.Current_ctl_bandwidth_percentage = kAxis1.current_ctl_config.bandwidth_percentage * 10.0f;
-    /* USER CODE END get_Current_ctl_bandwidth_percentage */
-    return kManufacturer.Current_ctl_bandwidth_percentage;
-}
-
-UNS32 set_Current_ctl_kp_ld(UNS16 val){
-    /* USER CODE BEGIN set_Current_ctl_kp_ld 0 */
-    /* USER CODE END set_Current_ctl_kp_ld 0 */
-    kManufacturer.Current_ctl_kp_ld = val;
-    /* USER CODE BEGIN set_Current_ctl_kp_ld 1 */
-    //kp_ld单位:0.01 V/A
-    kAxis1.current_ctl_config.kp_ld = (float)val * 0.01f;
-    /* USER CODE END set_Current_ctl_kp_ld 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Current_ctl_kp_ld(void){
-    /* USER CODE BEGIN get_Current_ctl_kp_ld */
-    kManufacturer.Current_ctl_kp_ld = kAxis1.current_ctl_config.kp_ld * 100.0f;
-    /* USER CODE END get_Current_ctl_kp_ld */
-    return kManufacturer.Current_ctl_kp_ld;
-}
-
-UNS32 set_Current_ctl_ki_ld(UNS16 val){
-    /* USER CODE BEGIN set_Current_ctl_ki_ld 0 */
-    /* USER CODE END set_Current_ctl_ki_ld 0 */
-    kManufacturer.Current_ctl_ki_ld = val;
-    /* USER CODE BEGIN set_Current_ctl_ki_ld 1 */
-    //ki_ld单位:0.01 V/(A*s)
-    kAxis1.current_ctl_config.ki_ld = (float)val * 0.01f;
-    /* USER CODE END set_Current_ctl_ki_ld 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Current_ctl_ki_ld(void){
-    /* USER CODE BEGIN get_Current_ctl_ki_ld */
-    kManufacturer.Current_ctl_ki_ld = kAxis1.current_ctl_config.ki_ld * 100.0f;
-    /* USER CODE END get_Current_ctl_ki_ld */
-    return kManufacturer.Current_ctl_ki_ld;
-}
-
-UNS32 set_Current_ctl_kp_lq(UNS16 val){
-    /* USER CODE BEGIN set_Current_ctl_kp_lq 0 */
-    /* USER CODE END set_Current_ctl_kp_lq 0 */
-    kManufacturer.Current_ctl_kp_lq = val;
-    /* USER CODE BEGIN set_Current_ctl_kp_lq 1 */
-    //kp_lq单位:0.01 V/A
-    kAxis1.current_ctl_config.kp_lq = (float)val * 0.01f;
-    /* USER CODE END set_Current_ctl_kp_lq 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Current_ctl_kp_lq(void){
-    /* USER CODE BEGIN get_Current_ctl_kp_lq */
-    kManufacturer.Current_ctl_kp_lq = kAxis1.current_ctl_config.kp_lq * 100.0f;
-    /* USER CODE END get_Current_ctl_kp_lq */
-    return kManufacturer.Current_ctl_kp_lq;
-}
-
-UNS32 set_Current_ctl_ki_lq(UNS16 val){
-    /* USER CODE BEGIN set_Current_ctl_ki_lq 0 */
-    /* USER CODE END set_Current_ctl_ki_lq 0 */
-    kManufacturer.Current_ctl_ki_lq = val;
-    /* USER CODE BEGIN set_Current_ctl_ki_lq 1 */
-    //ki_ld单位:0.01 V/(A*s)
-    kAxis1.current_ctl_config.ki_ld = (float)val * 0.01f;
-    /* USER CODE END set_Current_ctl_ki_lq 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Current_ctl_ki_lq(void){
-    /* USER CODE BEGIN get_Current_ctl_ki_lq */
-    kManufacturer.Current_ctl_ki_lq = kAxis1.current_ctl_config.ki_ld * 100.0f;
-    /* USER CODE END get_Current_ctl_ki_lq */
-    return kManufacturer.Current_ctl_ki_lq;
-}
-
-UNS32 set_Speed_obs_pll_wn(UNS16 val){
-    /* USER CODE BEGIN set_Speed_obs_pll_wn 0 */
-    /* USER CODE END set_Speed_obs_pll_wn 0 */
-    kManufacturer.Speed_obs_pll_wn = val;
-    /* USER CODE BEGIN set_Speed_obs_pll_wn 1 */
-    //速度观测器带宽:单位0.1hz
-    kAxis1.speed_obs_pll_config.wn_Hz = (float)val * 0.1f;
-    /* USER CODE END set_Speed_obs_pll_wn 1 */
-    return ABORT_CODE_SUCCESSFUL;
-}
-UNS16 get_Speed_obs_pll_wn(void){
-    /* USER CODE BEGIN get_Speed_obs_pll_wn */
-    kManufacturer.Speed_obs_pll_wn = kAxis1.speed_obs_pll_config.wn_Hz * 10.0f;
-    /* USER CODE END get_Speed_obs_pll_wn */
-    return kManufacturer.Speed_obs_pll_wn;
 }
 

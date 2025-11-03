@@ -15,6 +15,7 @@
 #include "drv_encoder.h"
 #include "drv_spi_flash.h"
 
+
 typedef struct
 {
     uint16_t adc1_raw_buffer[3];

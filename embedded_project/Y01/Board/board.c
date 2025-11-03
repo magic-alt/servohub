@@ -1,5 +1,10 @@
 #include "board.h"
 
+#ifdef USE_ECAT
+#include "YuanHub_Lan9252_HW.h"
+#include "ecatappl.h"
+#endif
+
 __attribute__((section(".RAM_D1"))) BspData kBspData =
 {
     .adc1_raw_buffer[0] = 0,
@@ -152,7 +157,22 @@ void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
 
 void ECAT_EXTI_IRQ_TASK(uint16_t GPIO_Pin)
 {
-    // TODO
+#ifdef USE_ECAT
+    if (GPIO_Pin == ECAT_IRQ_EXTI_LINE)
+    {
+        PDI_Isr();
+    }
+    else if (GPIO_Pin == ECAT_SYNC0_EXTI_LINE)
+    {
+        DISABLE_ESC_INT();
+        Sync0_Isr();
+        ENABLE_ESC_INT();
+    }
+    else if (GPIO_Pin == ECAT_SYNC1_EXTI_LINE)
+    {
+        Sync1_Isr();
+    }
+#endif
 }
 
 // 1ms低频任务 典型频率  1KHZ
@@ -162,6 +182,12 @@ void NRT_CAN_ECAT_IRQ_TASK(TIM_HandleTypeDef *htim)
     {
         UnrealTimeBase1ms();
     }
+#ifdef USE_ECAT
+    else if (htim->Instance == ECAT_LAN9252_TIM_HANDLE.Instance)
+    {
+        ECAT_CheckTimer();
+    }
+#endif
 }
 
 /**
