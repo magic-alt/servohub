@@ -106,17 +106,18 @@ void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
         bsp_set_timer_record_stop(SYS_TIMER_RECORD_CURRENT_LOOP_CYCLE_INDEX); // 测量电流环周期
         bsp_set_timer_record_start(SYS_TIMER_RECORD_CURRENT_LOOP_CYCLE_INDEX);
 
+        bsp_set_timer_record_start(SYS_TIMER_RECORD_CURRENT_LOOP_TIME_INDEX); // 测量电流环运行时间
         // 硬件自检完毕且电流校准通过，运行电流环
         if (sys_get_hardware_self_test_status() == true && \
             sys_get_current_calibration_status() == CURRENT_CALIBRATION_STATUS_OK)
         {
-            bsp_set_timer_record_start(SYS_TIMER_RECORD_CURRENT_LOOP_TIME_INDEX); // 测量电流环运行时间
+            
             CurrentLoopCtrl();
+        }
         #ifdef VIRTUAL_MOTOR_MODEL
             SimPlantStep();
         #endif
-            bsp_set_timer_record_stop(SYS_TIMER_RECORD_CURRENT_LOOP_TIME_INDEX);
-        }
+        bsp_set_timer_record_stop(SYS_TIMER_RECORD_CURRENT_LOOP_TIME_INDEX);
 
         if (position_frq_div == 0)  //运行位置环  10KHZ
         {
