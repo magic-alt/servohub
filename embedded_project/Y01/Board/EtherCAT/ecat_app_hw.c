@@ -1,4 +1,4 @@
-#include "YuanHub_Lan9252_HW.h"
+#include "ecat_app_hw.h"
 
 typedef union
 {

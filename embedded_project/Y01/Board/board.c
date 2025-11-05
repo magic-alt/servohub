@@ -1,7 +1,7 @@
 #include "board.h"
 
 #ifdef USE_ECAT
-#include "YuanHub_Lan9252_HW.h"
+#include "ecat_app_hw.h"
 #include "ecatappl.h"
 #endif
 

@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,ARM_MATH_CM7</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/EtherCAT;../../../communication/protocol/EtherCAT/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -894,84 +894,84 @@
           <GroupName>communication/ethercat</GroupName>
           <Files>
             <File>
-              <FileName>SQIDriver.c</FileName>
+              <FileName>ecat_app_hw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\EtherCAT\SQIDriver.c</FilePath>
+              <FilePath>..\Board\EtherCAT\ecat_app_hw.c</FilePath>
             </File>
             <File>
-              <FileName>YuanHub_Lan9252_HW.c</FileName>
+              <FileName>ecat_drv_sqi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\EtherCAT\YuanHub_Lan9252_HW.c</FilePath>
+              <FilePath>..\Board\EtherCAT\ecat_drv_sqi.c</FilePath>
             </File>
             <File>
               <FileName>ecat_app.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\ecat_app.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\ecat_app.c</FilePath>
             </File>
             <File>
               <FileName>bootmode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\bootmode.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\bootmode.c</FilePath>
             </File>
             <File>
               <FileName>coeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\coeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\coeappl.c</FilePath>
             </File>
             <File>
               <FileName>ecatappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatappl.c</FilePath>
             </File>
             <File>
               <FileName>ecatcoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatcoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatcoe.c</FilePath>
             </File>
             <File>
               <FileName>ecateoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecateoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecateoe.c</FilePath>
             </File>
             <File>
               <FileName>ecatfoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatfoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatfoe.c</FilePath>
             </File>
             <File>
               <FileName>ecatslv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatslv.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatslv.c</FilePath>
             </File>
             <File>
               <FileName>emcy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\emcy.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\emcy.c</FilePath>
             </File>
             <File>
               <FileName>eoeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\eoeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\eoeappl.c</FilePath>
             </File>
             <File>
               <FileName>foeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\foeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\foeappl.c</FilePath>
             </File>
             <File>
               <FileName>mailbox.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\mailbox.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\mailbox.c</FilePath>
             </File>
             <File>
               <FileName>objdef.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\objdef.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\objdef.c</FilePath>
             </File>
             <File>
               <FileName>sdoserv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\sdoserv.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\sdoserv.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1958,84 +1958,84 @@
           <GroupName>communication/ethercat</GroupName>
           <Files>
             <File>
-              <FileName>SQIDriver.c</FileName>
+              <FileName>ecat_app_hw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\EtherCAT\SQIDriver.c</FilePath>
+              <FilePath>..\Board\EtherCAT\ecat_app_hw.c</FilePath>
             </File>
             <File>
-              <FileName>YuanHub_Lan9252_HW.c</FileName>
+              <FileName>ecat_drv_sqi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\EtherCAT\YuanHub_Lan9252_HW.c</FilePath>
+              <FilePath>..\Board\EtherCAT\ecat_drv_sqi.c</FilePath>
             </File>
             <File>
               <FileName>ecat_app.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\ecat_app.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\ecat_app.c</FilePath>
             </File>
             <File>
               <FileName>bootmode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\bootmode.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\bootmode.c</FilePath>
             </File>
             <File>
               <FileName>coeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\coeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\coeappl.c</FilePath>
             </File>
             <File>
               <FileName>ecatappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatappl.c</FilePath>
             </File>
             <File>
               <FileName>ecatcoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatcoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatcoe.c</FilePath>
             </File>
             <File>
               <FileName>ecateoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecateoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecateoe.c</FilePath>
             </File>
             <File>
               <FileName>ecatfoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatfoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatfoe.c</FilePath>
             </File>
             <File>
               <FileName>ecatslv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatslv.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatslv.c</FilePath>
             </File>
             <File>
               <FileName>emcy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\emcy.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\emcy.c</FilePath>
             </File>
             <File>
               <FileName>eoeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\eoeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\eoeappl.c</FilePath>
             </File>
             <File>
               <FileName>foeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\foeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\foeappl.c</FilePath>
             </File>
             <File>
               <FileName>mailbox.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\mailbox.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\mailbox.c</FilePath>
             </File>
             <File>
               <FileName>objdef.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\objdef.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\objdef.c</FilePath>
             </File>
             <File>
               <FileName>sdoserv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\sdoserv.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\sdoserv.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3091,84 +3091,84 @@
           <GroupName>communication/ethercat</GroupName>
           <Files>
             <File>
-              <FileName>SQIDriver.c</FileName>
+              <FileName>ecat_app_hw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\EtherCAT\SQIDriver.c</FilePath>
+              <FilePath>..\Board\EtherCAT\ecat_app_hw.c</FilePath>
             </File>
             <File>
-              <FileName>YuanHub_Lan9252_HW.c</FileName>
+              <FileName>ecat_drv_sqi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\EtherCAT\YuanHub_Lan9252_HW.c</FilePath>
+              <FilePath>..\Board\EtherCAT\ecat_drv_sqi.c</FilePath>
             </File>
             <File>
               <FileName>ecat_app.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\ecat_app.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\ecat_app.c</FilePath>
             </File>
             <File>
               <FileName>bootmode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\bootmode.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\bootmode.c</FilePath>
             </File>
             <File>
               <FileName>coeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\coeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\coeappl.c</FilePath>
             </File>
             <File>
               <FileName>ecatappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatappl.c</FilePath>
             </File>
             <File>
               <FileName>ecatcoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatcoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatcoe.c</FilePath>
             </File>
             <File>
               <FileName>ecateoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecateoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecateoe.c</FilePath>
             </File>
             <File>
               <FileName>ecatfoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatfoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatfoe.c</FilePath>
             </File>
             <File>
               <FileName>ecatslv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatslv.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatslv.c</FilePath>
             </File>
             <File>
               <FileName>emcy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\emcy.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\emcy.c</FilePath>
             </File>
             <File>
               <FileName>eoeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\eoeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\eoeappl.c</FilePath>
             </File>
             <File>
               <FileName>foeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\foeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\foeappl.c</FilePath>
             </File>
             <File>
               <FileName>mailbox.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\mailbox.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\mailbox.c</FilePath>
             </File>
             <File>
               <FileName>objdef.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\objdef.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\objdef.c</FilePath>
             </File>
             <File>
               <FileName>sdoserv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\sdoserv.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\sdoserv.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4224,84 +4224,84 @@
           <GroupName>communication/ethercat</GroupName>
           <Files>
             <File>
-              <FileName>SQIDriver.c</FileName>
+              <FileName>ecat_app_hw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\EtherCAT\SQIDriver.c</FilePath>
+              <FilePath>..\Board\EtherCAT\ecat_app_hw.c</FilePath>
             </File>
             <File>
-              <FileName>YuanHub_Lan9252_HW.c</FileName>
+              <FileName>ecat_drv_sqi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\EtherCAT\YuanHub_Lan9252_HW.c</FilePath>
+              <FilePath>..\Board\EtherCAT\ecat_drv_sqi.c</FilePath>
             </File>
             <File>
               <FileName>ecat_app.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\ecat_app.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\ecat_app.c</FilePath>
             </File>
             <File>
               <FileName>bootmode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\bootmode.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\bootmode.c</FilePath>
             </File>
             <File>
               <FileName>coeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\coeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\coeappl.c</FilePath>
             </File>
             <File>
               <FileName>ecatappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatappl.c</FilePath>
             </File>
             <File>
               <FileName>ecatcoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatcoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatcoe.c</FilePath>
             </File>
             <File>
               <FileName>ecateoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecateoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecateoe.c</FilePath>
             </File>
             <File>
               <FileName>ecatfoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatfoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatfoe.c</FilePath>
             </File>
             <File>
               <FileName>ecatslv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatslv.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatslv.c</FilePath>
             </File>
             <File>
               <FileName>emcy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\emcy.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\emcy.c</FilePath>
             </File>
             <File>
               <FileName>eoeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\eoeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\eoeappl.c</FilePath>
             </File>
             <File>
               <FileName>foeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\foeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\foeappl.c</FilePath>
             </File>
             <File>
               <FileName>mailbox.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\mailbox.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\mailbox.c</FilePath>
             </File>
             <File>
               <FileName>objdef.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\objdef.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\objdef.c</FilePath>
             </File>
             <File>
               <FileName>sdoserv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\sdoserv.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\sdoserv.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5357,84 +5357,84 @@
           <GroupName>communication/ethercat</GroupName>
           <Files>
             <File>
-              <FileName>SQIDriver.c</FileName>
+              <FileName>ecat_app_hw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\EtherCAT\SQIDriver.c</FilePath>
+              <FilePath>..\Board\EtherCAT\ecat_app_hw.c</FilePath>
             </File>
             <File>
-              <FileName>YuanHub_Lan9252_HW.c</FileName>
+              <FileName>ecat_drv_sqi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\EtherCAT\YuanHub_Lan9252_HW.c</FilePath>
+              <FilePath>..\Board\EtherCAT\ecat_drv_sqi.c</FilePath>
             </File>
             <File>
               <FileName>ecat_app.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\ecat_app.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\ecat_app.c</FilePath>
             </File>
             <File>
               <FileName>bootmode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\bootmode.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\bootmode.c</FilePath>
             </File>
             <File>
               <FileName>coeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\coeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\coeappl.c</FilePath>
             </File>
             <File>
               <FileName>ecatappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatappl.c</FilePath>
             </File>
             <File>
               <FileName>ecatcoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatcoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatcoe.c</FilePath>
             </File>
             <File>
               <FileName>ecateoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecateoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecateoe.c</FilePath>
             </File>
             <File>
               <FileName>ecatfoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatfoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatfoe.c</FilePath>
             </File>
             <File>
               <FileName>ecatslv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatslv.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatslv.c</FilePath>
             </File>
             <File>
               <FileName>emcy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\emcy.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\emcy.c</FilePath>
             </File>
             <File>
               <FileName>eoeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\eoeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\eoeappl.c</FilePath>
             </File>
             <File>
               <FileName>foeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\foeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\foeappl.c</FilePath>
             </File>
             <File>
               <FileName>mailbox.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\mailbox.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\mailbox.c</FilePath>
             </File>
             <File>
               <FileName>objdef.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\objdef.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\objdef.c</FilePath>
             </File>
             <File>
               <FileName>sdoserv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\sdoserv.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\sdoserv.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5608,7 +5608,7 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
-            <RunUserProg2>1</RunUserProg2>
+            <RunUserProg2>0</RunUserProg2>
             <UserProg1Name>fromelf --bin -o "$L@L.bin" "#L</UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
@@ -5866,7 +5866,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,ARM_MATH_CM7,VIRTUAL_MOTOR_MODEL</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/EtherCAT;../../../communication/protocol/EtherCAT/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -6490,84 +6490,84 @@
           <GroupName>communication/ethercat</GroupName>
           <Files>
             <File>
-              <FileName>SQIDriver.c</FileName>
+              <FileName>ecat_app_hw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\EtherCAT\SQIDriver.c</FilePath>
+              <FilePath>..\Board\EtherCAT\ecat_app_hw.c</FilePath>
             </File>
             <File>
-              <FileName>YuanHub_Lan9252_HW.c</FileName>
+              <FileName>ecat_drv_sqi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\EtherCAT\YuanHub_Lan9252_HW.c</FilePath>
+              <FilePath>..\Board\EtherCAT\ecat_drv_sqi.c</FilePath>
             </File>
             <File>
               <FileName>ecat_app.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\ecat_app.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\ecat_app.c</FilePath>
             </File>
             <File>
               <FileName>bootmode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\bootmode.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\bootmode.c</FilePath>
             </File>
             <File>
               <FileName>coeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\coeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\coeappl.c</FilePath>
             </File>
             <File>
               <FileName>ecatappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatappl.c</FilePath>
             </File>
             <File>
               <FileName>ecatcoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatcoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatcoe.c</FilePath>
             </File>
             <File>
               <FileName>ecateoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecateoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecateoe.c</FilePath>
             </File>
             <File>
               <FileName>ecatfoe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatfoe.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatfoe.c</FilePath>
             </File>
             <File>
               <FileName>ecatslv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\ecatslv.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatslv.c</FilePath>
             </File>
             <File>
               <FileName>emcy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\emcy.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\emcy.c</FilePath>
             </File>
             <File>
               <FileName>eoeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\eoeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\eoeappl.c</FilePath>
             </File>
             <File>
               <FileName>foeappl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\foeappl.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\foeappl.c</FilePath>
             </File>
             <File>
               <FileName>mailbox.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\mailbox.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\mailbox.c</FilePath>
             </File>
             <File>
               <FileName>objdef.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\objdef.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\objdef.c</FilePath>
             </File>
             <File>
               <FileName>sdoserv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\communication\protocol\EtherCAT\Src\sdoserv.c</FilePath>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\sdoserv.c</FilePath>
             </File>
           </Files>
         </Group>

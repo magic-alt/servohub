@@ -46,7 +46,7 @@ V5.01 : Start file change log
 #include "ecat_def.h"
 
 #include  "esc.h"
-#include "YuanHub_Lan9252_HW.h"
+#include "ecat_app_hw.h"
 
 #ifndef _ECATSLV_H_
 #define _ECATSLV_H_

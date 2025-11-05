@@ -1,4 +1,4 @@
-#include "SQIDriver.h"
+#include "ecat_drv_sqi.h"
 
 UINT32 SQIReadDWord(UINT16 Address)
 {

@@ -1526,7 +1526,7 @@
 
   <Group>
     <GroupName>app</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1730,7 +1730,7 @@
       <GroupNumber>8</GroupNumber>
       <FileNumber>52</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Board\board.c</PathWithFileName>
@@ -2245,8 +2245,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Board\EtherCAT\SQIDriver.c</PathWithFileName>
-      <FilenameWithoutPath>SQIDriver.c</FilenameWithoutPath>
+      <PathWithFileName>..\Board\EtherCAT\ecat_app_hw.c</PathWithFileName>
+      <FilenameWithoutPath>ecat_app_hw.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2257,8 +2257,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Board\EtherCAT\YuanHub_Lan9252_HW.c</PathWithFileName>
-      <FilenameWithoutPath>YuanHub_Lan9252_HW.c</FilenameWithoutPath>
+      <PathWithFileName>..\Board\EtherCAT\ecat_drv_sqi.c</PathWithFileName>
+      <FilenameWithoutPath>ecat_drv_sqi.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2269,7 +2269,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\communication\protocol\EtherCAT\ecat_app.c</PathWithFileName>
+      <PathWithFileName>..\..\..\communication\protocol\EtherCAT_LAN925x\ecat_app.c</PathWithFileName>
       <FilenameWithoutPath>ecat_app.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2281,7 +2281,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\communication\protocol\EtherCAT\Src\bootmode.c</PathWithFileName>
+      <PathWithFileName>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\bootmode.c</PathWithFileName>
       <FilenameWithoutPath>bootmode.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2293,7 +2293,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\communication\protocol\EtherCAT\Src\coeappl.c</PathWithFileName>
+      <PathWithFileName>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\coeappl.c</PathWithFileName>
       <FilenameWithoutPath>coeappl.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2305,7 +2305,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\communication\protocol\EtherCAT\Src\ecatappl.c</PathWithFileName>
+      <PathWithFileName>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatappl.c</PathWithFileName>
       <FilenameWithoutPath>ecatappl.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2317,7 +2317,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\communication\protocol\EtherCAT\Src\ecatcoe.c</PathWithFileName>
+      <PathWithFileName>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatcoe.c</PathWithFileName>
       <FilenameWithoutPath>ecatcoe.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2329,7 +2329,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\communication\protocol\EtherCAT\Src\ecateoe.c</PathWithFileName>
+      <PathWithFileName>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecateoe.c</PathWithFileName>
       <FilenameWithoutPath>ecateoe.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2341,7 +2341,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\communication\protocol\EtherCAT\Src\ecatfoe.c</PathWithFileName>
+      <PathWithFileName>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatfoe.c</PathWithFileName>
       <FilenameWithoutPath>ecatfoe.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2353,7 +2353,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\communication\protocol\EtherCAT\Src\ecatslv.c</PathWithFileName>
+      <PathWithFileName>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatslv.c</PathWithFileName>
       <FilenameWithoutPath>ecatslv.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2365,7 +2365,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\communication\protocol\EtherCAT\Src\emcy.c</PathWithFileName>
+      <PathWithFileName>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\emcy.c</PathWithFileName>
       <FilenameWithoutPath>emcy.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2377,7 +2377,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\communication\protocol\EtherCAT\Src\eoeappl.c</PathWithFileName>
+      <PathWithFileName>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\eoeappl.c</PathWithFileName>
       <FilenameWithoutPath>eoeappl.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2389,7 +2389,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\communication\protocol\EtherCAT\Src\foeappl.c</PathWithFileName>
+      <PathWithFileName>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\foeappl.c</PathWithFileName>
       <FilenameWithoutPath>foeappl.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2401,7 +2401,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\communication\protocol\EtherCAT\Src\mailbox.c</PathWithFileName>
+      <PathWithFileName>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\mailbox.c</PathWithFileName>
       <FilenameWithoutPath>mailbox.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2413,7 +2413,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\communication\protocol\EtherCAT\Src\objdef.c</PathWithFileName>
+      <PathWithFileName>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\objdef.c</PathWithFileName>
       <FilenameWithoutPath>objdef.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2425,7 +2425,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\communication\protocol\EtherCAT\Src\sdoserv.c</PathWithFileName>
+      <PathWithFileName>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\sdoserv.c</PathWithFileName>
       <FilenameWithoutPath>sdoserv.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

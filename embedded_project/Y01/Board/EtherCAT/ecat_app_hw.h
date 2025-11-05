@@ -1,5 +1,5 @@
-#ifndef __YUANHUB_LAN9252_HW_H
-#define __YUANHUB_LAN9252_HW_H
+#ifndef __ECAT_APP_HW_H
+#define __ECAT_APP_HW_H
 
 #ifdef __cplusplus
 extern "C"
@@ -8,7 +8,7 @@ extern "C"
 
 /******************************头文件******************************/
 #include "board.h"
-#include "SQIDriver.h"
+#include "ecat_drv_sqi.h"
 #include "ecat_def.h"
 #include "ecatslv.h"
 
