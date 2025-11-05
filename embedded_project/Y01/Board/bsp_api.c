@@ -23,11 +23,7 @@ void bsp_system_reset(void)
 */
 void sys_set_bsp_error_state(BSP_ERROR_CODE type, BSP_ERROR_OPERATION op)
 {
-#ifdef VIRTUAL_MOTOR_MODEL
-    return;
-#else
     set_bsp_error_state(type, op);
-#endif
 }
 /**
  * @brief 获取系统硬件自检状态
@@ -54,6 +50,7 @@ VOLTAGE_CHECK_STATUS sys_bus_voltage_check(void)
 #else
     return BusVoltageCheck();
 #endif
+    
 }
 /**
  * @brief 三相电流检测
@@ -103,11 +100,7 @@ void sys_get_current_calibration_drift(uint16_t *drift)
  */
 void sys_get_bsp_error_state(BspErrorCode_t* *p_bsp_error)
 {
-#ifdef VIRTUAL_MOTOR_MODEL
-    return;
-#else
     *p_bsp_error = get_bsp_error_state();
-#endif
 }
 /**
  * @brief 设置PWM输出状态
@@ -374,13 +367,11 @@ int64_t bsp_get_encoder_turns(ENCODER_ID const enc_id)
  */
 void bsp_set_can_id(uint32_t can_id)
 {
-#ifdef VIRTUAL_MOTOR_MODEL
-    return ;
-#else
+ 
     #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
         //can_device_set_id(can_id);
     #endif
-#endif // VIRTUAL_MOTOR_MODEL
+ 
 }
 /**
  * @brief 设置CAN 波特率
@@ -390,13 +381,9 @@ void bsp_set_can_id(uint32_t can_id)
  */
 void bsp_set_can_baudrate(uint32_t baudrate)
 {
-#ifdef VIRTUAL_MOTOR_MODEL
-    return ;
-#else
     #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
         //can_device_set_baudrate(baudrate);
     #endif
-#endif // VIRTUAL_MOTOR_MODEL
 }
 /**
  * @brief 获取当前 CAN ID 
@@ -405,16 +392,13 @@ void bsp_set_can_baudrate(uint32_t baudrate)
  */
 uint32_t bsp_get_can_id(void)
 {
-#ifdef VIRTUAL_MOTOR_MODEL
-    return 0;
-#else
     #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
         //return can_device_get_id();
         return 0;
     #else
         return 0;
     #endif
-#endif // VIRTUAL_MOTOR_MODEL
+  
 }
 /**
  * @brief 获取当前 CAN 波特率
@@ -423,16 +407,14 @@ uint32_t bsp_get_can_id(void)
  */
 uint32_t bsp_get_can_baudrate(void)
 {
-#ifdef VIRTUAL_MOTOR_MODEL
-    return 0;
-#else
+ 
     #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
         //return can_device_get_baudrate();
         return 0;
     #else
         return 0;
     #endif
-#endif // VIRTUAL_MOTOR_MODEL
+ 
 }
 /**
  * @brief 获取当前 CAN 消息累计计数值
@@ -441,16 +423,14 @@ uint32_t bsp_get_can_baudrate(void)
  */
 uint32_t bsp_get_can_mg_counts(void)
 {
-#ifdef VIRTUAL_MOTOR_MODEL
-    return 0;
-#else
+ 
     #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
         //return can_device_get_mg_counts();
         return 0;
     #else
         return 0;
     #endif
-#endif // VIRTUAL_MOTOR_MODEL
+ 
 }
 
 #pragma endregion
@@ -519,11 +499,7 @@ FLASHDB_STATUS bsp_flashdb_key_delete(FLASHDB_KEY_INDEX const index)
  */
 void bsp_sys_blocking_delay_us(uint32_t us)
 {
-#ifdef VIRTUAL_MOTOR_MODEL
-    return ;
-#else
     sys_blocking_delay_us(us);
-#endif
 }
 /**
  * @brief 系统阻塞ms延时
@@ -533,11 +509,7 @@ void bsp_sys_blocking_delay_us(uint32_t us)
  */
 void bsp_sys_blocking_delay_ms(uint32_t ms)
 {
-#ifdef VIRTUAL_MOTOR_MODEL
-    return ;
-#else
     sys_blocking_delay_ms(ms);
-#endif
 }
 /**
  * @brief 系统耗时记录开始
