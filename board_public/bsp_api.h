@@ -22,7 +22,10 @@ void bsp_system_reset(void);
 #pragma endregion
 
 #pragma region 硬件状态相关
+/* 设置系统硬件错误状态 */
 void sys_set_bsp_error_state(BSP_ERROR_CODE type, BSP_ERROR_OPERATION op);
+/* 获取系统硬件错误状态地址 */
+void sys_get_bsp_error_state(BspErrorCode_t* *p_bsp_error);
 /* 获取系统硬件自检状态 */
 bool sys_get_hardware_self_test_status(void);
 /* 母线电压检测 */
@@ -33,10 +36,10 @@ void sys_current_calibration_step(void);
 CURRENT_CALIBRATION_STATUS sys_get_current_calibration_status(void);
 /* 获取UVW三相电流校准值 */
 void sys_get_current_calibration_drift(uint16_t *drift);
-/* 获取系统BSP错误码地址 */
-void sys_get_bsp_error_state(BspErrorCode_t* *p_bsp_error);
 /* 设置PWM输出状态 */
 void bsp_set_pwm_state(bool state);
+/* 更新PWM输出准备状态 */
+void bsp_pwm_ready_state_updata(void);
 /* 获取PWM输出状态 */
 bool bsp_get_pwm_state(void);
 /* 设置UVW三相电压 */
@@ -73,10 +76,10 @@ int64_t bsp_get_encoder_turns(ENCODER_ID const enc_id);
 #pragma region 通讯相关
 /* 设置CAN ID */
 void bsp_set_can_id(uint32_t can_id);
-/* 设置CAN 波特率 */
-void bsp_set_can_baudrate(uint32_t baudrate);
 /* 获取当前 CAN ID */
 uint32_t bsp_get_can_id(void);
+/* 设置CAN 波特率 */
+void bsp_set_can_baudrate(uint32_t baudrate);
 /* 获取当前 CAN 波特率 */
 uint32_t bsp_get_can_baudrate(void);
 /* 获取当前 CAN 消息累计计数值 */

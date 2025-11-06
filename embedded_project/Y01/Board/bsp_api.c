@@ -26,6 +26,16 @@ void sys_set_bsp_error_state(BSP_ERROR_CODE type, BSP_ERROR_OPERATION op)
     set_bsp_error_state(type, op);
 }
 /**
+ * @brief 获取系统硬件错误状态地址
+ * @param[out] p_bsp_error 硬件错误状态地址
+ * @return
+ * @note
+ */
+void sys_get_bsp_error_state(BspErrorCode_t* *p_bsp_error)
+{
+    *p_bsp_error = get_bsp_error_state();
+}
+/**
  * @brief 获取系统硬件自检状态
  * @return bool false:未完成 true:完成
  * @note
@@ -50,7 +60,6 @@ VOLTAGE_CHECK_STATUS sys_bus_voltage_check(void)
 #else
     return BusVoltageCheck();
 #endif
-    
 }
 /**
  * @brief 三相电流检测
@@ -85,22 +94,12 @@ CURRENT_CALIBRATION_STATUS sys_get_current_calibration_status(void)
 void sys_get_current_calibration_drift(uint16_t *drift)
 {
 #ifdef VIRTUAL_MOTOR_MODEL
-    drift[0] = 32768;
-    drift[1] = 32768;
-    drift[2] = 32768;
+    drift[0] = UVW_CURRENT_MID_VAL;
+    drift[1] = UVW_CURRENT_MID_VAL;
+    drift[2] = UVW_CURRENT_MID_VAL;
 #else
     get_current_calibration_drift(drift);
 #endif
-}
-/**
- * @brief 获取系统BSP错误码地址
- * @param[out] p_bsp_error BSP错误码地址
- * @return
- * @note
- */
-void sys_get_bsp_error_state(BspErrorCode_t* *p_bsp_error)
-{
-    *p_bsp_error = get_bsp_error_state();
 }
 /**
  * @brief 设置PWM输出状态
@@ -119,6 +118,37 @@ void bsp_set_pwm_state(bool state)
     else
     {
         __HAL_TIM_MOE_DISABLE_UNCONDITIONALLY(&PWM_TIM_HANDLE);
+    }
+#endif
+}
+/**
+ * @brief 更新PWM输出准备状态
+ */
+void bsp_pwm_ready_state_updata(void)
+{
+#ifdef VIRTUAL_MOTOR_MODEL
+    kBspData.pwm_ready_state = true;
+#else
+    if (DRIVER_PWM_READY_TIME)
+    {
+        if (kBspData.pwm_en_state == PWM_ENABLE)
+        {
+            kBspData.pwm_state_cnt ++;
+            if (kBspData.pwm_state_cnt >= DRIVER_PWM_READY_TIME)
+            {
+                kBspData.pwm_state_cnt = DRIVER_PWM_READY_TIME;
+                kBspData.pwm_ready_state = true;
+            }
+        }
+        else
+        {
+            kBspData.pwm_state_cnt = 0;
+            kBspData.pwm_ready_state = false;
+        }
+    }
+    else // 等待时间为0，PWM使能后立即认为PWM准备好
+    {
+        kBspData.pwm_ready_state = true;
     }
 #endif
 }
@@ -159,17 +189,17 @@ void bsp_set_phase_voltage(const float voltage[3])
 
     for (uint8_t i = 0; i < 3; i++)
     {
-        uabc_tar[i] = voltage[i] * ((float)PWM_ARR / kBspData.dc_bus_voltage_val) + PWM_ARR_HALF;
-        if (uabc_tar[i] > PWM_ARR_P_LIMIT)
+        uabc_tar[i] = voltage[i] * ((float)PWM_TIM_ARR / kBspData.dc_bus_voltage_val) + PWM_TIM_ARR_LIMIT_HALF;
+        if (uabc_tar[i] > PWM_TIM_ARR_P_LIMIT)
         {
-            uabc_tar[i] = PWM_ARR_P_LIMIT;
+            uabc_tar[i] = PWM_TIM_ARR_P_LIMIT;
         }
-        if (uabc_tar[i] < PWM_ARR_N_LIMIT)
+        if (uabc_tar[i] < PWM_TIM_ARR_N_LIMIT)
         {
-            uabc_tar[i] = PWM_ARR_N_LIMIT;
+            uabc_tar[i] = PWM_TIM_ARR_N_LIMIT;
         }
 
-        uabc_tar[i] = PWM_ARR - uabc_tar[i]; // CCR值越大，占空比越小
+        uabc_tar[i] = PWM_TIM_ARR - uabc_tar[i]; // CCR值越大，占空比越小
     }
 
     PWM_TIM_U_CCR_VAL = uabc_tar[0];
@@ -190,8 +220,6 @@ void bsp_get_phase_current(float piabc[3])
 #else
     uint16_t drift[3] = {0};
 
-    sys_get_current_calibration_drift(drift);
-
     if (false == bsp_get_pwm_state()) // PWM未准备好，电流采样回读值强制为0
     {
         kBspData.uvw_current[0] = 0.0f;
@@ -200,6 +228,8 @@ void bsp_get_phase_current(float piabc[3])
     }
     else
     {
+        sys_get_current_calibration_drift(drift);
+
         kBspData.uvw_current[0] = UVW_CURRENT_DIRECTION * \
             (float)(int32_t)(UVW_CURRENT_U_CHANNEL - drift[0]) * UVW_CURRENT_SAMP_ADC_K;
         kBspData.uvw_current[1] = UVW_CURRENT_DIRECTION * \
@@ -367,11 +397,23 @@ int64_t bsp_get_encoder_turns(ENCODER_ID const enc_id)
  */
 void bsp_set_can_id(uint32_t can_id)
 {
- 
     #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
         //can_device_set_id(can_id);
     #endif
- 
+}
+/**
+ * @brief 获取当前 CAN ID
+ * @return 
+ * @note  
+ */
+uint32_t bsp_get_can_id(void)
+{
+    #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
+        //return can_device_get_id();
+        return 0;
+    #else
+        return 0;
+    #endif
 }
 /**
  * @brief 设置CAN 波特率
@@ -386,35 +428,18 @@ void bsp_set_can_baudrate(uint32_t baudrate)
     #endif
 }
 /**
- * @brief 获取当前 CAN ID 
- * @return 
- * @note  
- */
-uint32_t bsp_get_can_id(void)
-{
-    #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
-        //return can_device_get_id();
-        return 0;
-    #else
-        return 0;
-    #endif
-  
-}
-/**
  * @brief 获取当前 CAN 波特率
  * @return 
  * @note  
  */
 uint32_t bsp_get_can_baudrate(void)
 {
- 
     #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
         //return can_device_get_baudrate();
         return 0;
     #else
         return 0;
     #endif
- 
 }
 /**
  * @brief 获取当前 CAN 消息累计计数值
@@ -423,14 +448,12 @@ uint32_t bsp_get_can_baudrate(void)
  */
 uint32_t bsp_get_can_mg_counts(void)
 {
- 
     #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
         //return can_device_get_mg_counts();
         return 0;
     #else
         return 0;
     #endif
- 
 }
 
 #pragma endregion

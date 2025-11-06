@@ -6,8 +6,6 @@
 #include "data_type_define.h"
 #include "bsp_api.h"
 
-#include "driver_parameter.h"
-#include "motor_parameter.h"
 #include "version.h"
 
 typedef enum

@@ -8,11 +8,10 @@
 #include <stdint.h>
 #include <string.h>
 
-
-//#include "data_param.h"
 #include "yuanhub_math.h"
 #include "coordinate_conversion.h"
 #include "motor_ctl_sm.h"
+#include "servo_system_cfg.h"
 
 #define ENCODER_NUM             (2u)                    // 每轴的编码器数量（最大值）
 #define ENCODER_ID_MAX          (ENCODER_NUM - 1)       // 编码器ID最大值
@@ -195,4 +194,5 @@ typedef enum
     FLASH_STORE_STATUS_BUSY    = 1,     // 存储中
     FLASH_STORE_STATUS_SUCCESS = 2,     // 存储成功
 } FLASH_STORE_STATUS;
+
 #endif // DATA_TYPE_DEFINE_H

@@ -111,7 +111,6 @@ void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
         if (sys_get_hardware_self_test_status() == true && \
             sys_get_current_calibration_status() == CURRENT_CALIBRATION_STATUS_OK)
         {
-            
             CurrentLoopCtrl();
         }
         #ifdef VIRTUAL_MOTOR_MODEL
@@ -136,7 +135,7 @@ void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
             encoder_data_read();
             encoder_data_process();
 
-            BspReadyStateupdata(); // 更新硬件准备状态
+            bsp_pwm_ready_state_updata(); // 更新PWM输出准备状态
         #endif
 
             PosSpeedLoopCtrl();

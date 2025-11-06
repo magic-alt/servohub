@@ -2,10 +2,6 @@
 #define BOARD_H
 
 #include "main.h"
-#include "bsp_api.h"
-
-#include "driver_parameter.h"
-#include "motor_parameter.h"
 
 #include "motor_ctl_loop.h"
 #include "mavlink_callback.h"
@@ -39,6 +35,10 @@ typedef struct
 
 #pragma region // MCU 外设寄存器映射
 #pragma region // ANALOG
+#define ADC_REFERENCE_V             (3.3f)      // ADC参考电压(V)
+#define ADC_REFERENCE_MV            (3300)      // ADC参考电压(mV)
+#define ADC_RESOLTION               (65536.0f)  // ADC采样分辨率(16位)
+
 #define UVW_CURRENT_U_HANDLE        (hadc1)
 #define UVW_CURRENT_V_HANDLE        (hadc2)
 #define UVW_CURRENT_W_HANDLE        (hadc3)
@@ -66,6 +66,12 @@ typedef struct
 #pragma endregion // ANALOG
 
 #pragma region // TIMERS
+#define PWM_TIM_ARR                 (6000u)  // PWM定时器ARR值，此宏可直接用于CubeMX配置框（No Check）
+#define PWM_TIM_ARR_HALF            (3000u)  // PWM定时器ARR值的一半，此宏可直接用于CubeMX配置框（No Check）
+#define PWM_TIM_ARR_P_LIMIT         (5400u)  // PWM定时器ARR上限值（PWM_TIM_ARR * 90%）
+#define PWM_TIM_ARR_LIMIT_HALF      (2700u)  // PWM定时器ARR上限值的一半
+#define PWM_TIM_ARR_N_LIMIT         (0u)     // PWM定时器ARR下限值（0）
+
 #define PWM_TIM_HANDLE              (htim1)
 #define PWM_TIM_U_CHANNEL           (TIM_CHANNEL_1)
 #define PWM_TIM_V_CHANNEL           (TIM_CHANNEL_2)
@@ -152,15 +158,6 @@ typedef struct
 #pragma endregion // GPIO
 
 #pragma endregion // MCU 外设寄存器映射
-
-#pragma region // 硬件参数配置
-
-#define PWM_ARR (6000)
-#define PWM_ARR_P_LIMIT (5400)
-#define PWM_ARR_N_LIMIT (0)
-#define PWM_ARR_HALF (2700)
-
-#pragma endregion // 硬件参数配置
 
 extern BspData kBspData;
 

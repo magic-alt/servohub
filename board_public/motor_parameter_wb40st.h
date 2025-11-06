@@ -1,5 +1,5 @@
-#ifndef MOTOR_PARAMETER_H
-#define MOTOR_PARAMETER_H
+#ifndef MOTOR_PARAMETER_WB40ST_H
+#define MOTOR_PARAMETER_WB40ST_H
 
 // 整个模组参数，电机参数、编码器参数、减速器参数
 
@@ -58,6 +58,10 @@ extern "C"
 #define GEAR_RATIO_DEN (1) // 减速比分母
 #define GEAR_RATIO (1.0f)  // 减速比
 
+// 温度传感器参数
+#define MOTOR_TEMP_SENSOR_K             (-0.31283F) // (0℃-120℃)/(ADC(0) - ADC(120))
+#define MOTOR_TEMP_SENSOR_BIAS          (645.72F)   // 0℃ 时候 偏置值
+
 // 抱闸相关参数
 #define BRAKE_ENGAGE_TIME (0.0f)               // 抱闸延迟时间
 #define BRAKE_RELEASE_TIME (0.0f)              // 松闸延迟时间
@@ -83,4 +87,4 @@ extern "C"
 }
 #endif
 
-#endif // MOTOR_PARAMETER_H
+#endif // MOTOR_PARAMETER_WB40ST_H

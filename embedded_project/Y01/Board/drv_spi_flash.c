@@ -6,6 +6,7 @@ static struct fdb_kvdb kvdb = {0};
 static struct fdb_default_kv default_kv;
 static struct fdb_default_kv_node default_kv_table[FLASHDB_KEYS_NUM];
 
+// lock and unlock function for KVDB
 static void lock(fdb_db_t db)
 {
     __disable_irq();
@@ -25,13 +26,11 @@ fdb_err_t flashdb_init(void)
 {
     default_kv.kvs = default_kv_table;
     default_kv.num = FLASHDB_KEYS_NUM;
-    /* set the lock and unlock function if you want */
 
+    /* set the lock and unlock function if you want */
     fdb_kvdb_control(&kvdb, FDB_KVDB_CTRL_SET_LOCK, (void *)lock);
     fdb_kvdb_control(&kvdb, FDB_KVDB_CTRL_SET_UNLOCK, (void *)unlock);
 
-    
-    
     /* Key-Value database initialization
          *
          *       &kvdb: database object

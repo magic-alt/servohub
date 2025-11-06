@@ -98,31 +98,6 @@ void HardwareSelfTestRun(void)
     }
 }
 
-void BspReadyStateupdata(void)
-{
-    if (DRIVER_PWM_READY_TIME)
-    {
-        if (kBspData.pwm_en_state == PWM_ENABLE)
-        {
-            kBspData.pwm_state_cnt ++;
-            if (kBspData.pwm_state_cnt >= DRIVER_PWM_READY_TIME)
-            {
-                kBspData.pwm_state_cnt = DRIVER_PWM_READY_TIME;
-                kBspData.pwm_ready_state = true;
-            }
-        }
-        else
-        {
-            kBspData.pwm_state_cnt = 0;
-            kBspData.pwm_ready_state = false;
-        }
-    }
-    else // 等待时间为0，PWM使能后立即认为PWM准备好
-    {
-        kBspData.pwm_ready_state = true;
-    }
-}
-
 // 三相电流校准
 void CurrentCalibrationStep(void)
 {
