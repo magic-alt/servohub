@@ -48,8 +48,8 @@ typedef struct
     UNS8 Software_position_limit;
     INTEGER32 Software_position_limit_Minimal_position_limit; //应用位置下限
     INTEGER32 Software_position_limit_Maximal_position_limit; //应用位置上限
-    UNS32 Max_Profile_velocity; //应用速度限制
-    UNS32 Max_motor_speed; //电机最大转速
+    UNS32 Max_profile_velocity; //应用速度限制
+    UNS32 Max_motor_speed; //电机最大转速（弃用实际不生效）
     UNS32 Profile_velocity; //轮廓速度
     UNS32 Profile_acceleration; //轮廓加速度
     UNS32 Profile_deceleration; //轮廓减速度
@@ -69,7 +69,7 @@ typedef struct
     INTEGER32 Position_actual_value_inc; //负载端内部位置当前值
     INTEGER32 Position_actual_value; //负载端位置当前值
     UNS32 Following_error_window; //位置跟随误差阈值
-    UNS16 Following_error_time_Out; //位置跟随误差阈值时间
+    UNS16 Following_error_time_out; //位置跟随误差阈值时间
     UNS32 Position_window; //位置到达检测窗口
     UNS16 Position_window_time; //位置到达检测窗口时间
     INTEGER32 Following_error_actual_value; //负载端位置误差值
@@ -99,39 +99,6 @@ typedef struct
     UNS32 DC_link_circuit_voltage; //母线电压当前值
     UNS32 Torque_slope; //力矩上升斜率
 }Profile_torque_mode;
-
-typedef struct
-{
-    UNS32 Alarm_word; //告警字
-    INTEGER32 MIT_feedforward_torque_current; //MIT前馈力矩电流
-    INTEGER32 MIT_target_position; //MIT目标位置
-    INTEGER32 MIT_max_current; //MIT最大输出电流
-    INTEGER32 MIT_target_velocity; //MIT目标速度
-    UNS32 MIT_Kp; //位置刚度
-    UNS32 MIT_Kd; //速度阻尼系数
-    UNS8 SysCmd; //系统指令
-    INTEGER8 storage_status; //Flash存储状态
-    UNS16 Notch_filter_frq[6]; //陷波滤波器频率
-    UNS16 Notch_filter_width[6]; //陷波滤波器宽度
-    UNS16 Notch_filter_depth[6]; //陷波滤波器深度
-    UNS16 Input_shaping_wn; //末端振动抑制的频率
-    UNS16 Pos_speed_ctl_aff; //加速度前馈系数
-    UNS16 Pos_speed_ctl_vff; //速度前馈系数
-    UNS32 Pos_speed_ctl_j_kt; //惯性系数
-    UNS32 Pos_speed_ctl_ki_s; //速度环积分系数
-    UNS16 Pos_speed_ctl_kp_p; //位置环比例系数
-    UNS32 Pos_speed_ctl_kp_s; //速度环比例系数
-    UNS16 Pos_speed_ctl_dob_wn; //负载扰动观测器带宽
-    UNS8 Pos_speed_ctl_dob_enable; //负载扰动观测使能开关
-    UNS16 Current_ctl_i_noise; //电流采样噪声绝对值
-    UNS16 Current_ctl_comp_du; //死区补偿电压大小
-    UNS16 Current_ctl_bandwidth_percentage; //电流环目标带宽
-    UNS16 Current_ctl_kp_ld; //d轴 kp控制增益
-    UNS16 Current_ctl_ki_ld; //d轴 ki控制增益
-    UNS16 Current_ctl_kp_lq; //q轴 kp控制增益
-    UNS16 Current_ctl_ki_lq; //q轴 ki控制增益
-    UNS16 Speed_obs_pll_wn; //速度观测带宽
-}Manufacturer;
 
 UNS32 set_Controlword(UNS16 val);
 UNS16 get_Controlword(void);
@@ -193,8 +160,8 @@ INTEGER32 get_Software_position_limit_Minimal_position_limit(void);
 UNS32 set_Software_position_limit_Maximal_position_limit(INTEGER32 val);
 INTEGER32 get_Software_position_limit_Maximal_position_limit(void);
 
-UNS32 set_Max_Profile_velocity(UNS32 val);
-UNS32 get_Max_Profile_velocity(void);
+UNS32 set_Max_profile_velocity(UNS32 val);
+UNS32 get_Max_profile_velocity(void);
 
 UNS32 set_Max_motor_speed(UNS32 val);
 UNS32 get_Max_motor_speed(void);
@@ -232,8 +199,8 @@ INTEGER32 get_Position_actual_value(void);
 UNS32 set_Following_error_window(UNS32 val);
 UNS32 get_Following_error_window(void);
 
-UNS32 set_Following_error_time_Out(UNS16 val);
-UNS16 get_Following_error_time_Out(void);
+UNS32 set_Following_error_time_out(UNS16 val);
+UNS16 get_Following_error_time_out(void);
 
 UNS32 set_Position_window(UNS32 val);
 UNS32 get_Position_window(void);
@@ -294,91 +261,4 @@ UNS32 get_DC_link_circuit_voltage(void);
 
 UNS32 set_Torque_slope(UNS32 val);
 UNS32 get_Torque_slope(void);
-
-UNS32 set_Alarm_word(UNS32 val);
-UNS32 get_Alarm_word(void);
-
-UNS32 set_MIT_feedforward_torque_current(INTEGER32 val);
-INTEGER32 get_MIT_feedforward_torque_current(void);
-
-UNS32 set_MIT_target_position(INTEGER32 val);
-INTEGER32 get_MIT_target_position(void);
-
-UNS32 set_MIT_max_current(INTEGER32 val);
-INTEGER32 get_MIT_max_current(void);
-
-UNS32 set_MIT_target_velocity(INTEGER32 val);
-INTEGER32 get_MIT_target_velocity(void);
-
-UNS32 set_MIT_Kp(UNS32 val);
-UNS32 get_MIT_Kp(void);
-
-UNS32 set_MIT_Kd(UNS32 val);
-UNS32 get_MIT_Kd(void);
-
-UNS32 set_SysCmd(UNS8 val);
-UNS8 get_SysCmd(void);
-
-UNS32 set_storage_status(INTEGER8 val);
-INTEGER8 get_storage_status(void);
-
-UNS32 set_Notch_filter_frq(uint8_t subindex, UNS16 val);
-UNS16 get_Notch_filter_frq(uint8_t subindex);
-
-UNS32 set_Notch_filter_width(uint8_t subindex, UNS16 val);
-UNS16 get_Notch_filter_width(uint8_t subindex);
-
-UNS32 set_Notch_filter_depth(uint8_t subindex, UNS16 val);
-UNS16 get_Notch_filter_depth(uint8_t subindex);
-
-UNS32 set_Input_shaping_wn(UNS16 val);
-UNS16 get_Input_shaping_wn(void);
-
-UNS32 set_Pos_speed_ctl_aff(UNS16 val);
-UNS16 get_Pos_speed_ctl_aff(void);
-
-UNS32 set_Pos_speed_ctl_vff(UNS16 val);
-UNS16 get_Pos_speed_ctl_vff(void);
-
-UNS32 set_Pos_speed_ctl_j_kt(UNS32 val);
-UNS32 get_Pos_speed_ctl_j_kt(void);
-
-UNS32 set_Pos_speed_ctl_ki_s(UNS32 val);
-UNS32 get_Pos_speed_ctl_ki_s(void);
-
-UNS32 set_Pos_speed_ctl_kp_p(UNS16 val);
-UNS16 get_Pos_speed_ctl_kp_p(void);
-
-UNS32 set_Pos_speed_ctl_kp_s(UNS32 val);
-UNS32 get_Pos_speed_ctl_kp_s(void);
-
-UNS32 set_Pos_speed_ctl_dob_wn(UNS16 val);
-UNS16 get_Pos_speed_ctl_dob_wn(void);
-
-UNS32 set_Pos_speed_ctl_dob_enable(UNS8 val);
-UNS8 get_Pos_speed_ctl_dob_enable(void);
-
-UNS32 set_Current_ctl_i_noise(UNS16 val);
-UNS16 get_Current_ctl_i_noise(void);
-
-UNS32 set_Current_ctl_comp_du(UNS16 val);
-UNS16 get_Current_ctl_comp_du(void);
-
-UNS32 set_Current_ctl_bandwidth_percentage(UNS16 val);
-UNS16 get_Current_ctl_bandwidth_percentage(void);
-
-UNS32 set_Current_ctl_kp_ld(UNS16 val);
-UNS16 get_Current_ctl_kp_ld(void);
-
-UNS32 set_Current_ctl_ki_ld(UNS16 val);
-UNS16 get_Current_ctl_ki_ld(void);
-
-UNS32 set_Current_ctl_kp_lq(UNS16 val);
-UNS16 get_Current_ctl_kp_lq(void);
-
-UNS32 set_Current_ctl_ki_lq(UNS16 val);
-UNS16 get_Current_ctl_ki_lq(void);
-
-UNS32 set_Speed_obs_pll_wn(UNS16 val);
-UNS16 get_Speed_obs_pll_wn(void);
 

@@ -16,8 +16,8 @@
         <TargetCommonOption>
           <Device>STM32H743VGTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32H7xx_DFP.4.0.0</PackID>
-          <PackURL>https://www.keil.com/pack/</PackURL>
+          <PackID>Keil.STM32H7xx_DFP.2.7.0</PackID>
+          <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x2001FFFF) IRAM2(0x24000000-0x2407FFFF) IROM(0x8000000-0x807FFFF) IROM2(0x8100000-0x817FFFF) CLOCK(12000000) FPU3(DFPU) CPUTYPE("Cortex-M7") ELITTLE TZ</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,ARM_MATH_CM7</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../simulink_code_gen;../../../motor_control;../Board;../../../app;../../../app/Identify;../../../common/unit_conversion;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -848,6 +848,131 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\callback\mavlink\mavlink_scope_interface.c</FilePath>
             </File>
+            <File>
+              <FileName>ecat_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\ethercat\ecat_callback.c</FilePath>
+            </File>
+            <File>
+              <FileName>Cia402_ObjectDictionary_Callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\Cia402_ObjectDictionary_Callback.c</FilePath>
+            </File>
+            <File>
+              <FileName>Cia402_ObjectDictionary_Variable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\Cia402_ObjectDictionary_Variable.c</FilePath>
+            </File>
+            <File>
+              <FileName>master_cia402_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\master_cia402_callback.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/cia402</GroupName>
+          <Files>
+            <File>
+              <FileName>cia402_error_code.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_error_code.c</FilePath>
+            </File>
+            <File>
+              <FileName>cia402_fsm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_fsm.c</FilePath>
+            </File>
+            <File>
+              <FileName>cia402_statusword.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_statusword.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/ethercat</GroupName>
+          <Files>
+            <File>
+              <FileName>ecat_app_hw.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\EtherCAT\ecat_app_hw.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_drv_sqi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\EtherCAT\ecat_drv_sqi.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\ecat_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>bootmode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\bootmode.c</FilePath>
+            </File>
+            <File>
+              <FileName>coeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\coeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatcoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatcoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecateoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecateoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatfoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatfoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatslv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatslv.c</FilePath>
+            </File>
+            <File>
+              <FileName>emcy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\emcy.c</FilePath>
+            </File>
+            <File>
+              <FileName>eoeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\eoeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>foeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\foeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>mailbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\mailbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>objdef.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\objdef.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdoserv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\sdoserv.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -955,8 +1080,8 @@
         <TargetCommonOption>
           <Device>STM32H743VGTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32H7xx_DFP.4.0.0</PackID>
-          <PackURL>https://www.keil.com/pack/</PackURL>
+          <PackID>Keil.STM32H7xx_DFP.2.7.0</PackID>
+          <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x2001FFFF) IRAM2(0x24000000-0x2407FFFF) IROM(0x8000000-0x807FFFF) IROM2(0x8100000-0x817FFFF) CLOCK(12000000) FPU3(DFPU) CPUTYPE("Cortex-M7") ELITTLE TZ</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -1786,6 +1911,131 @@
               <FileName>mavlink_scope_interface.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\callback\mavlink\mavlink_scope_interface.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\ethercat\ecat_callback.c</FilePath>
+            </File>
+            <File>
+              <FileName>Cia402_ObjectDictionary_Callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\Cia402_ObjectDictionary_Callback.c</FilePath>
+            </File>
+            <File>
+              <FileName>Cia402_ObjectDictionary_Variable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\Cia402_ObjectDictionary_Variable.c</FilePath>
+            </File>
+            <File>
+              <FileName>master_cia402_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\master_cia402_callback.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/cia402</GroupName>
+          <Files>
+            <File>
+              <FileName>cia402_error_code.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_error_code.c</FilePath>
+            </File>
+            <File>
+              <FileName>cia402_fsm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_fsm.c</FilePath>
+            </File>
+            <File>
+              <FileName>cia402_statusword.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_statusword.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/ethercat</GroupName>
+          <Files>
+            <File>
+              <FileName>ecat_app_hw.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\EtherCAT\ecat_app_hw.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_drv_sqi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\EtherCAT\ecat_drv_sqi.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\ecat_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>bootmode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\bootmode.c</FilePath>
+            </File>
+            <File>
+              <FileName>coeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\coeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatcoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatcoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecateoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecateoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatfoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatfoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatslv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatslv.c</FilePath>
+            </File>
+            <File>
+              <FileName>emcy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\emcy.c</FilePath>
+            </File>
+            <File>
+              <FileName>eoeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\eoeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>foeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\foeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>mailbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\mailbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>objdef.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\objdef.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdoserv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\sdoserv.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1963,8 +2213,8 @@
         <TargetCommonOption>
           <Device>STM32H743VGTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32H7xx_DFP.4.0.0</PackID>
-          <PackURL>https://www.keil.com/pack/</PackURL>
+          <PackID>Keil.STM32H7xx_DFP.2.7.0</PackID>
+          <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x2001FFFF) IRAM2(0x24000000-0x2407FFFF) IROM(0x8000000-0x807FFFF) IROM2(0x8100000-0x817FFFF) CLOCK(12000000) FPU3(DFPU) CPUTYPE("Cortex-M7") ELITTLE TZ</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -2794,6 +3044,131 @@
               <FileName>mavlink_scope_interface.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\callback\mavlink\mavlink_scope_interface.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\ethercat\ecat_callback.c</FilePath>
+            </File>
+            <File>
+              <FileName>Cia402_ObjectDictionary_Callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\Cia402_ObjectDictionary_Callback.c</FilePath>
+            </File>
+            <File>
+              <FileName>Cia402_ObjectDictionary_Variable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\Cia402_ObjectDictionary_Variable.c</FilePath>
+            </File>
+            <File>
+              <FileName>master_cia402_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\master_cia402_callback.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/cia402</GroupName>
+          <Files>
+            <File>
+              <FileName>cia402_error_code.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_error_code.c</FilePath>
+            </File>
+            <File>
+              <FileName>cia402_fsm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_fsm.c</FilePath>
+            </File>
+            <File>
+              <FileName>cia402_statusword.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_statusword.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/ethercat</GroupName>
+          <Files>
+            <File>
+              <FileName>ecat_app_hw.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\EtherCAT\ecat_app_hw.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_drv_sqi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\EtherCAT\ecat_drv_sqi.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\ecat_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>bootmode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\bootmode.c</FilePath>
+            </File>
+            <File>
+              <FileName>coeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\coeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatcoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatcoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecateoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecateoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatfoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatfoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatslv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatslv.c</FilePath>
+            </File>
+            <File>
+              <FileName>emcy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\emcy.c</FilePath>
+            </File>
+            <File>
+              <FileName>eoeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\eoeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>foeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\foeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>mailbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\mailbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>objdef.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\objdef.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdoserv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\sdoserv.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2971,8 +3346,8 @@
         <TargetCommonOption>
           <Device>STM32H743VGTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32H7xx_DFP.4.0.0</PackID>
-          <PackURL>https://www.keil.com/pack/</PackURL>
+          <PackID>Keil.STM32H7xx_DFP.2.7.0</PackID>
+          <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x2001FFFF) IRAM2(0x24000000-0x2407FFFF) IROM(0x8000000-0x807FFFF) IROM2(0x8100000-0x817FFFF) CLOCK(12000000) FPU3(DFPU) CPUTYPE("Cortex-M7") ELITTLE TZ</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -3802,6 +4177,131 @@
               <FileName>mavlink_scope_interface.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\callback\mavlink\mavlink_scope_interface.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\ethercat\ecat_callback.c</FilePath>
+            </File>
+            <File>
+              <FileName>Cia402_ObjectDictionary_Callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\Cia402_ObjectDictionary_Callback.c</FilePath>
+            </File>
+            <File>
+              <FileName>Cia402_ObjectDictionary_Variable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\Cia402_ObjectDictionary_Variable.c</FilePath>
+            </File>
+            <File>
+              <FileName>master_cia402_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\master_cia402_callback.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/cia402</GroupName>
+          <Files>
+            <File>
+              <FileName>cia402_error_code.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_error_code.c</FilePath>
+            </File>
+            <File>
+              <FileName>cia402_fsm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_fsm.c</FilePath>
+            </File>
+            <File>
+              <FileName>cia402_statusword.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_statusword.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/ethercat</GroupName>
+          <Files>
+            <File>
+              <FileName>ecat_app_hw.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\EtherCAT\ecat_app_hw.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_drv_sqi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\EtherCAT\ecat_drv_sqi.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\ecat_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>bootmode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\bootmode.c</FilePath>
+            </File>
+            <File>
+              <FileName>coeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\coeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatcoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatcoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecateoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecateoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatfoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatfoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatslv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatslv.c</FilePath>
+            </File>
+            <File>
+              <FileName>emcy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\emcy.c</FilePath>
+            </File>
+            <File>
+              <FileName>eoeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\eoeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>foeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\foeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>mailbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\mailbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>objdef.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\objdef.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdoserv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\sdoserv.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3979,8 +4479,8 @@
         <TargetCommonOption>
           <Device>STM32H743VGTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32H7xx_DFP.4.0.0</PackID>
-          <PackURL>https://www.keil.com/pack/</PackURL>
+          <PackID>Keil.STM32H7xx_DFP.2.7.0</PackID>
+          <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x2001FFFF) IRAM2(0x24000000-0x2407FFFF) IROM(0x8000000-0x807FFFF) IROM2(0x8100000-0x817FFFF) CLOCK(12000000) FPU3(DFPU) CPUTYPE("Cortex-M7") ELITTLE TZ</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -4811,6 +5311,131 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\callback\mavlink\mavlink_scope_interface.c</FilePath>
             </File>
+            <File>
+              <FileName>ecat_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\ethercat\ecat_callback.c</FilePath>
+            </File>
+            <File>
+              <FileName>Cia402_ObjectDictionary_Callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\Cia402_ObjectDictionary_Callback.c</FilePath>
+            </File>
+            <File>
+              <FileName>Cia402_ObjectDictionary_Variable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\Cia402_ObjectDictionary_Variable.c</FilePath>
+            </File>
+            <File>
+              <FileName>master_cia402_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\master_cia402_callback.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/cia402</GroupName>
+          <Files>
+            <File>
+              <FileName>cia402_error_code.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_error_code.c</FilePath>
+            </File>
+            <File>
+              <FileName>cia402_fsm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_fsm.c</FilePath>
+            </File>
+            <File>
+              <FileName>cia402_statusword.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_statusword.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/ethercat</GroupName>
+          <Files>
+            <File>
+              <FileName>ecat_app_hw.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\EtherCAT\ecat_app_hw.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_drv_sqi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\EtherCAT\ecat_drv_sqi.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\ecat_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>bootmode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\bootmode.c</FilePath>
+            </File>
+            <File>
+              <FileName>coeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\coeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatcoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatcoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecateoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecateoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatfoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatfoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatslv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatslv.c</FilePath>
+            </File>
+            <File>
+              <FileName>emcy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\emcy.c</FilePath>
+            </File>
+            <File>
+              <FileName>eoeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\eoeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>foeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\foeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>mailbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\mailbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>objdef.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\objdef.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdoserv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\sdoserv.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4918,8 +5543,8 @@
         <TargetCommonOption>
           <Device>STM32H743VGTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32H7xx_DFP.4.0.0</PackID>
-          <PackURL>https://www.keil.com/pack/</PackURL>
+          <PackID>Keil.STM32H7xx_DFP.2.7.0</PackID>
+          <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000-0x2001FFFF) IRAM2(0x24000000-0x2407FFFF) IROM(0x8000000-0x807FFFF) IROM2(0x8100000-0x817FFFF) CLOCK(12000000) FPU3(DFPU) CPUTYPE("Cortex-M7") ELITTLE TZ</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -4983,7 +5608,7 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
-            <RunUserProg2>1</RunUserProg2>
+            <RunUserProg2>0</RunUserProg2>
             <UserProg1Name>fromelf --bin -o "$L@L.bin" "#L</UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
@@ -5241,7 +5866,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,ARM_MATH_CM7,VIRTUAL_MOTOR_MODEL</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../simulink_code_gen;../../../motor_control;../Board;../../../app;../../../app/Identify;../../../common/unit_conversion;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -5818,6 +6443,131 @@
               <FileName>mavlink_scope_interface.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\callback\mavlink\mavlink_scope_interface.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\ethercat\ecat_callback.c</FilePath>
+            </File>
+            <File>
+              <FileName>Cia402_ObjectDictionary_Callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\Cia402_ObjectDictionary_Callback.c</FilePath>
+            </File>
+            <File>
+              <FileName>Cia402_ObjectDictionary_Variable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\Cia402_ObjectDictionary_Variable.c</FilePath>
+            </File>
+            <File>
+              <FileName>master_cia402_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\cia402_od\master_cia402_callback.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/cia402</GroupName>
+          <Files>
+            <File>
+              <FileName>cia402_error_code.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_error_code.c</FilePath>
+            </File>
+            <File>
+              <FileName>cia402_fsm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_fsm.c</FilePath>
+            </File>
+            <File>
+              <FileName>cia402_statusword.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_statusword.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/ethercat</GroupName>
+          <Files>
+            <File>
+              <FileName>ecat_app_hw.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\EtherCAT\ecat_app_hw.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_drv_sqi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\EtherCAT\ecat_drv_sqi.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecat_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\ecat_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>bootmode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\bootmode.c</FilePath>
+            </File>
+            <File>
+              <FileName>coeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\coeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatcoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatcoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecateoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecateoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatfoe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatfoe.c</FilePath>
+            </File>
+            <File>
+              <FileName>ecatslv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\ecatslv.c</FilePath>
+            </File>
+            <File>
+              <FileName>emcy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\emcy.c</FilePath>
+            </File>
+            <File>
+              <FileName>eoeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\eoeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>foeappl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\foeappl.c</FilePath>
+            </File>
+            <File>
+              <FileName>mailbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\mailbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>objdef.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\objdef.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdoserv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\EtherCAT_LAN925x\Src\sdoserv.c</FilePath>
             </File>
           </Files>
         </Group>

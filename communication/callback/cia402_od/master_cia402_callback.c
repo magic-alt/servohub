@@ -14,7 +14,7 @@ UNS32 master_cia402_write_callback(uint16_t index, uint8_t subindex, void *data)
         case 0x607A: return OD_0x607A_Target_position_Write_Callback(subindex, data); break;
         case 0x607B: return OD_0x607B_Position_range_limit_Write_Callback(subindex, data); break;
         case 0x607D: return OD_0x607D_Software_position_limit_Write_Callback(subindex, data); break;
-        case 0x607F: return OD_0x607F_Max_Profile_velocity_Write_Callback(subindex, data); break;
+        case 0x607F: return OD_0x607F_Max_profile_velocity_Write_Callback(subindex, data); break;
         case 0x6080: return OD_0x6080_Max_motor_speed_Write_Callback(subindex, data); break;
         case 0x6081: return OD_0x6081_Profile_velocity_Write_Callback(subindex, data); break;
         case 0x6083: return OD_0x6083_Profile_acceleration_Write_Callback(subindex, data); break;
@@ -24,7 +24,7 @@ UNS32 master_cia402_write_callback(uint16_t index, uint8_t subindex, void *data)
         case 0x60C6: return OD_0x60C6_Max_deceleration_Write_Callback(subindex, data); break;
         case 0x6098: return OD_0x6098_Homing_method_Write_Callback(subindex, data); break;
         case 0x6065: return OD_0x6065_Following_error_window_Write_Callback(subindex, data); break;
-        case 0x6066: return OD_0x6066_Following_error_time_Out_Write_Callback(subindex, data); break;
+        case 0x6066: return OD_0x6066_Following_error_time_out_Write_Callback(subindex, data); break;
         case 0x6067: return OD_0x6067_Position_window_Write_Callback(subindex, data); break;
         case 0x6068: return OD_0x6068_Position_window_time_Write_Callback(subindex, data); break;
         case 0x606D: return OD_0x606D_Velocity_window_Write_Callback(subindex, data); break;
@@ -38,33 +38,6 @@ UNS32 master_cia402_write_callback(uint16_t index, uint8_t subindex, void *data)
         case 0x6075: return OD_0x6075_Motor_rated_current_Write_Callback(subindex, data); break;
         case 0x6076: return OD_0x6076_Motor_rated_torque_Write_Callback(subindex, data); break;
         case 0x6087: return OD_0x6087_Torque_slope_Write_Callback(subindex, data); break;
-        case 0x3001: return OD_0x3001_MIT_feedforward_torque_current_Write_Callback(subindex, data); break;
-        case 0x3002: return OD_0x3002_MIT_target_position_Write_Callback(subindex, data); break;
-        case 0x3003: return OD_0x3003_MIT_max_current_Write_Callback(subindex, data); break;
-        case 0x3004: return OD_0x3004_MIT_target_velocity_Write_Callback(subindex, data); break;
-        case 0x3005: return OD_0x3005_MIT_Kp_Write_Callback(subindex, data); break;
-        case 0x3006: return OD_0x3006_MIT_Kd_Write_Callback(subindex, data); break;
-        case 0x3007: return OD_0x3007_SysCmd_Write_Callback(subindex, data); break;
-        case 0x3009: return OD_0x3009_Notch_filter_frq_Write_Callback(subindex, data); break;
-        case 0x300A: return OD_0x300A_Notch_filter_width_Write_Callback(subindex, data); break;
-        case 0x300B: return OD_0x300B_Notch_filter_depth_Write_Callback(subindex, data); break;
-        case 0x300C: return OD_0x300C_Input_shaping_wn_Write_Callback(subindex, data); break;
-        case 0x300D: return OD_0x300D_Pos_speed_ctl_aff_Write_Callback(subindex, data); break;
-        case 0x300E: return OD_0x300E_Pos_speed_ctl_vff_Write_Callback(subindex, data); break;
-        case 0x300F: return OD_0x300F_Pos_speed_ctl_j_kt_Write_Callback(subindex, data); break;
-        case 0x3010: return OD_0x3010_Pos_speed_ctl_ki_s_Write_Callback(subindex, data); break;
-        case 0x3011: return OD_0x3011_Pos_speed_ctl_kp_p_Write_Callback(subindex, data); break;
-        case 0x3012: return OD_0x3012_Pos_speed_ctl_kp_s_Write_Callback(subindex, data); break;
-        case 0x3013: return OD_0x3013_Pos_speed_ctl_dob_wn_Write_Callback(subindex, data); break;
-        case 0x3014: return OD_0x3014_Pos_speed_ctl_dob_enable_Write_Callback(subindex, data); break;
-        case 0x3015: return OD_0x3015_Current_ctl_i_noise_Write_Callback(subindex, data); break;
-        case 0x3016: return OD_0x3016_Current_ctl_comp_du_Write_Callback(subindex, data); break;
-        case 0x3017: return OD_0x3017_Current_ctl_bandwidth_percentage_Write_Callback(subindex, data); break;
-        case 0x3018: return OD_0x3018_Current_ctl_kp_ld_Write_Callback(subindex, data); break;
-        case 0x3019: return OD_0x3019_Current_ctl_ki_ld_Write_Callback(subindex, data); break;
-        case 0x3020: return OD_0x3020_Current_ctl_kp_lq_Write_Callback(subindex, data); break;
-        case 0x3021: return OD_0x3021_Current_ctl_ki_lq_Write_Callback(subindex, data); break;
-        case 0x3022: return OD_0x3022_Speed_obs_pll_wn_Write_Callback(subindex, data); break;
         default: return ABORT_CODE_CANNOT_WRITE_RO_OBJECT; break;
     }
 }
@@ -83,7 +56,7 @@ UNS32 master_cia402_read_callback(uint16_t index, uint8_t subindex, void *data){
         case 0x607A: return OD_0x607A_Target_position_Read_Callback(subindex, data); break;
         case 0x607B: return OD_0x607B_Position_range_limit_Read_Callback(subindex, data); break;
         case 0x607D: return OD_0x607D_Software_position_limit_Read_Callback(subindex, data); break;
-        case 0x607F: return OD_0x607F_Max_Profile_velocity_Read_Callback(subindex, data); break;
+        case 0x607F: return OD_0x607F_Max_profile_velocity_Read_Callback(subindex, data); break;
         case 0x6080: return OD_0x6080_Max_motor_speed_Read_Callback(subindex, data); break;
         case 0x6081: return OD_0x6081_Profile_velocity_Read_Callback(subindex, data); break;
         case 0x6083: return OD_0x6083_Profile_acceleration_Read_Callback(subindex, data); break;
@@ -96,7 +69,7 @@ UNS32 master_cia402_read_callback(uint16_t index, uint8_t subindex, void *data){
         case 0x6063: return OD_0x6063_Position_actual_value_inc_Read_Callback(subindex, data); break;
         case 0x6064: return OD_0x6064_Position_actual_value_Read_Callback(subindex, data); break;
         case 0x6065: return OD_0x6065_Following_error_window_Read_Callback(subindex, data); break;
-        case 0x6066: return OD_0x6066_Following_error_time_Out_Read_Callback(subindex, data); break;
+        case 0x6066: return OD_0x6066_Following_error_time_out_Read_Callback(subindex, data); break;
         case 0x6067: return OD_0x6067_Position_window_Read_Callback(subindex, data); break;
         case 0x6068: return OD_0x6068_Position_window_time_Read_Callback(subindex, data); break;
         case 0x60F4: return OD_0x60F4_Following_error_actual_value_Read_Callback(subindex, data); break;
@@ -117,35 +90,6 @@ UNS32 master_cia402_read_callback(uint16_t index, uint8_t subindex, void *data){
         case 0x6078: return OD_0x6078_Current_actual_value_Read_Callback(subindex, data); break;
         case 0x6079: return OD_0x6079_DC_link_circuit_voltage_Read_Callback(subindex, data); break;
         case 0x6087: return OD_0x6087_Torque_slope_Read_Callback(subindex, data); break;
-        case 0x3000: return OD_0x3000_Alarm_word_Read_Callback(subindex, data); break;
-        case 0x3001: return OD_0x3001_MIT_feedforward_torque_current_Read_Callback(subindex, data); break;
-        case 0x3002: return OD_0x3002_MIT_target_position_Read_Callback(subindex, data); break;
-        case 0x3003: return OD_0x3003_MIT_max_current_Read_Callback(subindex, data); break;
-        case 0x3004: return OD_0x3004_MIT_target_velocity_Read_Callback(subindex, data); break;
-        case 0x3005: return OD_0x3005_MIT_Kp_Read_Callback(subindex, data); break;
-        case 0x3006: return OD_0x3006_MIT_Kd_Read_Callback(subindex, data); break;
-        case 0x3007: return OD_0x3007_SysCmd_Read_Callback(subindex, data); break;
-        case 0x3008: return OD_0x3008_storage_status_Read_Callback(subindex, data); break;
-        case 0x3009: return OD_0x3009_Notch_filter_frq_Read_Callback(subindex, data); break;
-        case 0x300A: return OD_0x300A_Notch_filter_width_Read_Callback(subindex, data); break;
-        case 0x300B: return OD_0x300B_Notch_filter_depth_Read_Callback(subindex, data); break;
-        case 0x300C: return OD_0x300C_Input_shaping_wn_Read_Callback(subindex, data); break;
-        case 0x300D: return OD_0x300D_Pos_speed_ctl_aff_Read_Callback(subindex, data); break;
-        case 0x300E: return OD_0x300E_Pos_speed_ctl_vff_Read_Callback(subindex, data); break;
-        case 0x300F: return OD_0x300F_Pos_speed_ctl_j_kt_Read_Callback(subindex, data); break;
-        case 0x3010: return OD_0x3010_Pos_speed_ctl_ki_s_Read_Callback(subindex, data); break;
-        case 0x3011: return OD_0x3011_Pos_speed_ctl_kp_p_Read_Callback(subindex, data); break;
-        case 0x3012: return OD_0x3012_Pos_speed_ctl_kp_s_Read_Callback(subindex, data); break;
-        case 0x3013: return OD_0x3013_Pos_speed_ctl_dob_wn_Read_Callback(subindex, data); break;
-        case 0x3014: return OD_0x3014_Pos_speed_ctl_dob_enable_Read_Callback(subindex, data); break;
-        case 0x3015: return OD_0x3015_Current_ctl_i_noise_Read_Callback(subindex, data); break;
-        case 0x3016: return OD_0x3016_Current_ctl_comp_du_Read_Callback(subindex, data); break;
-        case 0x3017: return OD_0x3017_Current_ctl_bandwidth_percentage_Read_Callback(subindex, data); break;
-        case 0x3018: return OD_0x3018_Current_ctl_kp_ld_Read_Callback(subindex, data); break;
-        case 0x3019: return OD_0x3019_Current_ctl_ki_ld_Read_Callback(subindex, data); break;
-        case 0x3020: return OD_0x3020_Current_ctl_kp_lq_Read_Callback(subindex, data); break;
-        case 0x3021: return OD_0x3021_Current_ctl_ki_lq_Read_Callback(subindex, data); break;
-        case 0x3022: return OD_0x3022_Speed_obs_pll_wn_Read_Callback(subindex, data); break;
         default: return ABORT_CODE_CANNOT_READ_WO_OBJECT; break;
     }
 }
