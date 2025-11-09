@@ -255,17 +255,17 @@ static void motor_ctl_test_param_updata(void)
     kAxis.pmsm_config.tc_s = 1.0f / CURRENT_FREQUENCY_HZ;  // 电流环周期
     kAxis.pmsm_config.tp_s = 1.0f / POSITION_FREQUENCY_HZ; // 位置速度环周期
     kAxis.pmsm_config.j = PMSM_J;
-    kAxis.pmsm_config.ld = PMSM_LD;
-    kAxis.pmsm_config.lq = PMSM_LQ;
+    kAxis.pmsm_config.ld = PMSM_Lp2p * 0.5f;
+    kAxis.pmsm_config.lq = PMSM_Lp2p * 0.5f;
     kAxis.pmsm_config.peak_current = PMSM_PEAK_CURRENT;
     kAxis.pmsm_config.pn = PMSM_PN;
-    kAxis.pmsm_config.r = PMSM_R;
+    kAxis.pmsm_config.r = PMSM_Rp2p * 0.5f;
     kAxis.pmsm_config.rated_current = PMSM_RATED_CURRENT;
     kAxis.pmsm_config.speed_max_rpm = PMSM_SPEED_MAX_RPM;
     kAxis.pmsm_config.enc_line_p_n = PMSM_ENC_LINE_P_N;
 
     // 编码器参数
-    kAxis.motor_pos_sensor_config.elec_angle_bias_rad = ELEC_ANGLE_BIAS_RAD; // 电角度偏移值
+    kAxis.motor_pos_sensor_config.elec_angle_bias_rad = 0.0f; // 电角度偏移值
 
     // 电流环参数
     kAxis.current_ctl_config.comp_du_V = VOLTAGE_COMPENSATION_V;
@@ -462,7 +462,6 @@ static void motor_ctl_test_elec_angle_id_mode(void)
              kAxis.motor_ctl_sm_input.motor_enable == MOTOR_CTL_SM_MOTOR_DISABLE)
     {
         kAxis.motor_ctl_sm_config.mode = MOTOR_CTL_SM_MODE_ELECTRIC_ANGLE_IDENTIFICATION; // 电角度辨识模式
-        kAxis.elec_angle_id_config.id_sin_amp_A = kAxis.pmsm_config.rated_current;        // 设置电角度辨识正弦波幅值，一般设置为电机额定电流
 
         kAxis.elec_angle_id_output.state_now = IDENTIFICATION_MODE_STATE_IDLE; // 重置辨识状态
 
@@ -520,7 +519,7 @@ static void motor_ctl_test_tp_fc_id_mode(void)
 float kTorqueUserTarget = 0.0f;                      // 力矩用户目标值  A
 float kTorqueSlope = 10.0f;                          // 力矩上升斜率 A/s
 float kTrajectoryPeriod = 0.001f;                    // 力矩规划器运行周期
-linear_trajectory_planning_DW_f kTorqueTrajDw = {0}; // 力矩规划器内部缓存
+linear_trajectory_planning_DW_f kTorqueTrajTestDw = {0}; // 力矩规划器内部缓存
 int8_T kTroqueTrajStateNow = 0;
 static void motor_ctl_test_pt_mode(void) // kMotorCtlTestMode = 10
 {
@@ -536,7 +535,7 @@ static void motor_ctl_test_pt_mode(void) // kMotorCtlTestMode = 10
         kAxis.motor_ctl_sm_config.mode = MOTOR_CTL_SM_MODE_TORQUE; // 力矩模式
 
         // 初始化当前规划器 为当前 q轴电流
-        kTorqueTrajDw.traj_now = kAxis.current_ctl_output.idq_now_A[1]; // 力矩规划器初始化为当前 q轴电流 从当前值开始规划
+        kTorqueTrajTestDw.traj_now = kAxis.current_ctl_output.idq_now_A[1]; // 力矩规划器初始化为当前 q轴电流 从当前值开始规划
 
         kAxis.motor_ctl_sm_input.motor_enable = MOTOR_CTL_SM_MOTOR_ENABLE; // 使能电机  0->1 上升沿使能电机
 
@@ -548,7 +547,7 @@ static void motor_ctl_test_pt_mode(void) // kMotorCtlTestMode = 10
                                    &kTorqueSlope,
                                    &kTrajectoryPeriod,
                                    &kAxis.current_ctl_input.idq_tar_A[1],
-                                   &kTroqueTrajStateNow, &(kTorqueTrajDw));
+                                   &kTroqueTrajStateNow, &(kTorqueTrajTestDw));
 
         break;
 
@@ -559,7 +558,7 @@ static void motor_ctl_test_pt_mode(void) // kMotorCtlTestMode = 10
 
 float kSpeedUserTarget = 0.0f;                      // 速度用户目标值  P/s
 float kPvAcc = 1e6f;                                // 加速度 P/s^2
-linear_trajectory_planning_DW_f kSpeedTrajDw = {0}; // 速度规划器内部规划缓存
+linear_trajectory_planning_DW_f kSpeedTrajTestDw = {0}; // 速度规划器内部规划缓存
 int8_T kSpeedTrajStateNow = 0;
 static void motor_ctl_test_pv_mode(void) // kMotorCtlTestMode = 11
 {
@@ -577,7 +576,7 @@ static void motor_ctl_test_pv_mode(void) // kMotorCtlTestMode = 11
         kAxis.pos_speed_ctl_input.iq_max_A = 5.0f; // 按用户设定设置最大q轴电流限制
 
         // 初始化当前规划器 为当前 速度
-        kSpeedTrajDw.traj_now = kAxis.pos_speed_ctl_input.speed_now_rad_s /
+        kSpeedTrajTestDw.traj_now = kAxis.pos_speed_ctl_input.speed_now_rad_s /
                                 MOTOR_CTL_SM_TWO_PI * kAxis.pmsm_config.enc_line_p_n; // 从当前速度开始规划  p/s
 
         kAxis.motor_ctl_sm_input.motor_enable = MOTOR_CTL_SM_MOTOR_ENABLE; // 使能电机  0->1 上升沿使能电机
@@ -590,7 +589,7 @@ static void motor_ctl_test_pv_mode(void) // kMotorCtlTestMode = 11
                                    &kPvAcc,
                                    &kTrajectoryPeriod,
                                    &kAxis.pos_speed_ctl_input.speed_tar_p_s,
-                                   &kSpeedTrajStateNow, &(kSpeedTrajDw));
+                                   &kSpeedTrajStateNow, &(kSpeedTrajTestDw));
 
         break;
 
@@ -604,7 +603,7 @@ float kPosTrajOutDec = 0.0f;                   // 位置用户目标值 小数�
 float kProfileSpeed = 1e6f;                    // 轮廓速度
 float kProfileAcc = 1e6f;                      // 轮廓加速度
 float kProfileDec = 1e6f;                      // 轮廓减速度
-pos_trajectory_planning_DW_f kPosTrajDw = {0}; // 位置规划器内部缓存
+pos_trajectory_planning_DW_f kPosTrajTestDw = {0}; // 位置规划器内部缓存
 int8_T kPosTrajStateNow = 0;                   // TODO：规划器状态更新待修复
 static void motor_ctl_test_pp_mode(void)
 {
@@ -622,11 +621,11 @@ static void motor_ctl_test_pp_mode(void)
         kAxis.pos_speed_ctl_input.iq_max_A = 5.0f; // 按用户设定设置最大q轴电流限制
 
         // 初始化当前规划器 为当前速度  当前位置
-        kPosTrajDw.q0_int = kAxis.pos_speed_ctl_input.pos_now_p;
-        kPosTrajDw.q0_dec = 0.0f;
-        kPosTrajDw.dq0 = kAxis.pos_speed_ctl_input.speed_now_rad_s /
+        kPosTrajTestDw.q0_int = kAxis.pos_speed_ctl_input.pos_now_p;
+        kPosTrajTestDw.q0_dec = 0.0f;
+        kPosTrajTestDw.dq0 = kAxis.pos_speed_ctl_input.speed_now_rad_s /
                          MOTOR_CTL_SM_TWO_PI * kAxis.pmsm_config.enc_line_p_n; // 从当前速度开始规划  p/s
-        kPosTrajDw.x = kAxis.pos_speed_ctl_input.pos_now_p;
+        kPosTrajTestDw.x = kAxis.pos_speed_ctl_input.pos_now_p;
 
         kAxis.motor_ctl_sm_input.motor_enable = MOTOR_CTL_SM_MOTOR_ENABLE; // 使能电机  0->1 上升沿使能电机
 
@@ -643,7 +642,7 @@ static void motor_ctl_test_pp_mode(void)
                                 &kPosTrajOutDec,
                                 &kAxis.pos_speed_ctl_input.speed_tar_p_s,
                                 &kAxis.pos_speed_ctl_input.acc_tar_p_ss,
-                                &kPosTrajStateNow, &kPosTrajDw);
+                                &kPosTrajStateNow, &kPosTrajTestDw);
 
         break;
 
