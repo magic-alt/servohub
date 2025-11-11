@@ -87,7 +87,6 @@ void mit_trajectory_planning_init(MIT_TRAJECTORY_DATA *mit_traj_data)
 
 void mit_trajectory_planning_handle(MIT_TRAJECTORY_DATA *mit_traj_data)
 {
-    //TODO：做减速比转化  将负载端目标位置 速度 转矩，转化为电机端 位置  速度 转矩
     axis->mit_ctl_input.pos_tar_p = mit_traj_data->pos_tar_p;
     axis->mit_ctl_input.speed_tar_p_s = mit_traj_data->speed_tar_p_s;
     axis->mit_ctl_input.tq_set_NM = mit_traj_data->tq_set_NM;
