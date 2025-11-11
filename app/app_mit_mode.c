@@ -6,12 +6,12 @@ static MitMode_t mit_mode =
     .pre_Controlword = APP_CTRL_DISABLE,
     .traj =
     {
-        .kp_pos_rad_A = 0,
-        .kd_spd_rad_s_A = 0,
+        .kp_pos_rad_NM = 0,
+        .kd_spd_rad_s_NM = 0,
         .iq_max_A = 0,
         .speed_tar_p_s = 0,
         .pos_tar_p = 0,
-        .tq_set_A = 0,
+        .tq_set_NM = 0,
     },
     .check_status_val = 0,
     .emergency_brake_mode = EMERGENCY_BRAKE_MODE_DISABLED,
@@ -58,9 +58,9 @@ AppResult mit_mode_run()
         mit_mode.pos_tar_p_add = (float)(get_app_MIT_target_position() - get_app_Position_actual_value()) * \
                                     get_app_Reduction_ratio();
         mit_mode.traj.pos_tar_p = mit_mode.pos_tar_p_add + get_app_Motor_position_actual_value();
-        mit_mode.traj.tq_set_A = get_app_MIT_feedforward_torque_current();
-        mit_mode.traj.kp_pos_rad_A = get_app_MIT_kp() * get_app_Reduction_ratio_inv();
-        mit_mode.traj.kd_spd_rad_s_A = get_app_MIT_kd() * get_app_Reduction_ratio_inv();
+        mit_mode.traj.tq_set_NM = get_app_MIT_feedforward_torque_current();
+        mit_mode.traj.kp_pos_rad_NM = get_app_MIT_kp() * get_app_Reduction_ratio_inv();
+        mit_mode.traj.kd_spd_rad_s_NM = get_app_MIT_kd() * get_app_Reduction_ratio_inv();
     }
     else if (mit_mode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
     {
