@@ -163,6 +163,8 @@ typedef struct {
     float app_motor_config_Motor_rotor_inertia;
     float app_debug_param_Debug_float[16];
     uint32_t app_debug_param_Debug_uint32[16];
+    float mit_ctl_config_kp_pos_rad_NM;
+    float mit_ctl_config_kd_spd_rad_s_NM;
 }FLASH_PARAM_STRUCT;
 extern FLASH_PARAM_STRUCT kFlashStorage;
 

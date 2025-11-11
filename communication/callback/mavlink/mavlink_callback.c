@@ -645,7 +645,7 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 mavlink_msg_appprotectconfig_encode(0, 0, &send_msg, (mavlink_appprotectconfig_t *)&app_protect_config_t);
                 break;
             case MAVLINK_MSG_ID_MitCtlInput:
-                mit_ctl_input_t.tq_set_A = axis->mit_ctl_input.tq_set_A;
+                mit_ctl_input_t.tq_set_NM = axis->mit_ctl_input.tq_set_NM;
                 mit_ctl_input_t.pos_tar_p = axis->mit_ctl_input.pos_tar_p;
                 mit_ctl_input_t.pos_now_p = axis->mit_ctl_input.pos_now_p;
                 mit_ctl_input_t.iq_max_A = axis->mit_ctl_input.iq_max_A;
@@ -654,9 +654,10 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 mavlink_msg_mitctlinput_encode(0, 0, &send_msg, (mavlink_mitctlinput_t *)&mit_ctl_input_t);
                 break;
             case MAVLINK_MSG_ID_MitCtlConfig:
-                mit_ctl_config_t.kp_pos_rad_A = axis->mit_ctl_config.kp_pos_rad_A;
-                mit_ctl_config_t.kd_spd_rad_s_A = axis->mit_ctl_config.kd_spd_rad_s_A;
+                mit_ctl_config_t.kp_pos_rad_NM = axis->mit_ctl_config.kp_pos_rad_NM;
+                mit_ctl_config_t.kd_spd_rad_s_NM = axis->mit_ctl_config.kd_spd_rad_s_NM;
                 mit_ctl_config_t.enc_line_inv_p_n = axis->mit_ctl_config.enc_line_inv_p_n;
+                mit_ctl_config_t.kt_NM_A = axis->mit_ctl_config.kt_NM_A;
                 mavlink_msg_mitctlconfig_encode(0, 0, &send_msg, (mavlink_mitctlconfig_t *)&mit_ctl_config_t);
                 break;
             case MAVLINK_MSG_ID_MitCtlOutput:
@@ -1450,7 +1451,7 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 break;
             case MAVLINK_MSG_ID_MitCtlInput:
                 mavlink_msg_mitctlinput_decode(&msg, (mavlink_mitctlinput_t *)&mit_ctl_input_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_input.tq_set_A = mit_ctl_input_t.tq_set_A;}
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_input.tq_set_NM = mit_ctl_input_t.tq_set_NM;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_input.pos_tar_p = mit_ctl_input_t.pos_tar_p;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_input.pos_now_p = mit_ctl_input_t.pos_now_p;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_input.iq_max_A = mit_ctl_input_t.iq_max_A;}
@@ -1460,9 +1461,10 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 break;
             case MAVLINK_MSG_ID_MitCtlConfig:
                 mavlink_msg_mitctlconfig_decode(&msg, (mavlink_mitctlconfig_t *)&mit_ctl_config_t);
-                axis->mit_ctl_config.kp_pos_rad_A = mit_ctl_config_t.kp_pos_rad_A;
-                axis->mit_ctl_config.kd_spd_rad_s_A = mit_ctl_config_t.kd_spd_rad_s_A;
+                axis->mit_ctl_config.kp_pos_rad_NM = mit_ctl_config_t.kp_pos_rad_NM;
+                axis->mit_ctl_config.kd_spd_rad_s_NM = mit_ctl_config_t.kd_spd_rad_s_NM;
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_config.enc_line_inv_p_n = mit_ctl_config_t.enc_line_inv_p_n;}
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_config.kt_NM_A = mit_ctl_config_t.kt_NM_A;}
                 mavlink_msg_mitctlconfig_encode(0, 0, &send_msg, (mavlink_mitctlconfig_t *)&mit_ctl_config_t);
                 break;
             case MAVLINK_MSG_ID_MitCtlOutput:
@@ -1503,7 +1505,7 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 break;
             case MAVLINK_MSG_ID_SystemStatus:
                 mavlink_msg_systemstatus_decode(&msg, (mavlink_systemstatus_t *)&system_status_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Storage_status(system_status_t.Storage_status);}
+                set_app_Storage_status(system_status_t.Storage_status);
                 system_status_t.Storage_status = get_app_Storage_status();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Storage_cmd(system_status_t.Storage_cmd);}
                 system_status_t.Storage_cmd = get_app_Storage_cmd();

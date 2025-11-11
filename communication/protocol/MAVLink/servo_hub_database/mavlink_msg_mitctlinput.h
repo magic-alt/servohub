@@ -7,7 +7,7 @@
 typedef struct __mavlink_mitctlinput_t {
  int64_t pos_tar_p; /*<  */
  int64_t pos_now_p; /*<  */
- float tq_set_A; /*<  */
+ float tq_set_NM; /*<  */
  float iq_max_A; /*<  */
  float speed_tar_p_s; /*<  */
  float speed_now_rad_s; /*<  */
@@ -18,8 +18,8 @@ typedef struct __mavlink_mitctlinput_t {
 #define MAVLINK_MSG_ID_74_LEN 32
 #define MAVLINK_MSG_ID_74_MIN_LEN 32
 
-#define MAVLINK_MSG_ID_MitCtlInput_CRC 216
-#define MAVLINK_MSG_ID_74_CRC 216
+#define MAVLINK_MSG_ID_MitCtlInput_CRC 17
+#define MAVLINK_MSG_ID_74_CRC 17
 
 
 
@@ -28,7 +28,7 @@ typedef struct __mavlink_mitctlinput_t {
     74, \
     "MitCtlInput", \
     6, \
-    {  { "tq_set_A", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_mitctlinput_t, tq_set_A) }, \
+    {  { "tq_set_NM", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_mitctlinput_t, tq_set_NM) }, \
          { "pos_tar_p", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_mitctlinput_t, pos_tar_p) }, \
          { "pos_now_p", NULL, MAVLINK_TYPE_INT64_T, 0, 8, offsetof(mavlink_mitctlinput_t, pos_now_p) }, \
          { "iq_max_A", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_mitctlinput_t, iq_max_A) }, \
@@ -40,7 +40,7 @@ typedef struct __mavlink_mitctlinput_t {
 #define MAVLINK_MESSAGE_INFO_MitCtlInput { \
     "MitCtlInput", \
     6, \
-    {  { "tq_set_A", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_mitctlinput_t, tq_set_A) }, \
+    {  { "tq_set_NM", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_mitctlinput_t, tq_set_NM) }, \
          { "pos_tar_p", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_mitctlinput_t, pos_tar_p) }, \
          { "pos_now_p", NULL, MAVLINK_TYPE_INT64_T, 0, 8, offsetof(mavlink_mitctlinput_t, pos_now_p) }, \
          { "iq_max_A", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_mitctlinput_t, iq_max_A) }, \
@@ -56,7 +56,7 @@ typedef struct __mavlink_mitctlinput_t {
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param tq_set_A  
+ * @param tq_set_NM  
  * @param pos_tar_p  
  * @param pos_now_p  
  * @param iq_max_A  
@@ -65,13 +65,13 @@ typedef struct __mavlink_mitctlinput_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_mitctlinput_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               float tq_set_A, int64_t pos_tar_p, int64_t pos_now_p, float iq_max_A, float speed_tar_p_s, float speed_now_rad_s)
+                               float tq_set_NM, int64_t pos_tar_p, int64_t pos_now_p, float iq_max_A, float speed_tar_p_s, float speed_now_rad_s)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_MitCtlInput_LEN];
     _mav_put_int64_t(buf, 0, pos_tar_p);
     _mav_put_int64_t(buf, 8, pos_now_p);
-    _mav_put_float(buf, 16, tq_set_A);
+    _mav_put_float(buf, 16, tq_set_NM);
     _mav_put_float(buf, 20, iq_max_A);
     _mav_put_float(buf, 24, speed_tar_p_s);
     _mav_put_float(buf, 28, speed_now_rad_s);
@@ -81,7 +81,7 @@ static inline uint16_t mavlink_msg_mitctlinput_pack(uint8_t system_id, uint8_t c
     mavlink_mitctlinput_t packet;
     packet.pos_tar_p = pos_tar_p;
     packet.pos_now_p = pos_now_p;
-    packet.tq_set_A = tq_set_A;
+    packet.tq_set_NM = tq_set_NM;
     packet.iq_max_A = iq_max_A;
     packet.speed_tar_p_s = speed_tar_p_s;
     packet.speed_now_rad_s = speed_now_rad_s;
@@ -100,7 +100,7 @@ static inline uint16_t mavlink_msg_mitctlinput_pack(uint8_t system_id, uint8_t c
  * @param status MAVLink status structure
  * @param msg The MAVLink message to compress the data into
  *
- * @param tq_set_A  
+ * @param tq_set_NM  
  * @param pos_tar_p  
  * @param pos_now_p  
  * @param iq_max_A  
@@ -109,13 +109,13 @@ static inline uint16_t mavlink_msg_mitctlinput_pack(uint8_t system_id, uint8_t c
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_mitctlinput_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               float tq_set_A, int64_t pos_tar_p, int64_t pos_now_p, float iq_max_A, float speed_tar_p_s, float speed_now_rad_s)
+                               float tq_set_NM, int64_t pos_tar_p, int64_t pos_now_p, float iq_max_A, float speed_tar_p_s, float speed_now_rad_s)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_MitCtlInput_LEN];
     _mav_put_int64_t(buf, 0, pos_tar_p);
     _mav_put_int64_t(buf, 8, pos_now_p);
-    _mav_put_float(buf, 16, tq_set_A);
+    _mav_put_float(buf, 16, tq_set_NM);
     _mav_put_float(buf, 20, iq_max_A);
     _mav_put_float(buf, 24, speed_tar_p_s);
     _mav_put_float(buf, 28, speed_now_rad_s);
@@ -125,7 +125,7 @@ static inline uint16_t mavlink_msg_mitctlinput_pack_status(uint8_t system_id, ui
     mavlink_mitctlinput_t packet;
     packet.pos_tar_p = pos_tar_p;
     packet.pos_now_p = pos_now_p;
-    packet.tq_set_A = tq_set_A;
+    packet.tq_set_NM = tq_set_NM;
     packet.iq_max_A = iq_max_A;
     packet.speed_tar_p_s = speed_tar_p_s;
     packet.speed_now_rad_s = speed_now_rad_s;
@@ -147,7 +147,7 @@ static inline uint16_t mavlink_msg_mitctlinput_pack_status(uint8_t system_id, ui
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
- * @param tq_set_A  
+ * @param tq_set_NM  
  * @param pos_tar_p  
  * @param pos_now_p  
  * @param iq_max_A  
@@ -157,13 +157,13 @@ static inline uint16_t mavlink_msg_mitctlinput_pack_status(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_mitctlinput_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   float tq_set_A,int64_t pos_tar_p,int64_t pos_now_p,float iq_max_A,float speed_tar_p_s,float speed_now_rad_s)
+                                   float tq_set_NM,int64_t pos_tar_p,int64_t pos_now_p,float iq_max_A,float speed_tar_p_s,float speed_now_rad_s)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_MitCtlInput_LEN];
     _mav_put_int64_t(buf, 0, pos_tar_p);
     _mav_put_int64_t(buf, 8, pos_now_p);
-    _mav_put_float(buf, 16, tq_set_A);
+    _mav_put_float(buf, 16, tq_set_NM);
     _mav_put_float(buf, 20, iq_max_A);
     _mav_put_float(buf, 24, speed_tar_p_s);
     _mav_put_float(buf, 28, speed_now_rad_s);
@@ -173,7 +173,7 @@ static inline uint16_t mavlink_msg_mitctlinput_pack_chan(uint8_t system_id, uint
     mavlink_mitctlinput_t packet;
     packet.pos_tar_p = pos_tar_p;
     packet.pos_now_p = pos_now_p;
-    packet.tq_set_A = tq_set_A;
+    packet.tq_set_NM = tq_set_NM;
     packet.iq_max_A = iq_max_A;
     packet.speed_tar_p_s = speed_tar_p_s;
     packet.speed_now_rad_s = speed_now_rad_s;
@@ -195,7 +195,7 @@ static inline uint16_t mavlink_msg_mitctlinput_pack_chan(uint8_t system_id, uint
  */
 static inline uint16_t mavlink_msg_mitctlinput_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_mitctlinput_t* mitctlinput)
 {
-    return mavlink_msg_mitctlinput_pack(system_id, component_id, msg, mitctlinput->tq_set_A, mitctlinput->pos_tar_p, mitctlinput->pos_now_p, mitctlinput->iq_max_A, mitctlinput->speed_tar_p_s, mitctlinput->speed_now_rad_s);
+    return mavlink_msg_mitctlinput_pack(system_id, component_id, msg, mitctlinput->tq_set_NM, mitctlinput->pos_tar_p, mitctlinput->pos_now_p, mitctlinput->iq_max_A, mitctlinput->speed_tar_p_s, mitctlinput->speed_now_rad_s);
 }
 
 /**
@@ -209,7 +209,7 @@ static inline uint16_t mavlink_msg_mitctlinput_encode(uint8_t system_id, uint8_t
  */
 static inline uint16_t mavlink_msg_mitctlinput_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_mitctlinput_t* mitctlinput)
 {
-    return mavlink_msg_mitctlinput_pack_chan(system_id, component_id, chan, msg, mitctlinput->tq_set_A, mitctlinput->pos_tar_p, mitctlinput->pos_now_p, mitctlinput->iq_max_A, mitctlinput->speed_tar_p_s, mitctlinput->speed_now_rad_s);
+    return mavlink_msg_mitctlinput_pack_chan(system_id, component_id, chan, msg, mitctlinput->tq_set_NM, mitctlinput->pos_tar_p, mitctlinput->pos_now_p, mitctlinput->iq_max_A, mitctlinput->speed_tar_p_s, mitctlinput->speed_now_rad_s);
 }
 
 /**
@@ -223,14 +223,14 @@ static inline uint16_t mavlink_msg_mitctlinput_encode_chan(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_mitctlinput_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_mitctlinput_t* mitctlinput)
 {
-    return mavlink_msg_mitctlinput_pack_status(system_id, component_id, _status, msg,  mitctlinput->tq_set_A, mitctlinput->pos_tar_p, mitctlinput->pos_now_p, mitctlinput->iq_max_A, mitctlinput->speed_tar_p_s, mitctlinput->speed_now_rad_s);
+    return mavlink_msg_mitctlinput_pack_status(system_id, component_id, _status, msg,  mitctlinput->tq_set_NM, mitctlinput->pos_tar_p, mitctlinput->pos_now_p, mitctlinput->iq_max_A, mitctlinput->speed_tar_p_s, mitctlinput->speed_now_rad_s);
 }
 
 /**
  * @brief Send a mitctlinput message
  * @param chan MAVLink channel to send the message
  *
- * @param tq_set_A  
+ * @param tq_set_NM  
  * @param pos_tar_p  
  * @param pos_now_p  
  * @param iq_max_A  
@@ -239,13 +239,13 @@ static inline uint16_t mavlink_msg_mitctlinput_encode_status(uint8_t system_id, 
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_mitctlinput_send(mavlink_channel_t chan, float tq_set_A, int64_t pos_tar_p, int64_t pos_now_p, float iq_max_A, float speed_tar_p_s, float speed_now_rad_s)
+static inline void mavlink_msg_mitctlinput_send(mavlink_channel_t chan, float tq_set_NM, int64_t pos_tar_p, int64_t pos_now_p, float iq_max_A, float speed_tar_p_s, float speed_now_rad_s)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_MitCtlInput_LEN];
     _mav_put_int64_t(buf, 0, pos_tar_p);
     _mav_put_int64_t(buf, 8, pos_now_p);
-    _mav_put_float(buf, 16, tq_set_A);
+    _mav_put_float(buf, 16, tq_set_NM);
     _mav_put_float(buf, 20, iq_max_A);
     _mav_put_float(buf, 24, speed_tar_p_s);
     _mav_put_float(buf, 28, speed_now_rad_s);
@@ -255,7 +255,7 @@ static inline void mavlink_msg_mitctlinput_send(mavlink_channel_t chan, float tq
     mavlink_mitctlinput_t packet;
     packet.pos_tar_p = pos_tar_p;
     packet.pos_now_p = pos_now_p;
-    packet.tq_set_A = tq_set_A;
+    packet.tq_set_NM = tq_set_NM;
     packet.iq_max_A = iq_max_A;
     packet.speed_tar_p_s = speed_tar_p_s;
     packet.speed_now_rad_s = speed_now_rad_s;
@@ -272,7 +272,7 @@ static inline void mavlink_msg_mitctlinput_send(mavlink_channel_t chan, float tq
 static inline void mavlink_msg_mitctlinput_send_struct(mavlink_channel_t chan, const mavlink_mitctlinput_t* mitctlinput)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_mitctlinput_send(chan, mitctlinput->tq_set_A, mitctlinput->pos_tar_p, mitctlinput->pos_now_p, mitctlinput->iq_max_A, mitctlinput->speed_tar_p_s, mitctlinput->speed_now_rad_s);
+    mavlink_msg_mitctlinput_send(chan, mitctlinput->tq_set_NM, mitctlinput->pos_tar_p, mitctlinput->pos_now_p, mitctlinput->iq_max_A, mitctlinput->speed_tar_p_s, mitctlinput->speed_now_rad_s);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MitCtlInput, (const char *)mitctlinput, MAVLINK_MSG_ID_MitCtlInput_MIN_LEN, MAVLINK_MSG_ID_MitCtlInput_LEN, MAVLINK_MSG_ID_MitCtlInput_CRC);
 #endif
@@ -286,13 +286,13 @@ static inline void mavlink_msg_mitctlinput_send_struct(mavlink_channel_t chan, c
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_mitctlinput_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float tq_set_A, int64_t pos_tar_p, int64_t pos_now_p, float iq_max_A, float speed_tar_p_s, float speed_now_rad_s)
+static inline void mavlink_msg_mitctlinput_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float tq_set_NM, int64_t pos_tar_p, int64_t pos_now_p, float iq_max_A, float speed_tar_p_s, float speed_now_rad_s)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
     _mav_put_int64_t(buf, 0, pos_tar_p);
     _mav_put_int64_t(buf, 8, pos_now_p);
-    _mav_put_float(buf, 16, tq_set_A);
+    _mav_put_float(buf, 16, tq_set_NM);
     _mav_put_float(buf, 20, iq_max_A);
     _mav_put_float(buf, 24, speed_tar_p_s);
     _mav_put_float(buf, 28, speed_now_rad_s);
@@ -302,7 +302,7 @@ static inline void mavlink_msg_mitctlinput_send_buf(mavlink_message_t *msgbuf, m
     mavlink_mitctlinput_t *packet = (mavlink_mitctlinput_t *)msgbuf;
     packet->pos_tar_p = pos_tar_p;
     packet->pos_now_p = pos_now_p;
-    packet->tq_set_A = tq_set_A;
+    packet->tq_set_NM = tq_set_NM;
     packet->iq_max_A = iq_max_A;
     packet->speed_tar_p_s = speed_tar_p_s;
     packet->speed_now_rad_s = speed_now_rad_s;
@@ -318,11 +318,11 @@ static inline void mavlink_msg_mitctlinput_send_buf(mavlink_message_t *msgbuf, m
 
 
 /**
- * @brief Get field tq_set_A from mitctlinput message
+ * @brief Get field tq_set_NM from mitctlinput message
  *
  * @return  
  */
-static inline float mavlink_msg_mitctlinput_get_tq_set_A(const mavlink_message_t* msg)
+static inline float mavlink_msg_mitctlinput_get_tq_set_NM(const mavlink_message_t* msg)
 {
     return _MAV_RETURN_float(msg,  16);
 }
@@ -388,7 +388,7 @@ static inline void mavlink_msg_mitctlinput_decode(const mavlink_message_t* msg, 
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     mitctlinput->pos_tar_p = mavlink_msg_mitctlinput_get_pos_tar_p(msg);
     mitctlinput->pos_now_p = mavlink_msg_mitctlinput_get_pos_now_p(msg);
-    mitctlinput->tq_set_A = mavlink_msg_mitctlinput_get_tq_set_A(msg);
+    mitctlinput->tq_set_NM = mavlink_msg_mitctlinput_get_tq_set_NM(msg);
     mitctlinput->iq_max_A = mavlink_msg_mitctlinput_get_iq_max_A(msg);
     mitctlinput->speed_tar_p_s = mavlink_msg_mitctlinput_get_speed_tar_p_s(msg);
     mitctlinput->speed_now_rad_s = mavlink_msg_mitctlinput_get_speed_now_rad_s(msg);

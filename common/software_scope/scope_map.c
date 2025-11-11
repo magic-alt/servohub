@@ -4,7 +4,7 @@
 #include "motor_ctl_loop.h"
 
 //DATABASE_CODE_START_1
-const InterVarStruct kParamDataBase[370] = {
+const InterVarStruct kParamDataBase[371] = {
     {1, &kAxis.pmsm_config.b, kTypeFloat32},
     {2, &kAxis.pmsm_config.fc, kTypeFloat32},
     {3, &kAxis.pmsm_config.flux, kTypeFloat32},
@@ -234,10 +234,10 @@ const InterVarStruct kParamDataBase[370] = {
     {355, &kAppProtectConfig.Overspeed_threshold, kTypeFloat32},
     {357, &kAppStatusInfo.Drive_accumulated_heat, kTypeFloat32},
     {358, &kAppStatusInfo.Drive_temperature, kTypeFloat32},
-    {359, &kAxis.mit_ctl_input.tq_set_A, kTypeFloat32},
+    {359, &kAxis.mit_ctl_input.tq_set_NM, kTypeFloat32},
     {360, &kAxis.pmsm_config.kt, kTypeFloat32},
-    {363, &kAxis.mit_ctl_config.kp_pos_rad_A, kTypeFloat32},
-    {364, &kAxis.mit_ctl_config.kd_spd_rad_s_A, kTypeFloat32},
+    {363, &kAxis.mit_ctl_config.kp_pos_rad_NM, kTypeFloat32},
+    {364, &kAxis.mit_ctl_config.kd_spd_rad_s_NM, kTypeFloat32},
     {366, &kAxis.mit_ctl_input.pos_tar_p, kTypeInt64},
     {367, &kAxis.mit_ctl_input.pos_now_p, kTypeInt64},
     {368, &kAxis.mit_ctl_input.iq_max_A, kTypeFloat32},
@@ -375,5 +375,6 @@ const InterVarStruct kParamDataBase[370] = {
     {563, &kAppMotorConfig.Motor_rotor_inertia, kTypeFloat32},
     {564, &kAppDebugParam.Debug_float, kTypeFloat32},
     {565, &kAppDebugParam.Debug_uint32, kTypeUint32},
+    {589, &kAxis.mit_ctl_config.kt_NM_A, kTypeFloat32},
 };
 //DATABASE_CODE_STOP_1
