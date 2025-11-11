@@ -5,7 +5,7 @@
  *
  * File: rtwtypes.h
  *
- * Code generated for Simulink model 'input_shaping_ei'.
+ * Code generated for Simulink model 'mit_ctl'.
  *
  * Simulink Coder version         : 9.9 (R2023a) 19-Nov-2022
  */

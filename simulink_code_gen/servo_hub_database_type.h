@@ -359,13 +359,14 @@ MecIdOutput;
 typedef struct
 {
     /* 位置刚度 */
-    real32_T kp_pos_rad_A;
+    real32_T kp_pos_rad_NM;
 
     /* 速度阻尼 */
-    real32_T kd_spd_rad_s_A;
+    real32_T kd_spd_rad_s_NM;
 
     /* 编码器分辨率倒数 */
     real32_T enc_line_inv_p_n;
+    real32_T kt_NM_A;
 }
 
 MitCtlConfig;
@@ -373,7 +374,7 @@ MitCtlConfig;
 typedef struct
 {
     /* 前馈力矩电流 */
-    real32_T tq_set_A;
+    real32_T tq_set_NM;
 
     /* 目标位置 */
     int64_T pos_tar_p;

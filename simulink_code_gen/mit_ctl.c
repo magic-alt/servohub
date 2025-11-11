@@ -25,9 +25,9 @@
 void mit_ctl(const MitCtlInput *rtu_input, const MitCtlConfig *rtu_config,
              MitCtlOutput *rty_output)
 {
-    real32_T rtb_Add1;
+    real32_T rtb_Divide;
 
-    /* Sum: '<S1>/Add1' incorporates:
+    /* Product: '<S1>/Divide' incorporates:
      *  DataTypeConversion: '<S1>/Data Type Conversion'
      *  Gain: '<S3>/Gain1'
      *  Gain: '<S4>/Gain1'
@@ -36,13 +36,15 @@ void mit_ctl(const MitCtlInput *rtu_input, const MitCtlConfig *rtu_config,
      *  Product: '<S3>/Product'
      *  Product: '<S4>/Product'
      *  Sum: '<S1>/Add'
+     *  Sum: '<S1>/Add1'
      *  Sum: '<S1>/Add2'
      */
-    rtb_Add1 = ((real32_T)(rtu_input->pos_tar_p - rtu_input->pos_now_p) *
-                6.28318548F * rtu_config->enc_line_inv_p_n *
-                rtu_config->kp_pos_rad_A + rtu_input->tq_set_A) + (6.28318548F *
-        rtu_input->speed_tar_p_s * rtu_config->enc_line_inv_p_n -
-        rtu_input->speed_now_rad_s) * rtu_config->kd_spd_rad_s_A;
+    rtb_Divide = (((real32_T)(rtu_input->pos_tar_p - rtu_input->pos_now_p) *
+                   6.28318548F * rtu_config->enc_line_inv_p_n *
+                   rtu_config->kp_pos_rad_NM + rtu_input->tq_set_NM) +
+                  (6.28318548F * rtu_input->speed_tar_p_s *
+                   rtu_config->enc_line_inv_p_n - rtu_input->speed_now_rad_s) *
+                  rtu_config->kd_spd_rad_s_NM) / rtu_config->kt_NM_A;
 
     /* Switch: '<S2>/Switch2' incorporates:
      *  Gain: '<S1>/Gain'
@@ -50,12 +52,12 @@ void mit_ctl(const MitCtlInput *rtu_input, const MitCtlConfig *rtu_config,
      *  RelationalOperator: '<S2>/UpperRelop'
      *  Switch: '<S2>/Switch'
      */
-    if (rtb_Add1 > rtu_input->iq_max_A)
+    if (rtb_Divide > rtu_input->iq_max_A)
     {
         /* BusCreator: '<S1>/Bus Creator' */
         rty_output->iq_tar_A = rtu_input->iq_max_A;
     }
-    else if (rtb_Add1 < -rtu_input->iq_max_A)
+    else if (rtb_Divide < -rtu_input->iq_max_A)
     {
         /* Switch: '<S2>/Switch' incorporates:
          *  BusCreator: '<S1>/Bus Creator'
@@ -68,7 +70,7 @@ void mit_ctl(const MitCtlInput *rtu_input, const MitCtlConfig *rtu_config,
         /* BusCreator: '<S1>/Bus Creator' incorporates:
          *  Switch: '<S2>/Switch'
          */
-        rty_output->iq_tar_A = rtb_Add1;
+        rty_output->iq_tar_A = rtb_Divide;
     }
 
     /* End of Switch: '<S2>/Switch2' */
