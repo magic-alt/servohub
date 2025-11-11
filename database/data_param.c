@@ -380,7 +380,7 @@ void app_param_update(void)
     set_app_Drive_overcurrent_threshold(kAppProtectConfig.Drive_overcurrent_threshold);
     set_app_Protection_enable(kAppProtectConfig.Protection_enable);
     set_app_Encoder_calibration_speed(kAppMotionParam.Encoder_calibration_speed);
-    set_app_MIT_feedforward_torque_current(kAppMotionParam.MIT_feedforward_torque_current);
+    set_app_MIT_feedforward_torque(kAppMotionParam.MIT_feedforward_torque);
     set_app_MIT_target_position(kAppMotionParam.MIT_target_position);
     set_app_MIT_max_current(kAppMotionParam.MIT_max_current);
     set_app_MIT_target_velocity(kAppMotionParam.MIT_target_velocity);
@@ -522,7 +522,7 @@ void app_param_sync(void)
     get_app_Drive_overcurrent_threshold();
     get_app_Protection_enable();
     get_app_Encoder_calibration_speed();
-    get_app_MIT_feedforward_torque_current();
+    get_app_MIT_feedforward_torque();
     get_app_MIT_target_position();
     get_app_MIT_max_current();
     get_app_MIT_target_velocity();
@@ -1446,25 +1446,20 @@ float get_app_Encoder_calibration_speed(void)
     return kAppMotionParam.Encoder_calibration_speed;
 }
 
-uint32_t set_app_MIT_feedforward_torque_current(float val)
+uint32_t set_app_MIT_feedforward_torque(float val)
 {
-    /* USER CODE BEGIN set_app_MIT_feedforward_torque_current 0 */
-    if (MATH_ABS(val) > kAppMotionParam.MIT_max_current)
-    {
-        return 0;
-    }
-
-    /* USER CODE END set_app_MIT_feedforward_torque_current 0 */
-    kAppMotionParam.MIT_feedforward_torque_current = val;
-    /* USER CODE BEGIN set_app_MIT_feedforward_torque_current 1 */
-    /* USER CODE END set_app_MIT_feedforward_torque_current 1 */
+    /* USER CODE BEGIN set_app_MIT_feedforward_torque 0 */
+    /* USER CODE END set_app_MIT_feedforward_torque 0 */
+    kAppMotionParam.MIT_feedforward_torque = val;
+    /* USER CODE BEGIN set_app_MIT_feedforward_torque 1 */
+    /* USER CODE END set_app_MIT_feedforward_torque 1 */
     return APP_PARAM_SUCCESS;
 }
-float get_app_MIT_feedforward_torque_current(void)
+float get_app_MIT_feedforward_torque(void)
 {
-    /* USER CODE BEGIN get_app_MIT_feedforward_torque_current */
-    /* USER CODE END get_app_MIT_feedforward_torque_current */
-    return kAppMotionParam.MIT_feedforward_torque_current;
+    /* USER CODE BEGIN get_app_MIT_feedforward_torque */
+    /* USER CODE END get_app_MIT_feedforward_torque */
+    return kAppMotionParam.MIT_feedforward_torque;
 }
 
 uint32_t set_app_MIT_target_position(int64_t val)

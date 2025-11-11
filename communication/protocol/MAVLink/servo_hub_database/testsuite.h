@@ -3723,7 +3723,7 @@ static void mavlink_test_appmotionparam(uint8_t system_id, uint8_t component_id,
         packet1.Target_torque = packet_in.Target_torque;
         packet1.Torque_slope = packet_in.Torque_slope;
         packet1.Encoder_calibration_speed = packet_in.Encoder_calibration_speed;
-        packet1.MIT_feedforward_torque_current = packet_in.MIT_feedforward_torque_current;
+        packet1.MIT_feedforward_torque = packet_in.MIT_feedforward_torque;
         packet1.MIT_max_current = packet_in.MIT_max_current;
         packet1.MIT_target_velocity = packet_in.MIT_target_velocity;
         packet1.MIT_kp = packet_in.MIT_kp;
@@ -3743,12 +3743,12 @@ static void mavlink_test_appmotionparam(uint8_t system_id, uint8_t component_id,
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_appmotionparam_pack(system_id, component_id, &msg , packet1.Target_position , packet1.Profile_velocity , packet1.Profile_acceleration , packet1.Profile_deceleration , packet1.Quick_stop_deceleration , packet1.Motion_profile_type , packet1.Home_offset , packet1.Homing_method , packet1.Target_velocity , packet1.Target_torque , packet1.Torque_slope , packet1.Encoder_calibration_speed , packet1.MIT_feedforward_torque_current , packet1.MIT_target_position , packet1.MIT_max_current , packet1.MIT_target_velocity , packet1.MIT_kp , packet1.MIT_kd );
+    mavlink_msg_appmotionparam_pack(system_id, component_id, &msg , packet1.Target_position , packet1.Profile_velocity , packet1.Profile_acceleration , packet1.Profile_deceleration , packet1.Quick_stop_deceleration , packet1.Motion_profile_type , packet1.Home_offset , packet1.Homing_method , packet1.Target_velocity , packet1.Target_torque , packet1.Torque_slope , packet1.Encoder_calibration_speed , packet1.MIT_feedforward_torque , packet1.MIT_target_position , packet1.MIT_max_current , packet1.MIT_target_velocity , packet1.MIT_kp , packet1.MIT_kd );
     mavlink_msg_appmotionparam_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_appmotionparam_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.Target_position , packet1.Profile_velocity , packet1.Profile_acceleration , packet1.Profile_deceleration , packet1.Quick_stop_deceleration , packet1.Motion_profile_type , packet1.Home_offset , packet1.Homing_method , packet1.Target_velocity , packet1.Target_torque , packet1.Torque_slope , packet1.Encoder_calibration_speed , packet1.MIT_feedforward_torque_current , packet1.MIT_target_position , packet1.MIT_max_current , packet1.MIT_target_velocity , packet1.MIT_kp , packet1.MIT_kd );
+    mavlink_msg_appmotionparam_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.Target_position , packet1.Profile_velocity , packet1.Profile_acceleration , packet1.Profile_deceleration , packet1.Quick_stop_deceleration , packet1.Motion_profile_type , packet1.Home_offset , packet1.Homing_method , packet1.Target_velocity , packet1.Target_torque , packet1.Torque_slope , packet1.Encoder_calibration_speed , packet1.MIT_feedforward_torque , packet1.MIT_target_position , packet1.MIT_max_current , packet1.MIT_target_velocity , packet1.MIT_kp , packet1.MIT_kd );
     mavlink_msg_appmotionparam_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -3761,7 +3761,7 @@ static void mavlink_test_appmotionparam(uint8_t system_id, uint8_t component_id,
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_appmotionparam_send(MAVLINK_COMM_1 , packet1.Target_position , packet1.Profile_velocity , packet1.Profile_acceleration , packet1.Profile_deceleration , packet1.Quick_stop_deceleration , packet1.Motion_profile_type , packet1.Home_offset , packet1.Homing_method , packet1.Target_velocity , packet1.Target_torque , packet1.Torque_slope , packet1.Encoder_calibration_speed , packet1.MIT_feedforward_torque_current , packet1.MIT_target_position , packet1.MIT_max_current , packet1.MIT_target_velocity , packet1.MIT_kp , packet1.MIT_kd );
+    mavlink_msg_appmotionparam_send(MAVLINK_COMM_1 , packet1.Target_position , packet1.Profile_velocity , packet1.Profile_acceleration , packet1.Profile_deceleration , packet1.Quick_stop_deceleration , packet1.Motion_profile_type , packet1.Home_offset , packet1.Homing_method , packet1.Target_velocity , packet1.Target_torque , packet1.Torque_slope , packet1.Encoder_calibration_speed , packet1.MIT_feedforward_torque , packet1.MIT_target_position , packet1.MIT_max_current , packet1.MIT_target_velocity , packet1.MIT_kp , packet1.MIT_kd );
     mavlink_msg_appmotionparam_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 

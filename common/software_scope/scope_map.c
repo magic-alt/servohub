@@ -270,7 +270,7 @@ const InterVarStruct kParamDataBase[371] = {
     {400, &kAxis.direction_id_output.id_tar_A, kTypeFloat32},
     {401, &kAxis.pole_pairs_id_config.current_slope_percentage, kTypeFloat32},
     {402, &kAxis.direction_id_config.id_tar_max_A, kTypeFloat32},
-    {403, &kAppMotionParam.MIT_feedforward_torque_current, kTypeFloat32},
+    {403, &kAppMotionParam.MIT_feedforward_torque, kTypeFloat32},
     {404, &kAppMotionParam.MIT_target_position, kTypeInt64},
     {405, &kAppMotionParam.MIT_max_current, kTypeFloat32},
     {406, &kAppMotionParam.MIT_target_velocity, kTypeFloat32},

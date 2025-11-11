@@ -17,7 +17,7 @@ typedef struct __mavlink_appmotionparam_t {
  float Target_torque; /*<  */
  float Torque_slope; /*<  */
  float Encoder_calibration_speed; /*<  */
- float MIT_feedforward_torque_current; /*<  */
+ float MIT_feedforward_torque; /*<  */
  float MIT_max_current; /*<  */
  float MIT_target_velocity; /*<  */
  float MIT_kp; /*<  */
@@ -30,8 +30,8 @@ typedef struct __mavlink_appmotionparam_t {
 #define MAVLINK_MSG_ID_68_LEN 81
 #define MAVLINK_MSG_ID_68_MIN_LEN 81
 
-#define MAVLINK_MSG_ID_AppMotionParam_CRC 111
-#define MAVLINK_MSG_ID_68_CRC 111
+#define MAVLINK_MSG_ID_AppMotionParam_CRC 102
+#define MAVLINK_MSG_ID_68_CRC 102
 
 
 
@@ -52,7 +52,7 @@ typedef struct __mavlink_appmotionparam_t {
          { "Target_torque", NULL, MAVLINK_TYPE_FLOAT, 0, 48, offsetof(mavlink_appmotionparam_t, Target_torque) }, \
          { "Torque_slope", NULL, MAVLINK_TYPE_FLOAT, 0, 52, offsetof(mavlink_appmotionparam_t, Torque_slope) }, \
          { "Encoder_calibration_speed", NULL, MAVLINK_TYPE_FLOAT, 0, 56, offsetof(mavlink_appmotionparam_t, Encoder_calibration_speed) }, \
-         { "MIT_feedforward_torque_current", NULL, MAVLINK_TYPE_FLOAT, 0, 60, offsetof(mavlink_appmotionparam_t, MIT_feedforward_torque_current) }, \
+         { "MIT_feedforward_torque", NULL, MAVLINK_TYPE_FLOAT, 0, 60, offsetof(mavlink_appmotionparam_t, MIT_feedforward_torque) }, \
          { "MIT_target_position", NULL, MAVLINK_TYPE_INT64_T, 0, 16, offsetof(mavlink_appmotionparam_t, MIT_target_position) }, \
          { "MIT_max_current", NULL, MAVLINK_TYPE_FLOAT, 0, 64, offsetof(mavlink_appmotionparam_t, MIT_max_current) }, \
          { "MIT_target_velocity", NULL, MAVLINK_TYPE_FLOAT, 0, 68, offsetof(mavlink_appmotionparam_t, MIT_target_velocity) }, \
@@ -76,7 +76,7 @@ typedef struct __mavlink_appmotionparam_t {
          { "Target_torque", NULL, MAVLINK_TYPE_FLOAT, 0, 48, offsetof(mavlink_appmotionparam_t, Target_torque) }, \
          { "Torque_slope", NULL, MAVLINK_TYPE_FLOAT, 0, 52, offsetof(mavlink_appmotionparam_t, Torque_slope) }, \
          { "Encoder_calibration_speed", NULL, MAVLINK_TYPE_FLOAT, 0, 56, offsetof(mavlink_appmotionparam_t, Encoder_calibration_speed) }, \
-         { "MIT_feedforward_torque_current", NULL, MAVLINK_TYPE_FLOAT, 0, 60, offsetof(mavlink_appmotionparam_t, MIT_feedforward_torque_current) }, \
+         { "MIT_feedforward_torque", NULL, MAVLINK_TYPE_FLOAT, 0, 60, offsetof(mavlink_appmotionparam_t, MIT_feedforward_torque) }, \
          { "MIT_target_position", NULL, MAVLINK_TYPE_INT64_T, 0, 16, offsetof(mavlink_appmotionparam_t, MIT_target_position) }, \
          { "MIT_max_current", NULL, MAVLINK_TYPE_FLOAT, 0, 64, offsetof(mavlink_appmotionparam_t, MIT_max_current) }, \
          { "MIT_target_velocity", NULL, MAVLINK_TYPE_FLOAT, 0, 68, offsetof(mavlink_appmotionparam_t, MIT_target_velocity) }, \
@@ -104,7 +104,7 @@ typedef struct __mavlink_appmotionparam_t {
  * @param Target_torque  
  * @param Torque_slope  
  * @param Encoder_calibration_speed  
- * @param MIT_feedforward_torque_current  
+ * @param MIT_feedforward_torque  
  * @param MIT_target_position  
  * @param MIT_max_current  
  * @param MIT_target_velocity  
@@ -113,7 +113,7 @@ typedef struct __mavlink_appmotionparam_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_appmotionparam_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque_current, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd)
+                               int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppMotionParam_LEN];
@@ -129,7 +129,7 @@ static inline uint16_t mavlink_msg_appmotionparam_pack(uint8_t system_id, uint8_
     _mav_put_float(buf, 48, Target_torque);
     _mav_put_float(buf, 52, Torque_slope);
     _mav_put_float(buf, 56, Encoder_calibration_speed);
-    _mav_put_float(buf, 60, MIT_feedforward_torque_current);
+    _mav_put_float(buf, 60, MIT_feedforward_torque);
     _mav_put_float(buf, 64, MIT_max_current);
     _mav_put_float(buf, 68, MIT_target_velocity);
     _mav_put_float(buf, 72, MIT_kp);
@@ -151,7 +151,7 @@ static inline uint16_t mavlink_msg_appmotionparam_pack(uint8_t system_id, uint8_
     packet.Target_torque = Target_torque;
     packet.Torque_slope = Torque_slope;
     packet.Encoder_calibration_speed = Encoder_calibration_speed;
-    packet.MIT_feedforward_torque_current = MIT_feedforward_torque_current;
+    packet.MIT_feedforward_torque = MIT_feedforward_torque;
     packet.MIT_max_current = MIT_max_current;
     packet.MIT_target_velocity = MIT_target_velocity;
     packet.MIT_kp = MIT_kp;
@@ -184,7 +184,7 @@ static inline uint16_t mavlink_msg_appmotionparam_pack(uint8_t system_id, uint8_
  * @param Target_torque  
  * @param Torque_slope  
  * @param Encoder_calibration_speed  
- * @param MIT_feedforward_torque_current  
+ * @param MIT_feedforward_torque  
  * @param MIT_target_position  
  * @param MIT_max_current  
  * @param MIT_target_velocity  
@@ -193,7 +193,7 @@ static inline uint16_t mavlink_msg_appmotionparam_pack(uint8_t system_id, uint8_
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_appmotionparam_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque_current, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd)
+                               int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppMotionParam_LEN];
@@ -209,7 +209,7 @@ static inline uint16_t mavlink_msg_appmotionparam_pack_status(uint8_t system_id,
     _mav_put_float(buf, 48, Target_torque);
     _mav_put_float(buf, 52, Torque_slope);
     _mav_put_float(buf, 56, Encoder_calibration_speed);
-    _mav_put_float(buf, 60, MIT_feedforward_torque_current);
+    _mav_put_float(buf, 60, MIT_feedforward_torque);
     _mav_put_float(buf, 64, MIT_max_current);
     _mav_put_float(buf, 68, MIT_target_velocity);
     _mav_put_float(buf, 72, MIT_kp);
@@ -231,7 +231,7 @@ static inline uint16_t mavlink_msg_appmotionparam_pack_status(uint8_t system_id,
     packet.Target_torque = Target_torque;
     packet.Torque_slope = Torque_slope;
     packet.Encoder_calibration_speed = Encoder_calibration_speed;
-    packet.MIT_feedforward_torque_current = MIT_feedforward_torque_current;
+    packet.MIT_feedforward_torque = MIT_feedforward_torque;
     packet.MIT_max_current = MIT_max_current;
     packet.MIT_target_velocity = MIT_target_velocity;
     packet.MIT_kp = MIT_kp;
@@ -267,7 +267,7 @@ static inline uint16_t mavlink_msg_appmotionparam_pack_status(uint8_t system_id,
  * @param Target_torque  
  * @param Torque_slope  
  * @param Encoder_calibration_speed  
- * @param MIT_feedforward_torque_current  
+ * @param MIT_feedforward_torque  
  * @param MIT_target_position  
  * @param MIT_max_current  
  * @param MIT_target_velocity  
@@ -277,7 +277,7 @@ static inline uint16_t mavlink_msg_appmotionparam_pack_status(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_appmotionparam_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   int64_t Target_position,float Profile_velocity,float Profile_acceleration,float Profile_deceleration,float Quick_stop_deceleration,int32_t Motion_profile_type,int64_t Home_offset,int8_t Homing_method,float Target_velocity,float Target_torque,float Torque_slope,float Encoder_calibration_speed,float MIT_feedforward_torque_current,int64_t MIT_target_position,float MIT_max_current,float MIT_target_velocity,float MIT_kp,float MIT_kd)
+                                   int64_t Target_position,float Profile_velocity,float Profile_acceleration,float Profile_deceleration,float Quick_stop_deceleration,int32_t Motion_profile_type,int64_t Home_offset,int8_t Homing_method,float Target_velocity,float Target_torque,float Torque_slope,float Encoder_calibration_speed,float MIT_feedforward_torque,int64_t MIT_target_position,float MIT_max_current,float MIT_target_velocity,float MIT_kp,float MIT_kd)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppMotionParam_LEN];
@@ -293,7 +293,7 @@ static inline uint16_t mavlink_msg_appmotionparam_pack_chan(uint8_t system_id, u
     _mav_put_float(buf, 48, Target_torque);
     _mav_put_float(buf, 52, Torque_slope);
     _mav_put_float(buf, 56, Encoder_calibration_speed);
-    _mav_put_float(buf, 60, MIT_feedforward_torque_current);
+    _mav_put_float(buf, 60, MIT_feedforward_torque);
     _mav_put_float(buf, 64, MIT_max_current);
     _mav_put_float(buf, 68, MIT_target_velocity);
     _mav_put_float(buf, 72, MIT_kp);
@@ -315,7 +315,7 @@ static inline uint16_t mavlink_msg_appmotionparam_pack_chan(uint8_t system_id, u
     packet.Target_torque = Target_torque;
     packet.Torque_slope = Torque_slope;
     packet.Encoder_calibration_speed = Encoder_calibration_speed;
-    packet.MIT_feedforward_torque_current = MIT_feedforward_torque_current;
+    packet.MIT_feedforward_torque = MIT_feedforward_torque;
     packet.MIT_max_current = MIT_max_current;
     packet.MIT_target_velocity = MIT_target_velocity;
     packet.MIT_kp = MIT_kp;
@@ -339,7 +339,7 @@ static inline uint16_t mavlink_msg_appmotionparam_pack_chan(uint8_t system_id, u
  */
 static inline uint16_t mavlink_msg_appmotionparam_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_appmotionparam_t* appmotionparam)
 {
-    return mavlink_msg_appmotionparam_pack(system_id, component_id, msg, appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque_current, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd);
+    return mavlink_msg_appmotionparam_pack(system_id, component_id, msg, appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd);
 }
 
 /**
@@ -353,7 +353,7 @@ static inline uint16_t mavlink_msg_appmotionparam_encode(uint8_t system_id, uint
  */
 static inline uint16_t mavlink_msg_appmotionparam_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_appmotionparam_t* appmotionparam)
 {
-    return mavlink_msg_appmotionparam_pack_chan(system_id, component_id, chan, msg, appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque_current, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd);
+    return mavlink_msg_appmotionparam_pack_chan(system_id, component_id, chan, msg, appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd);
 }
 
 /**
@@ -367,7 +367,7 @@ static inline uint16_t mavlink_msg_appmotionparam_encode_chan(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_appmotionparam_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_appmotionparam_t* appmotionparam)
 {
-    return mavlink_msg_appmotionparam_pack_status(system_id, component_id, _status, msg,  appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque_current, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd);
+    return mavlink_msg_appmotionparam_pack_status(system_id, component_id, _status, msg,  appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd);
 }
 
 /**
@@ -386,7 +386,7 @@ static inline uint16_t mavlink_msg_appmotionparam_encode_status(uint8_t system_i
  * @param Target_torque  
  * @param Torque_slope  
  * @param Encoder_calibration_speed  
- * @param MIT_feedforward_torque_current  
+ * @param MIT_feedforward_torque  
  * @param MIT_target_position  
  * @param MIT_max_current  
  * @param MIT_target_velocity  
@@ -395,7 +395,7 @@ static inline uint16_t mavlink_msg_appmotionparam_encode_status(uint8_t system_i
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_appmotionparam_send(mavlink_channel_t chan, int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque_current, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd)
+static inline void mavlink_msg_appmotionparam_send(mavlink_channel_t chan, int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppMotionParam_LEN];
@@ -411,7 +411,7 @@ static inline void mavlink_msg_appmotionparam_send(mavlink_channel_t chan, int64
     _mav_put_float(buf, 48, Target_torque);
     _mav_put_float(buf, 52, Torque_slope);
     _mav_put_float(buf, 56, Encoder_calibration_speed);
-    _mav_put_float(buf, 60, MIT_feedforward_torque_current);
+    _mav_put_float(buf, 60, MIT_feedforward_torque);
     _mav_put_float(buf, 64, MIT_max_current);
     _mav_put_float(buf, 68, MIT_target_velocity);
     _mav_put_float(buf, 72, MIT_kp);
@@ -433,7 +433,7 @@ static inline void mavlink_msg_appmotionparam_send(mavlink_channel_t chan, int64
     packet.Target_torque = Target_torque;
     packet.Torque_slope = Torque_slope;
     packet.Encoder_calibration_speed = Encoder_calibration_speed;
-    packet.MIT_feedforward_torque_current = MIT_feedforward_torque_current;
+    packet.MIT_feedforward_torque = MIT_feedforward_torque;
     packet.MIT_max_current = MIT_max_current;
     packet.MIT_target_velocity = MIT_target_velocity;
     packet.MIT_kp = MIT_kp;
@@ -452,7 +452,7 @@ static inline void mavlink_msg_appmotionparam_send(mavlink_channel_t chan, int64
 static inline void mavlink_msg_appmotionparam_send_struct(mavlink_channel_t chan, const mavlink_appmotionparam_t* appmotionparam)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_appmotionparam_send(chan, appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque_current, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd);
+    mavlink_msg_appmotionparam_send(chan, appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppMotionParam, (const char *)appmotionparam, MAVLINK_MSG_ID_AppMotionParam_MIN_LEN, MAVLINK_MSG_ID_AppMotionParam_LEN, MAVLINK_MSG_ID_AppMotionParam_CRC);
 #endif
@@ -466,7 +466,7 @@ static inline void mavlink_msg_appmotionparam_send_struct(mavlink_channel_t chan
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_appmotionparam_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque_current, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd)
+static inline void mavlink_msg_appmotionparam_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -482,7 +482,7 @@ static inline void mavlink_msg_appmotionparam_send_buf(mavlink_message_t *msgbuf
     _mav_put_float(buf, 48, Target_torque);
     _mav_put_float(buf, 52, Torque_slope);
     _mav_put_float(buf, 56, Encoder_calibration_speed);
-    _mav_put_float(buf, 60, MIT_feedforward_torque_current);
+    _mav_put_float(buf, 60, MIT_feedforward_torque);
     _mav_put_float(buf, 64, MIT_max_current);
     _mav_put_float(buf, 68, MIT_target_velocity);
     _mav_put_float(buf, 72, MIT_kp);
@@ -504,7 +504,7 @@ static inline void mavlink_msg_appmotionparam_send_buf(mavlink_message_t *msgbuf
     packet->Target_torque = Target_torque;
     packet->Torque_slope = Torque_slope;
     packet->Encoder_calibration_speed = Encoder_calibration_speed;
-    packet->MIT_feedforward_torque_current = MIT_feedforward_torque_current;
+    packet->MIT_feedforward_torque = MIT_feedforward_torque;
     packet->MIT_max_current = MIT_max_current;
     packet->MIT_target_velocity = MIT_target_velocity;
     packet->MIT_kp = MIT_kp;
@@ -642,11 +642,11 @@ static inline float mavlink_msg_appmotionparam_get_Encoder_calibration_speed(con
 }
 
 /**
- * @brief Get field MIT_feedforward_torque_current from appmotionparam message
+ * @brief Get field MIT_feedforward_torque from appmotionparam message
  *
  * @return  
  */
-static inline float mavlink_msg_appmotionparam_get_MIT_feedforward_torque_current(const mavlink_message_t* msg)
+static inline float mavlink_msg_appmotionparam_get_MIT_feedforward_torque(const mavlink_message_t* msg)
 {
     return _MAV_RETURN_float(msg,  60);
 }
@@ -722,7 +722,7 @@ static inline void mavlink_msg_appmotionparam_decode(const mavlink_message_t* ms
     appmotionparam->Target_torque = mavlink_msg_appmotionparam_get_Target_torque(msg);
     appmotionparam->Torque_slope = mavlink_msg_appmotionparam_get_Torque_slope(msg);
     appmotionparam->Encoder_calibration_speed = mavlink_msg_appmotionparam_get_Encoder_calibration_speed(msg);
-    appmotionparam->MIT_feedforward_torque_current = mavlink_msg_appmotionparam_get_MIT_feedforward_torque_current(msg);
+    appmotionparam->MIT_feedforward_torque = mavlink_msg_appmotionparam_get_MIT_feedforward_torque(msg);
     appmotionparam->MIT_max_current = mavlink_msg_appmotionparam_get_MIT_max_current(msg);
     appmotionparam->MIT_target_velocity = mavlink_msg_appmotionparam_get_MIT_target_velocity(msg);
     appmotionparam->MIT_kp = mavlink_msg_appmotionparam_get_MIT_kp(msg);

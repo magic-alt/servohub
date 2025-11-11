@@ -544,7 +544,7 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 app_motion_param_t.Target_torque = get_app_Target_torque();
                 app_motion_param_t.Torque_slope = get_app_Torque_slope();
                 app_motion_param_t.Encoder_calibration_speed = get_app_Encoder_calibration_speed();
-                app_motion_param_t.MIT_feedforward_torque_current = get_app_MIT_feedforward_torque_current();
+                app_motion_param_t.MIT_feedforward_torque = get_app_MIT_feedforward_torque();
                 app_motion_param_t.MIT_target_position = get_app_MIT_target_position();
                 app_motion_param_t.MIT_max_current = get_app_MIT_max_current();
                 app_motion_param_t.MIT_target_velocity = get_app_MIT_target_velocity();
@@ -1261,8 +1261,8 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 app_motion_param_t.Torque_slope = get_app_Torque_slope();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Encoder_calibration_speed(app_motion_param_t.Encoder_calibration_speed);}
                 app_motion_param_t.Encoder_calibration_speed = get_app_Encoder_calibration_speed();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_MIT_feedforward_torque_current(app_motion_param_t.MIT_feedforward_torque_current);}
-                app_motion_param_t.MIT_feedforward_torque_current = get_app_MIT_feedforward_torque_current();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_MIT_feedforward_torque(app_motion_param_t.MIT_feedforward_torque);}
+                app_motion_param_t.MIT_feedforward_torque = get_app_MIT_feedforward_torque();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_MIT_target_position(app_motion_param_t.MIT_target_position);}
                 app_motion_param_t.MIT_target_position = get_app_MIT_target_position();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_MIT_max_current(app_motion_param_t.MIT_max_current);}

@@ -94,7 +94,7 @@ typedef struct
     float Target_torque; //力矩目标值
     float Torque_slope; //力矩上升斜率
     float Encoder_calibration_speed; //编码器校准速度
-    float MIT_feedforward_torque_current; //MIT前馈力矩电流
+    float MIT_feedforward_torque; //MIT前馈力矩
     int64_t MIT_target_position; //MIT目标位置
     float MIT_max_current; //MIT最大输出电流
     float MIT_target_velocity; //MIT目标速度
@@ -455,8 +455,8 @@ uint32_t get_app_Protection_enable(void);
 uint32_t set_app_Encoder_calibration_speed(float val);
 float get_app_Encoder_calibration_speed(void);
 
-uint32_t set_app_MIT_feedforward_torque_current(float val);
-float get_app_MIT_feedforward_torque_current(void);
+uint32_t set_app_MIT_feedforward_torque(float val);
+float get_app_MIT_feedforward_torque(void);
 
 uint32_t set_app_MIT_target_position(int64_t val);
 int64_t get_app_MIT_target_position(void);

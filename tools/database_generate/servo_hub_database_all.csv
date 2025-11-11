@@ -434,7 +434,7 @@ current_slope_percentage,电流上升斜率%每s,DirectionIdConfig,RW,single,1,0
 id_tar_A,d轴电流目标值,DirectionIdOutput,RO,single,1,0,A,400,,Visible,1,,,,,,
 current_slope_percentage,电流上升斜率%每s,PolePairsIdConfig,RW,single,1,0.0001,%/s,401,,Visible,1,,,,,,
 id_tar_max_A,d轴目标电流最大值,DirectionIdConfig,RW,single,1,0,A,402,强制拖动D轴最大目标电流,Visible,1,,,,,,
-MIT_feedforward_torque_current,MIT前馈力矩电流,AppMotionParam,RW,single,1,,A,403,,Visible,,,1,,,,
+MIT_feedforward_torque,MIT前馈力矩,AppMotionParam,RW,single,1,,NM,403,负载端转矩,Visible,,,1,,,,
 MIT_target_position,MIT目标位置,AppMotionParam,RW,int64,1,,P,404,负载端目标位置,Visible,,,1,,,,
 MIT_max_current,MIT最大输出电流,AppMotionParam,RW,single,1,,A,405,,Visible,,1,1,0,,,
 MIT_target_velocity,MIT目标速度,AppMotionParam,RW,single,1,,RPM,406,负载端目标速度,Visible,,,1,,,,
@@ -448,8 +448,8 @@ Reduction_ratio_num,减速比分子,AppMotorConfig,RW,uint32,1,,,414,,Visible,,1
 Reduction_ratio_den,减速比分母,AppMotorConfig,RW,uint32,1,,,415,,Visible,,1,1,,,,Motor_revolutions
 Can_id,CAN ID,AppBaseConfig,RW,uint32,1,,,416,,Visible,,1,1,,,,
 Can_baudrate,CAN 波特率,AppBaseConfig,RW,uint32,1,,,417,"1000000,500000",Visible,,1,1,,,,
-MIT_kp,位置刚度,AppMotionParam,RW,single,1,,A/rad,418,,Visible,,,1,,,,
-MIT_kd,速度阻尼系数,AppMotionParam,RW,single,1,,A/(rad/s),419,,Visible,,,1,,,,
+MIT_kp,位置刚度,AppMotionParam,RW,single,1,,NM/rad,418,,Visible,,,1,,,,
+MIT_kd,速度阻尼系数,AppMotionParam,RW,single,1,,NM/(rad/s),419,,Visible,,,1,,,,
 Sys_cmd,系统指令,SystemCmd,RW,uint8,1,0,,420,"0: 无动作
 1: 当前位置回零
 2：参数保存到FLASH
