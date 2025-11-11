@@ -2465,7 +2465,13 @@ uint32_t set_app_Torque_constant(float val)
     /* USER CODE BEGIN set_app_Torque_constant 1 */
     // 关联设置控制层参数
     axis->pmsm_config.kt = val * 0.001f;
-    MotorCtlParamSetUpdata(axis);
+    //转矩常数单独关联更新，因为用户在MIT模式下可能频繁修改KT参数
+    // MotorCtlParamSetUpdata(axis);  
+    // 转矩常数和永磁磁链 关联更新 // kt = 1.5*pn*flux
+    axis->pmsm_config.flux = axis->pmsm_config.kt / (1.5f * axis->pmsm_config.pn); // flux = kt/(1.5*pn);
+    axis->pos_speed_ctl_config.j_kt = axis->pmsm_config.j / axis->pmsm_config.kt;
+    axis->mit_ctl_config.kt_NM_A = axis->pmsm_config.kt; //关联设置
+
     /* USER CODE END set_app_Torque_constant 1 */
     return APP_PARAM_SUCCESS;
 }
