@@ -241,7 +241,7 @@ void MotorCtlSmStateInit(Axis *const axis, AxisDw *const axis_dw,
 // 控制层参数关联设置接口函数  失能状态下调用
 void MotorCtlParamSetUpdata(Axis *const axis)
 {
-   // 电机额定电流
+   // 电机额定电流 峰值电流
    axis->elec_id_sin_config.i_max_A = axis->pmsm_config.rated_current;
    axis->mec_id_config.i_max_A = axis->pmsm_config.rated_current;
    axis->elec_angle_id_config.id_max_A = axis->pmsm_config.rated_current;
@@ -258,7 +258,6 @@ void MotorCtlParamSetUpdata(Axis *const axis)
    axis->mit_ctl_config.kt_NM_A = axis->pmsm_config.kt; //关联设置
 
    // 电机最大转速
-   axis->motor_ctl_sm_config.over_speed_protection_rad_s = axis->pmsm_config.speed_max_rpm * MOTOR_CTL_SM_RPM_2_RAD_S * 1.2f;
    axis->pos_speed_ctl_config.speed_max_rad_s = axis->pmsm_config.speed_max_rpm * MOTOR_CTL_SM_RPM_2_RAD_S;
    axis->speed_obs_pll_config.speed_obs_max_rad_s = axis->pmsm_config.speed_max_rpm * MOTOR_CTL_SM_RPM_2_RAD_S * 1.2f;
 
@@ -279,7 +278,6 @@ void MotorCtlParamSetUpdata(Axis *const axis)
    axis->pos_speed_ctl_config.enc_line_inv_p_n = 1.0f / axis->pmsm_config.enc_line_p_n;
    axis->speed_obs_pll_config.enc_line_inv_p_n = 1.0f / axis->pmsm_config.enc_line_p_n;
    axis->motor_pos_sensor_config.enc_line_p_n = axis->pmsm_config.enc_line_p_n;
-   axis->motor_ctl_sm_config.position_following_error_protection = axis->pmsm_config.enc_line_p_n * 0.1f;
    axis->pole_pairs_id_config.enc_line_p_n = axis->pmsm_config.enc_line_p_n;
    axis->tq_fc_id_config.enc_line_p_n = axis->pmsm_config.enc_line_p_n;
    axis->mit_ctl_config.enc_line_inv_p_n = 1.0f / axis->pmsm_config.enc_line_p_n; // 编码器分辨率倒数

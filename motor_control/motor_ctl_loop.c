@@ -25,12 +25,6 @@ void MotorCtrlInit(void)
     MotorCtlSmInit(&kAxis, &kAxisDw);
 
     // 初始化硬件默认参数配置
-    // 保护参数
-    kAxis.motor_ctl_sm_config.under_voltage_protection_V = UNDER_VOLTAGE_PROTECTION_V;
-    kAxis.motor_ctl_sm_config.over_voltage_protection_V = OVER_VOLTAGE_PROTECTION_V;
-    kAxis.motor_ctl_sm_config.over_temperature_protection_d = OVER_TEMP_PROTECTION_C;
-    kAxis.motor_ctl_sm_config.under_temperature_protection_d = UNDER_TEMP_PROTECTION_C;
-
     // 电机参数
     kAxis.pmsm_config.tc_s = 1.0f / CURRENT_FREQUENCY_HZ;  // 电流环周期
     kAxis.pmsm_config.tp_s = 1.0f / POSITION_FREQUENCY_HZ; // 位置速度环周期
@@ -52,6 +46,14 @@ void MotorCtrlInit(void)
     kAxis.load_pos_sensor_config.enc_line_p_n = PMSM_LOAD_ENC_LINE_P_N; // 负载端编码器分辨率
     kAxis.load_pos_sensor_config.init_pos_p = 0;                        // 负载端初始位置
     kAxis.load_pos_sensor_config.dir = 1;                               // 负载端编码器方向
+
+    // 保护参数
+    kAxis.motor_ctl_sm_config.under_voltage_protection_V = UNDER_VOLTAGE_PROTECTION_V;
+    kAxis.motor_ctl_sm_config.over_voltage_protection_V = OVER_VOLTAGE_PROTECTION_V;
+    kAxis.motor_ctl_sm_config.over_temperature_protection_d = OVER_TEMP_PROTECTION_C;
+    kAxis.motor_ctl_sm_config.under_temperature_protection_d = UNDER_TEMP_PROTECTION_C;
+    kAxis.motor_ctl_sm_config.position_following_error_protection = PMSM_ENC_LINE_P_N / 10;
+    kAxis.motor_ctl_sm_config.over_speed_protection_rad_s = kAxis.pmsm_config.speed_max_rpm * MOTOR_CTL_SM_TWO_PI / 60.0f * 1.2f;
 
     // 电流环参数
     kAxis.current_ctl_config.comp_du_V = VOLTAGE_COMPENSATION_V;
