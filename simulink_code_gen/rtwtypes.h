@@ -5,7 +5,7 @@
  *
  * File: rtwtypes.h
  *
- * Code generated for Simulink model 'database_init'.
+ * Code generated for Simulink model 'elec_angle_id'.
  *
  * Simulink Coder version         : 9.9 (R2023a) 19-Nov-2022
  */

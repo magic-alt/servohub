@@ -134,9 +134,9 @@ void protect_check(const real32_T rtu_iabc_now[3], const real32_T *rtu_dc_bus,
             *rty_error = 3U;
 
             /* 位置跟随误差保护 */
-            /* '<S2>:1:69' if config.mode == 3 */
+            /* '<S2>:1:69' if config.mode == 3 || config.mode == 4 */
         }
-        else if (rtu_config->mode == 3)
+        else if ((rtu_config->mode == 3) || (rtu_config->mode == 4))
         {
             /* 位置模式下才会生效位置误差保护 */
             /* '<S2>:1:71' if pos_ctl_error > config.position_following_error_protection && bitget(config.error_enable, 6) == 1 */
