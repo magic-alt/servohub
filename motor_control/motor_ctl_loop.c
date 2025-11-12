@@ -129,7 +129,7 @@ void UnrealTimeBase1ms(void)
     // 3. 读取MCU温度
     data_org_p = bsp_get_mcu_temperature();
 
-    math_lib_first_order_lpf_iir(&data_org, &lpf_k,
+    math_lib_first_order_lpf_iir(&data_org_p, &lpf_k,
                                  &kAppStatusInfo.Mcu_temperature,
                                  &kAppStatusInfo.Mcu_temperature);
 
