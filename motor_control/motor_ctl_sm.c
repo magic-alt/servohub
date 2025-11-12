@@ -133,8 +133,8 @@ void MotorCtlSmInit(Axis *const axis, AxisDw *const axis_dw)
    axis->input_shaping_config.run_frq_Hz = 10000.0f;
    axis->input_shaping_config.wn_Hz = 0.0f;
 
-   axis->mit_ctl_config.kp_pos_rad_NM = 1.0f;
-   axis->mit_ctl_config.kd_spd_rad_s_NM = 1.0f;
+   axis->mit_ctl_config.kp_pos_NM_rad = 1.0f;
+   axis->mit_ctl_config.kd_spd_NM_rad_s = 1.0f;
    axis->mit_ctl_config.enc_line_inv_p_n = 1.0f / axis->pmsm_config.enc_line_p_n; // 编码器分辨率倒数
 
    axis->load_pos_sensor_config.dir = 1;

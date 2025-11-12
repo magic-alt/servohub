@@ -6,8 +6,8 @@ static MitMode_t mit_mode =
     .pre_Controlword = APP_CTRL_DISABLE,
     .traj =
     {
-        .kp_pos_rad_NM = 0,
-        .kd_spd_rad_s_NM = 0,
+        .kp_pos_NM_rad = 0,
+        .kd_spd_NM_rad_s = 0,
         .iq_max_A = 0,
         .speed_tar_p_s = 0,
         .pos_tar_p = 0,
@@ -59,8 +59,8 @@ AppResult mit_mode_run()
                                     get_app_Reduction_ratio();
         mit_mode.traj.pos_tar_p = mit_mode.pos_tar_p_add + get_app_Motor_position_actual_value();
         mit_mode.traj.tq_set_NM = get_app_MIT_feedforward_torque() * get_app_Reduction_ratio_inv();  //负载端转矩  转化 为电机端
-        mit_mode.traj.kp_pos_rad_NM = get_app_MIT_kp() * get_app_Reduction_ratio_inv();  // 转化为电机端增益
-        mit_mode.traj.kd_spd_rad_s_NM = get_app_MIT_kd() * get_app_Reduction_ratio_inv();  // 转化为电机端增益
+        mit_mode.traj.kp_pos_NM_rad = get_app_MIT_kp() * get_app_Reduction_ratio_inv();  // 转化为电机端增益
+        mit_mode.traj.kd_spd_NM_rad_s = get_app_MIT_kd() * get_app_Reduction_ratio_inv();  // 转化为电机端增益
     }
     else if (mit_mode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
     {

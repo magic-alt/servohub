@@ -5,7 +5,7 @@
  *
  * File: zero_crossing_types.h
  *
- * Code generated for Simulink model 'direction_id'.
+ * Code generated for Simulink model 'pole_pairs_id'.
  *
  * Simulink Coder version         : 9.9 (R2023a) 19-Nov-2022
  */

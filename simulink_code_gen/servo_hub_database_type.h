@@ -359,13 +359,15 @@ MecIdOutput;
 typedef struct
 {
     /* 位置刚度 */
-    real32_T kp_pos_rad_NM;
+    real32_T kp_pos_NM_rad;
 
     /* 速度阻尼 */
-    real32_T kd_spd_rad_s_NM;
+    real32_T kd_spd_NM_rad_s;
 
     /* 编码器分辨率倒数 */
     real32_T enc_line_inv_p_n;
+
+    /* 转矩常数 */
     real32_T kt_NM_A;
 }
 

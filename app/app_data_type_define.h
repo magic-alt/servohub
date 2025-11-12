@@ -53,8 +53,8 @@ typedef struct
     float speed_tar_p_s;   // 速度用户目标值p/s
     float tq_set_NM;       // 力矩用户目标值NM
     float iq_max_A;        // 电流最大值A
-    float kp_pos_rad_NM;   // 位置环比例系数rad/NM
-    float kd_spd_rad_s_NM; // 速度环比例系数(rad/s)/NM
+    float kp_pos_NM_rad;   // 位置环比例系数rad/NM
+    float kd_spd_NM_rad_s; // 速度环比例系数(rad/s)/NM
 } MIT_TRAJECTORY_DATA;
 
 #endif // APP_DATA_TYPE_DEFINE_H

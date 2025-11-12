@@ -41,10 +41,10 @@ void mit_ctl(const MitCtlInput *rtu_input, const MitCtlConfig *rtu_config,
      */
     rtb_Divide = (((real32_T)(rtu_input->pos_tar_p - rtu_input->pos_now_p) *
                    6.28318548F * rtu_config->enc_line_inv_p_n *
-                   rtu_config->kp_pos_rad_NM + rtu_input->tq_set_NM) +
+                   rtu_config->kp_pos_NM_rad + rtu_input->tq_set_NM) +
                   (6.28318548F * rtu_input->speed_tar_p_s *
                    rtu_config->enc_line_inv_p_n - rtu_input->speed_now_rad_s) *
-                  rtu_config->kd_spd_rad_s_NM) / rtu_config->kt_NM_A;
+                  rtu_config->kd_spd_NM_rad_s) / rtu_config->kt_NM_A;
 
     /* Switch: '<S2>/Switch2' incorporates:
      *  Gain: '<S1>/Gain'

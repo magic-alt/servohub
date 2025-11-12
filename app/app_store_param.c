@@ -89,8 +89,8 @@ void flash_param_update(void)
     kFlashStorage.app_protect_config_Drive_low_temperature_fault_threshold = kAppProtectConfig.Drive_low_temperature_fault_threshold;
     kFlashStorage.app_protect_config_Drive_high_temperature_fault_threshold = kAppProtectConfig.Drive_high_temperature_fault_threshold;
     kFlashStorage.app_protect_config_Overspeed_threshold = kAppProtectConfig.Overspeed_threshold;
-    kFlashStorage.mit_ctl_config_kp_pos_rad_NM = kAxis.mit_ctl_config.kp_pos_rad_NM;
-    kFlashStorage.mit_ctl_config_kd_spd_rad_s_NM = kAxis.mit_ctl_config.kd_spd_rad_s_NM;
+    kFlashStorage.mit_ctl_config_kp_pos_NM_rad = kAxis.mit_ctl_config.kp_pos_NM_rad;
+    kFlashStorage.mit_ctl_config_kd_spd_NM_rad_s = kAxis.mit_ctl_config.kd_spd_NM_rad_s;
     kFlashStorage.app_motor_config_Motor_peak_current = kAppMotorConfig.Motor_peak_current;
     kFlashStorage.app_motor_config_Motor_pole_pairs = kAppMotorConfig.Motor_pole_pairs;
     kFlashStorage.app_motor_config_Motor_maximum_speed = kAppMotorConfig.Motor_maximum_speed;
@@ -245,8 +245,8 @@ void flash_param_init(void)
     kAppProtectConfig.Drive_low_temperature_fault_threshold = kFlashStorage.app_protect_config_Drive_low_temperature_fault_threshold;
     kAppProtectConfig.Drive_high_temperature_fault_threshold = kFlashStorage.app_protect_config_Drive_high_temperature_fault_threshold;
     kAppProtectConfig.Overspeed_threshold = kFlashStorage.app_protect_config_Overspeed_threshold;
-    kAxis.mit_ctl_config.kp_pos_rad_NM = kFlashStorage.mit_ctl_config_kp_pos_rad_NM;
-    kAxis.mit_ctl_config.kd_spd_rad_s_NM = kFlashStorage.mit_ctl_config_kd_spd_rad_s_NM;
+    kAxis.mit_ctl_config.kp_pos_NM_rad = kFlashStorage.mit_ctl_config_kp_pos_NM_rad;
+    kAxis.mit_ctl_config.kd_spd_NM_rad_s = kFlashStorage.mit_ctl_config_kd_spd_NM_rad_s;
     kAppMotorConfig.Motor_peak_current = kFlashStorage.app_motor_config_Motor_peak_current;
     kAppMotorConfig.Motor_pole_pairs = kFlashStorage.app_motor_config_Motor_pole_pairs;
     kAppMotorConfig.Motor_maximum_speed = kFlashStorage.app_motor_config_Motor_maximum_speed;

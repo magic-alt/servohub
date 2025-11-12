@@ -654,8 +654,8 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 mavlink_msg_mitctlinput_encode(0, 0, &send_msg, (mavlink_mitctlinput_t *)&mit_ctl_input_t);
                 break;
             case MAVLINK_MSG_ID_MitCtlConfig:
-                mit_ctl_config_t.kp_pos_rad_NM = axis->mit_ctl_config.kp_pos_rad_NM;
-                mit_ctl_config_t.kd_spd_rad_s_NM = axis->mit_ctl_config.kd_spd_rad_s_NM;
+                mit_ctl_config_t.kp_pos_NM_rad = axis->mit_ctl_config.kp_pos_NM_rad;
+                mit_ctl_config_t.kd_spd_NM_rad_s = axis->mit_ctl_config.kd_spd_NM_rad_s;
                 mit_ctl_config_t.enc_line_inv_p_n = axis->mit_ctl_config.enc_line_inv_p_n;
                 mit_ctl_config_t.kt_NM_A = axis->mit_ctl_config.kt_NM_A;
                 mavlink_msg_mitctlconfig_encode(0, 0, &send_msg, (mavlink_mitctlconfig_t *)&mit_ctl_config_t);
@@ -1461,8 +1461,8 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 break;
             case MAVLINK_MSG_ID_MitCtlConfig:
                 mavlink_msg_mitctlconfig_decode(&msg, (mavlink_mitctlconfig_t *)&mit_ctl_config_t);
-                axis->mit_ctl_config.kp_pos_rad_NM = mit_ctl_config_t.kp_pos_rad_NM;
-                axis->mit_ctl_config.kd_spd_rad_s_NM = mit_ctl_config_t.kd_spd_rad_s_NM;
+                axis->mit_ctl_config.kp_pos_NM_rad = mit_ctl_config_t.kp_pos_NM_rad;
+                axis->mit_ctl_config.kd_spd_NM_rad_s = mit_ctl_config_t.kd_spd_NM_rad_s;
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_config.enc_line_inv_p_n = mit_ctl_config_t.enc_line_inv_p_n;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_config.kt_NM_A = mit_ctl_config_t.kt_NM_A;}
                 mavlink_msg_mitctlconfig_encode(0, 0, &send_msg, (mavlink_mitctlconfig_t *)&mit_ctl_config_t);

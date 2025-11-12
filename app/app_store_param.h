@@ -36,8 +36,8 @@ typedef struct {
     float current_ctl_config_pwm_duty_cycle_max;
     uint8_t pos_speed_ctl_config_dynamic_integration_enable;
     int64_t app_motion_info_Home_position_offset_value;
-    float mit_ctl_config_kp_pos_rad_A;
-    float mit_ctl_config_kd_spd_rad_s_A;
+    float mit_ctl_config_kp_pos_NM_rad;
+    float mit_ctl_config_kd_spd_NM_rad_s;
     float current_ctl_config_elec_angle_compensation;
     int8_t current_ctl_config_phase_dir;
     uint32_t app_base_config_Can_Id;
@@ -163,8 +163,6 @@ typedef struct {
     float app_motor_config_Motor_rotor_inertia;
     float app_debug_param_Debug_float[16];
     uint32_t app_debug_param_Debug_uint32[16];
-    float mit_ctl_config_kp_pos_rad_NM;
-    float mit_ctl_config_kd_spd_rad_s_NM;
 }FLASH_PARAM_STRUCT;
 extern FLASH_PARAM_STRUCT kFlashStorage;
 

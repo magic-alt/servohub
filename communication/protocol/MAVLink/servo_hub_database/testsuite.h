@@ -4218,8 +4218,8 @@ static void mavlink_test_mitctlconfig(uint8_t system_id, uint8_t component_id, m
     };
     mavlink_mitctlconfig_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
-        packet1.kp_pos_rad_NM = packet_in.kp_pos_rad_NM;
-        packet1.kd_spd_rad_s_NM = packet_in.kd_spd_rad_s_NM;
+        packet1.kp_pos_NM_rad = packet_in.kp_pos_NM_rad;
+        packet1.kd_spd_NM_rad_s = packet_in.kd_spd_NM_rad_s;
         packet1.enc_line_inv_p_n = packet_in.enc_line_inv_p_n;
         packet1.kt_NM_A = packet_in.kt_NM_A;
         
@@ -4236,12 +4236,12 @@ static void mavlink_test_mitctlconfig(uint8_t system_id, uint8_t component_id, m
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_mitctlconfig_pack(system_id, component_id, &msg , packet1.kp_pos_rad_NM , packet1.kd_spd_rad_s_NM , packet1.enc_line_inv_p_n , packet1.kt_NM_A );
+    mavlink_msg_mitctlconfig_pack(system_id, component_id, &msg , packet1.kp_pos_NM_rad , packet1.kd_spd_NM_rad_s , packet1.enc_line_inv_p_n , packet1.kt_NM_A );
     mavlink_msg_mitctlconfig_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_mitctlconfig_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.kp_pos_rad_NM , packet1.kd_spd_rad_s_NM , packet1.enc_line_inv_p_n , packet1.kt_NM_A );
+    mavlink_msg_mitctlconfig_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.kp_pos_NM_rad , packet1.kd_spd_NM_rad_s , packet1.enc_line_inv_p_n , packet1.kt_NM_A );
     mavlink_msg_mitctlconfig_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -4254,7 +4254,7 @@ static void mavlink_test_mitctlconfig(uint8_t system_id, uint8_t component_id, m
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_mitctlconfig_send(MAVLINK_COMM_1 , packet1.kp_pos_rad_NM , packet1.kd_spd_rad_s_NM , packet1.enc_line_inv_p_n , packet1.kt_NM_A );
+    mavlink_msg_mitctlconfig_send(MAVLINK_COMM_1 , packet1.kp_pos_NM_rad , packet1.kd_spd_NM_rad_s , packet1.enc_line_inv_p_n , packet1.kt_NM_A );
     mavlink_msg_mitctlconfig_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
