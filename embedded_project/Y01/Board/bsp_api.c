@@ -397,35 +397,34 @@ int64_t bsp_get_encoder_turns(ENCODER_ID const enc_id)
  */
 void bsp_set_can_id(uint32_t can_id)
 {
-    #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
-        //can_device_set_id(can_id);
-    #endif
+#ifdef USE_CAN
+    fdcan_set_id(can_id);
+#endif
 }
 /**
  * @brief 获取当前 CAN ID
- * @return 
+ * @return 当前 CAN ID
  * @note  
  */
 uint32_t bsp_get_can_id(void)
 {
-    #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
-        //return can_device_get_id();
-        return 0;
-    #else
-        return 0;
-    #endif
+#ifdef USE_CAN
+    return fdcan_get_id();
+#else
+    return 0;
+#endif
 }
 /**
  * @brief 设置CAN 波特率
- * @param[in] baudrate 波特率  1000000, 500000  其他配置默认 1000000
+ * @param[in] baudrate 波特率
  * @return 
  * @note  
  */
 void bsp_set_can_baudrate(uint32_t baudrate)
 {
-    #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
-        //can_device_set_baudrate(baudrate);
-    #endif
+#ifdef USE_CAN
+    fdcan_set_baudrate(baudrate);
+#endif
 }
 /**
  * @brief 获取当前 CAN 波特率
@@ -434,12 +433,11 @@ void bsp_set_can_baudrate(uint32_t baudrate)
  */
 uint32_t bsp_get_can_baudrate(void)
 {
-    #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
-        //return can_device_get_baudrate();
-        return 0;
-    #else
-        return 0;
-    #endif
+#ifdef USE_CAN
+    return fdcan_get_baudrate();
+#else
+    return 0;
+#endif
 }
 /**
  * @brief 获取当前 CAN 消息累计计数值
@@ -448,12 +446,11 @@ uint32_t bsp_get_can_baudrate(void)
  */
 uint32_t bsp_get_can_mg_counts(void)
 {
-    #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
-        //return can_device_get_mg_counts();
-        return 0;
-    #else
-        return 0;
-    #endif
+#ifdef USE_CAN
+    return fdcan_get_mg_counts();
+#else
+    return 0;
+#endif
 }
 
 #pragma endregion

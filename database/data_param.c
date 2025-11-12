@@ -67,7 +67,7 @@ void app_param_init(void)
     // 初始化基础配置  恢复出厂的默认配置
     kAppBaseConfig.Home_position_offset_value = 0;                                              // 回零完成位置偏移值
     kAppBaseConfig.Polarity = 0;                                                                // 运动极性
-    kAppBaseConfig.Can_id = 0X15;                                                               // CAN ID
+    kAppBaseConfig.Can_id = 0x15;                                                               // CAN ID
     kAppBaseConfig.Can_baudrate = 1000000;                                                      // CAN 波特率
     kAppBaseConfig.Quick_stop_option_code = 2;                                                  // 快速停机方式选择
     kAppBaseConfig.Brake_engage_time = BRAKE_ENGAGE_TIME;                                       // 抱闸延迟时间
@@ -76,12 +76,12 @@ void app_param_init(void)
     kAppBaseConfig.Brake_release_hold_voltage = BRAKE_RELEASE_HOLD_VOLTAGE;                     // 松闸保持电压
 
     // 初始化编码器配置
-    kAppEncoderConfig.Load_encoder_resolution = PMSM_LOAD_ENC_LINE_P_N;                            // 负载端位置反馈分辨率
-    kAppEncoderConfig.Motor_encoder_resolution = PMSM_ENC_LINE_P_N;                                // 电机端位置反馈分辨率
-    kAppEncoderConfig.Encoder_options = 0;                                                         // 编码器选项
-    kAppEncoderConfig.Load_pps_2_rpm = 60.0f / (float)PMSM_LOAD_ENC_LINE_P_N;                      // 负载端速度P/s转换RPM系数
-    kAppEncoderConfig.Load_rpm_2_pps = (float)PMSM_LOAD_ENC_LINE_P_N / 60.0f;                      // 负载端速度RPM转换P/s系数
-    
+    kAppEncoderConfig.Load_encoder_resolution = PMSM_LOAD_ENC_LINE_P_N;                         // 负载端位置反馈分辨率
+    kAppEncoderConfig.Motor_encoder_resolution = PMSM_ENC_LINE_P_N;                             // 电机端位置反馈分辨率
+    kAppEncoderConfig.Encoder_options = 0;                                                      // 编码器选项
+    kAppEncoderConfig.Load_pps_2_rpm = 60.0f / (float)PMSM_LOAD_ENC_LINE_P_N;                   // 负载端速度P/s转换RPM系数
+    kAppEncoderConfig.Load_rpm_2_pps = (float)PMSM_LOAD_ENC_LINE_P_N / 60.0f;                   // 负载端速度RPM转换P/s系数
+
     // 初始化电机配置
     kAppMotorConfig.Motor_rated_current = PMSM_RATED_CURRENT;                                    // 电机额定电流
     kAppMotorConfig.Motor_rated_torque = 0.0f;                                                   // 电机额定力矩/推力
@@ -96,7 +96,7 @@ void app_param_init(void)
     kAppMotorConfig.Reduction_ratio_inv = (float)GEAR_RATIO_DEN / (float)GEAR_RATIO_NUM;         // 减速比倒数
     kAppMotorConfig.Reduction_ratio = (float)GEAR_RATIO_NUM / (float)GEAR_RATIO_DEN;             // 减速比系数
     kAppMotorConfig.Motor_rotor_inertia = PMSM_J * 1e4f;                                         // 电机转子惯量
-    
+
     // 初始化保护配置
     kAppProtectConfig.Bus_under_voltage_threshold = UNDER_VOLTAGE_PROTECTION_V;                    // 母线欠压阈值
     kAppProtectConfig.Bus_over_voltage_threshold = OVER_VOLTAGE_PROTECTION_V;                      // 母线过压阈值

@@ -20,21 +20,18 @@ extern "C"
 #define BUILD_VERSION           (0x00)              // 构建号
 #define VERSION_ENCODE (((MAJOR_VERSION) << 24) | ((MINOR_VERSION) << 16) | ((REVISION_VERSION) << 8) | (BUILD_VERSION))
 
-#define IS_CAN_PROTOCOL(minor_version) ((minor_version) == V_CAN_CIA402 || \
-                                        (minor_version) == V_CAN_ENCOS || \
-                                        (minor_version) == V_CANOPEN_CIA402 || \
-                                        (minor_version) == V_CANFD_CUSTOM)
-
 #if MINOR_VERSION == V_CAN_CIA402
 #define USE_CAN
 #define USE_CIA402
 #endif
 
 #if MINOR_VERSION == V_CAN_ENCOS
-#define ENCOS_CAN_FREE
+#define USE_CAN
+#define USE_ENCOS
 #endif
 
 #if MINOR_VERSION == V_CANOPEN_CIA402
+#define USE_CAN
 #define USE_CANOPEN
 #define USE_CIA402
 #endif
@@ -45,7 +42,8 @@ extern "C"
 #endif
 
 #if MINOR_VERSION == V_CANFD_CUSTOM
-#define USE_CANFD
+#define USE_CAN
+#define USE_CUSTOM
 #endif
 
 

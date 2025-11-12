@@ -8,6 +8,9 @@
 
 #include "system_init.h"
 #include "system_timer.h"
+
+#include "bsp_fdcan.h"
+#include "drv_can_app.h"
 #include "drv_encoder.h"
 #include "drv_spi_flash.h"
 
@@ -67,8 +70,8 @@ typedef struct
 #pragma endregion // ANALOG
 
 #pragma region // TIMERS
-#define PWM_TIM_ARR                 (6000u)  // PWM定时器ARR值，此宏可直接用于CubeMX配置框（No Check）
-#define PWM_TIM_ARR_HALF            (3000u)  // PWM定时器ARR值的一半，此宏可直接用于CubeMX配置框（No Check）
+#define PWM_TIM_ARR                 (6000u)  // PWM定时器ARR值，此宏可同步用于CubeMX配置框（No Check）
+#define PWM_TIM_ARR_HALF            (3000u)  // PWM定时器ARR值的一半，此宏可同步用于CubeMX配置框（No Check）
 #define PWM_TIM_ARR_P_LIMIT         (5400u)  // PWM定时器ARR上限值（PWM_TIM_ARR * 90%）
 #define PWM_TIM_ARR_LIMIT_HALF      (2700u)  // PWM定时器ARR上限值的一半
 #define PWM_TIM_ARR_N_LIMIT         (0u)     // PWM定时器ARR下限值（0）
@@ -86,13 +89,18 @@ typedef struct
 #define ENCODER_ABZ_TIM_HANDLE      (htim3)             //ABZ增量式编码器定时器
 #define ENCODER_ABZ_TIM_Z_CHANNEL   (TIM_CHANNEL_3)     //ABZ增量式编码器定时器Z相捕获通道
 #define CANOPEN_TIM_HANDLE          (htim6)             //CANopen定时器
+#define CANOPEN_TIM_ARR             (1000 - 1)          //CANopen定时器ARR值，此宏可同步用于CubeMX配置框（No Check）
 #define ECAT_LAN9252_TIM_HANDLE     (htim7)             //EtherCAT定时器
 #define NRT_TASK_TIM_HANDLE         (htim13)            //非实时(1ms)任务定时器
 #define NRT_CAN_ECAT_IRQ_TASK       HAL_TIM_PeriodElapsedCallback
+
 #pragma endregion // TIMERS
 
 #pragma region // CONNECTIVITY
 #define CAN_FDCAN_HANDLE            (hfdcan1)
+#define CAN_FDCAN_NUMBER            (FDCAN1)
+#define CAN_FDCAN_RX_FIFO0_CALLBACK HAL_FDCAN_RxFifo0Callback
+#define CAN_FDCAN_RX_FIFO1_CALLBACK HAL_FDCAN_RxFifo1Callback
 
 #define ECAT_LAN9252_QSPI_HANDLE    (hqspi)
 

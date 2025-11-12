@@ -38,7 +38,7 @@ typedef enum
     ERROR_BUS_CURRENT_OC,                   // 母线过流错误
     ERROR_BUS_OFFLINE,                      // 母线掉线
     ERROR_FLASH_STORE,                      // Flash存储错误
-    ERROR_ECAT_INIT,                        // Ecat初始化错误
+    ERROR_COMMS_INIT,                       // 通讯初始化错误
     ERROR_DRV_INIT,                         // Drv初始化错误
     ERROR_BUS_VOLTAGE,                      // 母线电压错误
     ERROR_CURRENT_SAMPLE,                   // 电流采样错误
@@ -58,7 +58,7 @@ typedef union
         uint32_t error_bus_current_oc : 1;              // 母线过流错误
         uint32_t error_bus_offline : 1;                 // 母线掉线
         uint32_t error_flash_store : 1;                 // Flash存储错误
-        uint32_t error_ecat_init : 1;                   // Ecat初始化错误
+        uint32_t error_comms_init : 1;                  // 通讯初始化错误
         uint32_t error_drv_init : 1;                    // Drv初始化错误
         uint32_t error_bus_voltage : 1;                 // 母线电压错误
         uint32_t error_current_sample : 1;              // 电流采样错误
