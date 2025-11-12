@@ -331,8 +331,8 @@ void PosSpeedCtlLoopTask(Axis *const axis, AxisDw *const axis_dw)
    protect_check(&axis->current_ctl_input.iabc_now_A[0], &axis->current_ctl_input.dc_bus_now_V,
                  &axis->current_ctl_input.driver_temp,
                  &axis->pos_speed_ctl_output.pos_ctl_error_p,
-                 &axis->motor_ctl_sm_config,
                  &axis->pos_speed_ctl_input.speed_now_rad_s,
+                 &axis->motor_ctl_sm_config,
                  &error_code);
 
    // 状态机切换

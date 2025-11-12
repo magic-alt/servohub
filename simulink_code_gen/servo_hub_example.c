@@ -241,7 +241,7 @@ void protect_check_step(void)          /* Explicit Task: protect_check_step */
      *  Outport: '<Root>/error'
      */
     protect_check(&_rt_U.iabc_now[0], &_rt_U.dc_bus, &_rt_U.driver_temp,
-                  &_rt_U.pos_ctl_error, &_rt_U.config, &_rt_U.speed_now,
+                  &_rt_U.pos_ctl_error, &_rt_U.speed_now, &_rt_U.config,
                   &_rt_Y.error);
 
     /* End of Outputs for RootInportFunctionCallGenerator generated from: '<Root>/protect_check_step' */

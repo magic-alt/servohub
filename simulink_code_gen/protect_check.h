@@ -28,8 +28,8 @@
 
 extern void protect_check(const real32_T rtu_iabc_now[3], const real32_T
     *rtu_dc_bus, const real32_T *rtu_driver_temp, const int32_T
-    *rtu_pos_ctl_error, const MotorCtlSmConfig *rtu_config, const real32_T
-    *rtu_speed_now, uint32_T *rty_error);
+    *rtu_pos_ctl_error, const real32_T *rtu_speed_now, const MotorCtlSmConfig
+    *rtu_config, uint32_T *rty_error);
 
 /*-
  * The generated code includes comments that allow you to trace directly
