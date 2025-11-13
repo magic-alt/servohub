@@ -73,28 +73,49 @@ void HardwareSelfTestRun(void)
     static int64_t load_encoder_turns = 0;     // 负载端编码器多圈值
 
     position_irq_cnt++;
-    if (position_irq_cnt >= HARDWARE_SELF_TEST_RUN_CNT)
+
+    // 检查编码器是否准备好
+    if (bsp_get_encoder_state(ENCODER_ID_MOTOR) == true && \
+        bsp_get_encoder_state(ENCODER_ID_LOAD) == true)
     {
-        position_irq_cnt = HARDWARE_SELF_TEST_RUN_CNT;
+        // 编码器已准备好，获取编码器数据并初始化电机控制状态
+        motor_encoder_cnt = bsp_get_encoder_cnt(ENCODER_ID_MOTOR);
+        load_encoder_cnt = bsp_get_encoder_cnt(ENCODER_ID_LOAD);
+        motor_encoder_turns = bsp_get_encoder_turns(ENCODER_ID_MOTOR);
+        load_encoder_turns = bsp_get_encoder_turns(ENCODER_ID_LOAD);
 
-        if (bsp_get_encoder_state(ENCODER_ID_MOTOR) == true && \
-            bsp_get_encoder_state(ENCODER_ID_LOAD) == true)   //延迟等待一段时间后，获取编码器准备好状态，对当前位置进行初始化
-        {
-            motor_encoder_cnt = bsp_get_encoder_cnt(ENCODER_ID_MOTOR);
-            load_encoder_cnt = bsp_get_encoder_cnt(ENCODER_ID_LOAD);
-            motor_encoder_turns = bsp_get_encoder_turns(ENCODER_ID_MOTOR);
-            load_encoder_turns = bsp_get_encoder_turns(ENCODER_ID_LOAD);
+        MotorCtlSmStateInit(&kAxis, &kAxisDw, \
+                            motor_encoder_turns, motor_encoder_cnt, \
+                            load_encoder_turns, load_encoder_cnt);
 
-            MotorCtlSmStateInit(&kAxis, &kAxisDw, \
-                                motor_encoder_turns, motor_encoder_cnt, \
-                                load_encoder_turns, load_encoder_cnt);
-        }
-        else
-        {
-            MotorCtlSmStateInit(&kAxis, &kAxisDw, 0, 0, 0, 0);
-        }
+        position_irq_cnt = 0;
 
+        // 编码器准备好，设置硬件自检状态为true
         sys_msg.hardware_self_test_status = true;
+    }
+    else
+    {
+        // 编码器未准备好，检查是否超时
+        if (position_irq_cnt >= HARDWARE_SELF_TEST_RUN_CNT)
+        {
+            // 超时处理：使用默认值初始化电机控制状态
+            MotorCtlSmStateInit(&kAxis, &kAxisDw, 0, 0, 0, 0);
+
+            // 设置编码器错误状态
+            if (bsp_get_encoder_state(ENCODER_ID_MOTOR) == false)
+            {
+                sys_set_bsp_error_state(ERROR_ENCODER_MOTOR, ERROR_SET);
+            }
+            if (bsp_get_encoder_state(ENCODER_ID_LOAD) == false)
+            {
+                sys_set_bsp_error_state(ERROR_ENCODER_LOAD, ERROR_SET);
+            }
+
+            // 重置计数器
+            position_irq_cnt = 0;
+        }
+        // 编码器未准备好，保持硬件自检状态为false
+        sys_msg.hardware_self_test_status = false;
     }
 }
 

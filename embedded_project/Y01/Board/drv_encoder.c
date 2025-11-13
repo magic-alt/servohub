@@ -146,7 +146,7 @@ void encoder_data_process(void)
             encoder_data[enc_id].load_single_raw = 0;
             encoder_data[enc_id].load_multi_raw = 0;
             encoder_data[enc_id].almc = 0;
-            encoder_data[enc_id].enid = 0;
+            encoder_data[enc_id].enid = TAMAGAWA_ENCODER_ID;
         }
         else// if (enc_id == ENCODER_ID_2)
         {

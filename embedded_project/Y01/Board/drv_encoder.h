@@ -117,7 +117,8 @@ typedef struct
 #define SF_HAS_DELIM_ALARM(sf_data)  ((sf_data) & SF_ALARM_DELIMITER)
 
 // 编码器ID (固定值)
-#define TAMAGAWA_ENCODER_ID 0x00    // 不读取编码器ID，使用0替代
+//#define TAMAGAWA_ENCODER_ID (Real_encoder_id) // 当读取ID时，使用实际编码器ID
+#define TAMAGAWA_ENCODER_ID (0xCE)  // 当未读取编码器ID时，位置解析成功后强制设为0xCE（Connected Encoder）
 
 void encoder_data_init(void);
 void encoder_data_read(void);
