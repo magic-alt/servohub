@@ -38,6 +38,8 @@ __attribute__((section(".RAM_D1"))) BspData kBspData =
     .pwm_state_cnt = 0,
 };
 
+static void PositionLoopInit(void);
+
 void BspInit(void)
 {
     // 触发规则通道队列DMA采样
@@ -74,6 +76,9 @@ void BspInit(void)
     // 启动 1ms 任务
     HAL_TIM_Base_Start_IT(&CANOPEN_TIM_HANDLE);
     HAL_TIM_Base_Start_IT(&NRT_TASK_TIM_HANDLE);
+    
+    // 位置环软中断初始化
+    PositionLoopInit();
 
     // 启动ADC注入中断
     HAL_ADCEx_InjectedStart_IT(&UVW_CURRENT_U_HANDLE);
@@ -101,6 +106,27 @@ void BspInit(void)
     HAL_Delay(10);
 }
 
+// 位置环软件中断初始化函数
+static void PositionLoopInit(void)
+{
+    EXTI_HandleTypeDef position_loop_exit;
+    EXTI_ConfigTypeDef position_loop_exit_config;
+    position_loop_exit_config.GPIOSel = EXTI_GPIOB;
+    position_loop_exit_config.Line = EXTI_LINE_0;
+    position_loop_exit_config.Mode = EXTI_MODE_INTERRUPT;
+    position_loop_exit_config.Trigger = EXTI_TRIGGER_RISING;
+    HAL_EXTI_SetConfigLine(&position_loop_exit, &position_loop_exit_config);
+    HAL_NVIC_SetPriority(EXTI0_IRQn, 2, 0);
+    HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+}
+//定义位置环软件中断句柄
+EXTI_HandleTypeDef exti_handle =
+{
+    .Line = EXTI_LINE_0,
+    .PendingCallback = NULL
+};
+
+
 // 电流环中断任务 典型频率  20KHZ
 void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
 {
@@ -125,28 +151,9 @@ void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
 
         if (position_frq_div == 0)  //运行位置环  10KHZ
         {
-            bsp_set_timer_record_stop(SYS_TIMER_RECORD_POSITION_LOOP_CYCLE_INDEX); // 测量位置环周期
-            bsp_set_timer_record_start(SYS_TIMER_RECORD_POSITION_LOOP_CYCLE_INDEX);
-
-            bsp_set_timer_record_start(SYS_TIMER_RECORD_POSITION_LOOP_TIME_INDEX); // 测量位置环运行时间
-        #ifndef VIRTUAL_MOTOR_MODEL
-            if (sys_get_hardware_self_test_status() == false)
-            {
-                encoder_data_init();
-                HardwareSelfTestRun();
-            }
-
-            // 编码器数据读取及处理
-            encoder_data_read();
-            encoder_data_process();
-
-            bsp_pwm_ready_state_updata(); // 更新PWM输出准备状态
-        #endif
-
-            PosSpeedLoopCtrl();
-
+            HAL_EXTI_GenerateSWI(&exti_handle); // 位置环中断优先级低于电流环
+            //EXTI->SWIER1 |= GPIO_PIN_0;
             position_frq_div = 1; // 1:10KHZ 位置环   3:5KHZ 位置环
-            bsp_set_timer_record_stop(SYS_TIMER_RECORD_POSITION_LOOP_TIME_INDEX);
         }
         else
         {
@@ -154,6 +161,35 @@ void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
         }
     }
 }
+
+// 位置环中断任务 典型频率  10KHZ
+void EXTI0_IRQHandler(void)
+{
+    HAL_EXTI_ClearPending(&exti_handle, 0);
+    
+    bsp_set_timer_record_stop(SYS_TIMER_RECORD_POSITION_LOOP_CYCLE_INDEX); // 测量位置环周期
+    bsp_set_timer_record_start(SYS_TIMER_RECORD_POSITION_LOOP_CYCLE_INDEX);
+
+    bsp_set_timer_record_start(SYS_TIMER_RECORD_POSITION_LOOP_TIME_INDEX); // 测量位置环运行时间
+#ifndef VIRTUAL_MOTOR_MODEL
+    if (sys_get_hardware_self_test_status() == false)
+    {
+        encoder_data_init();
+        HardwareSelfTestRun();
+    }
+    
+    // 编码器数据读取及处理
+    encoder_data_read();
+    encoder_data_process();
+
+    bsp_pwm_ready_state_updata(); // 更新PWM输出准备状态
+#endif
+
+    PosSpeedLoopCtrl();
+    bsp_set_timer_record_stop(SYS_TIMER_RECORD_POSITION_LOOP_TIME_INDEX);
+}
+
+
 
 void ECAT_EXTI_IRQ_TASK(uint16_t GPIO_Pin)
 {
