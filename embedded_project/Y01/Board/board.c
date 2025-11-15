@@ -113,17 +113,17 @@ static void PositionLoopInit(void)
     EXTI_HandleTypeDef position_loop_exit;
     EXTI_ConfigTypeDef position_loop_exit_config;
     position_loop_exit_config.GPIOSel = EXTI_GPIOB;
-    position_loop_exit_config.Line = POSITION_EXTI_LINE_x;
+    position_loop_exit_config.Line = POSITION_EXTI_LINE_X;
     position_loop_exit_config.Mode = EXTI_MODE_INTERRUPT;
     position_loop_exit_config.Trigger = EXTI_TRIGGER_RISING;
     HAL_EXTI_SetConfigLine(&position_loop_exit, &position_loop_exit_config);
-    HAL_NVIC_SetPriority(POSITION_EXTIx_IRQn, 2, 0);
-    HAL_NVIC_EnableIRQ(POSITION_EXTIx_IRQn);
+    HAL_NVIC_SetPriority(POSITION_EXTIX_IRQN, 2, 0);
+    HAL_NVIC_EnableIRQ(POSITION_EXTIX_IRQN);
 }
 // 定义位置环软件中断句柄
 EXTI_HandleTypeDef kExtiHandle =
 {
-    .Line = POSITION_EXTI_LINE_x,
+    .Line = POSITION_EXTI_LINE_X,
     .PendingCallback = NULL
 };
 

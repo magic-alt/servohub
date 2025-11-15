@@ -124,8 +124,8 @@ typedef struct
 
 #pragma region // GPIO
 #define POSITION_LOOP_IRQ_TASK      EXTI0_IRQHandler   //位置环GPIO软件中断回调函数
-#define POSITION_EXTIx_IRQn         EXTI0_IRQn         //位置环GPIO软件中断号
-#define POSITION_EXTI_LINE_x        EXTI_LINE_0        //位置环GPIO软件中断线
+#define POSITION_EXTIX_IRQN         EXTI0_IRQn         //位置环GPIO软件中断号
+#define POSITION_EXTI_LINE_X        EXTI_LINE_0        //位置环GPIO软件中断线
 
 #define DRV_GATE_ENABLE()           (HAL_GPIO_WritePin(DRV_EN_GATE_GPIO_Port, DRV_EN_GATE_Pin, GPIO_PIN_SET))
 #define DRV_GATE_DISABLE()          (HAL_GPIO_WritePin(DRV_EN_GATE_GPIO_Port, DRV_EN_GATE_Pin, GPIO_PIN_RESET))
