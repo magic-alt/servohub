@@ -6,36 +6,36 @@
 #endif
 
 __attribute__((section(".RAM_D1"))) BspData kBspData =
-    {
-        .adc1_raw_buffer[0] = 0,
-        .adc1_raw_buffer[1] = 0,
-        .adc1_raw_buffer[2] = 0,
-        .adc2_raw_buffer[0] = 0,
-        .adc2_raw_buffer[1] = 0,
-        .adc2_raw_buffer[2] = 0,
-        .adc3_raw_buffer[0] = 0,
-        .adc3_raw_buffer[1] = 0,
-        .adc3_raw_buffer[2] = 0,
-        .dc_bus_voltage_val = 0.0f,
-        .dc_bus_current_val = 0.0f,
-        .motor_temp_val = 20.0f,
-        .mos_temp_val = 25.0f,
-        .mcu_temp[0] = 30.0f,
-        .mcu_temp[1] = 30.0f,
-        .mcu_temp[2] = 30.0f,
-        .uvw_current[0] = 0.0f,
-        .uvw_current[1] = 0.0f,
-        .uvw_current[2] = 0.0f,
-        .uvw_target_voltage[0] = 0.0f,
-        .uvw_target_voltage[1] = 0.0f,
-        .uvw_target_voltage[2] = 0.0f,
-        .motor_cnt = 0,
-        .load_cnt = 0,
-        .motor_turns = 0,
-        .load_turns = 0,
-        .pwm_en_state = 0,
-        .pwm_ready_state = 0,
-        .pwm_state_cnt = 0,
+{
+    .adc1_raw_buffer[0] = 0,
+    .adc1_raw_buffer[1] = 0,
+    .adc1_raw_buffer[2] = 0,
+    .adc2_raw_buffer[0] = 0,
+    .adc2_raw_buffer[1] = 0,
+    .adc2_raw_buffer[2] = 0,
+    .adc3_raw_buffer[0] = 0,
+    .adc3_raw_buffer[1] = 0,
+    .adc3_raw_buffer[2] = 0,
+    .dc_bus_voltage_val = 0.0f,
+    .dc_bus_current_val = 0.0f,
+    .motor_temp_val = 20.0f,
+    .mos_temp_val = 25.0f,
+    .mcu_temp[0] = 30.0f,
+    .mcu_temp[1] = 30.0f,
+    .mcu_temp[2] = 30.0f,
+    .uvw_current[0] = 0.0f,
+    .uvw_current[1] = 0.0f,
+    .uvw_current[2] = 0.0f,
+    .uvw_target_voltage[0] = 0.0f,
+    .uvw_target_voltage[1] = 0.0f,
+    .uvw_target_voltage[2] = 0.0f,
+    .motor_cnt = 0,
+    .load_cnt = 0,
+    .motor_turns = 0,
+    .load_turns = 0,
+    .pwm_en_state = 0,
+    .pwm_ready_state = 0,
+    .pwm_state_cnt = 0,
 };
 
 static void PositionLoopInit(void);
@@ -113,18 +113,19 @@ static void PositionLoopInit(void)
     EXTI_HandleTypeDef position_loop_exit;
     EXTI_ConfigTypeDef position_loop_exit_config;
     position_loop_exit_config.GPIOSel = EXTI_GPIOB;
-    position_loop_exit_config.Line = EXTI_LINE_0;
+    position_loop_exit_config.Line = POSITION_EXTI_LINE_x;
     position_loop_exit_config.Mode = EXTI_MODE_INTERRUPT;
     position_loop_exit_config.Trigger = EXTI_TRIGGER_RISING;
     HAL_EXTI_SetConfigLine(&position_loop_exit, &position_loop_exit_config);
-    HAL_NVIC_SetPriority(EXTI0_IRQn, 2, 0);
-    HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+    HAL_NVIC_SetPriority(POSITION_EXTIx_IRQn, 2, 0);
+    HAL_NVIC_EnableIRQ(POSITION_EXTIx_IRQn);
 }
 // 定义位置环软件中断句柄
-EXTI_HandleTypeDef exti_handle =
-    {
-        .Line = EXTI_LINE_0,
-        .PendingCallback = NULL};
+EXTI_HandleTypeDef kExtiHandle =
+{
+    .Line = POSITION_EXTI_LINE_x,
+    .PendingCallback = NULL
+};
 
 // 电流环中断任务 典型频率  20KHZ
 void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
@@ -150,9 +151,8 @@ void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
 
         if (position_frq_div == 0) // 运行位置环  10KHZ
         {
-            HAL_EXTI_GenerateSWI(&exti_handle); // 位置环中断优先级低于电流环
-            // EXTI->SWIER1 |= GPIO_PIN_0;
-            position_frq_div = 1; // 1:10KHZ 位置环   3:5KHZ 位置环
+            HAL_EXTI_GenerateSWI(&kExtiHandle); // 触发位置环软件中断
+            position_frq_div = 1;               // 1:10KHZ 位置环   3:5KHZ 位置环
         }
         else
         {
@@ -162,9 +162,9 @@ void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
 }
 
 // 位置环中断任务 典型频率  10KHZ
-void EXTI0_IRQHandler(void)
+void POSITION_LOOP_IRQ_TASK(void)
 {
-    HAL_EXTI_ClearPending(&exti_handle, 0);
+    HAL_EXTI_ClearPending(&kExtiHandle, 0);
 
     bsp_set_timer_record_stop(SYS_TIMER_RECORD_POSITION_LOOP_CYCLE_INDEX); // 测量位置环周期
     bsp_set_timer_record_start(SYS_TIMER_RECORD_POSITION_LOOP_CYCLE_INDEX);
