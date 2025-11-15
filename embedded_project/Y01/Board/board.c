@@ -6,36 +6,36 @@
 #endif
 
 __attribute__((section(".RAM_D1"))) BspData kBspData =
-{
-    .adc1_raw_buffer[0] = 0,
-    .adc1_raw_buffer[1] = 0,
-    .adc1_raw_buffer[2] = 0,
-    .adc2_raw_buffer[0] = 0,
-    .adc2_raw_buffer[1] = 0,
-    .adc2_raw_buffer[2] = 0,
-    .adc3_raw_buffer[0] = 0,
-    .adc3_raw_buffer[1] = 0,
-    .adc3_raw_buffer[2] = 0,
-    .dc_bus_voltage_val = 0.0f,
-    .dc_bus_current_val = 0.0f,
-    .motor_temp_val = 20.0f,
-    .mos_temp_val = 25.0f,
-    .mcu_temp[0] = 30.0f,
-    .mcu_temp[1] = 30.0f,
-    .mcu_temp[2] = 30.0f,
-    .uvw_current[0] = 0.0f,
-    .uvw_current[1] = 0.0f,
-    .uvw_current[2] = 0.0f,
-    .uvw_target_voltage[0] = 0.0f,
-    .uvw_target_voltage[1] = 0.0f,
-    .uvw_target_voltage[2] = 0.0f,
-    .motor_cnt = 0,
-    .load_cnt = 0,
-    .motor_turns = 0,
-    .load_turns = 0,
-    .pwm_en_state = 0,
-    .pwm_ready_state = 0,
-    .pwm_state_cnt = 0,
+    {
+        .adc1_raw_buffer[0] = 0,
+        .adc1_raw_buffer[1] = 0,
+        .adc1_raw_buffer[2] = 0,
+        .adc2_raw_buffer[0] = 0,
+        .adc2_raw_buffer[1] = 0,
+        .adc2_raw_buffer[2] = 0,
+        .adc3_raw_buffer[0] = 0,
+        .adc3_raw_buffer[1] = 0,
+        .adc3_raw_buffer[2] = 0,
+        .dc_bus_voltage_val = 0.0f,
+        .dc_bus_current_val = 0.0f,
+        .motor_temp_val = 20.0f,
+        .mos_temp_val = 25.0f,
+        .mcu_temp[0] = 30.0f,
+        .mcu_temp[1] = 30.0f,
+        .mcu_temp[2] = 30.0f,
+        .uvw_current[0] = 0.0f,
+        .uvw_current[1] = 0.0f,
+        .uvw_current[2] = 0.0f,
+        .uvw_target_voltage[0] = 0.0f,
+        .uvw_target_voltage[1] = 0.0f,
+        .uvw_target_voltage[2] = 0.0f,
+        .motor_cnt = 0,
+        .load_cnt = 0,
+        .motor_turns = 0,
+        .load_turns = 0,
+        .pwm_en_state = 0,
+        .pwm_ready_state = 0,
+        .pwm_state_cnt = 0,
 };
 
 static void PositionLoopInit(void);
@@ -45,25 +45,26 @@ void BspInit(void)
     // 触发规则通道队列DMA采样
     HAL_ADC_Start_DMA(&DC_BUS_VOLTAGE_HANDLE, (uint32_t *)kBspData.adc1_raw_buffer, ADC1_REGULAR_RANK_NUMBER);
     // 等待母线电压稳定
-    do {
+    do
+    {
         HAL_Delay(1);
     } while (sys_bus_voltage_check() == VOLTAGE_STATUS_UNKNOWN);
 
     HAL_ADC_Stop_DMA(&DC_BUS_VOLTAGE_HANDLE);
 
     // 启动 ADC 校准
-    if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_U_HANDLE, \
-        ADC_CALIB_OFFSET_LINEARITY, ADC_SINGLE_ENDED) != HAL_OK)
+    if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_U_HANDLE,
+                                    ADC_CALIB_OFFSET_LINEARITY, ADC_SINGLE_ENDED) != HAL_OK)
     {
         sys_set_bsp_error_state(ERROR_CURRENT_SAMPLE, ERROR_SET);
     }
-    else if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_V_HANDLE, \
-        ADC_CALIB_OFFSET_LINEARITY, ADC_SINGLE_ENDED) != HAL_OK)
+    else if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_V_HANDLE,
+                                         ADC_CALIB_OFFSET_LINEARITY, ADC_SINGLE_ENDED) != HAL_OK)
     {
         sys_set_bsp_error_state(ERROR_CURRENT_SAMPLE, ERROR_SET);
     }
-    else if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_W_HANDLE, \
-        ADC_CALIB_OFFSET_LINEARITY, ADC_SINGLE_ENDED) != HAL_OK)
+    else if (HAL_ADCEx_Calibration_Start(&UVW_CURRENT_W_HANDLE,
+                                         ADC_CALIB_OFFSET_LINEARITY, ADC_SINGLE_ENDED) != HAL_OK)
     {
         sys_set_bsp_error_state(ERROR_CURRENT_SAMPLE, ERROR_SET);
     }
@@ -76,7 +77,7 @@ void BspInit(void)
     // 启动 1ms 任务
     HAL_TIM_Base_Start_IT(&CANOPEN_TIM_HANDLE);
     HAL_TIM_Base_Start_IT(&NRT_TASK_TIM_HANDLE);
-    
+
     // 位置环软中断初始化
     PositionLoopInit();
 
@@ -119,13 +120,11 @@ static void PositionLoopInit(void)
     HAL_NVIC_SetPriority(EXTI0_IRQn, 2, 0);
     HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 }
-//定义位置环软件中断句柄
+// 定义位置环软件中断句柄
 EXTI_HandleTypeDef exti_handle =
-{
-    .Line = EXTI_LINE_0,
-    .PendingCallback = NULL
-};
-
+    {
+        .Line = EXTI_LINE_0,
+        .PendingCallback = NULL};
 
 // 电流环中断任务 典型频率  20KHZ
 void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
@@ -139,20 +138,20 @@ void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
 
         bsp_set_timer_record_start(SYS_TIMER_RECORD_CURRENT_LOOP_TIME_INDEX); // 测量电流环运行时间
         // 硬件自检完毕且电流校准通过，运行电流环
-        if (sys_get_hardware_self_test_status() == true && \
+        if (sys_get_hardware_self_test_status() == true &&
             sys_get_current_calibration_status() == CURRENT_CALIBRATION_STATUS_OK)
         {
             CurrentLoopCtrl();
         }
-        #ifdef VIRTUAL_MOTOR_MODEL
-            SimPlantStep();
-        #endif
+#ifdef VIRTUAL_MOTOR_MODEL
+        SimPlantStep();
+#endif
         bsp_set_timer_record_stop(SYS_TIMER_RECORD_CURRENT_LOOP_TIME_INDEX);
 
-        if (position_frq_div == 0)  //运行位置环  10KHZ
+        if (position_frq_div == 0) // 运行位置环  10KHZ
         {
             HAL_EXTI_GenerateSWI(&exti_handle); // 位置环中断优先级低于电流环
-            //EXTI->SWIER1 |= GPIO_PIN_0;
+            // EXTI->SWIER1 |= GPIO_PIN_0;
             position_frq_div = 1; // 1:10KHZ 位置环   3:5KHZ 位置环
         }
         else
@@ -166,7 +165,7 @@ void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
 void EXTI0_IRQHandler(void)
 {
     HAL_EXTI_ClearPending(&exti_handle, 0);
-    
+
     bsp_set_timer_record_stop(SYS_TIMER_RECORD_POSITION_LOOP_CYCLE_INDEX); // 测量位置环周期
     bsp_set_timer_record_start(SYS_TIMER_RECORD_POSITION_LOOP_CYCLE_INDEX);
 
@@ -177,7 +176,7 @@ void EXTI0_IRQHandler(void)
         encoder_data_init();
         HardwareSelfTestRun();
     }
-    
+
     // 编码器数据读取及处理
     encoder_data_read();
     encoder_data_process();
@@ -188,8 +187,6 @@ void EXTI0_IRQHandler(void)
     PosSpeedLoopCtrl();
     bsp_set_timer_record_stop(SYS_TIMER_RECORD_POSITION_LOOP_TIME_INDEX);
 }
-
-
 
 void ECAT_EXTI_IRQ_TASK(uint16_t GPIO_Pin)
 {
@@ -259,7 +256,7 @@ void mavlink_send_data(uint8_t *pdata, uint32_t len)
  */
 void HOST_UART_IRQ_TASK(void)
 {
-    HAL_UART_IRQHandler(&HOST_UART_HANDLE);  // 调用HAL库的UART中断处理函数
+    HAL_UART_IRQHandler(&HOST_UART_HANDLE); // 调用HAL库的UART中断处理函数
 
     if (__HAL_UART_GET_FLAG(&HOST_UART_HANDLE, UART_FLAG_IDLE))
     {
@@ -294,11 +291,11 @@ void HOST_UART_ERROR_HANDLE(UART_HandleTypeDef *huart)
     if (huart->Instance == HOST_UART_HANDLE.Instance)
     {
         // 检查是否存在奇偶校验错误(PE)、帧错误(FE)、噪声错误(NE)或溢出错误(ORE)
-        if (__HAL_UART_GET_FLAG(huart, UART_FLAG_PE | UART_FLAG_FE | \
-                                       UART_FLAG_NE | UART_FLAG_ORE))
+        if (__HAL_UART_GET_FLAG(huart, UART_FLAG_PE | UART_FLAG_FE |
+                                           UART_FLAG_NE | UART_FLAG_ORE))
         {
-            __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_PE | UART_FLAG_FE |\
-                                         UART_FLAG_NE | UART_FLAG_ORE);
+            __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_PE | UART_FLAG_FE |
+                                             UART_FLAG_NE | UART_FLAG_ORE);
             HAL_UART_DMAStop(huart);
             // 重新启动UART DMA接收，使用指定的接收缓冲区和缓冲区大小
             HAL_UART_Receive_DMA(huart, mavlink_rx_buff, MAVLINK_RECV_BUFF_SIZE);

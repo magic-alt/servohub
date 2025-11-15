@@ -20,7 +20,7 @@ void bsp_system_reset(void)
  * @param[in] type 错误类型
  * @param[in] op 错误操作
  * @return
-*/
+ */
 void sys_set_bsp_error_state(BSP_ERROR_CODE type, BSP_ERROR_OPERATION op)
 {
     set_bsp_error_state(type, op);
@@ -31,7 +31,7 @@ void sys_set_bsp_error_state(BSP_ERROR_CODE type, BSP_ERROR_OPERATION op)
  * @return
  * @note
  */
-void sys_get_bsp_error_state(BspErrorCode_t* *p_bsp_error)
+void sys_get_bsp_error_state(BspErrorCode_t **p_bsp_error)
 {
     *p_bsp_error = get_bsp_error_state();
 }
@@ -69,7 +69,7 @@ VOLTAGE_CHECK_STATUS sys_bus_voltage_check(void)
 void sys_current_calibration_step(void)
 {
 #ifdef VIRTUAL_MOTOR_MODEL
-    return ;
+    return;
 #else
     CurrentCalibrationStep();
 #endif
@@ -133,7 +133,7 @@ void bsp_pwm_ready_state_updata(void)
     {
         if (kBspData.pwm_en_state == PWM_ENABLE)
         {
-            kBspData.pwm_state_cnt ++;
+            kBspData.pwm_state_cnt++;
             if (kBspData.pwm_state_cnt >= DRIVER_PWM_READY_TIME)
             {
                 kBspData.pwm_state_cnt = DRIVER_PWM_READY_TIME;
@@ -230,12 +230,12 @@ void bsp_get_phase_current(float piabc[3])
     {
         sys_get_current_calibration_drift(drift);
 
-        kBspData.uvw_current[0] = UVW_CURRENT_DIRECTION * \
-            (float)(int32_t)(UVW_CURRENT_U_CHANNEL - drift[0]) * UVW_CURRENT_SAMP_ADC_K;
-        kBspData.uvw_current[1] = UVW_CURRENT_DIRECTION * \
-            (float)(int32_t)(UVW_CURRENT_V_CHANNEL - drift[1]) * UVW_CURRENT_SAMP_ADC_K;
-        kBspData.uvw_current[2] = UVW_CURRENT_DIRECTION * \
-            (float)(int32_t)(UVW_CURRENT_W_CHANNEL - drift[2]) * UVW_CURRENT_SAMP_ADC_K;
+        kBspData.uvw_current[0] = UVW_CURRENT_DIRECTION *
+                                  (float)(int32_t)(UVW_CURRENT_U_CHANNEL - drift[0]) * UVW_CURRENT_SAMP_ADC_K;
+        kBspData.uvw_current[1] = UVW_CURRENT_DIRECTION *
+                                  (float)(int32_t)(UVW_CURRENT_V_CHANNEL - drift[1]) * UVW_CURRENT_SAMP_ADC_K;
+        kBspData.uvw_current[2] = UVW_CURRENT_DIRECTION *
+                                  (float)(int32_t)(UVW_CURRENT_W_CHANNEL - drift[2]) * UVW_CURRENT_SAMP_ADC_K;
     }
 
     piabc[0] = kBspData.uvw_current[0];
@@ -252,8 +252,9 @@ float bsp_get_dc_bus_voltage(void)
 #ifdef VIRTUAL_MOTOR_MODEL
     return kAxis.sim_plant_output.dc_bus_V;
 #else
-    kBspData.dc_bus_voltage_val = (float)kBspData.adc1_raw_buffer[DC_BUS_VOLTAGE_RANK1_INDEX] * \
-                                        DC_BUS_ADC_VOLTAGE_K + DC_BUS_ADC_VOLTAGE_BIAS;
+    kBspData.dc_bus_voltage_val = (float)kBspData.adc1_raw_buffer[DC_BUS_VOLTAGE_RANK1_INDEX] *
+                                      DC_BUS_ADC_VOLTAGE_K +
+                                  DC_BUS_ADC_VOLTAGE_BIAS;
 
     return kBspData.dc_bus_voltage_val;
 #endif
@@ -267,8 +268,10 @@ float bsp_get_dc_bus_current(void)
 #ifdef VIRTUAL_MOTOR_MODEL
     return 0;
 #else
-    kBspData.dc_bus_current_val = (float)(kBspData.adc1_raw_buffer[DC_BUS_CURRENT_RANK2_INDEX] - \
-                                UVW_CURRENT_MID_VAL) * DC_BUS_CURRENT_SAMP_ADC_K + DC_BUS_ADC_CURRENT_BIAS;
+    kBspData.dc_bus_current_val = (float)(kBspData.adc1_raw_buffer[DC_BUS_CURRENT_RANK2_INDEX] -
+                                          UVW_CURRENT_MID_VAL) *
+                                      DC_BUS_CURRENT_SAMP_ADC_K +
+                                  DC_BUS_ADC_CURRENT_BIAS;
 
     return kBspData.dc_bus_current_val;
 #endif
@@ -283,8 +286,9 @@ float bsp_get_motor_temp(void)
     float temp = (float)(rand() % 201 - 100) / 10.0f;
     return 48.0f + temp;
 #else
-    kBspData.motor_temp_val = (float)kBspData.adc3_raw_buffer[TEMP_MOTOR_RANK2_INDEX] * \
-                                    MOTOR_TO_IN_VOLTAGE_RATIO * MOTOR_TEMP_SENSOR_K + MOTOR_TEMP_SENSOR_BIAS;
+    kBspData.motor_temp_val = (float)kBspData.adc3_raw_buffer[TEMP_MOTOR_RANK2_INDEX] *
+                                  MOTOR_TO_IN_VOLTAGE_RATIO * MOTOR_TEMP_SENSOR_K +
+                              MOTOR_TEMP_SENSOR_BIAS;
 
     return kBspData.motor_temp_val;
 #endif
@@ -318,8 +322,8 @@ float bsp_get_mcu_temperature(void)
     {
         mcu_temp_index = 0;
     }
-    kBspData.mcu_temp[mcu_temp_index] = __LL_ADC_CALC_TEMPERATURE(ADC_REFERENCE_MV, \
-            kBspData.adc3_raw_buffer[TEMP_MCU_RANK1_INDEX], LL_ADC_RESOLUTION_16B);
+    kBspData.mcu_temp[mcu_temp_index] = __LL_ADC_CALC_TEMPERATURE(ADC_REFERENCE_MV,
+                                                                  kBspData.adc3_raw_buffer[TEMP_MCU_RANK1_INDEX], LL_ADC_RESOLUTION_16B);
 
     return kBspData.mcu_temp[mcu_temp_index];
 }
@@ -336,8 +340,8 @@ float bsp_get_mcu_temperature(void)
  * @param[in] options 编码器选项
  */
 void bsp_set_encoder_config(ENCODER_ID const enc_id,
-                        uint32_t const single_bits, uint32_t const  multi_bits,
-                        uint16_t const type, uint8_t const options)
+                            uint32_t const single_bits, uint32_t const multi_bits,
+                            uint16_t const type, uint8_t const options)
 {
 #ifdef VIRTUAL_MOTOR_MODEL
     return;
@@ -392,68 +396,68 @@ int64_t bsp_get_encoder_turns(ENCODER_ID const enc_id)
 /**
  * @brief 设置CAN ID
  * @param[in] can_id CAN ID
- * @return 
- * @note  
+ * @return
+ * @note
  */
 void bsp_set_can_id(uint32_t can_id)
 {
-    #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
-        //can_device_set_id(can_id);
-    #endif
+#if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
+    // can_device_set_id(can_id);
+#endif
 }
 /**
  * @brief 获取当前 CAN ID
- * @return 
- * @note  
+ * @return
+ * @note
  */
 uint32_t bsp_get_can_id(void)
 {
-    #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
-        //return can_device_get_id();
-        return 0;
-    #else
-        return 0;
-    #endif
+#if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
+    // return can_device_get_id();
+    return 0;
+#else
+    return 0;
+#endif
 }
 /**
  * @brief 设置CAN 波特率
  * @param[in] baudrate 波特率  1000000, 500000  其他配置默认 1000000
- * @return 
- * @note  
+ * @return
+ * @note
  */
 void bsp_set_can_baudrate(uint32_t baudrate)
 {
-    #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
-        //can_device_set_baudrate(baudrate);
-    #endif
+#if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
+    // can_device_set_baudrate(baudrate);
+#endif
 }
 /**
  * @brief 获取当前 CAN 波特率
- * @return 
- * @note  
+ * @return
+ * @note
  */
 uint32_t bsp_get_can_baudrate(void)
 {
-    #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
-        //return can_device_get_baudrate();
-        return 0;
-    #else
-        return 0;
-    #endif
+#if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
+    // return can_device_get_baudrate();
+    return 0;
+#else
+    return 0;
+#endif
 }
 /**
  * @brief 获取当前 CAN 消息累计计数值
- * @return 
- * @note  
+ * @return
+ * @note
  */
 uint32_t bsp_get_can_mg_counts(void)
 {
-    #if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
-        //return can_device_get_mg_counts();
-        return 0;
-    #else
-        return 0;
-    #endif
+#if (defined MINOR_VERSION) && (IS_CAN_PROTOCOL(MINOR_VERSION))
+    // return can_device_get_mg_counts();
+    return 0;
+#else
+    return 0;
+#endif
 }
 
 #pragma endregion
@@ -567,8 +571,8 @@ float bsp_get_timer_duration_records_us(SYS_TIMER_RECORD_INDEX index)
 /**
  * @brief 设置运行LED状态
  * @param[in] state  0:关闭 1:打开
- * @return 
- * @note  
+ * @return
+ * @note
  */
 void bsp_set_run_led_state(uint8_t state)
 {
@@ -583,8 +587,8 @@ void bsp_set_run_led_state(uint8_t state)
 }
 /**
  * @brief 设置运行 LED状态翻转
- * @return 
- * @note  
+ * @return
+ * @note
  */
 void bsp_set_run_led_toggle(void)
 {
@@ -593,8 +597,8 @@ void bsp_set_run_led_toggle(void)
 /**
  * @brief 设置错误LED状态
  * @param[in] state  0:关闭 1:打开
- * @return 
- * @note  
+ * @return
+ * @note
  */
 void bsp_set_error_led_state(uint8_t state)
 {
@@ -609,8 +613,8 @@ void bsp_set_error_led_state(uint8_t state)
 }
 /**
  * @brief 设置错误LED状态翻转
- * @return 
- * @note  
+ * @return
+ * @note
  */
 void bsp_set_error_led_toggle(void)
 {
