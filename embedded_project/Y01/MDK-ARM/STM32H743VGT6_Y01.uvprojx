@@ -335,8 +335,8 @@
             <VariousControls>
               <MiscControls />
               <Define>USE_HAL_DRIVER,STM32H743xx,ARM_MATH_CM7</Define>
-              <Undefine />
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
+              <Undefine></Undefine>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/CANopen;../../../communication/protocol/CANopen/inc;../../../communication/protocol/CANopen/inc/hw_cm7;../../../communication/protocol/CANopen/SlaveOD;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -681,9 +681,19 @@
               <FilePath>..\Board\bsp_api.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_fdcan.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\bsp_fdcan.c</FilePath>
+            </File>
+            <File>
               <FileName>bsp_spi_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Board\bsp_spi_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_can_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\drv_can_app.c</FilePath>
             </File>
             <File>
               <FileName>drv_encoder.c</FileName>
@@ -865,6 +875,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\callback\cia402_od\master_cia402_callback.c</FilePath>
             </File>
+            <File>
+              <FileName>canopen_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\canopen\canopen_callback.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -884,6 +899,76 @@
               <FileName>cia402_statusword.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_statusword.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/canopen</GroupName>
+          <Files>
+            <File>
+              <FileName>SlaveOD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\SlaveOD\SlaveOD.c</FilePath>
+            </File>
+            <File>
+              <FileName>dcf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\dcf.c</FilePath>
+            </File>
+            <File>
+              <FileName>emcy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\emcy.c</FilePath>
+            </File>
+            <File>
+              <FileName>lifegrd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\lifegrd.c</FilePath>
+            </File>
+            <File>
+              <FileName>lss.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\lss.c</FilePath>
+            </File>
+            <File>
+              <FileName>nmtMaster.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\nmtMaster.c</FilePath>
+            </File>
+            <File>
+              <FileName>nmtSlave.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\nmtSlave.c</FilePath>
+            </File>
+            <File>
+              <FileName>objacces.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\objacces.c</FilePath>
+            </File>
+            <File>
+              <FileName>pdo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\pdo.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\sdo.c</FilePath>
+            </File>
+            <File>
+              <FileName>states.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\states.c</FilePath>
+            </File>
+            <File>
+              <FileName>sync.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\sync.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\timer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1745,9 +1830,19 @@
               <FilePath>..\Board\bsp_api.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_fdcan.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\bsp_fdcan.c</FilePath>
+            </File>
+            <File>
               <FileName>bsp_spi_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Board\bsp_spi_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_can_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\drv_can_app.c</FilePath>
             </File>
             <File>
               <FileName>drv_encoder.c</FileName>
@@ -1929,6 +2024,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\callback\cia402_od\master_cia402_callback.c</FilePath>
             </File>
+            <File>
+              <FileName>canopen_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\canopen\canopen_callback.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1948,6 +2048,76 @@
               <FileName>cia402_statusword.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_statusword.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/canopen</GroupName>
+          <Files>
+            <File>
+              <FileName>SlaveOD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\SlaveOD\SlaveOD.c</FilePath>
+            </File>
+            <File>
+              <FileName>dcf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\dcf.c</FilePath>
+            </File>
+            <File>
+              <FileName>emcy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\emcy.c</FilePath>
+            </File>
+            <File>
+              <FileName>lifegrd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\lifegrd.c</FilePath>
+            </File>
+            <File>
+              <FileName>lss.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\lss.c</FilePath>
+            </File>
+            <File>
+              <FileName>nmtMaster.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\nmtMaster.c</FilePath>
+            </File>
+            <File>
+              <FileName>nmtSlave.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\nmtSlave.c</FilePath>
+            </File>
+            <File>
+              <FileName>objacces.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\objacces.c</FilePath>
+            </File>
+            <File>
+              <FileName>pdo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\pdo.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\sdo.c</FilePath>
+            </File>
+            <File>
+              <FileName>states.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\states.c</FilePath>
+            </File>
+            <File>
+              <FileName>sync.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\sync.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\timer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2878,9 +3048,19 @@
               <FilePath>..\Board\bsp_api.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_fdcan.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\bsp_fdcan.c</FilePath>
+            </File>
+            <File>
               <FileName>bsp_spi_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Board\bsp_spi_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_can_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\drv_can_app.c</FilePath>
             </File>
             <File>
               <FileName>drv_encoder.c</FileName>
@@ -3062,6 +3242,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\callback\cia402_od\master_cia402_callback.c</FilePath>
             </File>
+            <File>
+              <FileName>canopen_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\canopen\canopen_callback.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3081,6 +3266,76 @@
               <FileName>cia402_statusword.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_statusword.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/canopen</GroupName>
+          <Files>
+            <File>
+              <FileName>SlaveOD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\SlaveOD\SlaveOD.c</FilePath>
+            </File>
+            <File>
+              <FileName>dcf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\dcf.c</FilePath>
+            </File>
+            <File>
+              <FileName>emcy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\emcy.c</FilePath>
+            </File>
+            <File>
+              <FileName>lifegrd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\lifegrd.c</FilePath>
+            </File>
+            <File>
+              <FileName>lss.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\lss.c</FilePath>
+            </File>
+            <File>
+              <FileName>nmtMaster.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\nmtMaster.c</FilePath>
+            </File>
+            <File>
+              <FileName>nmtSlave.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\nmtSlave.c</FilePath>
+            </File>
+            <File>
+              <FileName>objacces.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\objacces.c</FilePath>
+            </File>
+            <File>
+              <FileName>pdo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\pdo.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\sdo.c</FilePath>
+            </File>
+            <File>
+              <FileName>states.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\states.c</FilePath>
+            </File>
+            <File>
+              <FileName>sync.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\sync.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\timer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4011,9 +4266,19 @@
               <FilePath>..\Board\bsp_api.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_fdcan.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\bsp_fdcan.c</FilePath>
+            </File>
+            <File>
               <FileName>bsp_spi_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Board\bsp_spi_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_can_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\drv_can_app.c</FilePath>
             </File>
             <File>
               <FileName>drv_encoder.c</FileName>
@@ -4195,6 +4460,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\callback\cia402_od\master_cia402_callback.c</FilePath>
             </File>
+            <File>
+              <FileName>canopen_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\canopen\canopen_callback.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4214,6 +4484,76 @@
               <FileName>cia402_statusword.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_statusword.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/canopen</GroupName>
+          <Files>
+            <File>
+              <FileName>SlaveOD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\SlaveOD\SlaveOD.c</FilePath>
+            </File>
+            <File>
+              <FileName>dcf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\dcf.c</FilePath>
+            </File>
+            <File>
+              <FileName>emcy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\emcy.c</FilePath>
+            </File>
+            <File>
+              <FileName>lifegrd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\lifegrd.c</FilePath>
+            </File>
+            <File>
+              <FileName>lss.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\lss.c</FilePath>
+            </File>
+            <File>
+              <FileName>nmtMaster.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\nmtMaster.c</FilePath>
+            </File>
+            <File>
+              <FileName>nmtSlave.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\nmtSlave.c</FilePath>
+            </File>
+            <File>
+              <FileName>objacces.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\objacces.c</FilePath>
+            </File>
+            <File>
+              <FileName>pdo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\pdo.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\sdo.c</FilePath>
+            </File>
+            <File>
+              <FileName>states.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\states.c</FilePath>
+            </File>
+            <File>
+              <FileName>sync.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\sync.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\timer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5144,9 +5484,19 @@
               <FilePath>..\Board\bsp_api.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_fdcan.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\bsp_fdcan.c</FilePath>
+            </File>
+            <File>
               <FileName>bsp_spi_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Board\bsp_spi_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_can_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\drv_can_app.c</FilePath>
             </File>
             <File>
               <FileName>drv_encoder.c</FileName>
@@ -5328,6 +5678,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\callback\cia402_od\master_cia402_callback.c</FilePath>
             </File>
+            <File>
+              <FileName>canopen_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\canopen\canopen_callback.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -5347,6 +5702,76 @@
               <FileName>cia402_statusword.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_statusword.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/canopen</GroupName>
+          <Files>
+            <File>
+              <FileName>SlaveOD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\SlaveOD\SlaveOD.c</FilePath>
+            </File>
+            <File>
+              <FileName>dcf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\dcf.c</FilePath>
+            </File>
+            <File>
+              <FileName>emcy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\emcy.c</FilePath>
+            </File>
+            <File>
+              <FileName>lifegrd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\lifegrd.c</FilePath>
+            </File>
+            <File>
+              <FileName>lss.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\lss.c</FilePath>
+            </File>
+            <File>
+              <FileName>nmtMaster.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\nmtMaster.c</FilePath>
+            </File>
+            <File>
+              <FileName>nmtSlave.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\nmtSlave.c</FilePath>
+            </File>
+            <File>
+              <FileName>objacces.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\objacces.c</FilePath>
+            </File>
+            <File>
+              <FileName>pdo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\pdo.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\sdo.c</FilePath>
+            </File>
+            <File>
+              <FileName>states.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\states.c</FilePath>
+            </File>
+            <File>
+              <FileName>sync.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\sync.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\timer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5862,8 +6287,8 @@
             <VariousControls>
               <MiscControls />
               <Define>USE_HAL_DRIVER,STM32H743xx,ARM_MATH_CM7,VIRTUAL_MOTOR_MODEL</Define>
-              <Undefine />
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
+              <Undefine></Undefine>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/CANopen;../../../communication/protocol/CANopen/inc;../../../communication/protocol/CANopen/inc/hw_cm7;../../../communication/protocol/CANopen/SlaveOD;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -6277,9 +6702,19 @@
               <FilePath>..\Board\bsp_api.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_fdcan.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\bsp_fdcan.c</FilePath>
+            </File>
+            <File>
               <FileName>bsp_spi_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Board\bsp_spi_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_can_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\drv_can_app.c</FilePath>
             </File>
             <File>
               <FileName>drv_encoder.c</FileName>
@@ -6461,6 +6896,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\callback\cia402_od\master_cia402_callback.c</FilePath>
             </File>
+            <File>
+              <FileName>canopen_callback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\callback\canopen\canopen_callback.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -6480,6 +6920,76 @@
               <FileName>cia402_statusword.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\communication\protocol\CiA402\PDS_FSA\cia402_statusword.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>communication/canopen</GroupName>
+          <Files>
+            <File>
+              <FileName>SlaveOD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\SlaveOD\SlaveOD.c</FilePath>
+            </File>
+            <File>
+              <FileName>dcf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\dcf.c</FilePath>
+            </File>
+            <File>
+              <FileName>emcy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\emcy.c</FilePath>
+            </File>
+            <File>
+              <FileName>lifegrd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\lifegrd.c</FilePath>
+            </File>
+            <File>
+              <FileName>lss.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\lss.c</FilePath>
+            </File>
+            <File>
+              <FileName>nmtMaster.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\nmtMaster.c</FilePath>
+            </File>
+            <File>
+              <FileName>nmtSlave.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\nmtSlave.c</FilePath>
+            </File>
+            <File>
+              <FileName>objacces.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\objacces.c</FilePath>
+            </File>
+            <File>
+              <FileName>pdo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\pdo.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\sdo.c</FilePath>
+            </File>
+            <File>
+              <FileName>states.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\states.c</FilePath>
+            </File>
+            <File>
+              <FileName>sync.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\sync.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\communication\protocol\CANopen\src\timer.c</FilePath>
             </File>
           </Files>
         </Group>

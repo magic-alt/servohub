@@ -246,8 +246,8 @@ void set_bsp_error_state(BSP_ERROR_CODE type, BSP_ERROR_OPERATION op)
     case ERROR_FLASH_STORE:
         sys_msg.bsp_error_code.bit_band.error_flash_store = op;
         break;
-    case ERROR_ECAT_INIT:
-        sys_msg.bsp_error_code.bit_band.error_ecat_init = op;
+    case ERROR_COMMS_INIT:
+        sys_msg.bsp_error_code.bit_band.error_comms_init = op;
         break;
     case ERROR_DRV_INIT:
         sys_msg.bsp_error_code.bit_band.error_drv_init = op;

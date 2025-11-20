@@ -1,9 +1,12 @@
 #include "board.h"
 
+#ifdef USE_CAN
+#include "drv_can_app.h"
+#endif // USE_CAN
 #ifdef USE_ECAT
 #include "ecat_app_hw.h"
 #include "ecatappl.h"
-#endif
+#endif // USE_ECAT
 
 __attribute__((section(".RAM_D1"))) BspData kBspData =
 {
@@ -75,7 +78,6 @@ void BspInit(void)
     HAL_Delay(5);
 
     // 启动 1ms 任务
-    HAL_TIM_Base_Start_IT(&CANOPEN_TIM_HANDLE);
     HAL_TIM_Base_Start_IT(&NRT_TASK_TIM_HANDLE);
 
     // 位置环软中断初始化
@@ -98,6 +100,11 @@ void BspInit(void)
     HAL_TIMEx_PWMN_Start(&PWM_TIM_HANDLE, PWM_TIM_W_CHANNEL);
     bsp_set_pwm_state(PWM_DISABLE);
     __HAL_TIM_ENABLE_IT(&PWM_TIM_HANDLE, TIM_IT_BREAK);
+
+#ifdef USE_CAN
+    // CAN相关应用初始化
+    fdcan_app_init();
+#endif // USE_CAN
 
     // 启动调试软件通讯
     __HAL_UART_CLEAR_IDLEFLAG(&HOST_UART_HANDLE);
@@ -215,12 +222,18 @@ void NRT_CAN_ECAT_IRQ_TASK(TIM_HandleTypeDef *htim)
     {
         UnrealTimeBase1ms();
     }
+#ifdef USE_CANOPEN
+    else if (htim->Instance == CANOPEN_TIM_HANDLE.Instance)
+    {
+        CANopen_DispatchFromISR();
+    }
+#endif // USE_CANOPEN
 #ifdef USE_ECAT
     else if (htim->Instance == ECAT_LAN9252_TIM_HANDLE.Instance)
     {
         ECAT_CheckTimer();
     }
-#endif
+#endif // USE_ECAT
 }
 
 /**
@@ -302,3 +315,32 @@ void HOST_UART_ERROR_HANDLE(UART_HandleTypeDef *huart)
         }
     }
 }
+
+#ifdef USE_CAN
+/**
+ * @brief FDCAN接收FIFO0中断回调函数
+ * @param hfdcan: FDCAN句柄
+ * @param RxFifo0ITs: 中断标志位
+ * @note 处理新接收的消息，解析数据并触发对应回调，同时回发响应
+ */
+void CAN_FDCAN_RX_FIFO0_CALLBACK(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
+{
+    if ((hfdcan->Instance == CAN_FDCAN_NUMBER) && (RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) != RESET)
+    {
+        fdcan_app_fifo0_handle(hfdcan);
+    }
+}
+/**
+ * @brief FDCAN接收FIFO1中断回调函数
+ * @param hfdcan: FDCAN句柄
+ * @param RxFifo0ITs: 中断标志位
+ * @note 处理新接收的消息，解析数据并触发对应回调，同时回发响应
+ */
+void CAN_FDCAN_RX_FIFO1_CALLBACK(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
+{
+    if ((hfdcan->Instance == CAN_FDCAN_NUMBER) && (RxFifo1ITs & FDCAN_IT_RX_FIFO1_NEW_MESSAGE) != RESET)
+    {
+        fdcan_app_fifo1_handle(hfdcan);
+    }
+}
+#endif // USE_CAN
