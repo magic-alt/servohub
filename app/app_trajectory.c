@@ -90,6 +90,8 @@ void mit_trajectory_planning_handle(MIT_TRAJECTORY_DATA *mit_traj_data)
     axis->mit_ctl_input.pos_tar_p = mit_traj_data->pos_tar_p;
     axis->mit_ctl_input.speed_tar_p_s = mit_traj_data->speed_tar_p_s;
     axis->mit_ctl_input.tq_set_NM = mit_traj_data->tq_set_NM;
+    axis->mit_ctl_input.iq_max_A = mit_traj_data->iq_max_A;
+    
     axis->mit_ctl_config.kp_pos_NM_rad = mit_traj_data->kp_pos_NM_rad;
     axis->mit_ctl_config.kd_spd_NM_rad_s = mit_traj_data->kd_spd_NM_rad_s;
 }

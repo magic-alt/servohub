@@ -55,6 +55,7 @@ AppResult mit_mode_run()
             mit_mode.traj.speed_tar_p_s = get_app_MIT_target_velocity() * get_app_Load_rpm_2_pps() * \
                                             get_app_Reduction_ratio();
         }
+        mit_mode.traj.iq_max_A = get_app_MIT_max_current();
         mit_mode.pos_tar_p_add = (float)(get_app_MIT_target_position() - get_app_Position_actual_value()) * \
                                     get_app_Reduction_ratio();
         mit_mode.traj.pos_tar_p = mit_mode.pos_tar_p_add + get_app_Motor_position_actual_value();
