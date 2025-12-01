@@ -50,11 +50,11 @@ typedef struct {
     bool (*check_state)(void); // 检查状态的函数指针
 } StateTableEntry;
 
-void update_statusword(void);
+void UpdateStatusword(void);
 
 //允许特殊情况下,在其它应用代码更新状态字
-void specific_mode_statusword_update(Od6041Mask status_bit, bool state);
+void SpecificModeStatuswordUpdate(Od6041Mask status_bit, bool state);
 
-bool check_velocity_zero_state(void);
+bool get_velocity_zero_state(void);
 
 #endif // CIA402_STATUSWORD_UPDATE_H

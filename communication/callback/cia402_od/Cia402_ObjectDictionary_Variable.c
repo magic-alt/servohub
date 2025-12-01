@@ -35,7 +35,7 @@ UNS32 set_Controlword(UNS16 val){
     /* USER CODE END set_Controlword 0 */
     kPDS_FSA.Controlword = val;
     /* USER CODE BEGIN set_Controlword 1 */
-    controlword_change_PDAS_FSA();//cia402的控制字只影响PDS_FSA的状态机
+    ControlwordChange_PDAS_FSA();//cia402的控制字只影响PDS_FSA的状态机
     /* USER CODE END set_Controlword 1 */
     return ABORT_CODE_SUCCESSFUL;
 }

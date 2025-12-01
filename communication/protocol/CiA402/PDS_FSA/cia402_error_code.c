@@ -2,13 +2,13 @@
 #include "Cia402_ObjectDictionary_Variable.h"
 #include "app_status_check.h"
 // 失能自由停机
-void free_to_rotate_error_handle(void)
+void FreeToRotateErrorHandle(void)
 {
     // axis->motor_ctl_sm_input.motor_enable = 0; //控制状态机：失能
 }
 
 // 中断运行时，检查错误代码
-void cia402_error_code_scan(void)
+void Cia402ErrorCodeScan(void)
 {
     CheckErrorCode_t check_error_val = (CheckErrorCode_t)app_get_check_error_val();
     // 无错误不检查

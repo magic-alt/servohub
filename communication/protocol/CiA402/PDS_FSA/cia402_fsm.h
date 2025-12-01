@@ -67,8 +67,8 @@ typedef struct {
     ActionFunction action;
 }FSATransition;
 
-void PDS_FSA_run(void);
-void controlword_change_PDAS_FSA(void);
+void PDS_FSA_Run(void);
+void ControlwordChange_PDAS_FSA(void);
 Cia402State get_CurrentState(void);
 
 #endif // CIA402_FSM_H

@@ -4,12 +4,11 @@
 #include "Cia402_ObjectDictionary_Variable.h"
 #include "app_status_check.h"
 
-static CheckErrorCode_t check_error_val;
-static CheckStatusVal_t check_status_val;
-static bool target_reached_status;
+static CheckErrorCode_t kCheckErrorVal;
+static CheckStatusVal_t kCheckStatusVal;
 
-bool check_voltage_state(void) {
-    return true;
+static bool check_voltage_state(void) {
+    return true;  //TODO：获取底层电压的状态
 }
 
 static bool check_position_target_reached_state(void) {
@@ -17,9 +16,9 @@ static bool check_position_target_reached_state(void) {
     //控制字非暂停，由各个应用更新目标到达状态
     if (CIA402_READ_BIT(get_Controlword(), kOd6040_Halt) == 0)
     {
-        return check_status_val.bits.position_target_reached;
+        return kCheckStatusVal.bits.position_target_reached;
     }
-    return check_status_val.bits.target_reached;
+    return kCheckStatusVal.bits.target_reached;
 }
 
 static bool check_velocity_target_reached_state(void) {
@@ -27,9 +26,9 @@ static bool check_velocity_target_reached_state(void) {
     //控制字非暂停，由各个应用更新目标到达状态
     if (CIA402_READ_BIT(get_Controlword(), kOd6040_Halt) == 0)
     {
-        return check_status_val.bits.velocity_target_reached;
+        return kCheckStatusVal.bits.velocity_target_reached;
     }
-    return check_status_val.bits.target_reached;
+    return kCheckStatusVal.bits.target_reached;
 }
 
 static bool check_set_point_acknowledge_state(void) {
@@ -47,15 +46,15 @@ static bool check_set_point_acknowledge_state(void) {
 }
 
 static bool check_position_following_error_state(void) {
-    return check_error_val.bits.position_following_error;
+    return kCheckErrorVal.bits.position_following_error;
 }
 
-bool check_velocity_zero_state(void) {
-    return check_status_val.bits.velocity_zero;
+static bool check_velocity_zero_state(void) {
+    return kCheckStatusVal.bits.velocity_zero;
 }
 
 static bool check_homing_attained_state(void) {
-    return check_status_val.bits.homing_attained;
+    return kCheckStatusVal.bits.homing_attained;
 }
 
 
@@ -72,7 +71,7 @@ static const StateTableEntry state_table[] = {
 };
 
 //内部信号更新状态字
-void update_statusword(void) {
+void UpdateStatusword(void) {
 
     uint16_t statusword = get_Statusword();
 
@@ -80,8 +79,8 @@ void update_statusword(void) {
 
     const StateTableEntry *entry = state_table;
 
-    check_status_val = (CheckStatusVal_t)app_get_check_status_val();
-    check_error_val = (CheckErrorCode_t)app_get_check_error_val();
+    kCheckStatusVal = (CheckStatusVal_t)app_get_check_status_val();
+    kCheckErrorVal = (CheckErrorCode_t)app_get_check_error_val();
 
     for (int i = 0; i < CIA402_ARRAY_SIZE(state_table); i++, entry++) {
         if ((entry->op_mode == get_Modes_of_operation()) || (entry->op_mode == kOd6060_ANY)) {
@@ -96,7 +95,7 @@ void update_statusword(void) {
     set_Statusword(statusword);
 }
 
-void specific_mode_statusword_update(Od6041Mask status_bit, bool state) {
+void SpecificModeStatuswordUpdate(Od6041Mask status_bit, bool state) {
     uint16_t statusword = get_Statusword();
     if(state) {
         CIA402_SET_BIT(statusword, status_bit);
@@ -105,4 +104,8 @@ void specific_mode_statusword_update(Od6041Mask status_bit, bool state) {
         CIA402_CLEAR_BIT(statusword, status_bit);
     }
     set_Statusword(statusword);
+}
+
+bool get_velocity_zero_state(void) {
+    return kCheckStatusVal.bits.velocity_zero;
 }

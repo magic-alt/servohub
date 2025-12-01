@@ -8,10 +8,10 @@
 
 #include "cia402_common.h"
 
-void cia402_error_code_scan(void);
-void free_to_rotate_error_handle(void);
+void Cia402ErrorCodeScan(void);
+void FreeToRotateErrorHandle(void);
 
-//Chapter 7.Error codes and error behaviour
+//CIA402 Error Codes 402错误代码定义
 #define Short_circuit_earth_leakage_error_1                        (0X2110)
 #define Earth_leakage_error_1                                      (0X2120)
 #define Earth_leakage_phase_L1_error                               (0X2121)
@@ -173,7 +173,7 @@ void free_to_rotate_error_handle(void);
 #define Winding_controller_error                                   (0X8800)
 #define Process_data_monitoring_error                              (0X8900)
 #define Softeware_Control_error                                    (0X8A00)
-// Ueser_defined_error
+// 用户自定义的 错误代码
 #define Deceleration_error                                         (0XF001)
 #define Sub_synchronous_run_error                                  (0XF002)
 #define Stroke_operation_error                                     (0XF003)

@@ -11,10 +11,8 @@ static bool controlword_bit4_upedge = false;
 Cia402State CurrentState = kStart; // Initial state
 static bool quick_stop_start_flag = false;
 static void PDS_FSA_set_statusword(Cia402State CurrentState);
-static void controlword_bit4_upedge_check(void);
-
-//static Axis *const axis = &kAxis1;
-static bool quick_stop_run(void);
+static void ControlwordBit4UpedgeCheck(void);
+static bool QuickStopRun(void);
 
 //Automatic transition
 bool AutomaticTransition() {
@@ -297,7 +295,7 @@ Cia402State get_CurrentState(void){
 }
 
 //控制字切换状态机(通过总线或者内部方式改变控制字)
-void controlword_change_PDAS_FSA(void){
+void ControlwordChange_PDAS_FSA(void){
 
     uint16_t const controlword_tar = get_Controlword();
 
@@ -323,11 +321,11 @@ void controlword_change_PDAS_FSA(void){
 
     set_app_Halt_running_cmd(CIA402_READ_BIT(controlword_tar, kOd6040_Halt) == kOd6040_Halt); //锁存halt命令,用于检测halt命令(上升沿触发)
 
-    controlword_bit4_upedge_check(); //检测控制字bit4的上升沿事件
+    ControlwordBit4UpedgeCheck(); //检测控制字bit4的上升沿事件
 }
 
 //轮询状态机(中断或者任务中轮询)
-void PDS_FSA_run(void){
+void PDS_FSA_Run(void){
 
     //任何状态触发错误，直接跳转到故障状态
     if(Transition_13_Event()) {
@@ -351,7 +349,7 @@ void PDS_FSA_run(void){
    //启动quick stop功能，在kOperationEnable完成急停动作后，由内部跳转到kQuickStopActive状态
     if (quick_stop_start_flag == true) {
         //如果quick stop动作已经完成，则跳转到kQuickStopActive状态
-        if (quick_stop_run() == true) {
+        if (QuickStopRun() == true) {
             CurrentState = kQuickStopActive;
             Transition_11_Action();
             PDS_FSA_set_statusword(CurrentState);
@@ -405,7 +403,7 @@ void PDS_FSA_set_statusword(Cia402State CurrentState){
 }
 
 
-void controlword_bit4_upedge_check(void)
+void ControlwordBit4UpedgeCheck(void)
 {
     if (CIA402_READ_BIT(last_controlword, kOd6040_NewSetPoint) == 0 && \
         CIA402_READ_BIT(get_Controlword(), kOd6040_NewSetPoint) != 0)
@@ -417,12 +415,12 @@ void controlword_bit4_upedge_check(void)
 }
 
 //static Axis *const axis = &kAxis1;
-bool quick_stop_run(void)
+bool QuickStopRun(void)
 {
     set_app_Controlword(MOTOR_CTL_SM_MOTOR_EMERGENCY_BRAKE);  //通过应用层控制电机急停
 
     //速度为0，快速停止完成
-    if (check_velocity_zero_state()) {
+    if (get_velocity_zero_state()) {
         return true;
     }
     else {
