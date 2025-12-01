@@ -451,7 +451,7 @@ void app_param_update(void)
     set_app_Debug_uint32(0, kAppDebugParam.Debug_uint32[0]);
 }
 
-void AppParamSync(void)
+void app_param_sync(void)
 {
     get_app_Controlword();
     get_app_Statusword();
