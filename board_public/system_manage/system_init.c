@@ -22,7 +22,7 @@ void HalInit(void)
     sys_timer_init();
     app_param_init();
     MotorCtrlInit();  //电机控制相关初始化
-    app_init();
+    AppInit();
     app_status_scan_init();
     app_store_init();
     scope_init();

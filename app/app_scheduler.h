@@ -39,12 +39,11 @@ typedef struct
     AppResult app_result;   //应用程序结果
 } AppInfo;
 
-void app_init(void);
-void app_run(uint8_t hw_ready_state);
+void AppInit(void);
+void AppRun(uint8_t hw_ready_state);
+void AppStop(APP_NAMES name);
 
 void set_app(APP_NAMES name);
-void stop_app(APP_NAMES name);
-
 AppInfo get_current_app_info(APP_NAMES name);
 
 #endif /* APP_SCHEDULER_H */

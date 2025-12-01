@@ -186,7 +186,7 @@ void PosSpeedLoopCtrl(void)
     if (get_app_Internal_control_authority() == INTERNAL_CONTROL_APP)
     {
         app_status_scan_fast();
-        app_run(kAxis.motor_ctl_sm_input.hw_ready_state);
+        AppRun(kAxis.motor_ctl_sm_input.hw_ready_state);
     }
 
     // 2. 执行位置速度环控制算法

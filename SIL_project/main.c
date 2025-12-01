@@ -7,15 +7,15 @@
 
 int main(void)
 {
-    scope_init();
-    app_param_init();
-    MotorCtrlInit();
-    app_init();
-
     RegisterSetAppCallback(set_app);
     RegisterCheckErrorCallback(app_get_check_error_val);
     RegisterCheckWarningCallback(app_get_check_warning_val);
     RegisterCheckStatusCallback(app_get_check_status_val);
+
+    scope_init();
+    app_param_init();
+    MotorCtrlInit();
+    AppInit();
 
     int rc = ZmqHandlerInit();
     if (rc != 0)
