@@ -3,9 +3,9 @@
 
 #include "app_data_type_define.h"
 
-AppResult id_mec_mode_init();
-AppResult id_mec_mode_start();
-AppResult id_mec_mode_run();
-AppResult id_mec_mode_stop();
+AppResult IdMecModeInit();
+AppResult IdMecModeStart();
+AppResult IdMecModeRun();
+AppResult IdMecModeStop();
 
 #endif // APP_ID_MEC_MODE_H

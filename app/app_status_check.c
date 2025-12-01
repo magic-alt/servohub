@@ -38,7 +38,7 @@ AppCheckVal kAppCheck =
 
 
 
-// 错误检测函数声明
+// 内部错误检测函数声明
 static inline bool AppDriveOverPeakCurrentErrorCheck(void);
 static inline bool AppDriveOverloadErrorCheck(void);
 static inline bool AppDCLinkOverVoltageErrorCheck(void);

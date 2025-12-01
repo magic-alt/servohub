@@ -16,9 +16,9 @@ typedef struct
     float velocity_target;                          // 目标速度
 } PvMode_t;
 
-AppResult pv_mode_init();
-AppResult pv_mode_start();
-AppResult pv_mode_run();
-AppResult pv_mode_stop();
+AppResult PvModeInit();
+AppResult PvModeStart();
+AppResult PvModeRun();
+AppResult PvModeStop();
 
 #endif // APP_PROFILE_VELOCITY_MODE_H

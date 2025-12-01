@@ -410,7 +410,7 @@ void controlword_bit4_upedge_check(void)
     if (CIA402_READ_BIT(last_controlword, kOd6040_NewSetPoint) == 0 && \
         CIA402_READ_BIT(get_Controlword(), kOd6040_NewSetPoint) != 0)
     {
-        set_app_g_start_upedge_state(true);
+        set_app_start_upedge_state(true);
     }
 
     last_controlword = get_Controlword();

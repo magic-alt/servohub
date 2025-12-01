@@ -8,7 +8,7 @@ linear_trajectory_planning_DW_f kTorqueTrajDw;
 linear_trajectory_planning_DW_f kSpeedTrajDw;
 
 // 位置轨迹规划器初始化
-void pos_trajectory_planning_init(void)
+void PosTrajectoryPlanningInit(void)
 {
     memset(&kPosTrajDw, 0, sizeof(kPosTrajDw));
 
@@ -21,7 +21,7 @@ void pos_trajectory_planning_init(void)
 }
 
 // 位置轨迹规划器处理函数
-void pos_trajectory_planning_handle(POS_TRAJECTORY_DATA *pos_traj_data)
+void PosTrajectoryPlanningHandle(POS_TRAJECTORY_DATA *pos_traj_data)
 {
     int8_T state_now = 0;
     pos_traj_data->period_s = axis->pmsm_config.tp_s;
@@ -39,7 +39,7 @@ void pos_trajectory_planning_handle(POS_TRAJECTORY_DATA *pos_traj_data)
 }
 
 // 速度轨迹规划器初始化
-void speed_trajectory_planning_init(void)
+void SpeedTrajectoryPlanningInit(void)
 {
     memset(&kSpeedTrajDw, 0, sizeof(kSpeedTrajDw));
     kSpeedTrajDw.traj_now = axis->pos_speed_ctl_input.speed_now_rad_s /
@@ -47,7 +47,7 @@ void speed_trajectory_planning_init(void)
 }
 
 // 速度轨迹规划器处理函数
-void speed_trajectory_planning_handle(SPEED_TRAJECTORY_DATA *speed_traj_data)
+void SpeedTrajectoryPlanningHandle(SPEED_TRAJECTORY_DATA *speed_traj_data)
 {
     int8_T state_now = 0;
     speed_traj_data->period_s = axis->pmsm_config.tp_s;
@@ -60,7 +60,7 @@ void speed_trajectory_planning_handle(SPEED_TRAJECTORY_DATA *speed_traj_data)
 }
 
 // 转矩轨迹规划器初始化
-void torque_trajectory_planning_init(void)
+void TorqueTrajectoryPlanningInit(void)
 {
     memset(&kTorqueTrajDw, 0, sizeof(kTorqueTrajDw));
     // 初始化当前规划器 为当前 q轴电流
@@ -68,7 +68,7 @@ void torque_trajectory_planning_init(void)
 }
 
 // 转矩轨迹规划器处理函数
-void torque_trajectory_planning_handle(TORQUE_TRAJECTORY_DATA *torque_traj_data)
+void TorqueTrajectoryPlanningHandle(TORQUE_TRAJECTORY_DATA *torque_traj_data)
 {
     int8_T state_now = 0;
     torque_traj_data->period_s = axis->pmsm_config.tp_s;
@@ -80,12 +80,12 @@ void torque_trajectory_planning_handle(TORQUE_TRAJECTORY_DATA *torque_traj_data)
                                &state_now, &(kTorqueTrajDw));
 }
 
-void mit_trajectory_planning_init(MIT_TRAJECTORY_DATA *mit_traj_data)
+void MitTrajectoryPlanningInit(MIT_TRAJECTORY_DATA *mit_traj_data)
 {
     axis->mit_ctl_input.iq_max_A = mit_traj_data->iq_max_A;
 }
 
-void mit_trajectory_planning_handle(MIT_TRAJECTORY_DATA *mit_traj_data)
+void MitTrajectoryPlanningHandle(MIT_TRAJECTORY_DATA *mit_traj_data)
 {
     axis->mit_ctl_input.pos_tar_p = mit_traj_data->pos_tar_p;
     axis->mit_ctl_input.speed_tar_p_s = mit_traj_data->speed_tar_p_s;

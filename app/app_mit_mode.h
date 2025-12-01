@@ -16,9 +16,9 @@ typedef struct
     int64_t pos_tar_p_add;                          // 位置目标值增量
 } MitMode_t;
 
-AppResult mit_mode_init();
-AppResult mit_mode_start();
-AppResult mit_mode_run();
-AppResult mit_mode_stop();
+AppResult MitModeInit();
+AppResult MitModeStart();
+AppResult MitModeRun();
+AppResult MitModeStop();
 
 #endif // APP_MIT_MODE_H

@@ -13,9 +13,9 @@ typedef struct
     SPEED_TRAJECTORY_DATA traj;                     // 回零模式使用速度规划器
 } HomingMode_t;
 
-AppResult hm_mode_init();
-AppResult hm_mode_start();
-AppResult hm_mode_run();
-AppResult hm_mode_stop();
+AppResult HomingModeInit();
+AppResult HomingModeStart();
+AppResult HomingModeRun();
+AppResult HomingModeStop();
 
 #endif // APP_HOMING_MODE_H

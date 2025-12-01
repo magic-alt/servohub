@@ -320,7 +320,7 @@ void flash_param_init(void)
 /* USER CODE BEGIN AREA 1 */
 static HistoricalInfo kFlashHistoricalInfo;
 
-static void flashdb_database_init(void)
+static void FlashdbDatabaseInit(void)
 {
     if (bsp_flashdb_key_register(FLASHDB_KEY_INDEX_ALL_PARAM, "AllParam", \
             &kFlashStorage, sizeof(kFlashStorage)) != FLASHDB_NO_ERR)
@@ -346,7 +346,7 @@ static void flashdb_database_init(void)
 void AppStoreInit(void)
 {
     flash_param_update(); // 在初次存储KV还未被创建时，将参数默认值更新到kFlashStorage后写入flash
-    flashdb_database_init();
+    FlashdbDatabaseInit();
 
     set_app_Storage_status(FLASH_STORE_STATUS_IDLE);
 

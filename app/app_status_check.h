@@ -102,7 +102,7 @@ typedef struct {
 typedef bool (*CheckFunction)(void); // 定义检查函数指针类型
 typedef struct {
     CheckFunction check_func;
-    bool scan_fast;          // 是否在快速轮询中调用
+    bool scan_fast;          // 是否在快速轮询中调用  ture - 快速轮询位置环中调用  false - 慢速轮询  1ms
 }CheckFunctionList;
 
 // 任务循环调用接口

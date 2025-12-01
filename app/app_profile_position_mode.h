@@ -19,11 +19,11 @@ typedef struct
     int64_t pos_tar_p_add;                          // 目标位置增量
 } PpMode_t;
 
-void set_app_g_start_upedge_state(bool state);
+void set_app_start_upedge_state(bool state);  //可由外部调用设置启动沿状态
 
-AppResult pp_mode_init();
-AppResult pp_mode_start();
-AppResult pp_mode_run();
-AppResult pp_mode_stop();
+AppResult PpModeInit();
+AppResult PpModeStart();
+AppResult PpModeRun();
+AppResult PpModeStop();
 
 #endif // APP_PROFILE_POSITION_MODE_H

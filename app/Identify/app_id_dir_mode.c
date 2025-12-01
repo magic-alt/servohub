@@ -3,7 +3,7 @@
 
 static Axis *const axis = &kAxis; // 引用电机对象实例化
 
-AppResult id_dir_mode_init()
+AppResult IdDirModeInit()
 {
     set_app_Controlword(APP_CTRL_DISABLE); //上升沿使能，初始化置0
 
@@ -12,12 +12,12 @@ AppResult id_dir_mode_init()
     return APP_RET_SUCCESS;
 }
 
-AppResult id_dir_mode_start()
+AppResult IdDirModeStart()
 {
     return APP_RET_SUCCESS;
 }
 
-AppResult id_dir_mode_run()
+AppResult IdDirModeRun()
 {
     if(get_app_Controlword() == APP_CTRL_ENABLE)
     {
@@ -32,7 +32,7 @@ AppResult id_dir_mode_run()
     return APP_RET_RUNNING;
 }
 
-AppResult id_dir_mode_stop()
+AppResult IdDirModeStop()
 {
     return APP_RET_SUCCESS;
 }

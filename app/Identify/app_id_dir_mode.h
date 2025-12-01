@@ -3,9 +3,9 @@
 
 #include "app_data_type_define.h"
 
-AppResult id_dir_mode_init();
-AppResult id_dir_mode_start();
-AppResult id_dir_mode_run();
-AppResult id_dir_mode_stop();
+AppResult IdDirModeInit();
+AppResult IdDirModeStart();
+AppResult IdDirModeRun();
+AppResult IdDirModeStop();
 
 #endif // APP_ID_DIR_MODE_H

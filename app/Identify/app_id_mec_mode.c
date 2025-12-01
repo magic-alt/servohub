@@ -3,7 +3,7 @@
 
 static Axis *const axis = &kAxis;// 引用电机对象实例化
 
-AppResult id_mec_mode_init()
+AppResult IdMecModeInit()
 {
     set_app_Controlword(APP_CTRL_DISABLE); //上升沿使能，初始化置0
 
@@ -15,12 +15,12 @@ AppResult id_mec_mode_init()
     return APP_RET_SUCCESS;
 }
 
-AppResult id_mec_mode_start()
+AppResult IdMecModeStart()
 {
     return APP_RET_SUCCESS;
 }
 
-AppResult id_mec_mode_run()
+AppResult IdMecModeRun()
 {
     if(get_app_Controlword() == APP_CTRL_ENABLE)
     {
@@ -35,7 +35,7 @@ AppResult id_mec_mode_run()
     return APP_RET_RUNNING;
 }
 
-AppResult id_mec_mode_stop()
+AppResult IdMecModeStop()
 {
     return APP_RET_SUCCESS;
 }

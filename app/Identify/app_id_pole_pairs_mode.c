@@ -3,7 +3,7 @@
 
 static Axis *const axis = &kAxis; // 引用电机对象实例化
 
-AppResult id_pole_pairs_mode_init()
+AppResult IdPolePairsModeInit()
 {
     set_app_Controlword(APP_CTRL_DISABLE); //上升沿使能，初始化置0
 
@@ -13,12 +13,12 @@ AppResult id_pole_pairs_mode_init()
     return APP_RET_SUCCESS;
 }
 
-AppResult id_pole_pairs_mode_start()
+AppResult IdPolePairsModeStart()
 {
     return APP_RET_SUCCESS;
 }
 
-AppResult id_pole_pairs_mode_run()
+AppResult IdPolePairsModeRun()
 {
     if(get_app_Controlword() == APP_CTRL_ENABLE)
     {
@@ -33,7 +33,7 @@ AppResult id_pole_pairs_mode_run()
     return APP_RET_RUNNING;
 }
 
-AppResult id_pole_pairs_mode_stop()
+AppResult IdPolePairsModeStop()
 {
     return APP_RET_SUCCESS;
 }

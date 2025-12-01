@@ -1,6 +1,6 @@
 #include "app_mit_mode.h"
 
-static MitMode_t mit_mode =
+static MitMode_t kMitMode =
 {
     .now_Controlword = APP_CTRL_DISABLE,
     .pre_Controlword = APP_CTRL_DISABLE,
@@ -18,80 +18,80 @@ static MitMode_t mit_mode =
     .pos_tar_p_add = 0,
 };
 
-AppResult mit_mode_init()
+AppResult MitModeInit()
 {
     set_app_Controlword(APP_CTRL_DISABLE); // 上升沿使能，初始化置0
-    mit_mode.pre_Controlword = APP_CTRL_DISABLE;
+    kMitMode.pre_Controlword = APP_CTRL_DISABLE;
 
     return APP_RET_SUCCESS;
 }
 
-AppResult mit_mode_start()
+AppResult MitModeStart()
 {
     return APP_RET_SUCCESS;
 }
 
-AppResult mit_mode_run()
+AppResult MitModeRun()
 {
     int64_t pos_tar_p_add = 0;
 
-    mit_mode.now_Controlword = (APP_CONTROL_WORD)get_app_Controlword();
+    kMitMode.now_Controlword = (APP_CONTROL_WORD)get_app_Controlword();
 
-    if (mit_mode.now_Controlword == APP_CTRL_ENABLE)
+    if (kMitMode.now_Controlword == APP_CTRL_ENABLE)
     {
-        if (mit_mode.pre_Controlword == APP_CTRL_DISABLE)
+        if (kMitMode.pre_Controlword == APP_CTRL_DISABLE)
         {
             // 重新使能后初始化规划器
-            mit_mode.traj.iq_max_A = get_app_MIT_max_current();
-            mit_trajectory_planning_init(&mit_mode.traj);
+            kMitMode.traj.iq_max_A = get_app_MIT_max_current();
+            MitTrajectoryPlanningInit(&kMitMode.traj);
         }
 
         if (get_app_Halt_running_cmd() == true)
         {
-            mit_mode.traj.speed_tar_p_s = 0;
+            kMitMode.traj.speed_tar_p_s = 0;
         }
         else
         {
-            mit_mode.traj.speed_tar_p_s = get_app_MIT_target_velocity() * get_app_Load_rpm_2_pps() * \
+            kMitMode.traj.speed_tar_p_s = get_app_MIT_target_velocity() * get_app_Load_rpm_2_pps() * \
                                             get_app_Reduction_ratio();
         }
-        mit_mode.traj.iq_max_A = get_app_MIT_max_current();
-        mit_mode.pos_tar_p_add = (float)(get_app_MIT_target_position() - get_app_Position_actual_value()) * \
+        kMitMode.traj.iq_max_A = get_app_MIT_max_current();
+        kMitMode.pos_tar_p_add = (float)(get_app_MIT_target_position() - get_app_Position_actual_value()) * \
                                     get_app_Reduction_ratio();
-        mit_mode.traj.pos_tar_p = mit_mode.pos_tar_p_add + get_app_Motor_position_actual_value();
-        mit_mode.traj.tq_set_NM = get_app_MIT_feedforward_torque() * get_app_Reduction_ratio_inv();  //负载端转矩  转化 为电机端
-        mit_mode.traj.kp_pos_NM_rad = get_app_MIT_kp() * get_app_Reduction_ratio_inv();  // 转化为电机端增益
-        mit_mode.traj.kd_spd_NM_rad_s = get_app_MIT_kd() * get_app_Reduction_ratio_inv();  // 转化为电机端增益
+        kMitMode.traj.pos_tar_p = kMitMode.pos_tar_p_add + get_app_Motor_position_actual_value();
+        kMitMode.traj.tq_set_NM = get_app_MIT_feedforward_torque() * get_app_Reduction_ratio_inv();  //负载端转矩  转化 为电机端
+        kMitMode.traj.kp_pos_NM_rad = get_app_MIT_kp() * get_app_Reduction_ratio_inv();  // 转化为电机端增益
+        kMitMode.traj.kd_spd_NM_rad_s = get_app_MIT_kd() * get_app_Reduction_ratio_inv();  // 转化为电机端增益
     }
-    else if (mit_mode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
+    else if (kMitMode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
     {
-        mit_mode.traj.speed_tar_p_s = 0; // 如果处于急停状态，规划速度为0
+        kMitMode.traj.speed_tar_p_s = 0; // 如果处于急停状态，规划速度为0
 
-        mit_mode.emergency_brake_mode = get_app_Quick_stop_option_code();
+        kMitMode.emergency_brake_mode = get_app_Quick_stop_option_code();
         // 在急停后失能电机模式下，检测到零速后电机失能
-        if (mit_mode.emergency_brake_mode <= EMERGENCY_BRAKE_MODE_VOLTAGE_LIMIT)
+        if (kMitMode.emergency_brake_mode <= EMERGENCY_BRAKE_MODE_VOLTAGE_LIMIT)
         {
-            mit_mode.check_status_val = (CheckStatusVal_t)app_get_check_status_val();
-            if (mit_mode.emergency_brake_mode == EMERGENCY_BRAKE_MODE_DISABLED ||\
-                mit_mode.check_status_val.bits.velocity_zero == true)
+            kMitMode.check_status_val = (CheckStatusVal_t)app_get_check_status_val();
+            if (kMitMode.emergency_brake_mode == EMERGENCY_BRAKE_MODE_DISABLED ||\
+                kMitMode.check_status_val.bits.velocity_zero == true)
             {
                 set_app_Controlword(APP_CTRL_DISABLE);
-                mit_mode.now_Controlword = APP_CTRL_DISABLE;
+                kMitMode.now_Controlword = APP_CTRL_DISABLE;
             }
         }
     }
 
-    if (mit_mode.now_Controlword != APP_CTRL_DISABLE)
+    if (kMitMode.now_Controlword != APP_CTRL_DISABLE)
     {
-        mit_trajectory_planning_handle(&mit_mode.traj);
+        MitTrajectoryPlanningHandle(&kMitMode.traj);
     }
 
-    mit_mode.pre_Controlword = mit_mode.now_Controlword;
+    kMitMode.pre_Controlword = kMitMode.now_Controlword;
 
     return APP_RET_RUNNING;
 }
 
-AppResult mit_mode_stop()
+AppResult MitModeStop()
 {
     return APP_RET_SUCCESS;
 }
