@@ -15,7 +15,7 @@ static PtMode_t pt_mode =
 
 AppResult pt_mode_init()
 {
-    app_target_torque_reached_state_clear();
+    AppTargetTorqueReachedStateClear();
     set_app_Controlword(APP_CTRL_DISABLE); // 上升沿使能，初始化置0
     pt_mode.pre_Controlword = APP_CTRL_DISABLE;
 
@@ -69,7 +69,7 @@ AppResult pt_mode_run()
 
     pt_mode.pre_Controlword = pt_mode.now_Controlword;
 
-    app_target_torque_reached_state_check();
+    AppTargetTorqueReachedStateCheck();
 
     return APP_RET_RUNNING;
 }

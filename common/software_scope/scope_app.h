@@ -112,13 +112,13 @@ typedef struct {
     TriggerStruct trigger_object;
 } ScopeStruct;
 
-void scope_init(void);
+void ScopeInit(void);
 
-void scope_isr_handle(void);
+void ScopeIsrHandle(void);
 
-void control_word_write_callback(ScopeControlWord control_word);
+void ControlWordWriteCallback(ScopeControlWord control_word);
 
-void scope_channel_data_read(uint32_t channel_num, uint16_t subindex, uint8_t* data_length,
+void ScopeChannelDataRead(uint32_t channel_num, uint16_t subindex, uint8_t* data_length,
                              uint8_t* p_data);
 
 void get_database_param_info(uint32_t index, uint32_t *pdata, uint8_t *type, uint8_t *size, void **pdata_ptr);

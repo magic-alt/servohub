@@ -20,12 +20,12 @@ SystemMessage_t sys_msg = {
 void HalInit(void)
 {
     sys_timer_init();
-    app_param_init();
+    AppParamInit();
     MotorCtrlInit();  //电机控制相关初始化
     AppInit();
-    app_status_scan_init();
-    app_store_init();
-    scope_init();
+    AppStatusScanInit();
+    AppStoreInit();
+    ScopeInit();
 }
 
 // 检测母线电压稳定

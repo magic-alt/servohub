@@ -170,7 +170,7 @@ void flash_param_update(void);
 void flash_param_init(void);
 
 /* USER CODE BEGIN AREA 1 */
-void app_store_init(void);
-void app_store_updata_1ms(void);
+void AppStoreInit(void);
+void AppStoreUpdata1ms(void);
 
 /* USER CODE END AREA 1 */

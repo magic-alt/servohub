@@ -22,7 +22,7 @@ static PpMode_t pp_mode =
 
 AppResult pp_mode_init()
 {
-    app_position_target_reached_state_clear(); // 清除目标到达标志
+    AppPositionTargetReachedStateClear(); // 清除目标到达标志
     set_app_Controlword(APP_CTRL_DISABLE); // 上升沿使能，初始化置0
     pp_mode.pre_Controlword = APP_CTRL_DISABLE;
     pp_mode.start_upedge_latch = false;
@@ -130,7 +130,7 @@ AppResult pp_mode_run()
 
     pp_mode.pre_Controlword = pp_mode.now_Controlword;
 
-    app_position_target_reached_state_check();
+    AppPositionTargetReachedStateCheck();
 
     return APP_RET_RUNNING;
 }

@@ -5,9 +5,8 @@
 
 #include "bsp_api.h"
 
-
-#define TASK_PERIOD_1MS         (0.001f)        // 1ms = 0.001s任务周期
-#define DRIVE_OVER_PEAK_COOLING_TIME (30.0f)    // 30s
+#define TASK_PERIOD_1MS         (0.001f)        // 1ms = 0.001s任务周期  一般不用修改
+#define DRIVE_OVER_PEAK_COOLING_TIME (30.0f)    // 30s 默认驱动器峰值电流过载驱动器冷却时间，一般无需修改，冷却时间内一直会报错
 #define DC_BUS_UNDER_VOLTAGE_CHECK_TIME (0.2f)  // 欠压错误持续时间阈值
 #define LED_NORMAL_STATE_PERIOD (500.0f)        // 正常状态持续时间ms
 #define LED_ERROR_STATE_PERIOD  (100.0f)        // 错误状态持续时间ms
@@ -107,30 +106,29 @@ typedef struct {
 }CheckFunctionList;
 
 // 任务循环调用接口
-void app_status_scan_init(void);
-void app_status_scan_fast(void);        // 错误轮询检查函数  位置环调用
-void app_status_scan_slow(void);        // 错误轮询检查函数  1ms任务调用
-void app_status_check(void);            // 通用状态轮询检查函数  位置环调用
-void app_led_state_updata_1ms(void);    // LED状态更新函数  1ms任务调用
+void AppStatusScanInit(void);        // 应用状态扫描初始化函数
+void AppStatusScanFast(void);        // 错误轮询检查函数  位置环调用
+void AppStatusCheck(void);           // 通用状态轮询检查函数  位置环调用
+void AppStatusScanSlow(void);        // 错误轮询检查函数  1ms任务调用
+void AppLedStateUpdata1ms(void);     // LED状态更新函数   1ms任务调用
 
 
-// 获取错误、警告和状态值
+// 外部接口 获取错误、警告和状态值
 uint32_t app_get_check_error_val(void);
 uint32_t app_get_check_warning_val(void);
 uint32_t app_get_check_status_val(void);
 
-
 // 状态检测
-bool app_motor_enable_state_check(void);
-bool app_target_reached_state_check(void);
-bool app_set_point_acknowledge_state_check(void);
-bool app_velocity_zero_state_check(void);
-bool app_homing_attained_state_check(void);
-bool app_position_target_reached_state_check(void);
-void app_position_target_reached_state_clear(void);
-bool app_velocity_target_reached_state_check(void);
-void app_velocity_target_reached_state_clear(void);
-bool app_target_torque_reached_state_check(void);
-void app_target_torque_reached_state_clear(void);
+bool AppMotorEnableStateCheck(void);
+bool AppTargetReachedStateCheck(void);
+bool AppSetPointAcknowledgeStateCheck(void);
+bool AppVelocityZeroStateCheck(void);
+bool AppHomingAttainedStateCheck(void);
+bool AppPositionTargetReachedStateCheck(void);
+void AppPositionTargetReachedStateClear(void);
+bool AppVelocityTargetReachedStateCheck(void);
+void AppVelocityTargetReachedStateClear(void);
+bool AppTargetTorqueReachedStateCheck(void);
+void AppTargetTorqueReachedStateClear(void);
 
 #endif // APP_STATUS_CHECK_H

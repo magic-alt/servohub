@@ -32,8 +32,7 @@ void RegisterCheckStatusCallback(void* callback) {
 
 static Axis *const axis = &kAxis;
 
-extern void app_param_update(void);
-void app_param_init(void)
+void AppParamInit(void)
 {
     // 初始化控制字
     kAppControlWord.Controlword = 0;      // 控制字
@@ -242,7 +241,7 @@ void app_param_restrictions_update(void)
 }
 
 // 用户自定义的更新的变量
-void app_param_sync_user(void)
+void AppParamSyncUser(void)
 {
     get_app_Statusword();
     get_app_Error_word();
@@ -452,7 +451,7 @@ void app_param_update(void)
     set_app_Debug_uint32(0, kAppDebugParam.Debug_uint32[0]);
 }
 
-void app_param_sync(void)
+void AppParamSync(void)
 {
     get_app_Controlword();
     get_app_Statusword();

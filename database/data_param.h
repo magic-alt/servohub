@@ -27,7 +27,7 @@ typedef enum
     APP_PARAM_WRITE_STATE_ERROR = 3,    //参数写入状态错误，不能在电机使能状态下写入
 } APP_PARAM_STATUS;
 
-void app_param_init(void);
+void AppParamInit(void);
 /* USER CODE END AREA 0 */
 
 typedef struct
@@ -689,9 +689,10 @@ extern AppDebugParam kAppDebugParam;
 /* USER CODE BEGIN AREA 1 */
 #define ERROR_RECORD_NUM    (sizeof(kHistoricalInfo.Error_records_list) / \
                             sizeof(kHistoricalInfo.Error_records_list[0]))
-void app_param_update(void);
-void app_param_sync(void);
-void app_param_sync_user(void);
+void AppParamInit(void);
+void AppParamSyncUser(void);
+
+void app_param_update(void);  //此函数由代码生成  使用set 接口更新所有应用层数据库变量
 
 // 回调函数注册表结构体
 typedef struct{
@@ -701,6 +702,12 @@ typedef struct{
     uint32_t (*get_check_status_val)(void);
 } CallbackRegistry;
 
+//应用层数据库注册接口 典型调用  eg:
+//   RegisterSetAppCallback(set_app);
+//   RegisterCheckErrorCallback(app_get_check_error_val);
+//   RegisterCheckWarningCallback(app_get_check_warning_val);
+//   RegisterCheckStatusCallback(app_get_check_status_val);
+//   RegisterSendCallback(mavlink_send_data);
 
 void RegisterSetAppCallback(void* callback);
 void RegisterCheckErrorCallback(void* callback);

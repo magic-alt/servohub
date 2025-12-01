@@ -12,8 +12,8 @@ int main(void)
     RegisterCheckWarningCallback(app_get_check_warning_val);
     RegisterCheckStatusCallback(app_get_check_status_val);
 
-    scope_init();
-    app_param_init();
+    ScopeInit();
+    AppParamInit();
     MotorCtrlInit();
     AppInit();
 

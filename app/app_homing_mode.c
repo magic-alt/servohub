@@ -14,7 +14,7 @@ static HomingMode_t hm_mode =
 
 AppResult hm_mode_init()
 {
-    app_velocity_target_reached_state_clear();
+    AppVelocityTargetReachedStateClear();
     set_app_Controlword(APP_CTRL_DISABLE);
     hm_mode.pre_Controlword = APP_CTRL_DISABLE;
 
@@ -57,7 +57,7 @@ AppResult hm_mode_run()
 
     hm_mode.pre_Controlword = hm_mode.now_Controlword;
 
-    app_velocity_target_reached_state_check();
+    AppVelocityTargetReachedStateCheck();
 
     // 单独处理35号回零模式
     if (hm_mode.now_Controlword == APP_CTRL_ENABLE && get_app_Homing_method() == 35)

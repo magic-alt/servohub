@@ -2,7 +2,7 @@
 #include "motor_ctl_loop.h"
 
 static Axis *const axis = &kAxis; // 引用电机对象实例化
-AppCheckVal app_check =
+AppCheckVal kAppCheck =
 {
     .error.all = 0,
     .warning.all = 0,
@@ -36,91 +36,92 @@ AppCheckVal app_check =
     .can_mg_counts_last = 0,
 };
 
+
+
 // 错误检测函数声明
-static inline bool app_drive_over_peak_current_error_check(void);
-static inline bool app_drive_overload_error_check(void);
-static inline bool app_DC_link_over_voltage_error_check(void);
-static inline bool app_DC_link_under_voltage_error_check(void);
-static inline bool app_excess_temperature_drive_error_check(void);
-static inline bool app_too_low_temperature_drive_error_check(void);
-static inline bool app_over_speed_error_check(void);
-static inline bool app_position_following_error_check(void);
-static inline bool app_load_encoder_error_check(void);
-static inline bool app_motor_encoder_error_check(void);
-static inline bool app_flash_store_error_check(void);
-static inline bool app_drv_init_error_check(void);
-static inline bool app_current_sample_error_check(void);
-static inline bool app_Nfault_error_check(void);
-static inline bool app_driver_over_current_error_check(void);
-static inline bool app_bus_voltage_error_check(void);
-static inline bool app_can_bus_disconnection_error_check(void);
-static inline bool app_excess_temperature_motor_error_check(void);
-static inline bool app_too_low_temperature_motor_error_check(void);
-static inline bool app_excess_temperature_mcu_error_check(void);
-static inline bool app_too_low_temperature_mcu_error_check(void);
+static inline bool AppDriveOverPeakCurrentErrorCheck(void);
+static inline bool AppDriveOverloadErrorCheck(void);
+static inline bool AppDCLinkOverVoltageErrorCheck(void);
+static inline bool AppDCLinkUnderVoltageErrorCheck(void);
+static inline bool AppExcessTemperatureDriveErrorCheck(void);
+static inline bool AppTooLowTemperatureDriveErrorCheck(void);
+static inline bool AppOverSpeedErrorCheck(void);
+static inline bool AppPositionFollowingErrorCheck(void);
+static inline bool AppLoadEncoderErrorCheck(void);
+static inline bool AppMotorEncoderErrorCheck(void);
+static inline bool AppFlashStoreErrorCheck(void);
+static inline bool AppDrvInitErrorCheck(void);
+static inline bool AppCurrentSampleErrorCheck(void);
+static inline bool AppNfaultErrorCheck(void);
+static inline bool AppDriverOverCurrentErrorCheck(void);
+static inline bool AppBusVoltageErrorCheck(void);
+static inline bool AppCanBusDisconnectionErrorCheck(void);
+static inline bool AppExcessTemperatureMotorErrorCheck(void);
+static inline bool AppTooLowTemperatureMotorErrorCheck(void);
+static inline bool AppExcessTemperatureMcuErrorCheck(void);
+static inline bool AppTooLowTemperatureMcuErrorCheck(void);
 
 // 错误检测函数数组注册
 static const CheckFunctionList CheckTable[] =
 {
-    {app_drive_over_peak_current_error_check, false},
-    {app_drive_overload_error_check, false},
-    {app_DC_link_over_voltage_error_check, true},
-    {app_DC_link_under_voltage_error_check, false},
-    {app_excess_temperature_drive_error_check, false},
-    {app_too_low_temperature_drive_error_check, false},
-    {app_over_speed_error_check, false},
-    {app_position_following_error_check, false},
+    {AppDriveOverPeakCurrentErrorCheck, false},
+    {AppDriveOverloadErrorCheck, false},
+    {AppDCLinkOverVoltageErrorCheck, true},
+    {AppDCLinkUnderVoltageErrorCheck, false},
+    {AppExcessTemperatureDriveErrorCheck, false},
+    {AppTooLowTemperatureDriveErrorCheck, false},
+    {AppOverSpeedErrorCheck, false},
+    {AppPositionFollowingErrorCheck, false},
 
-    {app_load_encoder_error_check, true},
-    {app_motor_encoder_error_check, true},
-    {app_flash_store_error_check, true},
-    {app_drv_init_error_check, true},
-    {app_current_sample_error_check, true},
-    {app_Nfault_error_check, true},
-    {app_driver_over_current_error_check, true},
-    {app_bus_voltage_error_check, true},
+    {AppLoadEncoderErrorCheck, true},
+    {AppMotorEncoderErrorCheck, true},
+    {AppFlashStoreErrorCheck, true},
+    {AppDrvInitErrorCheck, true},
+    {AppCurrentSampleErrorCheck, true},
+    {AppNfaultErrorCheck, true},
+    {AppDriverOverCurrentErrorCheck, true},
+    {AppBusVoltageErrorCheck, true},
 
-    {app_can_bus_disconnection_error_check, false},
-    {app_excess_temperature_motor_error_check, false},
-    {app_too_low_temperature_motor_error_check, false},
-    {app_excess_temperature_mcu_error_check, false},
-    {app_too_low_temperature_mcu_error_check, false},
+    {AppCanBusDisconnectionErrorCheck, false},
+    {AppExcessTemperatureMotorErrorCheck, false},
+    {AppTooLowTemperatureMotorErrorCheck, false},
+    {AppExcessTemperatureMcuErrorCheck, false},
+    {AppTooLowTemperatureMcuErrorCheck, false},
 };
 
 #pragma region 错误检测函数定义
-static inline bool app_load_encoder_error_check(void)
+static inline bool AppLoadEncoderErrorCheck(void)
 {
-    return app_check.p_bsp_error->bit_band.error_encoder_load;
+    return kAppCheck.p_bsp_error->bit_band.error_encoder_load;
+}
+static inline bool AppMotorEncoderErrorCheck(void)
+{
+    return kAppCheck.p_bsp_error->bit_band.error_encoder_motor;
 }
 
-static inline bool app_motor_encoder_error_check(void)
+static inline bool AppFlashStoreErrorCheck(void)
 {
-    return app_check.p_bsp_error->bit_band.error_encoder_motor;
+    return kAppCheck.p_bsp_error->bit_band.error_flash_store;
 }
 
-static inline bool app_flash_store_error_check(void)
+static inline bool AppDrvInitErrorCheck(void)
 {
-    return app_check.p_bsp_error->bit_band.error_flash_store;
+    return kAppCheck.p_bsp_error->bit_band.error_drv_init;
 }
 
-static inline bool app_drv_init_error_check(void)
+static inline bool AppCurrentSampleErrorCheck(void)
 {
-    return app_check.p_bsp_error->bit_band.error_drv_init;
+    return kAppCheck.p_bsp_error->bit_band.error_current_sample;
 }
 
-static inline bool app_current_sample_error_check(void)
+static inline bool AppNfaultErrorCheck(void)
 {
-    return app_check.p_bsp_error->bit_band.error_current_sample;
+    return kAppCheck.p_bsp_error->bit_band.error_nfault;
 }
 
-static inline bool app_Nfault_error_check(void)
+static inline bool AppBusVoltageErrorCheck(void)
 {
-    return app_check.p_bsp_error->bit_band.error_nfault;
-}
-
-static inline bool app_bus_voltage_error_check(void)
-{
-    return app_check.p_bsp_error->bit_band.error_bus_voltage;
+    return kAppCheck.p_bsp_error->bit_band.error_bus_voltage;
 }
 
 /**
@@ -133,14 +134,14 @@ static inline bool app_bus_voltage_error_check(void)
  * @return true  如果检测到峰值电流错误或处于冷却时间内
  * @return false 正常，无峰值电流错误
  */
-static inline bool app_drive_over_peak_current_error_check(void)
+static inline bool AppDriveOverPeakCurrentErrorCheck(void)
 {
     static float time_count[2] = {0, 0};
 
     // 超过峰值电流阈值，计时
-    if (app_check.idq_squared_now > app_check.i_peak_squared_threshold)
+    if (kAppCheck.idq_squared_now > kAppCheck.i_peak_squared_threshold)
     {
-        time_count[0] += app_check.dt_1ms;
+        time_count[0] += kAppCheck.dt_1ms;
         if (time_count[0] >= get_app_Drive_peak_current_duration())
         {
             time_count[0] = get_app_Drive_peak_current_duration();
@@ -156,7 +157,7 @@ static inline bool app_drive_over_peak_current_error_check(void)
     // 冷却时间未结束，持续报错
     if (time_count[1] > 0)
     {
-        time_count[1] -= app_check.dt_1ms; // 冷却中
+        time_count[1] -= kAppCheck.dt_1ms; // 冷却中
         return true;
     }
 
@@ -178,19 +179,19 @@ static inline bool app_drive_over_peak_current_error_check(void)
  * - 当heat超过阈值时会被限制在阈值，并返回过载错误。
  * - 会调用set_app_Drive_accumulated_heat()设置累计热量。
  */
-static inline bool app_drive_overload_error_check(void)
+static inline bool AppDriveOverloadErrorCheck(void)
 {
-    app_check.overload_heat_threshold_now = app_check.i_rated_squared * get_app_Drive_overload_current_duration();
-    app_check.drive_heat_now += (app_check.idq_squared_now - app_check.i_rated_squared) * app_check.dt_1ms;
-    if (app_check.drive_heat_now < 0)
+    kAppCheck.overload_heat_threshold_now = kAppCheck.i_rated_squared * get_app_Drive_overload_current_duration();
+    kAppCheck.drive_heat_now += (kAppCheck.idq_squared_now - kAppCheck.i_rated_squared) * kAppCheck.dt_1ms;
+    if (kAppCheck.drive_heat_now < 0)
     {
-        app_check.drive_heat_now = 0;
+        kAppCheck.drive_heat_now = 0;
     }
-    set_app_Drive_accumulated_heat(app_check.drive_heat_now);
+    set_app_Drive_accumulated_heat(kAppCheck.drive_heat_now);
 
-    if (app_check.drive_heat_now >= app_check.overload_heat_threshold_now)
+    if (kAppCheck.drive_heat_now >= kAppCheck.overload_heat_threshold_now)
     {
-        app_check.drive_heat_now = app_check.overload_heat_threshold_now;
+        kAppCheck.drive_heat_now = kAppCheck.overload_heat_threshold_now;
         return true;
     }
     return false;
@@ -200,7 +201,7 @@ static inline bool app_drive_overload_error_check(void)
  * @brief 检查直流母线电压是否过高。
  * @return 如果检测到直流母线过压错误，返回 true；否则返回 false。
  */
-static inline bool app_DC_link_over_voltage_error_check(void)
+static inline bool AppDCLinkOverVoltageErrorCheck(void)
 {
     if (get_app_DC_link_circuit_voltage() > get_app_Bus_over_voltage_threshold())
     {
@@ -218,13 +219,13 @@ static inline bool app_DC_link_over_voltage_error_check(void)
  *
  * @return 如果检测到直流母线欠压错误，返回 true；否则返回 false。
  */
-static inline bool app_DC_link_under_voltage_error_check(void)
+static inline bool AppDCLinkUnderVoltageErrorCheck(void)
 {
     static float time_count = 0;
 
     if (get_app_DC_link_circuit_voltage() < get_app_Bus_under_voltage_threshold())
     {
-        time_count += app_check.dt_1ms;
+        time_count += kAppCheck.dt_1ms;
         if (time_count >= DC_BUS_UNDER_VOLTAGE_CHECK_TIME)
         {
             time_count = DC_BUS_UNDER_VOLTAGE_CHECK_TIME;
@@ -247,22 +248,22 @@ static inline bool app_DC_link_under_voltage_error_check(void)
  *
  * @return 如果检测到过温故障，返回true；否则返回false。
  */
-static inline bool app_excess_temperature_drive_error_check(void)
+static inline bool AppExcessTemperatureDriveErrorCheck(void)
 {
     static float time_count = 0;
 
-    if (app_check.drive_temp_now > get_app_Drive_high_temperature_warning_threshold()) // 警告
+    if (kAppCheck.drive_temp_now > get_app_Drive_high_temperature_warning_threshold()) // 警告
     {
-        app_check.warning.bits.over_temperature_drive = true;
+        kAppCheck.warning.bits.over_temperature_drive = true;
     }
     else
     {
-        app_check.warning.bits.over_temperature_drive = false;
+        kAppCheck.warning.bits.over_temperature_drive = false;
     }
 
-    if (app_check.drive_temp_now > get_app_Drive_high_temperature_fault_threshold())
+    if (kAppCheck.drive_temp_now > get_app_Drive_high_temperature_fault_threshold())
     {
-        time_count += app_check.dt_1ms;
+        time_count += kAppCheck.dt_1ms;
         if (time_count >= get_app_Drive_temperature_threshold_time())
         {
             time_count = get_app_Drive_temperature_threshold_time();
@@ -284,22 +285,22 @@ static inline bool app_excess_temperature_drive_error_check(void)
  *
  * @return 如果检测到温度过低且持续时间超过阈值，返回true，否则返回false。
  */
-static inline bool app_too_low_temperature_drive_error_check(void)
+static inline bool AppTooLowTemperatureDriveErrorCheck(void)
 {
     static float time_count = 0;
 
-    if (app_check.drive_temp_now < get_app_Drive_low_temperature_warning_threshold()) // 警告
+    if (kAppCheck.drive_temp_now < get_app_Drive_low_temperature_warning_threshold()) // 警告
     {
-        app_check.warning.bits.under_temperature_drive = true;
+        kAppCheck.warning.bits.under_temperature_drive = true;
     }
     else
     {
-        app_check.warning.bits.under_temperature_drive = false;
+        kAppCheck.warning.bits.under_temperature_drive = false;
     }
 
-    if (app_check.drive_temp_now < get_app_Drive_low_temperature_fault_threshold())
+    if (kAppCheck.drive_temp_now < get_app_Drive_low_temperature_fault_threshold())
     {
-        time_count += app_check.dt_1ms;
+        time_count += kAppCheck.dt_1ms;
         if (time_count >= get_app_Drive_temperature_threshold_time())
         {
             time_count = get_app_Drive_temperature_threshold_time();
@@ -320,10 +321,10 @@ static inline bool app_too_low_temperature_drive_error_check(void)
  *
  * @return 如果当前速度超过超速阈值，返回 true；否则返回 false。
  */
-static inline bool app_over_speed_error_check(void)
+static inline bool AppOverSpeedErrorCheck(void)
 {
-    app_check.motor_rpm_now = get_app_Motor_velocity_actual_value();
-    if (MATH_ABS(app_check.motor_rpm_now) > get_app_Overspeed_threshold())
+    kAppCheck.motor_rpm_now = get_app_Motor_velocity_actual_value();
+    if (MATH_ABS(kAppCheck.motor_rpm_now) > get_app_Overspeed_threshold())
     {
         return true;
     }
@@ -334,7 +335,7 @@ static inline bool app_over_speed_error_check(void)
  * @brief 位置误差持续超过设定时间
  * @return 如果位置误差持续超过设定时间，返回true；否则返回false。
  */
-static inline bool app_position_following_error_check(void)
+static inline bool AppPositionFollowingErrorCheck(void)
 {
     static float time_count = 0;
 
@@ -345,10 +346,10 @@ static inline bool app_position_following_error_check(void)
         return false;
     }
 
-    app_check.pos_error_now = get_app_Following_error_actual_value();
-    if (MATH_ABS(app_check.pos_error_now) > get_app_Following_error_window())
+    kAppCheck.pos_error_now = get_app_Following_error_actual_value();
+    if (MATH_ABS(kAppCheck.pos_error_now) > get_app_Following_error_window())
     {
-        time_count += app_check.dt_1ms;
+        time_count += kAppCheck.dt_1ms;
         if (time_count >= get_app_Following_error_time_out())
         {
             time_count = get_app_Following_error_time_out();
@@ -367,17 +368,17 @@ static inline bool app_position_following_error_check(void)
  *
  * @return  ，返回 true；否则返回 false。
  */
-static inline bool app_driver_over_current_error_check(void)
+static inline bool AppDriverOverCurrentErrorCheck(void)
 {
 
-    app_check.iabc_now[0] = get_app_U_current_actual_value(); // 获取当前三相电流
-    app_check.iabc_now[1] = get_app_V_current_actual_value(); // 获取当前三相电流
-    app_check.iabc_now[2] = get_app_W_current_actual_value(); // 获取当前三相电流
-    app_check.over_current_threshold = get_app_Drive_overcurrent_threshold();
+    kAppCheck.iabc_now[0] = get_app_U_current_actual_value(); // 获取当前三相电流
+    kAppCheck.iabc_now[1] = get_app_V_current_actual_value(); // 获取当前三相电流
+    kAppCheck.iabc_now[2] = get_app_W_current_actual_value(); // 获取当前三相电流
+    kAppCheck.over_current_threshold = get_app_Drive_overcurrent_threshold();
 
-    if (MATH_ABS(app_check.iabc_now[0]) > app_check.over_current_threshold ||
-        MATH_ABS(app_check.iabc_now[1]) > app_check.over_current_threshold ||
-        MATH_ABS(app_check.iabc_now[2]) > app_check.over_current_threshold)
+    if (MATH_ABS(kAppCheck.iabc_now[0]) > kAppCheck.over_current_threshold ||
+        MATH_ABS(kAppCheck.iabc_now[1]) > kAppCheck.over_current_threshold ||
+        MATH_ABS(kAppCheck.iabc_now[2]) > kAppCheck.over_current_threshold)
     {
         return true;
     }
@@ -391,20 +392,20 @@ static inline bool app_driver_over_current_error_check(void)
  *
  * @return 掉线，返回 true；否则返回 false。
  */
-static inline bool app_can_bus_disconnection_error_check(void)
+static inline bool AppCanBusDisconnectionErrorCheck(void)
 {
     static float time_count = 0;
 
-    app_check.can_mg_counts_now = bsp_get_can_mg_counts();
+    kAppCheck.can_mg_counts_now = bsp_get_can_mg_counts();
 
-    if (0 == app_check.can_mg_counts_now && 0 == app_check.can_mg_counts_last) // 未接受到CAN消息
+    if (0 == kAppCheck.can_mg_counts_now && 0 == kAppCheck.can_mg_counts_last) // 未接受到CAN消息
     {
-        app_check.can_mg_counts_last = app_check.can_mg_counts_now;
+        kAppCheck.can_mg_counts_last = kAppCheck.can_mg_counts_now;
         return false;
     }
-    if (app_check.can_mg_counts_last == app_check.can_mg_counts_now) // 没有接收到 新的CAN消息 累计记录时间
+    if (kAppCheck.can_mg_counts_last == kAppCheck.can_mg_counts_now) // 没有接收到 新的CAN消息 累计记录时间
     {
-        time_count += app_check.dt_1ms;
+        time_count += kAppCheck.dt_1ms;
         if (time_count >= get_app_Can_timeout()) // 超时报错
         {
             time_count = get_app_Can_timeout();
@@ -415,7 +416,7 @@ static inline bool app_can_bus_disconnection_error_check(void)
     {
         time_count = 0.0f;
     }
-    app_check.can_mg_counts_last = app_check.can_mg_counts_now;
+    kAppCheck.can_mg_counts_last = kAppCheck.can_mg_counts_now;
     return false;
 }
 
@@ -425,24 +426,24 @@ static inline bool app_can_bus_disconnection_error_check(void)
  *
  * @return 过温，返回 true；否则返回 false。
  */
-static inline bool app_excess_temperature_motor_error_check(void)
+static inline bool AppExcessTemperatureMotorErrorCheck(void)
 {
-    if (app_check.motor_temp_now > MOTOR_NTC_FAULT_C) // NTC警告
+    if (kAppCheck.motor_temp_now > MOTOR_NTC_FAULT_C) // NTC警告
     {
-        app_check.warning.bits.motor_temperature_ntc = true;
+        kAppCheck.warning.bits.motor_temperature_ntc = true;
         return false; //非正常温度值，不再检测错误
     }
 
-    if (app_check.motor_temp_now > get_app_Motor_high_temperature_warning_threshold()) // 警告
+    if (kAppCheck.motor_temp_now > get_app_Motor_high_temperature_warning_threshold()) // 警告
     {
-        app_check.warning.bits.over_temperature_motor = true;
+        kAppCheck.warning.bits.over_temperature_motor = true;
     }
     else
     {
-        app_check.warning.bits.over_temperature_motor = false;
+        kAppCheck.warning.bits.over_temperature_motor = false;
     }
 
-    if (app_check.motor_temp_now > get_app_Motor_high_temperature_fault_threshold()) // 错误
+    if (kAppCheck.motor_temp_now > get_app_Motor_high_temperature_fault_threshold()) // 错误
     {
         return true;
     }
@@ -457,24 +458,24 @@ static inline bool app_excess_temperature_motor_error_check(void)
  *
  * @return 欠温，返回 true；否则返回 false。
  */
-static inline bool app_too_low_temperature_motor_error_check(void)
+static inline bool AppTooLowTemperatureMotorErrorCheck(void)
 {
-    if (app_check.motor_temp_now > MOTOR_NTC_FAULT_C) // NTC警告
+    if (kAppCheck.motor_temp_now > MOTOR_NTC_FAULT_C) // NTC警告
     {
-        app_check.warning.bits.motor_temperature_ntc = true;
+        kAppCheck.warning.bits.motor_temperature_ntc = true;
         return false; //非正常温度值，不再检测错误
     }
 
-    if (app_check.motor_temp_now < get_app_Motor_low_temperature_warning_threshold()) // 警告
+    if (kAppCheck.motor_temp_now < get_app_Motor_low_temperature_warning_threshold()) // 警告
     {
-        app_check.warning.bits.under_temperature_motor = true;
+        kAppCheck.warning.bits.under_temperature_motor = true;
     }
     else
     {
-        app_check.warning.bits.under_temperature_motor = false;
+        kAppCheck.warning.bits.under_temperature_motor = false;
     }
 
-    if (app_check.motor_temp_now < get_app_Motor_low_temperature_fault_threshold()) // 错误
+    if (kAppCheck.motor_temp_now < get_app_Motor_low_temperature_fault_threshold()) // 错误
     {
         return true;
     }
@@ -491,21 +492,21 @@ static inline bool app_too_low_temperature_motor_error_check(void)
  *
  * @return 如果检测到过温故障，返回true；否则返回false。
  */
-static inline bool app_excess_temperature_mcu_error_check(void)
+static inline bool AppExcessTemperatureMcuErrorCheck(void)
 {
     static float time_count = 0;
 
-    if (app_check.mcu_temp_now > get_app_Mcu_high_temperature_warning_threshold()) // 警告
+    if (kAppCheck.mcu_temp_now > get_app_Mcu_high_temperature_warning_threshold()) // 警告
     {
-        app_check.warning.bits.over_temperature_mcu = true;
+        kAppCheck.warning.bits.over_temperature_mcu = true;
     }
     else
     {
-        app_check.warning.bits.over_temperature_mcu = false;
+        kAppCheck.warning.bits.over_temperature_mcu = false;
     }
-    if (app_check.mcu_temp_now > get_app_Mcu_high_temperature_fault_threshold())
+    if (kAppCheck.mcu_temp_now > get_app_Mcu_high_temperature_fault_threshold())
     {
-        time_count += app_check.dt_1ms;
+        time_count += kAppCheck.dt_1ms;
         if (time_count >= get_app_Mcu_temperature_threshold_time())
         {
             time_count = get_app_Mcu_temperature_threshold_time();
@@ -527,22 +528,22 @@ static inline bool app_excess_temperature_mcu_error_check(void)
  *
  * @return 如果检测到温度过低且持续时间超过阈值，返回true，否则返回false。
  */
-static inline bool app_too_low_temperature_mcu_error_check(void)
+static inline bool AppTooLowTemperatureMcuErrorCheck(void)
 {
     static float time_count = 0;
 
-    if (app_check.mcu_temp_now < get_app_Mcu_low_temperature_warning_threshold()) // 警告
+    if (kAppCheck.mcu_temp_now < get_app_Mcu_low_temperature_warning_threshold()) // 警告
     {
-        app_check.warning.bits.under_temperature_mcu = true;
+        kAppCheck.warning.bits.under_temperature_mcu = true;
     }
     else
     {
-        app_check.warning.bits.under_temperature_mcu = false;
+        kAppCheck.warning.bits.under_temperature_mcu = false;
     }
 
-    if (app_check.mcu_temp_now < get_app_Mcu_low_temperature_fault_threshold())
+    if (kAppCheck.mcu_temp_now < get_app_Mcu_low_temperature_fault_threshold())
     {
-        time_count += app_check.dt_1ms;
+        time_count += kAppCheck.dt_1ms;
         if (time_count >= get_app_Mcu_temperature_threshold_time())
         {
             time_count = get_app_Mcu_temperature_threshold_time();
@@ -559,15 +560,15 @@ static inline bool app_too_low_temperature_mcu_error_check(void)
 #pragma endregion
 
 #pragma region 状态检测函数定义
-bool app_motor_enable_state_check(void)
+bool AppMotorEnableStateCheck(void)
 {
     // 同步控制层的使能状态
     if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_STATE_ENABLE)
     {
-        app_check.status.bits.motor_enable_state = true;
+        kAppCheck.status.bits.motor_enable_state = true;
         return true;
     }
-    app_check.status.bits.motor_enable_state = false;
+    kAppCheck.status.bits.motor_enable_state = false;
     return false;
 }
 
@@ -579,12 +580,12 @@ bool app_motor_enable_state_check(void)
  *
  * @return 如果目标到达状态返回true，否则返回false。
  */
-bool app_target_reached_state_check(void)
+bool AppTargetReachedStateCheck(void)
 {
     // 控制字暂停，所有模式均检测速度是否为0,更新目标到达状态
-    app_check.status.bits.target_reached = app_check.status.bits.velocity_zero;
+    kAppCheck.status.bits.target_reached = kAppCheck.status.bits.velocity_zero;
 
-    return app_check.status.bits.target_reached;
+    return kAppCheck.status.bits.target_reached;
 }
 
 /**
@@ -595,17 +596,17 @@ bool app_target_reached_state_check(void)
  *
  * @return 如果速度为零状态返回true，否则返回false。
  */
-bool app_velocity_zero_state_check(void)
+bool AppVelocityZeroStateCheck(void)
 {
     static float time_count = 0;
 
-    if (MATH_ABS(app_check.load_rpm_now) <= get_app_Velocity_threshold())
+    if (MATH_ABS(kAppCheck.load_rpm_now) <= get_app_Velocity_threshold())
     {
-        time_count += app_check.dt_1ms;
+        time_count += kAppCheck.dt_1ms;
         if (time_count >= get_app_Velocity_threshold_time())
         {
             time_count = get_app_Velocity_threshold_time();
-            app_check.status.bits.velocity_zero = true;
+            kAppCheck.status.bits.velocity_zero = true;
             return true;
         }
     }
@@ -613,7 +614,7 @@ bool app_velocity_zero_state_check(void)
     {
         time_count = 0;
     }
-    app_check.status.bits.velocity_zero = false;
+    kAppCheck.status.bits.velocity_zero = false;
     return false;
 }
 
@@ -624,18 +625,18 @@ bool app_velocity_zero_state_check(void)
  *
  * @return 如果达到回零状态返回true，否则返回false。
  */
-bool app_homing_attained_state_check(void)
+bool AppHomingAttainedStateCheck(void)
 {
     if (get_app_Homing_method() == 35 && get_app_Controlword() == APP_CTRL_ENABLE)
     {
-        app_check.status.bits.homing_attained = true;
+        kAppCheck.status.bits.homing_attained = true;
     }
     else
     {
-        app_check.status.bits.homing_attained = false;
+        kAppCheck.status.bits.homing_attained = false;
     }
 
-    return app_check.status.bits.homing_attained;
+    return kAppCheck.status.bits.homing_attained;
 }
 
 /**
@@ -647,23 +648,23 @@ bool app_homing_attained_state_check(void)
  *
  * @return 如果位置达到目标状态返回true，否则返回false。
  */
-bool app_position_target_reached_state_check(void)
+bool AppPositionTargetReachedStateCheck(void)
 {
     static float time_count = 0;
 
-    app_check.pos_diff_now = get_app_Target_position() - get_app_Position_actual_value();
-    app_check.pos_diff_now = MATH_ABS(app_check.pos_diff_now);
-    if (app_check.pos_diff_now > 0x7FFFFFFF)
+    kAppCheck.pos_diff_now = get_app_Target_position() - get_app_Position_actual_value();
+    kAppCheck.pos_diff_now = MATH_ABS(kAppCheck.pos_diff_now);
+    if (kAppCheck.pos_diff_now > 0x7FFFFFFF)
     {
-        app_check.pos_diff_now = 0x7FFFFFFF;
+        kAppCheck.pos_diff_now = 0x7FFFFFFF;
     }
-    if (app_check.pos_diff_now <= get_app_Position_window())
+    if (kAppCheck.pos_diff_now <= get_app_Position_window())
     {
-        time_count += app_check.dt;
+        time_count += kAppCheck.dt;
         if (time_count >= get_app_Position_window_time())
         {
             time_count = get_app_Position_window_time();
-            app_check.status.bits.position_target_reached = true;
+            kAppCheck.status.bits.position_target_reached = true;
             return true;
         }
     }
@@ -671,12 +672,12 @@ bool app_position_target_reached_state_check(void)
     {
         time_count = 0;
     }
-    app_check.status.bits.position_target_reached = false;
+    kAppCheck.status.bits.position_target_reached = false;
     return false;
 }
-void app_position_target_reached_state_clear(void)
+void AppPositionTargetReachedStateClear(void)
 {
-    app_check.status.bits.position_target_reached = false;
+    kAppCheck.status.bits.position_target_reached = false;
 }
 
 /**
@@ -688,18 +689,18 @@ void app_position_target_reached_state_clear(void)
  *
  * @return 如果速度达到目标状态返回true，否则返回false。
  */
-bool app_velocity_target_reached_state_check(void)
+bool AppVelocityTargetReachedStateCheck(void)
 {
     static float time_count = 0;
 
-    app_check.vel_diff_now = get_app_Target_velocity() - get_app_Velocity_actual_value();
-    if (MATH_ABS(app_check.vel_diff_now) <= get_app_Velocity_window())
+    kAppCheck.vel_diff_now = get_app_Target_velocity() - get_app_Velocity_actual_value();
+    if (MATH_ABS(kAppCheck.vel_diff_now) <= get_app_Velocity_window())
     {
-        time_count += app_check.dt;
+        time_count += kAppCheck.dt;
         if (time_count >= get_app_Velocity_window_time())
         {
             time_count = get_app_Velocity_window_time();
-            app_check.status.bits.velocity_target_reached = true;
+            kAppCheck.status.bits.velocity_target_reached = true;
             return true;
         }
     }
@@ -707,12 +708,12 @@ bool app_velocity_target_reached_state_check(void)
     {
         time_count = 0;
     }
-    app_check.status.bits.velocity_target_reached = false;
+    kAppCheck.status.bits.velocity_target_reached = false;
     return false;
 }
-void app_velocity_target_reached_state_clear(void)
+void AppVelocityTargetReachedStateClear(void)
 {
-    app_check.status.bits.velocity_target_reached = false;
+    kAppCheck.status.bits.velocity_target_reached = false;
 }
 
 /**
@@ -722,20 +723,20 @@ void app_velocity_target_reached_state_clear(void)
  *
  * @return 如果目标转矩达到状态返回true，否则返回false。
  */
-bool app_target_torque_reached_state_check(void)
+bool AppTargetTorqueReachedStateCheck(void)
 {
-    app_check.trq_diff_now = get_app_Target_torque() - get_app_Torque_demand_value();
-    if (MATH_ABS(app_check.trq_diff_now) <= 0.0001f) // 判断目标转矩和指令规划转矩指令相等
+    kAppCheck.trq_diff_now = get_app_Target_torque() - get_app_Torque_demand_value();
+    if (MATH_ABS(kAppCheck.trq_diff_now) <= 0.0001f) // 判断目标转矩和指令规划转矩指令相等
     {
-        app_check.status.bits.target_torque_reached = true;
+        kAppCheck.status.bits.target_torque_reached = true;
         return true;
     }
-    app_check.status.bits.target_torque_reached = false;
+    kAppCheck.status.bits.target_torque_reached = false;
     return false;
 }
-void app_target_torque_reached_state_clear(void)
+void AppTargetTorqueReachedStateClear(void)
 {
-    app_check.status.bits.target_torque_reached = false;
+    kAppCheck.status.bits.target_torque_reached = false;
 }
 
 #pragma endregion
@@ -743,17 +744,17 @@ void app_target_torque_reached_state_clear(void)
 #pragma region 外部接口函数定义
 uint32_t app_get_check_error_val(void)
 {
-    return app_check.error.all;
+    return kAppCheck.error.all;
 }
 
 uint32_t app_get_check_warning_val(void)
 {
-    return app_check.warning.all;
+    return kAppCheck.warning.all;
 }
 
 uint32_t app_get_check_status_val(void)
 {
-    return app_check.status.all;
+    return kAppCheck.status.all;
 }
 
 /**
@@ -762,15 +763,15 @@ uint32_t app_get_check_status_val(void)
  *
  * @note
  */
-void app_status_scan_init(void)
+void AppStatusScanInit(void)
 {
-    app_check.scan_ring_num = MATH_ARRAY_SIZE(CheckTable);
-    sys_get_bsp_error_state(&app_check.p_bsp_error);
-    app_check.error_record_addr = get_app_Error_records_list_addr();
-    app_check.dt = axis->pmsm_config.tp_s;
-    app_check.dt_1ms = TASK_PERIOD_1MS;
-    app_check.i_rated_squared = DRIVER_RATED_CURRENT_A * DRIVER_RATED_CURRENT_A;
-    app_check.i_peak_squared_threshold = 0.81f * DRIVER_PEAK_CURRENT_A * DRIVER_PEAK_CURRENT_A;
+    kAppCheck.scan_ring_num = MATH_ARRAY_SIZE(CheckTable);
+    sys_get_bsp_error_state(&kAppCheck.p_bsp_error);
+    kAppCheck.error_record_addr = get_app_Error_records_list_addr();
+    kAppCheck.dt = axis->pmsm_config.tp_s;
+    kAppCheck.dt_1ms = TASK_PERIOD_1MS;
+    kAppCheck.i_rated_squared = DRIVER_RATED_CURRENT_A * DRIVER_RATED_CURRENT_A;
+    kAppCheck.i_peak_squared_threshold = 0.81f * DRIVER_PEAK_CURRENT_A * DRIVER_PEAK_CURRENT_A;
 }
 
 /**
@@ -782,42 +783,42 @@ void app_status_scan_init(void)
  *
  * @note 应周期性调用本函数以监测和更新错误状态。
  */
-void app_status_scan_fast(void)
+void AppStatusScanFast(void)
 {
-    app_check.now_ctrl_word = get_app_Controlword();
+    kAppCheck.now_ctrl_word = get_app_Controlword();
     // 控制字发送0->3，清错
-    if (app_check.pre_ctrl_word == APP_CTRL_DISABLE &&
-        (app_check.now_ctrl_word == APP_CTRL_CLEAR_ERROR))
+    if (kAppCheck.pre_ctrl_word == APP_CTRL_DISABLE &&
+        (kAppCheck.now_ctrl_word == APP_CTRL_CLEAR_ERROR))
     {
-        if (app_check.p_bsp_error->bit_band.error_bus_voltage) // 母线电压错误无法被清除  只能复位
+        if (kAppCheck.p_bsp_error->bit_band.error_bus_voltage) // 母线电压错误无法被清除  只能复位
         {
             ;;;
         }
         else
         {
-            app_check.error.all = 0;
-            app_check.p_bsp_error->code = 0;
+            kAppCheck.error.all = 0;
+            kAppCheck.p_bsp_error->code = 0;
         }
     }
-    app_check.pre_ctrl_word = app_check.now_ctrl_word;
+    kAppCheck.pre_ctrl_word = kAppCheck.now_ctrl_word;
 
     // 遍历错误检测函数
-    for (uint8_t i = 0; i < app_check.scan_ring_num; i++)
+    for (uint8_t i = 0; i < kAppCheck.scan_ring_num; i++)
     {
         if (CheckTable[i].scan_fast == true)
         {
-            app_check.error.all |= (CheckTable[i].check_func() << i); // 对应bit置1
+            kAppCheck.error.all |= (CheckTable[i].check_func() << i); // 对应bit置1
         }
     }
 
     // 发生错误失能电机
-    if (app_check.error.all != 0)
+    if (kAppCheck.error.all != 0)
     {
         // TODO：根据不同错误类型执行不同保护动作，目前统一失能
         set_app_Controlword(APP_CTRL_DISABLE);
     }
 
-    app_motor_enable_state_check();
+    AppMotorEnableStateCheck();
 }
 
 /**
@@ -829,38 +830,38 @@ void app_status_scan_fast(void)
  *
  * @note 应周期性调用本函数以监测和更新错误状态。
  */
-void app_status_scan_slow(void)
+void AppStatusScanSlow(void)
 {
     // 部分通用检测数据更新
-    app_check.idq_now[0] = get_app_D_current_actual_value();
-    app_check.idq_now[1] = get_app_Current_actual_value();
-    app_check.idq_squared_now = app_check.idq_now[0] * app_check.idq_now[0] + app_check.idq_now[1] * app_check.idq_now[1];
-    app_check.drive_temp_now = get_app_Drive_temperature();
-    app_check.motor_temp_now = get_app_Motor_temperature();
-    app_check.mcu_temp_now = get_app_Mcu_temperature();
-    app_check.load_rpm_now = get_app_Velocity_actual_value();
+    kAppCheck.idq_now[0] = get_app_D_current_actual_value();
+    kAppCheck.idq_now[1] = get_app_Current_actual_value();
+    kAppCheck.idq_squared_now = kAppCheck.idq_now[0] * kAppCheck.idq_now[0] + kAppCheck.idq_now[1] * kAppCheck.idq_now[1];
+    kAppCheck.drive_temp_now = get_app_Drive_temperature();
+    kAppCheck.motor_temp_now = get_app_Motor_temperature();
+    kAppCheck.mcu_temp_now = get_app_Mcu_temperature();
+    kAppCheck.load_rpm_now = get_app_Velocity_actual_value();
 
     // 遍历错误检测函数
-    for (uint8_t i = 0; i < app_check.scan_ring_num; i++)
+    for (uint8_t i = 0; i < kAppCheck.scan_ring_num; i++)
     {
         if (CheckTable[i].scan_fast == false)
         {
-            app_check.error.all |= (CheckTable[i].check_func() << i); // 对应bit置1
+            kAppCheck.error.all |= (CheckTable[i].check_func() << i); // 对应bit置1
         }
     }
 
     // 发生错误失能电机
-    if (app_check.error.all != 0)
+    if (kAppCheck.error.all != 0)
     {
         // TODO：根据不同错误类型执行不同保护动作，目前统一失能
         set_app_Controlword(APP_CTRL_DISABLE);
 
         // 低速进行错误记录存储兼容高速部分
-        if (app_check.error_record_addr[0] != app_check.error.all) // 错误中，再新增其它错误再加入新记录
+        if (kAppCheck.error_record_addr[0] != kAppCheck.error.all) // 错误中，再新增其它错误再加入新记录
         {
-            app_check.error_record_latch_flag = false;
+            kAppCheck.error_record_latch_flag = false;
         }
-        if (app_check.error_record_latch_flag == false)
+        if (kAppCheck.error_record_latch_flag == false)
         {
             if (axis->motor_ctl_sm_output.state != MOTOR_CTL_SM_STATE_ENABLE && \
                 get_app_Storage_status() != FLASH_STORE_STATUS_BUSY)    // 等待Flash空闲
@@ -868,22 +869,22 @@ void app_status_scan_slow(void)
                 // 数组FIFO，更新错误记录，低优先级更新避免重复记录错误
                 for (uint8_t i = ERROR_RECORD_NUM - 1; i > 0; i--)
                 {
-                    app_check.error_record_addr[i] = app_check.error_record_addr[i - 1];
+                    kAppCheck.error_record_addr[i] = kAppCheck.error_record_addr[i - 1];
                 }
-                app_check.error_record_addr[0] = app_check.error.all;
-                app_check.error_record_latch_flag = true;
+                kAppCheck.error_record_addr[0] = kAppCheck.error.all;
+                kAppCheck.error_record_latch_flag = true;
                 set_app_Storage_cmd(FLASH_STORE_CMD_WRITE_ERROR);
             }
         }
     }
     else
     {
-        app_check.error_record_latch_flag = false;
+        kAppCheck.error_record_latch_flag = false;
     }
 
     // 检查速度是否为零状态
-    app_velocity_zero_state_check();
-    app_target_reached_state_check();
+    AppVelocityZeroStateCheck();
+    AppTargetReachedStateCheck();
 }
 
 /**
@@ -892,7 +893,7 @@ void app_status_scan_slow(void)
  * 错误状态 error led 常亮  run led  0.1s 闪烁一次
  * @note  应周期性调用本函数以监测和更新 LED 状态。
  */
-void app_led_state_updata_1ms(void)
+void AppLedStateUpdata1ms(void)
 {
     static uint16_t run_led_times_count = 0; // 运行LED闪烁计数
     static uint16_t run_led_blink_period = LED_NORMAL_STATE_PERIOD; // 运行LED闪烁周期

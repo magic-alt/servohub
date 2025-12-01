@@ -16,7 +16,7 @@ static PvMode_t pv_mode =
 
 AppResult pv_mode_init()
 {
-    app_velocity_target_reached_state_clear();
+    AppVelocityTargetReachedStateClear();
     set_app_Controlword(APP_CTRL_DISABLE); // 上升沿使能，初始化置0
     pv_mode.pre_Controlword = APP_CTRL_DISABLE;
 
@@ -102,7 +102,7 @@ AppResult pv_mode_run()
 
     pv_mode.pre_Controlword = pv_mode.now_Controlword;
 
-    app_velocity_target_reached_state_check();
+    AppVelocityTargetReachedStateCheck();
 
     return APP_RET_RUNNING;
 }

@@ -144,13 +144,13 @@ void UnrealTimeBase1ms(void)
     bsp_get_dc_bus_current();
 
     // 6. 状态扫描
-    app_status_scan_slow();
+    AppStatusScanSlow();
 
     // 7. 更新LED状态
-    app_led_state_updata_1ms();
+    AppLedStateUpdata1ms();
 
     // 8. flash参数存储
-    app_store_updata_1ms();
+    AppStoreUpdata1ms();
 
 #ifdef MOTOR_CTL_TEST // 控制层示例测试代码
     motor_ctl_test();
@@ -185,7 +185,7 @@ void PosSpeedLoopCtrl(void)
 
     if (get_app_Internal_control_authority() == INTERNAL_CONTROL_APP)
     {
-        app_status_scan_fast();
+        AppStatusScanFast();
         AppRun(kAxis.motor_ctl_sm_input.hw_ready_state);
     }
 
@@ -227,10 +227,10 @@ void PosSpeedLoopCtrl(void)
 
 
     // 同步控制层变量到应用层,实现波形动态刷新和离线波形采集
-    app_param_sync_user();
+    AppParamSyncUser();
 
     // 运行离线波形采样
-    scope_isr_handle();
+    ScopeIsrHandle();
 }
 
 /**

@@ -76,7 +76,7 @@ void mavlink_scope_control_callback(mavlink_scopecontrol_t *mavlink_control,
     } else if (rw == SCOPE_WRITE) {
         if (mavlink_control->control_word != kNullControl) {
             scope_struct->control_word = mavlink_control->control_word;
-            control_word_write_callback(mavlink_control->control_word);
+            ControlWordWriteCallback(mavlink_control->control_word);
         }
     }
 }
@@ -109,7 +109,7 @@ void mavlink_get_scope_data_callback(mavlink_scopedata_t *mavlink_scope_data,
         mavlink_scope_data->frame_data[1] = ch & 0xff;
         mavlink_scope_data->frame_data[2] = pack_index >> 8;
         mavlink_scope_data->frame_data[3] = pack_index & 0xff;
-        scope_channel_data_read(ch, pack_index, &mavlink_scope_data->frame_data[4],
+        ScopeChannelDataRead(ch, pack_index, &mavlink_scope_data->frame_data[4],
                                 &mavlink_scope_data->frame_data[8]);
     }
 }

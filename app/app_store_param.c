@@ -343,7 +343,7 @@ static void flashdb_database_init(void)
     }
 }
 
-void app_store_init(void)
+void AppStoreInit(void)
 {
     flash_param_update(); // 在初次存储KV还未被创建时，将参数默认值更新到kFlashStorage后写入flash
     flashdb_database_init();
@@ -351,12 +351,12 @@ void app_store_init(void)
     set_app_Storage_status(FLASH_STORE_STATUS_IDLE);
 
     set_app_Storage_cmd(FLASH_STORE_CMD_READ_PARAM);
-    app_store_updata_1ms();
+    AppStoreUpdata1ms();
     set_app_Storage_cmd(FLASH_STORE_CMD_READ_ERROR);
-    app_store_updata_1ms();
+    AppStoreUpdata1ms();
 }
 
-void app_store_updata_1ms(void)
+void AppStoreUpdata1ms(void)
 {
     FLASHDB_STATUS flashdb_status = FLASHDB_NO_ERR;
 
@@ -391,7 +391,7 @@ void app_store_updata_1ms(void)
                 break;
             case FLASH_STORE_CMD_ERASE_PARAM:
                 // 先恢复出厂再写入flash，成功后系统复位
-                app_param_init();  //应用层数据库初始化
+                AppParamInit();  //应用层数据库初始化
                 MotorCtrlInit();   //控制层数据库初始化
                 flash_param_update();
 

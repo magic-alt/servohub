@@ -374,7 +374,7 @@ static void scope_reset() {
 /**
  * @brief 获取通道数据
  */
-void scope_channel_data_read(uint32_t channel_num, uint16_t subindex, uint8_t* data_length,
+void ScopeChannelDataRead(uint32_t channel_num, uint16_t subindex, uint8_t* data_length,
                              uint8_t* p_data) {
     ChannelStruct* temp_channel = NULL;
     temp_channel = kScopeObject.channel_object[channel_num];
@@ -385,7 +385,7 @@ void scope_channel_data_read(uint32_t channel_num, uint16_t subindex, uint8_t* d
 /**
  * @brief 示波器初始化，系统上电后仅执行一次
  */
-void scope_init(void) {
+void ScopeInit(void) {
 
     memset(&kScopeObject, 0, sizeof(ScopeStruct));
 
@@ -407,7 +407,7 @@ void scope_init(void) {
 /**
  * @brief 示波器中断处理
  */
-void scope_isr_handle(void) {
+void ScopeIsrHandle(void) {
     //初始化未完成，则直接返回
     if (kInitSuccessFlag != kScopeObject.init_flag) { return; }
 
@@ -446,7 +446,7 @@ void scope_isr_handle(void) {
  * @brief 控制字写入回调函数
  * @param control_word 控制字
  */
-void control_word_write_callback(ScopeControlWord control_word) {
+void ControlWordWriteCallback(ScopeControlWord control_word) {
     kScopeObject.control_word = control_word;
     switch (kScopeObject.control_word) {
         case kScopeConfig:
