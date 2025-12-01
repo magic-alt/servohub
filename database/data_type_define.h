@@ -34,7 +34,7 @@ typedef enum
 {
     ERROR_ENCODER_MOTOR = 0,                // 电机端编码器错误
     ERROR_ENCODER_LOAD,                     // 负载端编码器错误
-    ERROR_NFAULT,                           // Drv预驱nFault报错
+    ERROR_NFAULT,                           // nFault引脚报错低电平触发
     ERROR_BUS_CURRENT_OC,                   // 母线过流错误
     ERROR_BUS_OFFLINE,                      // 母线掉线
     ERROR_FLASH_STORE,                      // Flash存储错误
