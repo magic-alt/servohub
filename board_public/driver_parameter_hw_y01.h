@@ -29,11 +29,11 @@ extern "C"
 #define UVW_CURRENT_DIRECTION           (1.0f)      // 电流采样方向 1：正向  -1：反向
 
 
-#define CURRENT_SAMP_NOISE_A            (0.3f)      // 电流采样噪声绝对值
-#define VOLTAGE_COMPENSATION_V          (0.00f)     // 电压补偿值
-#define DRIVER_RATED_CURRENT_A          (38.0F)     // 驱动器额定电流 iq峰值电流
-#define DRIVER_PEAK_CURRENT_A           (76.0F)     // 驱动器峰值电流 iq峰值电流
-#define DRIVER_OVERCURRENT_LIMIT_A      (100.0F)    // 驱动器过电流保护阈值
+#define CURRENT_SAMP_NOISE_A            (0.05f)     // 电流采样噪声绝对值
+#define VOLTAGE_COMPENSATION_V          (0.00f)     // 死区电压补偿值
+#define DRIVER_RATED_CURRENT_A          (14.14f)    // 驱动器额定电流 iq峰值电流
+#define DRIVER_PEAK_CURRENT_A           (40.0F)     // 驱动器峰值电流 iq峰值电流
+#define DRIVER_OVERCURRENT_LIMIT_A      (41.0F)     // 驱动器过电流保护阈值
 #define DRIVER_PWM_READY_TIME           (0)         // PWM使能后等待时间 (单位 位置环周期数)
 #define MOS_TEMP_VOLTAGE_K              (3300.0f / ADC_RESOLTION)   // MOS温度传感器电压转换系数
 #define MOS_TEMP_SENSOR_K               (0.1f)      // MOS温度传感器温度系数
