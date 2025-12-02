@@ -173,18 +173,19 @@ void FreeToRotateErrorHandle(void);
 #define Winding_controller_error                                   (0X8800)
 #define Process_data_monitoring_error                              (0X8900)
 #define Softeware_Control_error                                    (0X8A00)
-// 用户自定义的 错误代码
 #define Deceleration_error                                         (0XF001)
 #define Sub_synchronous_run_error                                  (0XF002)
 #define Stroke_operation_error                                     (0XF003)
 #define Ohter_control_error                                        (0XF004)
-#define Driver_peak_current_overload_error                         (0XF005)
-#define Drv_init_error                                             (0XF006)
-#define Drv_nfault_error                                           (0XF007)
-#define Current_sample_error                                       (0XF008)
-#define Drive_bus_voltage_error                                    (0XF009)
-#define Can_bus_disconnection_error                                (0XF00A)
-#define Under_temperature_motor_error                              (0XF00B)
+
+// 用户自定义的 错误代码
+#define Driver_peak_current_overload_error                         (0XFF05)
+#define Drv_init_error                                             (0XFF06)
+#define Drv_nfault_error                                           (0XFF07)
+#define Current_sample_error                                       (0XFF08)
+#define Drive_bus_voltage_error                                    (0XFF09)
+#define Can_bus_disconnection_error                                (0XFF0A)
+#define Under_temperature_motor_error                              (0XFF0B)
 
 
 #endif // CIA402_ERROR_CODE_H
