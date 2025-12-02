@@ -29,5 +29,5 @@
 #define MATH_RAD2RPM   (9.549296585513721f)  // 60/(2*pi)
 #define MATH_ABS(x) (((x) > 0) ? (x) : -(x))
 #define MATH_ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
-
+#define MATH_FLOAT_EQUAL (1E-4F)  // 判断2个float是否相等 的误差范围
 #endif

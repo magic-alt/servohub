@@ -726,7 +726,7 @@ void AppVelocityTargetReachedStateClear(void)
 bool AppTargetTorqueReachedStateCheck(void)
 {
     kAppCheck.trq_diff_now = get_app_Target_torque() - get_app_Torque_demand_value();
-    if (MATH_ABS(kAppCheck.trq_diff_now) <= 0.0001f) // 判断目标转矩和指令规划转矩指令相等
+    if (MATH_ABS(kAppCheck.trq_diff_now) <= MATH_FLOAT_EQUAL) // 判断目标转矩和指令规划转矩指令相等
     {
         kAppCheck.status.bits.target_torque_reached = true;
         return true;
