@@ -48,20 +48,23 @@ AppResult MitModeRun()
 
         if (get_app_Halt_running_cmd() == true)
         {
+            kMitMode.traj.pos_tar_p = get_app_Motor_position_actual_value();
             kMitMode.traj.speed_tar_p_s = 0;
         }
         else
         {
-            kMitMode.traj.speed_tar_p_s = get_app_MIT_target_velocity() * get_app_Load_rpm_2_pps() * \
-                                            get_app_Reduction_ratio();
+            kMitMode.pos_tar_p_add = (float)(get_app_MIT_target_position() - get_app_Position_actual_value()) *
+                                     get_app_Reduction_ratio();
+            kMitMode.traj.pos_tar_p = kMitMode.pos_tar_p_add + get_app_Motor_position_actual_value();
+            
+            kMitMode.traj.speed_tar_p_s = get_app_MIT_target_velocity() * get_app_Load_rpm_2_pps() *
+                                          get_app_Reduction_ratio();
         }
+
         kMitMode.traj.iq_max_A = get_app_MIT_max_current();
-        kMitMode.pos_tar_p_add = (float)(get_app_MIT_target_position() - get_app_Position_actual_value()) * \
-                                    get_app_Reduction_ratio();
-        kMitMode.traj.pos_tar_p = kMitMode.pos_tar_p_add + get_app_Motor_position_actual_value();
-        kMitMode.traj.tq_set_NM = get_app_MIT_feedforward_torque() * get_app_Reduction_ratio_inv();  //负载端转矩  转化 为电机端
-        kMitMode.traj.kp_pos_NM_rad = get_app_MIT_kp() * get_app_Reduction_ratio_inv();  // 转化为电机端增益
-        kMitMode.traj.kd_spd_NM_rad_s = get_app_MIT_kd() * get_app_Reduction_ratio_inv();  // 转化为电机端增益
+        kMitMode.traj.tq_set_NM = get_app_MIT_feedforward_torque() * get_app_Reduction_ratio_inv(); // 负载端转矩  转化 为电机端
+        kMitMode.traj.kp_pos_NM_rad = get_app_MIT_kp() * get_app_Reduction_ratio_inv();             // 转化为电机端增益
+        kMitMode.traj.kd_spd_NM_rad_s = get_app_MIT_kd() * get_app_Reduction_ratio_inv();           // 转化为电机端增益
     }
     else if (kMitMode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
     {
@@ -72,7 +75,7 @@ AppResult MitModeRun()
         if (kMitMode.emergency_brake_mode <= EMERGENCY_BRAKE_MODE_VOLTAGE_LIMIT)
         {
             kMitMode.check_status_val = (CheckStatusVal_t)app_get_check_status_val();
-            if (kMitMode.emergency_brake_mode == EMERGENCY_BRAKE_MODE_DISABLED ||\
+            if (kMitMode.emergency_brake_mode == EMERGENCY_BRAKE_MODE_DISABLED ||
                 kMitMode.check_status_val.bits.velocity_zero == true)
             {
                 set_app_Controlword(APP_CTRL_DISABLE);
