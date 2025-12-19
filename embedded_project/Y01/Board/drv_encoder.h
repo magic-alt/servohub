@@ -120,9 +120,10 @@ typedef struct
 //#define TAMAGAWA_ENCODER_ID (Real_encoder_id) // 当读取ID时，使用实际编码器ID
 #define TAMAGAWA_ENCODER_ID (0xCE)  // 当未读取编码器ID时，位置解析成功后强制设为0xCE（Connected Encoder）
 
-void encoder_data_init(void);
-void encoder_data_read(void);
-void encoder_data_process(void);
+void EncoderDataInit(void);
+void EncoderDataRead(void);
+void EncoderDataProcess(void);
+
 uint32_t get_encoder_cnt(ENCODER_ID const enc_id);
 int64_t get_encoder_turns(ENCODER_ID const enc_id);
 bool get_encoder_status(ENCODER_ID const enc_id);

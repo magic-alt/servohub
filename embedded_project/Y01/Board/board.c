@@ -180,13 +180,13 @@ void POSITION_LOOP_IRQ_TASK(void)
 #ifndef VIRTUAL_MOTOR_MODEL
     if (sys_get_hardware_self_test_status() == false)
     {
-        encoder_data_init();
+        EncoderDataInit();
         HardwareSelfTestRun();
     }
 
     // 编码器数据读取及处理
-    encoder_data_read();
-    encoder_data_process();
+    EncoderDataRead();
+    EncoderDataProcess();
 
     bsp_pwm_ready_state_updata(); // 更新PWM输出准备状态
 #endif
