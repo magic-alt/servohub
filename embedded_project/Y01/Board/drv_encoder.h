@@ -3,6 +3,17 @@
 
 #include "board.h"
 
+// 编码器类型/型号定义
+#define ENCODER_TYPE_NONE               0x00 // 无编码器
+#define ENCODER_TYPE_INC_AB_ABZ         0x01 // 增量式通用AB/ABZ编码器，注：由于Y01硬件单接口，只可配置电机端/负载端任选一端
+#define ENCODER_TYPE_ABS_RS485_TAMAGAWA 0x02 // 绝对式通用RS485多摩川编码器
+#define ENCODER_TYPE_ABS_SPI_KTM59XX    0x03 // 绝对式SPI KTM59xx 编码器
+#define ENCODER_TYPE_ABS_BISSC_SMC40S   0x04 // 绝对式SPI BISS-C SMC40S 编码器
+// 其他编码器类型
+// ...
+// 编码器类型通过宏定义指定
+#define ENCODER1_TYPE_OPTION    (ENCODER_TYPE_ABS_RS485_TAMAGAWA)      // 电机端
+#define ENCODER2_TYPE_OPTION    (ENCODER_TYPE_NONE)      // 负载端
 // 编码器参数定义
 #define ENCODER_FRAME_MAX_LEN   16  // 数据帧最大帧长度
 #define ENCODER_COMM_ERROR_MAX  20  // 编码器连续通信错误最大次数
@@ -23,6 +34,17 @@ typedef enum : uint8_t
     TAMAGAWA_CF_ID_6 = 0x32,        // 写入EEPROM
     TAMAGAWA_CF_ID_D = 0xEA,        // 从EEPROM读取
 
+    // KTM59xx编码器 CF_ID（bit31~24） 宏定义（协议标准值）
+    KTM59XX_CF_ID_1 = 0x5B,         // 指令1：控制寄存器写入
+    KTM59XX_CF_ID_2 = 0x62,         // 指令2：控制寄存器读取
+    KTM59XX_CF_ID_3 = 0x23,         // 指令3：角度和内部信号读取
+
+    KTM59XX_REG_ADD_CALIB = 0xA0,       // 校准寄存器地址
+    KTM59XX_REG_VAL_CALIB_OFF = 0x00,   // 校准寄存器值：关闭校准
+
+    // BISSC SMC40S BISS-C编码器 宏定义
+    SMC40S_CF_ID_0 = 0x00,          // 读取单圈数据，无需命令
+
     // 其他编码器类型
     // ...
 } EncoderCf_t; // 编码器控制字段
@@ -34,7 +56,7 @@ typedef enum : uint8_t
     TAMAGAWA_FRAME_LEN_ID_0 = 6,    // TAMAGAWA_CF_ID_0：读取单圈数据（ABS0 ABS1 ABS2）
     TAMAGAWA_FRAME_LEN_ID_1 = 6,    // TAMAGAWA_CF_ID_1：读取多圈数据（ABM0 ABM1 ABM2）
     TAMAGAWA_FRAME_LEN_ID_2 = 2,    // TAMAGAWA_CF_ID_2：读取编码器ID（ENID）
-    TAMAGAWA_FRAME_LEN_ID_3 = 13,   // TAMAGAWA_CF_ID_3：读取所有数据（ABS + ENID + ABM + ALMC）
+    TAMAGAWA_FRAME_LEN_ID_3 = 11,   // TAMAGAWA_CF_ID_3：读取所有数据（ABS + ENID + ABM + ALMC）
     TAMAGAWA_FRAME_LEN_ID_4 = 7,    // TAMAGAWA_CF_ID_4：读取单圈扩展数据（ABS0-ABS3）
     TAMAGAWA_FRAME_LEN_ID_5 = 9,    // TAMAGAWA_CF_ID_5：读取单圈 + 多圈扩展数据（ABS0-ABS3 + ABM0-ABM1）
     TAMAGAWA_FRAME_LEN_ID_7 = 2,    // TAMAGAWA_CF_ID_7：复位单圈计数 + 清除错误
@@ -42,6 +64,34 @@ typedef enum : uint8_t
     TAMAGAWA_FRAME_LEN_ID_C = 2,    // TAMAGAWA_CF_ID_C：复位多圈计数 + 清除错误
     TAMAGAWA_FRAME_LEN_ID_6 = 4,    // TAMAGAWA_CF_ID_6：写入EEPROM
     TAMAGAWA_FRAME_LEN_ID_D = 4,    // TAMAGAWA_CF_ID_D：从EEPROM读取
+
+    // KTM59xx编码器各CF_ID对应的帧长度（单位：字节）
+    KTM59XX_FRAME_LEN_ID_1 = 4,    // KTM59XX_CF_ID_1：控制寄存器写入
+    KTM59XX_FRAME_LEN_ID_2 = 4,    // KTM59XX_CF_ID_2：控制寄存器读取
+    KTM59XX_FRAME_LEN_ID_3 = 8,    // KTM59XX_CF_ID_3：角度和内部信号读取
+
+    KTM59xx_FRAME_LEN_TX = 8,    // KTM59xx 数据帧发送长度
+    KTM59xx_FRAME_LEN_TX_BW = 8 * KTM59xx_FRAME_LEN_TX,
+    KTM59xx_FRAME_LEN_RX = 8,    // KTM59xx 数据帧接收长度
+    KTM59xx_FRAME_LEN_RX_BW = 8 * KTM59xx_FRAME_LEN_RX,
+    KTM59xx_FRAME_LEN_ANGLE_BW = 24,    // KTM59xx 角度数据位宽
+    KTM59xx_FRAME_LEN_RC_BW = 0,        // KTM59xx 内部信号数据位宽
+    KTM59xx_FRAME_LEN_STATUS_BW = 2,    // KTM59xx 状态数据位宽
+    KTM59xx_FRAME_LEN_CRC_BW = 8,       // KTM59xx CRC校验位宽
+    KTM59xx_FRAME_LEN_DATA_BW = KTM59xx_FRAME_LEN_ANGLE_BW + KTM59xx_FRAME_LEN_RC_BW + KTM59xx_FRAME_LEN_STATUS_BW, // KTM59xx 数据帧数据位宽
+    KTM59xx_FRAME_LEN_TOTAL_BW = KTM59xx_FRAME_LEN_DATA_BW + KTM59xx_FRAME_LEN_CRC_BW, // KTM59xx 数据帧总位宽
+
+    // BISSC SMC40S BISS-C编码器 各CF_ID对应的帧长度（单位：字节）
+    SMC40S_FRAME_LEN_ID_0 = 4,           // SMC40S_CF_ID_0：读取单圈数据
+
+    SMC40S_FRAME_LEN_ACK_BW = 6,         // SMC40S 数据帧应答位宽
+    SMC40S_FRAME_LEN_START_BW = 1,       // SMC40S 数据帧起始位宽
+    SMC40S_FRAME_LEN_CDS_BW = 1,         // SMC40S 数据帧命令位宽
+    SMC40S_FRAME_LEN_DATA_BW = 19,       // SMC40S 数据帧数据位宽
+    SMC40S_FRAME_LEN_ERROR_BW = 1,       // SMC40S 数据帧错误位宽
+    SMC40S_FRAME_LEN_WARNING_BW = 1,     // SMC40S 数据帧警告位宽
+    SMC40S_FRAME_LEN_CRC_BW = 6,         // SMC40S 数据帧CRC校验位宽
+    SMC40S_FRAME_LEN_TOTAL_BW = SMC40S_FRAME_LEN_DATA_BW + SMC40S_FRAME_LEN_ERROR_BW + SMC40S_FRAME_LEN_WARNING_BW + SMC40S_FRAME_LEN_CRC_BW, // SMC40S 数据帧总位宽
 
     // 其他编码器类型
     // ...
@@ -61,8 +111,19 @@ typedef union
     } bits;
 } Options_t; // 编码器配置选项
 
-typedef struct
+typedef struct EncoderDataInfo_t EncoderDataInfo_t;
+struct EncoderDataInfo_t
 {
+    ENCODER_ID id;                              // 编码器编号
+
+    TIM_HandleTypeDef *tim_handle;              // TIM句柄指针
+    UART_HandleTypeDef *uart_handle;            // UART句柄指针
+    SPI_HandleTypeDef *spi_handle;              // SPI句柄指针
+
+    uint32_t abz_ab_cnt;                        // ABZ编码器AB相计数值
+    bool abz_z_first_flag;                      // ABZ编码器Z相首次计数值标志位
+    uint32_t abz_z_first_ab_cnt;                // ABZ编码器Z相首次计数值
+    uint32_t abz_z_last_ab_cnt;                 // ABZ编码器Z相末次计数值
     uint8_t data_raw[ENCODER_FRAME_MAX_LEN];    // 编码器数据帧
     EncoderFrameLen_t frame_len;                // 数据帧长度
     EncoderCf_t cf;                             // 控制字段
@@ -72,6 +133,8 @@ typedef struct
     uint8_t check_val;                          // 编码器校验值
     uint8_t err_cnt;                            // 错误计数
     Options_t options;                          // 编码器配置选项
+    uint8_t motor_single_less_bits;             // 电机端单圈分辨率降位位数
+    uint8_t load_single_less_bits;              // 负载端单圈分辨率降位位数
     uint32_t motor_single_res;                  // 电机端单圈分辨率
     uint32_t motor_multi_res;                   // 电机端多圈分辨率
     uint32_t load_single_res;                   // 负载端单圈分辨率
@@ -83,7 +146,11 @@ typedef struct
     volatile uint32_t single_cnt;               // 编码器单圈值
     volatile int64_t multi_turns;               // 编码器多圈值
     uint32_t real_motor_turns_res;              // 实际电机端编码器多圈分辨率
-} EncoderDataInfo_t;
+
+    void (*init)(EncoderDataInfo_t *enc_data);  // 编码器初始化函数指针
+    void (*read)(EncoderDataInfo_t *enc_data);  // 编码器数据读取函数指针
+    void (*process)(EncoderDataInfo_t *enc_data); // 编码器数据处理函数指针
+};
 
 // 多摩川编码器数据参数定义
 // SF字段固定位定义（共10位，bit0为最低位，bit9为最高位）
@@ -117,8 +184,13 @@ typedef struct
 #define SF_HAS_DELIM_ALARM(sf_data)  ((sf_data) & SF_ALARM_DELIMITER)
 
 // 编码器ID (固定值)
-//#define TAMAGAWA_ENCODER_ID (Real_encoder_id) // 当读取ID时，使用实际编码器ID
-#define TAMAGAWA_ENCODER_ID (0xCE)  // 当未读取编码器ID时，位置解析成功后强制设为0xCE（Connected Encoder）
+#define ENCODER_CONNECTED_ID        (0xCE)  // 当未读取编码器ID时，位置解析成功后强制设为0xCE（Connected Encoder）
+// 编码器校验值最终异或值
+#define KTM5XXX_CRC8_FINAL_XOR      (0xFF)  // KTM5XXX校验值最终异或值
+#define SMC40S_CRC6_FINAL_XOR       (0x43)  // SMC40S校验值最终异或值
+
+// 其他参数
+#define ENCODER_ABZ_ERROR_RATIO     (0.05f) // 编码器ABZ通信错误最大偏差比例（基于分辨率）
 
 void EncoderDataInit(void);
 void EncoderDataRead(void);
@@ -128,4 +200,5 @@ uint32_t get_encoder_cnt(ENCODER_ID const enc_id);
 int64_t get_encoder_turns(ENCODER_ID const enc_id);
 bool get_encoder_status(ENCODER_ID const enc_id);
 void set_encoder_options(ENCODER_ID enc_id, uint8_t const options);
+
 #endif // DRV_ENCODER_H

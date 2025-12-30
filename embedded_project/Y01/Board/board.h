@@ -85,13 +85,16 @@ typedef struct
 #define PWM_TIM_W_CCR_VAL           (PWM_TIM_HANDLE.Instance->CCR3)
 #define PWM_TIM_BREAK_IRQ_HANDLE    HAL_TIMEx_BreakCallback
 
-#define BRAKE_PWM_TIM_HANDLE        (htim2)             //PWM抱闸IO输出定时器
-#define ENCODER_ABZ_TIM_HANDLE      (htim3)             //ABZ增量式编码器定时器
-#define ENCODER_ABZ_TIM_Z_CHANNEL   (TIM_CHANNEL_3)     //ABZ增量式编码器定时器Z相捕获通道
-#define CANOPEN_TIM_HANDLE          (htim6)             //CANopen定时器
-#define CANOPEN_TIM_ARR             (1000 - 1)          //CANopen定时器ARR值，此宏可同步用于CubeMX配置框（No Check）
-#define ECAT_LAN9252_TIM_HANDLE     (htim7)             //EtherCAT定时器
-#define NRT_TASK_TIM_HANDLE         (htim13)            //非实时(1ms)任务定时器
+#define BRAKE_PWM_TIM_HANDLE        (htim2)                     //PWM抱闸IO输出定时器
+#define ENCODER1_ABZ_TIM_HANDLE     (htim3)                     //ABZ增量式编码器1定时器
+#define ENCODER1_ABZ_TIM_Z_CHANNEL  (TIM_CHANNEL_3)             //ABZ增量式编码器1定时器Z相捕获通道
+#define ENCODER2_ABZ_TIM_HANDLE     (htim3)                     //ABZ增量式编码器2定时器
+#define ENCODER2_ABZ_TIM_Z_CHANNEL  (TIM_CHANNEL_3)             //ABZ增量式编码器2定时器Z相捕获通道
+#define ENCODER_ABZ_TIM_Z_IRQ_TASK  HAL_TIM_IC_CaptureCallback  //Z相中断回调函数
+#define CANOPEN_TIM_HANDLE          (htim6)                     //CANopen定时器
+#define CANOPEN_TIM_ARR             (1000 - 1)                  //CANopen定时器ARR值，此宏可同步用于CubeMX配置框（No Check）
+#define ECAT_LAN9252_TIM_HANDLE     (htim7)                     //EtherCAT定时器
+#define NRT_TASK_TIM_HANDLE         (htim13)                    //非实时(1ms)任务定时器
 #define NRT_CAN_ECAT_IRQ_TASK       HAL_TIM_PeriodElapsedCallback
 
 #pragma endregion // TIMERS
