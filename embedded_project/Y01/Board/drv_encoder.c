@@ -31,6 +31,7 @@ static void SMC40S_Encoder_Data_Process(EncoderDataInfo_t* enc_data);
 EncoderDataInfo_t encoder_data[ENCODER_NUM] = {
     [ENCODER_ID_1] = {
         .id = ENCODER_ID_1,
+        .type = ENCODER_TYPE_NONE,
         .tim_handle = NULL,
         .uart_handle = &ENCODER1_UART_HANDLE,
         .spi_handle = &ENCODER1_SPI_HANDLE,
@@ -84,6 +85,7 @@ EncoderDataInfo_t encoder_data[ENCODER_NUM] = {
     },
     [ENCODER_ID_2] = {
         .id = ENCODER_ID_2,
+        .type = ENCODER_TYPE_NONE,
         .tim_handle = NULL,
         .uart_handle = &ENCODER2_UART_HANDLE,
         .spi_handle = &ENCODER2_SPI_HANDLE,
@@ -234,10 +236,24 @@ void EncoderDataProcess(void)
         }
     }
     // 统一更新编码器数据, 需根据实际编码器1、2接口读取的编码器数据更新电机端、负载端编码器数据
-    encoder_data[ENCODER_ID_MOTOR].single_cnt = encoder_data[ENCODER_ID_1].motor_single_raw;
-    encoder_data[ENCODER_ID_MOTOR].multi_turns = encoder_data[ENCODER_ID_1].motor_multi_raw;
-    encoder_data[ENCODER_ID_LOAD].single_cnt = encoder_data[ENCODER_ID_2].motor_single_raw;
-    encoder_data[ENCODER_ID_LOAD].multi_turns = encoder_data[ENCODER_ID_2].motor_multi_raw;
+    // encoder_data[ENCODER_ID_MOTOR].single_cnt = encoder_data[ENCODER_ID_1].motor_single_raw;
+    // encoder_data[ENCODER_ID_MOTOR].multi_turns = encoder_data[ENCODER_ID_1].motor_multi_raw;
+    // encoder_data[ENCODER_ID_LOAD].single_cnt = encoder_data[ENCODER_ID_2].motor_single_raw;
+    // encoder_data[ENCODER_ID_LOAD].multi_turns = encoder_data[ENCODER_ID_2].motor_multi_raw;
+
+    // 电机端/负载端编码器是否存在，不存在则使用另外一端编码器的值，都不存在按如下方式处理不影响
+    // 电机端数据源：优先使用编码器1，如果编码器1不存在则使用编码器2
+    const ENCODER_ID motor_encoder_source = (encoder_data[ENCODER_ID_1].type != ENCODER_TYPE_NONE) ?
+                                            ENCODER_ID_1 : ENCODER_ID_2;
+    // 负载端数据源：优先使用编码器2，如果编码器2不存在则使用编码器1
+    const ENCODER_ID load_encoder_source = (encoder_data[ENCODER_ID_2].type != ENCODER_TYPE_NONE) ?
+                                            ENCODER_ID_2 : ENCODER_ID_1;
+    // 设置电机端编码器数据
+    encoder_data[ENCODER_ID_MOTOR].single_cnt = encoder_data[motor_encoder_source].motor_single_raw;
+    encoder_data[ENCODER_ID_MOTOR].multi_turns = encoder_data[motor_encoder_source].motor_multi_raw;
+    // 设置负载端编码器数据
+    encoder_data[ENCODER_ID_LOAD].single_cnt = encoder_data[load_encoder_source].motor_single_raw;
+    encoder_data[ENCODER_ID_LOAD].multi_turns = encoder_data[load_encoder_source].motor_multi_raw;
 }
 
 /**
@@ -313,6 +329,7 @@ void set_encoder_options(ENCODER_ID enc_id, uint8_t const options)
  */
 static inline void Encoder_None(EncoderDataInfo_t* enc_data)
 {
+    enc_data->type = ENCODER_TYPE_NONE;
     return;
 }
 #if ENCODER1_TYPE_OPTION == ENCODER_TYPE_INC_AB_ABZ || ENCODER2_TYPE_OPTION == ENCODER_TYPE_INC_AB_ABZ
@@ -323,6 +340,8 @@ static inline void Encoder_None(EncoderDataInfo_t* enc_data)
  */
 static void ABZ_Encoder_Init(EncoderDataInfo_t* enc_data)
 {
+    enc_data->type = ENCODER_TYPE_INC_AB_ABZ;
+
     enc_data->abz_ab_cnt = 0;
     enc_data->abz_z_first_flag = true;
     enc_data->abz_z_first_ab_cnt = 0;
@@ -360,6 +379,7 @@ static void ABZ_Encoder_Init(EncoderDataInfo_t* enc_data)
     }
     else
     {
+        enc_data->type = ENCODER_TYPE_NONE;
         return;
     }
 }
@@ -445,6 +465,7 @@ void ENCODER_ABZ_TIM_Z_IRQ_TASK(TIM_HandleTypeDef *htim)
  */
 static void TAMAGAWA_Encoder_Init(EncoderDataInfo_t* enc_data)
 {
+    enc_data->type = ENCODER_TYPE_ABS_RS485_TAMAGAWA;
     if (enc_data->id == ENCODER_ID_1)
     {
         enc_data->uart_handle = &ENCODER1_UART_HANDLE;
@@ -473,6 +494,7 @@ static void TAMAGAWA_Encoder_Init(EncoderDataInfo_t* enc_data)
     }
     else
     {
+        enc_data->type = ENCODER_TYPE_NONE;
         return;
     }
 }
@@ -559,6 +581,7 @@ static void TAMAGAWA_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
  */
 static void KTM59XX_Encoder_Init(EncoderDataInfo_t* enc_data)
 {
+    enc_data->type = ENCODER_TYPE_ABS_SPI_KTM59XX;
     if (enc_data->id == ENCODER_ID_1)
     {
         enc_data->spi_handle = &ENCODER1_SPI_HANDLE;
@@ -599,6 +622,7 @@ static void KTM59XX_Encoder_Init(EncoderDataInfo_t* enc_data)
     }
     else
     {
+        enc_data->type = ENCODER_TYPE_NONE;
         return;
     }
 }
@@ -697,6 +721,7 @@ static inline bool KTM59XX_Encoder_Crc8_Check(uint64_t input, int32_t len)
  */
 static void SMC40S_Encoder_Init(EncoderDataInfo_t* enc_data)
 {
+    enc_data->type = ENCODER_TYPE_ABS_BISSC_SMC40S;
     if (enc_data->id == ENCODER_ID_1)
     {
         enc_data->spi_handle = &ENCODER1_SPI_HANDLE;
@@ -733,6 +758,7 @@ static void SMC40S_Encoder_Init(EncoderDataInfo_t* enc_data)
     }
     else
     {
+        enc_data->type = ENCODER_TYPE_NONE;
         return;
     }
 }

@@ -115,6 +115,7 @@ typedef struct EncoderDataInfo_t EncoderDataInfo_t;
 struct EncoderDataInfo_t
 {
     ENCODER_ID id;                              // 编码器编号
+    uint8_t type;                               // 编码器类型
 
     TIM_HandleTypeDef *tim_handle;              // TIM句柄指针
     UART_HandleTypeDef *uart_handle;            // UART句柄指针
