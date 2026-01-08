@@ -9,6 +9,12 @@
 #include "app_status_check.h"
 #include "scope_app.h"
 
+#ifdef USE_CIA402
+#include "cia402_fsm.h"
+#include "cia402_statusword.h"
+#include "cia402_error_code.h"
+#endif
+
 #ifdef MOTOR_CTL_TEST // 控制层示例测试代码
 static void motor_ctl_test(void);
 #endif
@@ -186,7 +192,14 @@ void PosSpeedLoopCtrl(void)
     if (get_app_Internal_control_authority() == INTERNAL_CONTROL_APP)
     {
         AppStatusScanFast();
+#ifdef USE_CIA402
+        Cia402ErrorCodeScan();
+        PDS_FSA_Run();
+#endif
         AppRun(kAxis.motor_ctl_sm_input.hw_ready_state);
+#ifdef USE_CIA402
+        UpdateStatusword();
+#endif
     }
 
     // 2. 执行位置速度环控制算法

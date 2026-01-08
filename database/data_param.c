@@ -868,7 +868,11 @@ float get_app_Mcu_temperature(void)
 
 uint32_t set_app_Modes_of_operation(int8_t val)
 {
-   /* USER CODE BEGIN set_app_Modes_of_operation 0 */
+    /* USER CODE BEGIN set_app_Modes_of_operation 0 */
+    if (val == get_app_Modes_of_operation_display())
+    {
+        return APP_PARAM_SUCCESS;
+    }
     /* USER CODE END set_app_Modes_of_operation 0 */
     kAppOpMode.Modes_of_operation = val;
     /* USER CODE BEGIN set_app_Modes_of_operation 1 */
