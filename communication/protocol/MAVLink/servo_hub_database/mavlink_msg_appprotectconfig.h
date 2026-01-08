@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE AppProtectConfig PACKING
 
-#define MAVLINK_MSG_ID_AppProtectConfig 73
+#define MAVLINK_MSG_ID_AppProtectConfig 30064
 
 
 typedef struct __mavlink_appprotectconfig_t {
@@ -31,17 +31,17 @@ typedef struct __mavlink_appprotectconfig_t {
 
 #define MAVLINK_MSG_ID_AppProtectConfig_LEN 88
 #define MAVLINK_MSG_ID_AppProtectConfig_MIN_LEN 88
-#define MAVLINK_MSG_ID_73_LEN 88
-#define MAVLINK_MSG_ID_73_MIN_LEN 88
+#define MAVLINK_MSG_ID_30064_LEN 88
+#define MAVLINK_MSG_ID_30064_MIN_LEN 88
 
 #define MAVLINK_MSG_ID_AppProtectConfig_CRC 51
-#define MAVLINK_MSG_ID_73_CRC 51
+#define MAVLINK_MSG_ID_30064_CRC 51
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_AppProtectConfig { \
-    73, \
+    30064, \
     "AppProtectConfig", \
     22, \
     {  { "Bus_under_voltage_threshold", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_appprotectconfig_t, Bus_under_voltage_threshold) }, \

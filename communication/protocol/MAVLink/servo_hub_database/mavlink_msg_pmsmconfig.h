@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE PmsmConfig PACKING
 
-#define MAVLINK_MSG_ID_PmsmConfig 10
+#define MAVLINK_MSG_ID_PmsmConfig 30001
 
 
 typedef struct __mavlink_pmsmconfig_t {
@@ -24,17 +24,17 @@ typedef struct __mavlink_pmsmconfig_t {
 
 #define MAVLINK_MSG_ID_PmsmConfig_LEN 60
 #define MAVLINK_MSG_ID_PmsmConfig_MIN_LEN 60
-#define MAVLINK_MSG_ID_10_LEN 60
-#define MAVLINK_MSG_ID_10_MIN_LEN 60
+#define MAVLINK_MSG_ID_30001_LEN 60
+#define MAVLINK_MSG_ID_30001_MIN_LEN 60
 
 #define MAVLINK_MSG_ID_PmsmConfig_CRC 118
-#define MAVLINK_MSG_ID_10_CRC 118
+#define MAVLINK_MSG_ID_30001_CRC 118
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_PmsmConfig { \
-    10, \
+    30001, \
     "PmsmConfig", \
     15, \
     {  { "b", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_pmsmconfig_t, b) }, \

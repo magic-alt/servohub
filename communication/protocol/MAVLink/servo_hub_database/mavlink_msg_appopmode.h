@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE AppOpMode PACKING
 
-#define MAVLINK_MSG_ID_AppOpMode 65
+#define MAVLINK_MSG_ID_AppOpMode 30056
 
 
 typedef struct __mavlink_appopmode_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_appopmode_t {
 
 #define MAVLINK_MSG_ID_AppOpMode_LEN 1
 #define MAVLINK_MSG_ID_AppOpMode_MIN_LEN 1
-#define MAVLINK_MSG_ID_65_LEN 1
-#define MAVLINK_MSG_ID_65_MIN_LEN 1
+#define MAVLINK_MSG_ID_30056_LEN 1
+#define MAVLINK_MSG_ID_30056_MIN_LEN 1
 
 #define MAVLINK_MSG_ID_AppOpMode_CRC 26
-#define MAVLINK_MSG_ID_65_CRC 26
+#define MAVLINK_MSG_ID_30056_CRC 26
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_AppOpMode { \
-    65, \
+    30056, \
     "AppOpMode", \
     1, \
     {  { "Modes_of_operation", NULL, MAVLINK_TYPE_INT8_T, 0, 0, offsetof(mavlink_appopmode_t, Modes_of_operation) }, \

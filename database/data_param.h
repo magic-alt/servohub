@@ -62,9 +62,16 @@ typedef struct
     uint32_t Motor_encoder_resolution; //电机端位置反馈分辨率
     uint8_t Motor_encoder_type; //电机端编码器类型
     uint8_t Load_encoder_type; //负载端编码器类型
-    uint8_t Encoder_options; //编码器选项
+    uint8_t Motor_encoder_options; //电机端编码器选项
     float Load_pps_2_rpm; //负载端指令RPM转换系数
     float Load_rpm_2_pps; //负载端指令pps转换系数
+    float Motor_pps_2_rpm; //电机端指令RPM转换系数
+    float Motor_rpm_2_pps; //电机端指令pps转换系数
+    float P_load_2_motor; //负载端到电机端P转换系数
+    float P_motor_2_load; //电机端到负载端P转换系数
+    uint32_t Load_control_resolution; //负载端控制位置分辨率
+    uint32_t Motor_control_resolution; //电机端控制位置分辨率
+    uint8_t Load_encoder_options; //负载端编码器选项
 }AppEncoderConfig;
 
 typedef struct
@@ -246,6 +253,7 @@ typedef struct
 {
     float Debug_float[16]; //临时debug变量 float 类型
     uint32_t Debug_uint32[16]; //临时debug变量 uint32 类型
+    int32_t Debug_int32[16]; //临时debug变量 int32 类型
 }AppDebugParam;
 
 uint32_t set_app_Controlword(uint16_t val);
@@ -636,8 +644,8 @@ uint32_t set_app_Error_records_list(uint32_t index, uint32_t val);
 uint32_t get_app_Error_records_list(uint32_t index);
 uint32_t* get_app_Error_records_list_addr(void);
 
-uint32_t set_app_Encoder_options(uint8_t val);
-uint8_t get_app_Encoder_options(void);
+uint32_t set_app_Motor_encoder_options(uint8_t val);
+uint8_t get_app_Motor_encoder_options(void);
 
 uint32_t set_app_Reduction_ratio(float val);
 float get_app_Reduction_ratio(void);
@@ -664,6 +672,31 @@ float* get_app_Debug_float_addr(void);
 uint32_t set_app_Debug_uint32(uint32_t index, uint32_t val);
 uint32_t get_app_Debug_uint32(uint32_t index);
 uint32_t* get_app_Debug_uint32_addr(void);
+
+uint32_t set_app_Motor_pps_2_rpm(float val);
+float get_app_Motor_pps_2_rpm(void);
+
+uint32_t set_app_Motor_rpm_2_pps(float val);
+float get_app_Motor_rpm_2_pps(void);
+
+uint32_t set_app_P_load_2_motor(float val);
+float get_app_P_load_2_motor(void);
+
+uint32_t set_app_P_motor_2_load(float val);
+float get_app_P_motor_2_load(void);
+
+uint32_t set_app_Debug_int32(uint32_t index, int32_t val);
+int32_t get_app_Debug_int32(uint32_t index);
+int32_t* get_app_Debug_int32_addr(void);
+
+uint32_t set_app_Load_control_resolution(uint32_t val);
+uint32_t get_app_Load_control_resolution(void);
+
+uint32_t set_app_Motor_control_resolution(uint32_t val);
+uint32_t get_app_Motor_control_resolution(void);
+
+uint32_t set_app_Load_encoder_options(uint8_t val);
+uint8_t get_app_Load_encoder_options(void);
 
 extern AppControlWord kAppControlWord;
 extern AppStatusInfo kAppStatusInfo;

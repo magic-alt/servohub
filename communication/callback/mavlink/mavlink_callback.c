@@ -514,9 +514,16 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 app_encoder_config_t.Motor_encoder_resolution = get_app_Motor_encoder_resolution();
                 app_encoder_config_t.Motor_encoder_type = get_app_Motor_encoder_type();
                 app_encoder_config_t.Load_encoder_type = get_app_Load_encoder_type();
-                app_encoder_config_t.Encoder_options = get_app_Encoder_options();
+                app_encoder_config_t.Motor_encoder_options = get_app_Motor_encoder_options();
                 app_encoder_config_t.Load_pps_2_rpm = get_app_Load_pps_2_rpm();
                 app_encoder_config_t.Load_rpm_2_pps = get_app_Load_rpm_2_pps();
+                app_encoder_config_t.Motor_pps_2_rpm = get_app_Motor_pps_2_rpm();
+                app_encoder_config_t.Motor_rpm_2_pps = get_app_Motor_rpm_2_pps();
+                app_encoder_config_t.P_load_2_motor = get_app_P_load_2_motor();
+                app_encoder_config_t.P_motor_2_load = get_app_P_motor_2_load();
+                app_encoder_config_t.Load_control_resolution = get_app_Load_control_resolution();
+                app_encoder_config_t.Motor_control_resolution = get_app_Motor_control_resolution();
+                app_encoder_config_t.Load_encoder_options = get_app_Load_encoder_options();
                 mavlink_msg_appencoderconfig_encode(0, 0, &send_msg, (mavlink_appencoderconfig_t *)&app_encoder_config_t);
                 break;
             case MAVLINK_MSG_ID_AppBaseConfig:
@@ -750,6 +757,7 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
             case MAVLINK_MSG_ID_AppDebugParam:
                 memcpy(&app_debug_param_t.Debug_float, get_app_Debug_float_addr(), sizeof(app_debug_param_t.Debug_float));
                 memcpy(&app_debug_param_t.Debug_uint32, get_app_Debug_uint32_addr(), sizeof(app_debug_param_t.Debug_uint32));
+                memcpy(&app_debug_param_t.Debug_int32, get_app_Debug_int32_addr(), sizeof(app_debug_param_t.Debug_int32));
                 mavlink_msg_appdebugparam_encode(0, 0, &send_msg, (mavlink_appdebugparam_t *)&app_debug_param_t);
                 break;
 //DATABASE_CODE_STOP_2
@@ -1205,12 +1213,26 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 app_encoder_config_t.Motor_encoder_type = get_app_Motor_encoder_type();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Load_encoder_type(app_encoder_config_t.Load_encoder_type);}
                 app_encoder_config_t.Load_encoder_type = get_app_Load_encoder_type();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Encoder_options(app_encoder_config_t.Encoder_options);}
-                app_encoder_config_t.Encoder_options = get_app_Encoder_options();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_encoder_options(app_encoder_config_t.Motor_encoder_options);}
+                app_encoder_config_t.Motor_encoder_options = get_app_Motor_encoder_options();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Load_pps_2_rpm(app_encoder_config_t.Load_pps_2_rpm);}
                 app_encoder_config_t.Load_pps_2_rpm = get_app_Load_pps_2_rpm();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Load_rpm_2_pps(app_encoder_config_t.Load_rpm_2_pps);}
                 app_encoder_config_t.Load_rpm_2_pps = get_app_Load_rpm_2_pps();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_pps_2_rpm(app_encoder_config_t.Motor_pps_2_rpm);}
+                app_encoder_config_t.Motor_pps_2_rpm = get_app_Motor_pps_2_rpm();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_rpm_2_pps(app_encoder_config_t.Motor_rpm_2_pps);}
+                app_encoder_config_t.Motor_rpm_2_pps = get_app_Motor_rpm_2_pps();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_P_load_2_motor(app_encoder_config_t.P_load_2_motor);}
+                app_encoder_config_t.P_load_2_motor = get_app_P_load_2_motor();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_P_motor_2_load(app_encoder_config_t.P_motor_2_load);}
+                app_encoder_config_t.P_motor_2_load = get_app_P_motor_2_load();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Load_control_resolution(app_encoder_config_t.Load_control_resolution);}
+                app_encoder_config_t.Load_control_resolution = get_app_Load_control_resolution();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_control_resolution(app_encoder_config_t.Motor_control_resolution);}
+                app_encoder_config_t.Motor_control_resolution = get_app_Motor_control_resolution();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Load_encoder_options(app_encoder_config_t.Load_encoder_options);}
+                app_encoder_config_t.Load_encoder_options = get_app_Load_encoder_options();
                 mavlink_msg_appencoderconfig_encode(0, 0, &send_msg, (mavlink_appencoderconfig_t *)&app_encoder_config_t);
                 break;
             case MAVLINK_MSG_ID_AppBaseConfig:
@@ -1583,6 +1605,7 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 mavlink_msg_appdebugparam_decode(&msg, (mavlink_appdebugparam_t *)&app_debug_param_t);
                 memcpy(get_app_Debug_float_addr(), app_debug_param_t.Debug_float, sizeof(app_debug_param_t.Debug_float));
                 memcpy(get_app_Debug_uint32_addr(), app_debug_param_t.Debug_uint32, sizeof(app_debug_param_t.Debug_uint32));
+                memcpy(get_app_Debug_int32_addr(), app_debug_param_t.Debug_int32, sizeof(app_debug_param_t.Debug_int32));
                 mavlink_msg_appdebugparam_encode(0, 0, &send_msg, (mavlink_appdebugparam_t *)&app_debug_param_t);
                 break;
 //DATABASE_CODE_STOP_3
@@ -1590,7 +1613,7 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 break;
         }
         MotorCtlParamSetUpdata(&kAxis);
-        bsp_set_encoder_config(ENCODER_ID_MOTOR, axis->pmsm_config.enc_line_p_n, 0, 0, get_app_Encoder_options());
+        bsp_set_encoder_config(ENCODER_ID_MOTOR, axis->pmsm_config.enc_line_p_n, 0, 0, get_app_Motor_encoder_options());
     }
 
     len = mavlink_msg_to_send_buffer(mavlink_tx_buff, &send_msg);

@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE AppMotorConfig PACKING
 
-#define MAVLINK_MSG_ID_AppMotorConfig 72
+#define MAVLINK_MSG_ID_AppMotorConfig 30063
 
 
 typedef struct __mavlink_appmotorconfig_t {
@@ -22,17 +22,17 @@ typedef struct __mavlink_appmotorconfig_t {
 
 #define MAVLINK_MSG_ID_AppMotorConfig_LEN 52
 #define MAVLINK_MSG_ID_AppMotorConfig_MIN_LEN 52
-#define MAVLINK_MSG_ID_72_LEN 52
-#define MAVLINK_MSG_ID_72_MIN_LEN 52
+#define MAVLINK_MSG_ID_30063_LEN 52
+#define MAVLINK_MSG_ID_30063_MIN_LEN 52
 
 #define MAVLINK_MSG_ID_AppMotorConfig_CRC 239
-#define MAVLINK_MSG_ID_72_CRC 239
+#define MAVLINK_MSG_ID_30063_CRC 239
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_AppMotorConfig { \
-    72, \
+    30063, \
     "AppMotorConfig", \
     13, \
     {  { "Motor_rated_current", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_appmotorconfig_t, Motor_rated_current) }, \

@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE ReferenceSignalConfig PACKING
 
-#define MAVLINK_MSG_ID_ReferenceSignalConfig 61
+#define MAVLINK_MSG_ID_ReferenceSignalConfig 30052
 
 
 typedef struct __mavlink_referencesignalconfig_t {
@@ -16,17 +16,17 @@ typedef struct __mavlink_referencesignalconfig_t {
 
 #define MAVLINK_MSG_ID_ReferenceSignalConfig_LEN 26
 #define MAVLINK_MSG_ID_ReferenceSignalConfig_MIN_LEN 26
-#define MAVLINK_MSG_ID_61_LEN 26
-#define MAVLINK_MSG_ID_61_MIN_LEN 26
+#define MAVLINK_MSG_ID_30052_LEN 26
+#define MAVLINK_MSG_ID_30052_MIN_LEN 26
 
 #define MAVLINK_MSG_ID_ReferenceSignalConfig_CRC 90
-#define MAVLINK_MSG_ID_61_CRC 90
+#define MAVLINK_MSG_ID_30052_CRC 90
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ReferenceSignalConfig { \
-    61, \
+    30052, \
     "ReferenceSignalConfig", \
     7, \
     {  { "dt_s", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_referencesignalconfig_t, dt_s) }, \

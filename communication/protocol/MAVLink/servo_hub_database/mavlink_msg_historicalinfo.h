@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE HistoricalInfo PACKING
 
-#define MAVLINK_MSG_ID_HistoricalInfo 87
+#define MAVLINK_MSG_ID_HistoricalInfo 30078
 
 
 typedef struct __mavlink_historicalinfo_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_historicalinfo_t {
 
 #define MAVLINK_MSG_ID_HistoricalInfo_LEN 64
 #define MAVLINK_MSG_ID_HistoricalInfo_MIN_LEN 64
-#define MAVLINK_MSG_ID_87_LEN 64
-#define MAVLINK_MSG_ID_87_MIN_LEN 64
+#define MAVLINK_MSG_ID_30078_LEN 64
+#define MAVLINK_MSG_ID_30078_MIN_LEN 64
 
 #define MAVLINK_MSG_ID_HistoricalInfo_CRC 158
-#define MAVLINK_MSG_ID_87_CRC 158
+#define MAVLINK_MSG_ID_30078_CRC 158
 
 #define MAVLINK_MSG_HistoricalInfo_FIELD_ERROR_RECORDS_LIST_LEN 16
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_HistoricalInfo { \
-    87, \
+    30078, \
     "HistoricalInfo", \
     1, \
     {  { "Error_records_list", NULL, MAVLINK_TYPE_UINT32_T, 16, 0, offsetof(mavlink_historicalinfo_t, Error_records_list) }, \

@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE MotorPosSensorInput PACKING
 
-#define MAVLINK_MSG_ID_MotorPosSensorInput 47
+#define MAVLINK_MSG_ID_MotorPosSensorInput 30038
 
 
 typedef struct __mavlink_motorpossensorinput_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_motorpossensorinput_t {
 
 #define MAVLINK_MSG_ID_MotorPosSensorInput_LEN 4
 #define MAVLINK_MSG_ID_MotorPosSensorInput_MIN_LEN 4
-#define MAVLINK_MSG_ID_47_LEN 4
-#define MAVLINK_MSG_ID_47_MIN_LEN 4
+#define MAVLINK_MSG_ID_30038_LEN 4
+#define MAVLINK_MSG_ID_30038_MIN_LEN 4
 
 #define MAVLINK_MSG_ID_MotorPosSensorInput_CRC 107
-#define MAVLINK_MSG_ID_47_CRC 107
+#define MAVLINK_MSG_ID_30038_CRC 107
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_MotorPosSensorInput { \
-    47, \
+    30038, \
     "MotorPosSensorInput", \
     1, \
     {  { "enc_counts_now_p", NULL, MAVLINK_TYPE_UINT32_T, 0, 0, offsetof(mavlink_motorpossensorinput_t, enc_counts_now_p) }, \

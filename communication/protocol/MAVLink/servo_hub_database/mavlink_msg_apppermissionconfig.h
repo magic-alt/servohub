@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE AppPermissionConfig PACKING
 
-#define MAVLINK_MSG_ID_AppPermissionConfig 77
+#define MAVLINK_MSG_ID_AppPermissionConfig 30068
 
 
 typedef struct __mavlink_apppermissionconfig_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_apppermissionconfig_t {
 
 #define MAVLINK_MSG_ID_AppPermissionConfig_LEN 2
 #define MAVLINK_MSG_ID_AppPermissionConfig_MIN_LEN 2
-#define MAVLINK_MSG_ID_77_LEN 2
-#define MAVLINK_MSG_ID_77_MIN_LEN 2
+#define MAVLINK_MSG_ID_30068_LEN 2
+#define MAVLINK_MSG_ID_30068_MIN_LEN 2
 
 #define MAVLINK_MSG_ID_AppPermissionConfig_CRC 134
-#define MAVLINK_MSG_ID_77_CRC 134
+#define MAVLINK_MSG_ID_30068_CRC 134
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_AppPermissionConfig { \
-    77, \
+    30068, \
     "AppPermissionConfig", \
     2, \
     {  { "Comm_control_authority", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_apppermissionconfig_t, Comm_control_authority) }, \

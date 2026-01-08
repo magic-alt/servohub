@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE SystemCmd PACKING
 
-#define MAVLINK_MSG_ID_SystemCmd 78
+#define MAVLINK_MSG_ID_SystemCmd 30069
 
 
 typedef struct __mavlink_systemcmd_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_systemcmd_t {
 
 #define MAVLINK_MSG_ID_SystemCmd_LEN 1
 #define MAVLINK_MSG_ID_SystemCmd_MIN_LEN 1
-#define MAVLINK_MSG_ID_78_LEN 1
-#define MAVLINK_MSG_ID_78_MIN_LEN 1
+#define MAVLINK_MSG_ID_30069_LEN 1
+#define MAVLINK_MSG_ID_30069_MIN_LEN 1
 
 #define MAVLINK_MSG_ID_SystemCmd_CRC 169
-#define MAVLINK_MSG_ID_78_CRC 169
+#define MAVLINK_MSG_ID_30069_CRC 169
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_SystemCmd { \
-    78, \
+    30069, \
     "SystemCmd", \
     1, \
     {  { "Sys_cmd", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_systemcmd_t, Sys_cmd) }, \

@@ -1,36 +1,36 @@
 #pragma once
 // MESSAGE READ_PARAM PACKING
 
-#define MAVLINK_MSG_ID_READ_PARAM 9
+#define MAVLINK_MSG_ID_READ_PARAM 30000
 
 
 typedef struct __mavlink_read_param_t {
- uint8_t struct_id; /*<  */
+ uint32_t struct_id; /*<  */
 } mavlink_read_param_t;
 
-#define MAVLINK_MSG_ID_READ_PARAM_LEN 1
-#define MAVLINK_MSG_ID_READ_PARAM_MIN_LEN 1
-#define MAVLINK_MSG_ID_9_LEN 1
-#define MAVLINK_MSG_ID_9_MIN_LEN 1
+#define MAVLINK_MSG_ID_READ_PARAM_LEN 4
+#define MAVLINK_MSG_ID_READ_PARAM_MIN_LEN 4
+#define MAVLINK_MSG_ID_30000_LEN 4
+#define MAVLINK_MSG_ID_30000_MIN_LEN 4
 
-#define MAVLINK_MSG_ID_READ_PARAM_CRC 119
-#define MAVLINK_MSG_ID_9_CRC 119
+#define MAVLINK_MSG_ID_READ_PARAM_CRC 43
+#define MAVLINK_MSG_ID_30000_CRC 43
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_READ_PARAM { \
-    9, \
+    30000, \
     "READ_PARAM", \
     1, \
-    {  { "struct_id", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_read_param_t, struct_id) }, \
+    {  { "struct_id", NULL, MAVLINK_TYPE_UINT32_T, 0, 0, offsetof(mavlink_read_param_t, struct_id) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_READ_PARAM { \
     "READ_PARAM", \
     1, \
-    {  { "struct_id", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_read_param_t, struct_id) }, \
+    {  { "struct_id", NULL, MAVLINK_TYPE_UINT32_T, 0, 0, offsetof(mavlink_read_param_t, struct_id) }, \
          } \
 }
 #endif
@@ -45,11 +45,11 @@ typedef struct __mavlink_read_param_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_read_param_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint8_t struct_id)
+                               uint32_t struct_id)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_READ_PARAM_LEN];
-    _mav_put_uint8_t(buf, 0, struct_id);
+    _mav_put_uint32_t(buf, 0, struct_id);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_READ_PARAM_LEN);
 #else
@@ -74,11 +74,11 @@ static inline uint16_t mavlink_msg_read_param_pack(uint8_t system_id, uint8_t co
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_read_param_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               uint8_t struct_id)
+                               uint32_t struct_id)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_READ_PARAM_LEN];
-    _mav_put_uint8_t(buf, 0, struct_id);
+    _mav_put_uint32_t(buf, 0, struct_id);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_READ_PARAM_LEN);
 #else
@@ -107,11 +107,11 @@ static inline uint16_t mavlink_msg_read_param_pack_status(uint8_t system_id, uin
  */
 static inline uint16_t mavlink_msg_read_param_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint8_t struct_id)
+                                   uint32_t struct_id)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_READ_PARAM_LEN];
-    _mav_put_uint8_t(buf, 0, struct_id);
+    _mav_put_uint32_t(buf, 0, struct_id);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_READ_PARAM_LEN);
 #else
@@ -174,11 +174,11 @@ static inline uint16_t mavlink_msg_read_param_encode_status(uint8_t system_id, u
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_read_param_send(mavlink_channel_t chan, uint8_t struct_id)
+static inline void mavlink_msg_read_param_send(mavlink_channel_t chan, uint32_t struct_id)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_READ_PARAM_LEN];
-    _mav_put_uint8_t(buf, 0, struct_id);
+    _mav_put_uint32_t(buf, 0, struct_id);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_READ_PARAM, buf, MAVLINK_MSG_ID_READ_PARAM_MIN_LEN, MAVLINK_MSG_ID_READ_PARAM_LEN, MAVLINK_MSG_ID_READ_PARAM_CRC);
 #else
@@ -211,11 +211,11 @@ static inline void mavlink_msg_read_param_send_struct(mavlink_channel_t chan, co
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_read_param_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t struct_id)
+static inline void mavlink_msg_read_param_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint32_t struct_id)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_uint8_t(buf, 0, struct_id);
+    _mav_put_uint32_t(buf, 0, struct_id);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_READ_PARAM, buf, MAVLINK_MSG_ID_READ_PARAM_MIN_LEN, MAVLINK_MSG_ID_READ_PARAM_LEN, MAVLINK_MSG_ID_READ_PARAM_CRC);
 #else
@@ -237,9 +237,9 @@ static inline void mavlink_msg_read_param_send_buf(mavlink_message_t *msgbuf, ma
  *
  * @return  
  */
-static inline uint8_t mavlink_msg_read_param_get_struct_id(const mavlink_message_t* msg)
+static inline uint32_t mavlink_msg_read_param_get_struct_id(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  0);
+    return _MAV_RETURN_uint32_t(msg,  0);
 }
 
 /**

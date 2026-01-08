@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE AppControlWord PACKING
 
-#define MAVLINK_MSG_ID_AppControlWord 63
+#define MAVLINK_MSG_ID_AppControlWord 30054
 
 
 typedef struct __mavlink_appcontrolword_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_appcontrolword_t {
 
 #define MAVLINK_MSG_ID_AppControlWord_LEN 3
 #define MAVLINK_MSG_ID_AppControlWord_MIN_LEN 3
-#define MAVLINK_MSG_ID_63_LEN 3
-#define MAVLINK_MSG_ID_63_MIN_LEN 3
+#define MAVLINK_MSG_ID_30054_LEN 3
+#define MAVLINK_MSG_ID_30054_MIN_LEN 3
 
 #define MAVLINK_MSG_ID_AppControlWord_CRC 108
-#define MAVLINK_MSG_ID_63_CRC 108
+#define MAVLINK_MSG_ID_30054_CRC 108
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_AppControlWord { \
-    63, \
+    30054, \
     "AppControlWord", \
     2, \
     {  { "Controlword", NULL, MAVLINK_TYPE_UINT16_T, 0, 0, offsetof(mavlink_appcontrolword_t, Controlword) }, \

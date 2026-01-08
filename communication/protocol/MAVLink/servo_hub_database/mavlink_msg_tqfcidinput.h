@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE TqFcIdInput PACKING
 
-#define MAVLINK_MSG_ID_TqFcIdInput 55
+#define MAVLINK_MSG_ID_TqFcIdInput 30046
 
 
 typedef struct __mavlink_tqfcidinput_t {
@@ -13,17 +13,17 @@ typedef struct __mavlink_tqfcidinput_t {
 
 #define MAVLINK_MSG_ID_TqFcIdInput_LEN 17
 #define MAVLINK_MSG_ID_TqFcIdInput_MIN_LEN 17
-#define MAVLINK_MSG_ID_55_LEN 17
-#define MAVLINK_MSG_ID_55_MIN_LEN 17
+#define MAVLINK_MSG_ID_30046_LEN 17
+#define MAVLINK_MSG_ID_30046_MIN_LEN 17
 
 #define MAVLINK_MSG_ID_TqFcIdInput_CRC 37
-#define MAVLINK_MSG_ID_55_CRC 37
+#define MAVLINK_MSG_ID_30046_CRC 37
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_TqFcIdInput { \
-    55, \
+    30046, \
     "TqFcIdInput", \
     4, \
     {  { "iq_com_A", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_tqfcidinput_t, iq_com_A) }, \

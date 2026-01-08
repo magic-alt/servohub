@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE MitCtlInput PACKING
 
-#define MAVLINK_MSG_ID_MitCtlInput 74
+#define MAVLINK_MSG_ID_MitCtlInput 30065
 
 
 typedef struct __mavlink_mitctlinput_t {
@@ -15,17 +15,17 @@ typedef struct __mavlink_mitctlinput_t {
 
 #define MAVLINK_MSG_ID_MitCtlInput_LEN 32
 #define MAVLINK_MSG_ID_MitCtlInput_MIN_LEN 32
-#define MAVLINK_MSG_ID_74_LEN 32
-#define MAVLINK_MSG_ID_74_MIN_LEN 32
+#define MAVLINK_MSG_ID_30065_LEN 32
+#define MAVLINK_MSG_ID_30065_MIN_LEN 32
 
 #define MAVLINK_MSG_ID_MitCtlInput_CRC 17
-#define MAVLINK_MSG_ID_74_CRC 17
+#define MAVLINK_MSG_ID_30065_CRC 17
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_MitCtlInput { \
-    74, \
+    30065, \
     "MitCtlInput", \
     6, \
     {  { "tq_set_NM", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_mitctlinput_t, tq_set_NM) }, \

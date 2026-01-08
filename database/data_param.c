@@ -77,7 +77,7 @@ void AppParamInit(void)
     // 初始化编码器配置
     kAppEncoderConfig.Load_encoder_resolution = PMSM_LOAD_ENC_LINE_P_N;                         // 负载端位置反馈分辨率
     kAppEncoderConfig.Motor_encoder_resolution = PMSM_ENC_LINE_P_N;                             // 电机端位置反馈分辨率
-    kAppEncoderConfig.Encoder_options = 0;                                                      // 编码器选项
+    kAppEncoderConfig.Motor_encoder_options = 0;                                                // 电机编码器选项
     kAppEncoderConfig.Load_pps_2_rpm = 60.0f / (float)PMSM_LOAD_ENC_LINE_P_N;                   // 负载端速度P/s转换RPM系数
     kAppEncoderConfig.Load_rpm_2_pps = (float)PMSM_LOAD_ENC_LINE_P_N / 60.0f;                   // 负载端速度RPM转换P/s系数
 
@@ -186,7 +186,7 @@ void AppParamInit(void)
     set_app_Motor_maximum_speed(kAppMotorConfig.Motor_maximum_speed);
     set_app_Reduction_ratio_num(kAppMotorConfig.Reduction_ratio_num);
     set_app_Reduction_ratio_den(kAppMotorConfig.Reduction_ratio_den);
-    set_app_Encoder_options(kAppEncoderConfig.Encoder_options);
+    set_app_Motor_encoder_options(kAppEncoderConfig.Motor_encoder_options);
 
     // 限制参数初始化
     set_app_Position_range_limit_Maximal_position_limit(kAppRestrictParam.Position_range_limit_Maximal_position_limit);
@@ -440,7 +440,7 @@ void app_param_update(void)
     set_app_User_module_code(kCustomInfo.User_module_code);
     set_app_Sys_init_flag(kHeartBit.Sys_init_flag);
     set_app_Error_records_list(0, kHistoricalInfo.Error_records_list[0]);
-    set_app_Encoder_options(kAppEncoderConfig.Encoder_options);
+    set_app_Motor_encoder_options(kAppEncoderConfig.Motor_encoder_options);
     set_app_Reduction_ratio(kAppMotorConfig.Reduction_ratio);
     set_app_Reduction_ratio_inv(kAppMotorConfig.Reduction_ratio_inv);
     set_app_Load_pps_2_rpm(kAppEncoderConfig.Load_pps_2_rpm);
@@ -449,6 +449,14 @@ void app_param_update(void)
     set_app_Motor_rotor_inertia(kAppMotorConfig.Motor_rotor_inertia);
     set_app_Debug_float(0, kAppDebugParam.Debug_float[0]);
     set_app_Debug_uint32(0, kAppDebugParam.Debug_uint32[0]);
+    set_app_Motor_pps_2_rpm(kAppEncoderConfig.Motor_pps_2_rpm);
+    set_app_Motor_rpm_2_pps(kAppEncoderConfig.Motor_rpm_2_pps);
+    set_app_P_load_2_motor(kAppEncoderConfig.P_load_2_motor);
+    set_app_P_motor_2_load(kAppEncoderConfig.P_motor_2_load);
+    set_app_Debug_int32(0, kAppDebugParam.Debug_int32[0]);
+    set_app_Load_control_resolution(kAppEncoderConfig.Load_control_resolution);
+    set_app_Motor_control_resolution(kAppEncoderConfig.Motor_control_resolution);
+    set_app_Load_encoder_options(kAppEncoderConfig.Load_encoder_options);
 }
 
 void app_param_sync(void)
@@ -582,7 +590,7 @@ void app_param_sync(void)
     get_app_User_module_code();
     get_app_Sys_init_flag();
     get_app_Error_records_list(0);
-    get_app_Encoder_options();
+    get_app_Motor_encoder_options();
     get_app_Reduction_ratio();
     get_app_Reduction_ratio_inv();
     get_app_Load_pps_2_rpm();
@@ -591,6 +599,14 @@ void app_param_sync(void)
     get_app_Motor_rotor_inertia();
     get_app_Debug_float(0);
     get_app_Debug_uint32(0);
+    get_app_Motor_pps_2_rpm();
+    get_app_Motor_rpm_2_pps();
+    get_app_P_load_2_motor();
+    get_app_P_motor_2_load();
+    get_app_Debug_int32(0);
+    get_app_Load_control_resolution();
+    get_app_Motor_control_resolution();
+    get_app_Load_encoder_options();
 }
 
 uint32_t set_app_Controlword(uint16_t val)
@@ -917,7 +933,7 @@ uint32_t set_app_Motor_encoder_resolution(uint32_t val)
     axis->pmsm_config.enc_line_p_n = val;
     // 失能状态下调用，设置此参数时状态先由上位机限制
     MotorCtlParamSetUpdata(axis);
-    bsp_set_encoder_config(ENCODER_ID_MOTOR, axis->pmsm_config.enc_line_p_n, 0, 0, get_app_Encoder_options());
+    bsp_set_encoder_config(ENCODER_ID_MOTOR, axis->pmsm_config.enc_line_p_n, 0, 0, get_app_Motor_encoder_options());
     /* USER CODE END set_app_Motor_encoder_resolution 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -960,29 +976,22 @@ uint8_t get_app_Load_encoder_type(void)
     return kAppEncoderConfig.Load_encoder_type;
 }
 
-uint32_t set_app_Encoder_options(uint8_t val)
+uint32_t set_app_Motor_encoder_options(uint8_t val)
 {
     if (val < 0)
         return APP_PARAM_OUT_OF_RANGE;
-    /* USER CODE BEGIN set_app_Encoder_options 0 */
-    if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
-    {
-        return APP_PARAM_WRITE_STATE_ERROR;
-    }
-    /* USER CODE END set_app_Encoder_options 0 */
-    kAppEncoderConfig.Encoder_options = val;
-    /* USER CODE BEGIN set_app_Encoder_options 1 */
-    // 失能状态下调用，设置此参数时状态先由上位机限制
-    MotorCtlParamSetUpdata(axis);
-    bsp_set_encoder_config(ENCODER_ID_MOTOR, get_app_Motor_encoder_resolution(), 0, 0 , val);
-    /* USER CODE END set_app_Encoder_options 1 */
+    /* USER CODE BEGIN set_app_Motor_encoder_options 0 */
+    /* USER CODE END set_app_Motor_encoder_options 0 */
+    kAppEncoderConfig.Motor_encoder_options = val;
+    /* USER CODE BEGIN set_app_Motor_encoder_options 1 */
+    /* USER CODE END set_app_Motor_encoder_options 1 */
     return APP_PARAM_SUCCESS;
 }
-uint8_t get_app_Encoder_options(void)
+uint8_t get_app_Motor_encoder_options(void)
 {
-    /* USER CODE BEGIN get_app_Encoder_options */
-    /* USER CODE END get_app_Encoder_options */
-    return kAppEncoderConfig.Encoder_options;
+    /* USER CODE BEGIN get_app_Motor_encoder_options */
+    /* USER CODE END get_app_Motor_encoder_options */
+    return kAppEncoderConfig.Motor_encoder_options;
 }
 
 uint32_t set_app_Load_pps_2_rpm(float val)
@@ -1011,6 +1020,112 @@ float get_app_Load_rpm_2_pps(void)
     /* USER CODE BEGIN get_app_Load_rpm_2_pps */
     /* USER CODE END get_app_Load_rpm_2_pps */
     return kAppEncoderConfig.Load_rpm_2_pps;
+}
+
+uint32_t set_app_Motor_pps_2_rpm(float val)
+{
+    /* USER CODE BEGIN set_app_Motor_pps_2_rpm 0 */
+    //RO VAR CANNOT BE SET
+    /* USER CODE END set_app_Motor_pps_2_rpm 0 */
+    return APP_PARAM_READ_ONLY;
+}
+float get_app_Motor_pps_2_rpm(void)
+{
+    /* USER CODE BEGIN get_app_Motor_pps_2_rpm */
+    /* USER CODE END get_app_Motor_pps_2_rpm */
+    return kAppEncoderConfig.Motor_pps_2_rpm;
+}
+
+uint32_t set_app_Motor_rpm_2_pps(float val)
+{
+    /* USER CODE BEGIN set_app_Motor_rpm_2_pps 0 */
+    //RO VAR CANNOT BE SET
+    /* USER CODE END set_app_Motor_rpm_2_pps 0 */
+    return APP_PARAM_READ_ONLY;
+}
+float get_app_Motor_rpm_2_pps(void)
+{
+    /* USER CODE BEGIN get_app_Motor_rpm_2_pps */
+    /* USER CODE END get_app_Motor_rpm_2_pps */
+    return kAppEncoderConfig.Motor_rpm_2_pps;
+}
+
+uint32_t set_app_P_load_2_motor(float val)
+{
+    /* USER CODE BEGIN set_app_P_load_2_motor 0 */
+    //RO VAR CANNOT BE SET
+    /* USER CODE END set_app_P_load_2_motor 0 */
+    return APP_PARAM_READ_ONLY;
+}
+float get_app_P_load_2_motor(void)
+{
+    /* USER CODE BEGIN get_app_P_load_2_motor */
+    /* USER CODE END get_app_P_load_2_motor */
+    return kAppEncoderConfig.P_load_2_motor;
+}
+
+uint32_t set_app_P_motor_2_load(float val)
+{
+    /* USER CODE BEGIN set_app_P_motor_2_load 0 */
+    //RO VAR CANNOT BE SET
+    /* USER CODE END set_app_P_motor_2_load 0 */
+    return APP_PARAM_READ_ONLY;
+}
+float get_app_P_motor_2_load(void)
+{
+    /* USER CODE BEGIN get_app_P_motor_2_load */
+    /* USER CODE END get_app_P_motor_2_load */
+    return kAppEncoderConfig.P_motor_2_load;
+}
+
+uint32_t set_app_Load_control_resolution(uint32_t val)
+{
+    /* USER CODE BEGIN set_app_Load_control_resolution 0 */
+    /* USER CODE END set_app_Load_control_resolution 0 */
+    kAppEncoderConfig.Load_control_resolution = val;
+    /* USER CODE BEGIN set_app_Load_control_resolution 1 */
+    /* USER CODE END set_app_Load_control_resolution 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint32_t get_app_Load_control_resolution(void)
+{
+    /* USER CODE BEGIN get_app_Load_control_resolution */
+    /* USER CODE END get_app_Load_control_resolution */
+    return kAppEncoderConfig.Load_control_resolution;
+}
+
+uint32_t set_app_Motor_control_resolution(uint32_t val)
+{
+    /* USER CODE BEGIN set_app_Motor_control_resolution 0 */
+    /* USER CODE END set_app_Motor_control_resolution 0 */
+    kAppEncoderConfig.Motor_control_resolution = val;
+    /* USER CODE BEGIN set_app_Motor_control_resolution 1 */
+    /* USER CODE END set_app_Motor_control_resolution 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint32_t get_app_Motor_control_resolution(void)
+{
+    /* USER CODE BEGIN get_app_Motor_control_resolution */
+    /* USER CODE END get_app_Motor_control_resolution */
+    return kAppEncoderConfig.Motor_control_resolution;
+}
+
+uint32_t set_app_Load_encoder_options(uint8_t val)
+{
+    if (val < 0)
+        return APP_PARAM_OUT_OF_RANGE;
+    /* USER CODE BEGIN set_app_Load_encoder_options 0 */
+    /* USER CODE END set_app_Load_encoder_options 0 */
+    kAppEncoderConfig.Load_encoder_options = val;
+    /* USER CODE BEGIN set_app_Load_encoder_options 1 */
+    /* USER CODE END set_app_Load_encoder_options 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint8_t get_app_Load_encoder_options(void)
+{
+    /* USER CODE BEGIN get_app_Load_encoder_options */
+    /* USER CODE END get_app_Load_encoder_options */
+    return kAppEncoderConfig.Load_encoder_options;
 }
 
 uint32_t set_app_Polarity(uint8_t val)
@@ -3222,6 +3337,29 @@ uint32_t* get_app_Debug_uint32_addr(void)
     /* USER CODE BEGIN get_app_Debug_uint32_addr */
     /* USER CODE END get_app_Debug_uint32_addr */
     return kAppDebugParam.Debug_uint32;
+}
+
+uint32_t set_app_Debug_int32(uint32_t index, int32_t val)
+{
+    /* USER CODE BEGIN set_app_Debug_int32 0 */
+    /* USER CODE END set_app_Debug_int32 0 */
+    kAppDebugParam.Debug_int32[index] = val;
+    /* USER CODE BEGIN set_app_Debug_int32 1 */
+    /* USER CODE END set_app_Debug_int32 1 */
+    return APP_PARAM_SUCCESS;
+}
+int32_t get_app_Debug_int32(uint32_t index)
+{
+    /* USER CODE BEGIN get_app_Debug_int32 */
+    /* USER CODE END get_app_Debug_int32 */
+    return kAppDebugParam.Debug_int32[index];
+}
+
+int32_t* get_app_Debug_int32_addr(void)
+{
+    /* USER CODE BEGIN get_app_Debug_int32_addr */
+    /* USER CODE END get_app_Debug_int32_addr */
+    return kAppDebugParam.Debug_int32;
 }
 
 

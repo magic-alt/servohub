@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE InputShapingConfig PACKING
 
-#define MAVLINK_MSG_ID_InputShapingConfig 21
+#define MAVLINK_MSG_ID_InputShapingConfig 30012
 
 
 typedef struct __mavlink_inputshapingconfig_t {
@@ -12,17 +12,17 @@ typedef struct __mavlink_inputshapingconfig_t {
 
 #define MAVLINK_MSG_ID_InputShapingConfig_LEN 9
 #define MAVLINK_MSG_ID_InputShapingConfig_MIN_LEN 9
-#define MAVLINK_MSG_ID_21_LEN 9
-#define MAVLINK_MSG_ID_21_MIN_LEN 9
+#define MAVLINK_MSG_ID_30012_LEN 9
+#define MAVLINK_MSG_ID_30012_MIN_LEN 9
 
 #define MAVLINK_MSG_ID_InputShapingConfig_CRC 238
-#define MAVLINK_MSG_ID_21_CRC 238
+#define MAVLINK_MSG_ID_30012_CRC 238
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_InputShapingConfig { \
-    21, \
+    30012, \
     "InputShapingConfig", \
     3, \
     {  { "wn_Hz", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_inputshapingconfig_t, wn_Hz) }, \

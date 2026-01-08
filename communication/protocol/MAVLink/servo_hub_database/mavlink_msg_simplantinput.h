@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE SimPlantInput PACKING
 
-#define MAVLINK_MSG_ID_SimPlantInput 88
+#define MAVLINK_MSG_ID_SimPlantInput 30079
 
 
 typedef struct __mavlink_simplantinput_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_simplantinput_t {
 
 #define MAVLINK_MSG_ID_SimPlantInput_LEN 16
 #define MAVLINK_MSG_ID_SimPlantInput_MIN_LEN 16
-#define MAVLINK_MSG_ID_88_LEN 16
-#define MAVLINK_MSG_ID_88_MIN_LEN 16
+#define MAVLINK_MSG_ID_30079_LEN 16
+#define MAVLINK_MSG_ID_30079_MIN_LEN 16
 
 #define MAVLINK_MSG_ID_SimPlantInput_CRC 79
-#define MAVLINK_MSG_ID_88_CRC 79
+#define MAVLINK_MSG_ID_30079_CRC 79
 
 #define MAVLINK_MSG_SimPlantInput_FIELD_UABC_TAR_V_LEN 3
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_SimPlantInput { \
-    88, \
+    30079, \
     "SimPlantInput", \
     2, \
     {  { "uabc_tar_V", NULL, MAVLINK_TYPE_FLOAT, 3, 0, offsetof(mavlink_simplantinput_t, uabc_tar_V) }, \

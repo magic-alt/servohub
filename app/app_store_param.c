@@ -126,7 +126,7 @@ void flash_param_update(void)
     kFlashStorage.app_protect_config_Mcu_high_temperature_warning_threshold = kAppProtectConfig.Mcu_high_temperature_warning_threshold;
     kFlashStorage.app_protect_config_Drive_low_temperature_warning_threshold = kAppProtectConfig.Drive_low_temperature_warning_threshold;
     kFlashStorage.app_protect_config_Drive_high_temperature_warning_threshold = kAppProtectConfig.Drive_high_temperature_warning_threshold;
-    kFlashStorage.app_encoder_config_Encoder_options = kAppEncoderConfig.Encoder_options;
+    kFlashStorage.app_encoder_config_Motor_encoder_options = kAppEncoderConfig.Motor_encoder_options;
     kFlashStorage.app_motor_config_Motor_rotor_inertia = kAppMotorConfig.Motor_rotor_inertia;
     kFlashStorage.app_debug_param_Debug_float[0] = kAppDebugParam.Debug_float[0];
     kFlashStorage.app_debug_param_Debug_float[1] = kAppDebugParam.Debug_float[1];
@@ -160,6 +160,25 @@ void flash_param_update(void)
     kFlashStorage.app_debug_param_Debug_uint32[13] = kAppDebugParam.Debug_uint32[13];
     kFlashStorage.app_debug_param_Debug_uint32[14] = kAppDebugParam.Debug_uint32[14];
     kFlashStorage.app_debug_param_Debug_uint32[15] = kAppDebugParam.Debug_uint32[15];
+    kFlashStorage.app_debug_param_Debug_int32[0] = kAppDebugParam.Debug_int32[0];
+    kFlashStorage.app_debug_param_Debug_int32[1] = kAppDebugParam.Debug_int32[1];
+    kFlashStorage.app_debug_param_Debug_int32[2] = kAppDebugParam.Debug_int32[2];
+    kFlashStorage.app_debug_param_Debug_int32[3] = kAppDebugParam.Debug_int32[3];
+    kFlashStorage.app_debug_param_Debug_int32[4] = kAppDebugParam.Debug_int32[4];
+    kFlashStorage.app_debug_param_Debug_int32[5] = kAppDebugParam.Debug_int32[5];
+    kFlashStorage.app_debug_param_Debug_int32[6] = kAppDebugParam.Debug_int32[6];
+    kFlashStorage.app_debug_param_Debug_int32[7] = kAppDebugParam.Debug_int32[7];
+    kFlashStorage.app_debug_param_Debug_int32[8] = kAppDebugParam.Debug_int32[8];
+    kFlashStorage.app_debug_param_Debug_int32[9] = kAppDebugParam.Debug_int32[9];
+    kFlashStorage.app_debug_param_Debug_int32[10] = kAppDebugParam.Debug_int32[10];
+    kFlashStorage.app_debug_param_Debug_int32[11] = kAppDebugParam.Debug_int32[11];
+    kFlashStorage.app_debug_param_Debug_int32[12] = kAppDebugParam.Debug_int32[12];
+    kFlashStorage.app_debug_param_Debug_int32[13] = kAppDebugParam.Debug_int32[13];
+    kFlashStorage.app_debug_param_Debug_int32[14] = kAppDebugParam.Debug_int32[14];
+    kFlashStorage.app_debug_param_Debug_int32[15] = kAppDebugParam.Debug_int32[15];
+    kFlashStorage.app_encoder_config_Load_control_resolution = kAppEncoderConfig.Load_control_resolution;
+    kFlashStorage.app_encoder_config_Motor_control_resolution = kAppEncoderConfig.Motor_control_resolution;
+    kFlashStorage.app_encoder_config_Load_encoder_options = kAppEncoderConfig.Load_encoder_options;
 }
 
 void flash_param_init(void)
@@ -282,7 +301,7 @@ void flash_param_init(void)
     kAppProtectConfig.Mcu_high_temperature_warning_threshold = kFlashStorage.app_protect_config_Mcu_high_temperature_warning_threshold;
     kAppProtectConfig.Drive_low_temperature_warning_threshold = kFlashStorage.app_protect_config_Drive_low_temperature_warning_threshold;
     kAppProtectConfig.Drive_high_temperature_warning_threshold = kFlashStorage.app_protect_config_Drive_high_temperature_warning_threshold;
-    kAppEncoderConfig.Encoder_options = kFlashStorage.app_encoder_config_Encoder_options;
+    kAppEncoderConfig.Motor_encoder_options = kFlashStorage.app_encoder_config_Motor_encoder_options;
     kAppMotorConfig.Motor_rotor_inertia = kFlashStorage.app_motor_config_Motor_rotor_inertia;
     kAppDebugParam.Debug_float[0] = kFlashStorage.app_debug_param_Debug_float[0];
     kAppDebugParam.Debug_float[1] = kFlashStorage.app_debug_param_Debug_float[1];
@@ -316,6 +335,25 @@ void flash_param_init(void)
     kAppDebugParam.Debug_uint32[13] = kFlashStorage.app_debug_param_Debug_uint32[13];
     kAppDebugParam.Debug_uint32[14] = kFlashStorage.app_debug_param_Debug_uint32[14];
     kAppDebugParam.Debug_uint32[15] = kFlashStorage.app_debug_param_Debug_uint32[15];
+    kAppDebugParam.Debug_int32[0] = kFlashStorage.app_debug_param_Debug_int32[0];
+    kAppDebugParam.Debug_int32[1] = kFlashStorage.app_debug_param_Debug_int32[1];
+    kAppDebugParam.Debug_int32[2] = kFlashStorage.app_debug_param_Debug_int32[2];
+    kAppDebugParam.Debug_int32[3] = kFlashStorage.app_debug_param_Debug_int32[3];
+    kAppDebugParam.Debug_int32[4] = kFlashStorage.app_debug_param_Debug_int32[4];
+    kAppDebugParam.Debug_int32[5] = kFlashStorage.app_debug_param_Debug_int32[5];
+    kAppDebugParam.Debug_int32[6] = kFlashStorage.app_debug_param_Debug_int32[6];
+    kAppDebugParam.Debug_int32[7] = kFlashStorage.app_debug_param_Debug_int32[7];
+    kAppDebugParam.Debug_int32[8] = kFlashStorage.app_debug_param_Debug_int32[8];
+    kAppDebugParam.Debug_int32[9] = kFlashStorage.app_debug_param_Debug_int32[9];
+    kAppDebugParam.Debug_int32[10] = kFlashStorage.app_debug_param_Debug_int32[10];
+    kAppDebugParam.Debug_int32[11] = kFlashStorage.app_debug_param_Debug_int32[11];
+    kAppDebugParam.Debug_int32[12] = kFlashStorage.app_debug_param_Debug_int32[12];
+    kAppDebugParam.Debug_int32[13] = kFlashStorage.app_debug_param_Debug_int32[13];
+    kAppDebugParam.Debug_int32[14] = kFlashStorage.app_debug_param_Debug_int32[14];
+    kAppDebugParam.Debug_int32[15] = kFlashStorage.app_debug_param_Debug_int32[15];
+    kAppEncoderConfig.Load_control_resolution = kFlashStorage.app_encoder_config_Load_control_resolution;
+    kAppEncoderConfig.Motor_control_resolution = kFlashStorage.app_encoder_config_Motor_control_resolution;
+    kAppEncoderConfig.Load_encoder_options = kFlashStorage.app_encoder_config_Load_encoder_options;
 }
 /* USER CODE BEGIN AREA 1 */
 static HistoricalInfo kFlashHistoricalInfo;

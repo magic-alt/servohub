@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE AppMotionParam PACKING
 
-#define MAVLINK_MSG_ID_AppMotionParam 68
+#define MAVLINK_MSG_ID_AppMotionParam 30059
 
 
 typedef struct __mavlink_appmotionparam_t {
@@ -27,17 +27,17 @@ typedef struct __mavlink_appmotionparam_t {
 
 #define MAVLINK_MSG_ID_AppMotionParam_LEN 81
 #define MAVLINK_MSG_ID_AppMotionParam_MIN_LEN 81
-#define MAVLINK_MSG_ID_68_LEN 81
-#define MAVLINK_MSG_ID_68_MIN_LEN 81
+#define MAVLINK_MSG_ID_30059_LEN 81
+#define MAVLINK_MSG_ID_30059_MIN_LEN 81
 
 #define MAVLINK_MSG_ID_AppMotionParam_CRC 102
-#define MAVLINK_MSG_ID_68_CRC 102
+#define MAVLINK_MSG_ID_30059_CRC 102
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_AppMotionParam { \
-    68, \
+    30059, \
     "AppMotionParam", \
     18, \
     {  { "Target_position", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_appmotionparam_t, Target_position) }, \

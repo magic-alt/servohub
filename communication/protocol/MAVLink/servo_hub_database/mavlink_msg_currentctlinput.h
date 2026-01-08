@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE CurrentCtlInput PACKING
 
-#define MAVLINK_MSG_ID_CurrentCtlInput 34
+#define MAVLINK_MSG_ID_CurrentCtlInput 30025
 
 
 typedef struct __mavlink_currentctlinput_t {
@@ -17,11 +17,11 @@ typedef struct __mavlink_currentctlinput_t {
 
 #define MAVLINK_MSG_ID_CurrentCtlInput_LEN 49
 #define MAVLINK_MSG_ID_CurrentCtlInput_MIN_LEN 49
-#define MAVLINK_MSG_ID_34_LEN 49
-#define MAVLINK_MSG_ID_34_MIN_LEN 49
+#define MAVLINK_MSG_ID_30025_LEN 49
+#define MAVLINK_MSG_ID_30025_MIN_LEN 49
 
 #define MAVLINK_MSG_ID_CurrentCtlInput_CRC 121
-#define MAVLINK_MSG_ID_34_CRC 121
+#define MAVLINK_MSG_ID_30025_CRC 121
 
 #define MAVLINK_MSG_CurrentCtlInput_FIELD_IDQ_TAR_A_LEN 2
 #define MAVLINK_MSG_CurrentCtlInput_FIELD_IABC_NOW_A_LEN 3
@@ -29,7 +29,7 @@ typedef struct __mavlink_currentctlinput_t {
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_CurrentCtlInput { \
-    34, \
+    30025, \
     "CurrentCtlInput", \
     8, \
     {  { "idq_tar_A", NULL, MAVLINK_TYPE_FLOAT, 2, 0, offsetof(mavlink_currentctlinput_t, idq_tar_A) }, \

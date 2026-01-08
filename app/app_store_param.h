@@ -159,10 +159,14 @@ typedef struct {
     float app_protect_config_Mcu_high_temperature_warning_threshold;
     float app_protect_config_Drive_low_temperature_warning_threshold;
     float app_protect_config_Drive_high_temperature_warning_threshold;
-    uint8_t app_encoder_config_Encoder_options;
+    uint8_t app_encoder_config_Motor_encoder_options;
     float app_motor_config_Motor_rotor_inertia;
     float app_debug_param_Debug_float[16];
     uint32_t app_debug_param_Debug_uint32[16];
+    int32_t app_debug_param_Debug_int32[16];
+    uint32_t app_encoder_config_Load_control_resolution;
+    uint32_t app_encoder_config_Motor_control_resolution;
+    uint8_t app_encoder_config_Load_encoder_options;
 }FLASH_PARAM_STRUCT;
 extern FLASH_PARAM_STRUCT kFlashStorage;
 

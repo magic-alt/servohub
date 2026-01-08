@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE CurrentCtlOutput PACKING
 
-#define MAVLINK_MSG_ID_CurrentCtlOutput 36
+#define MAVLINK_MSG_ID_CurrentCtlOutput 30027
 
 
 typedef struct __mavlink_currentctloutput_t {
@@ -12,11 +12,11 @@ typedef struct __mavlink_currentctloutput_t {
 
 #define MAVLINK_MSG_ID_CurrentCtlOutput_LEN 32
 #define MAVLINK_MSG_ID_CurrentCtlOutput_MIN_LEN 32
-#define MAVLINK_MSG_ID_36_LEN 32
-#define MAVLINK_MSG_ID_36_MIN_LEN 32
+#define MAVLINK_MSG_ID_30027_LEN 32
+#define MAVLINK_MSG_ID_30027_MIN_LEN 32
 
 #define MAVLINK_MSG_ID_CurrentCtlOutput_CRC 58
-#define MAVLINK_MSG_ID_36_CRC 58
+#define MAVLINK_MSG_ID_30027_CRC 58
 
 #define MAVLINK_MSG_CurrentCtlOutput_FIELD_UABC_TAR_COMP_V_LEN 3
 #define MAVLINK_MSG_CurrentCtlOutput_FIELD_IDQ_NOW_A_LEN 2
@@ -24,7 +24,7 @@ typedef struct __mavlink_currentctloutput_t {
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_CurrentCtlOutput { \
-    36, \
+    30027, \
     "CurrentCtlOutput", \
     3, \
     {  { "uabc_tar_comp_V", NULL, MAVLINK_TYPE_FLOAT, 3, 0, offsetof(mavlink_currentctloutput_t, uabc_tar_comp_V) }, \

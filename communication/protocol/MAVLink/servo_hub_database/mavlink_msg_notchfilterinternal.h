@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE NotchFilterInternal PACKING
 
-#define MAVLINK_MSG_ID_NotchFilterInternal 17
+#define MAVLINK_MSG_ID_NotchFilterInternal 30008
 
 
 typedef struct __mavlink_notchfilterinternal_t {
@@ -14,11 +14,11 @@ typedef struct __mavlink_notchfilterinternal_t {
 
 #define MAVLINK_MSG_ID_NotchFilterInternal_LEN 120
 #define MAVLINK_MSG_ID_NotchFilterInternal_MIN_LEN 120
-#define MAVLINK_MSG_ID_17_LEN 120
-#define MAVLINK_MSG_ID_17_MIN_LEN 120
+#define MAVLINK_MSG_ID_30008_LEN 120
+#define MAVLINK_MSG_ID_30008_MIN_LEN 120
 
 #define MAVLINK_MSG_ID_NotchFilterInternal_CRC 3
-#define MAVLINK_MSG_ID_17_CRC 3
+#define MAVLINK_MSG_ID_30008_CRC 3
 
 #define MAVLINK_MSG_NotchFilterInternal_FIELD_U0_LEN 6
 #define MAVLINK_MSG_NotchFilterInternal_FIELD_U1_LEN 6
@@ -28,7 +28,7 @@ typedef struct __mavlink_notchfilterinternal_t {
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_NotchFilterInternal { \
-    17, \
+    30008, \
     "NotchFilterInternal", \
     5, \
     {  { "u0", NULL, MAVLINK_TYPE_FLOAT, 6, 0, offsetof(mavlink_notchfilterinternal_t, u0) }, \

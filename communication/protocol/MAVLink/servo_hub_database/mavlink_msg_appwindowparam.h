@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE AppWindowParam PACKING
 
-#define MAVLINK_MSG_ID_AppWindowParam 71
+#define MAVLINK_MSG_ID_AppWindowParam 30062
 
 
 typedef struct __mavlink_appwindowparam_t {
@@ -17,17 +17,17 @@ typedef struct __mavlink_appwindowparam_t {
 
 #define MAVLINK_MSG_ID_AppWindowParam_LEN 36
 #define MAVLINK_MSG_ID_AppWindowParam_MIN_LEN 36
-#define MAVLINK_MSG_ID_71_LEN 36
-#define MAVLINK_MSG_ID_71_MIN_LEN 36
+#define MAVLINK_MSG_ID_30062_LEN 36
+#define MAVLINK_MSG_ID_30062_MIN_LEN 36
 
 #define MAVLINK_MSG_ID_AppWindowParam_CRC 162
-#define MAVLINK_MSG_ID_71_CRC 162
+#define MAVLINK_MSG_ID_30062_CRC 162
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_AppWindowParam { \
-    71, \
+    30062, \
     "AppWindowParam", \
     8, \
     {  { "Following_error_window", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_appwindowparam_t, Following_error_window) }, \

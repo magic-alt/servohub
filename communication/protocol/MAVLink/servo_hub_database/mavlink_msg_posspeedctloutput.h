@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE PosSpeedCtlOutput PACKING
 
-#define MAVLINK_MSG_ID_PosSpeedCtlOutput 29
+#define MAVLINK_MSG_ID_PosSpeedCtlOutput 30020
 
 
 typedef struct __mavlink_posspeedctloutput_t {
@@ -12,17 +12,17 @@ typedef struct __mavlink_posspeedctloutput_t {
 
 #define MAVLINK_MSG_ID_PosSpeedCtlOutput_LEN 12
 #define MAVLINK_MSG_ID_PosSpeedCtlOutput_MIN_LEN 12
-#define MAVLINK_MSG_ID_29_LEN 12
-#define MAVLINK_MSG_ID_29_MIN_LEN 12
+#define MAVLINK_MSG_ID_30020_LEN 12
+#define MAVLINK_MSG_ID_30020_MIN_LEN 12
 
 #define MAVLINK_MSG_ID_PosSpeedCtlOutput_CRC 51
-#define MAVLINK_MSG_ID_29_CRC 51
+#define MAVLINK_MSG_ID_30020_CRC 51
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_PosSpeedCtlOutput { \
-    29, \
+    30020, \
     "PosSpeedCtlOutput", \
     3, \
     {  { "iq_tar_A", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_posspeedctloutput_t, iq_tar_A) }, \

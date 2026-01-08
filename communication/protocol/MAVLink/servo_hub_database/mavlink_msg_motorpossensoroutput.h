@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE MotorPosSensorOutput PACKING
 
-#define MAVLINK_MSG_ID_MotorPosSensorOutput 49
+#define MAVLINK_MSG_ID_MotorPosSensorOutput 30040
 
 
 typedef struct __mavlink_motorpossensoroutput_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_motorpossensoroutput_t {
 
 #define MAVLINK_MSG_ID_MotorPosSensorOutput_LEN 12
 #define MAVLINK_MSG_ID_MotorPosSensorOutput_MIN_LEN 12
-#define MAVLINK_MSG_ID_49_LEN 12
-#define MAVLINK_MSG_ID_49_MIN_LEN 12
+#define MAVLINK_MSG_ID_30040_LEN 12
+#define MAVLINK_MSG_ID_30040_MIN_LEN 12
 
 #define MAVLINK_MSG_ID_MotorPosSensorOutput_CRC 160
-#define MAVLINK_MSG_ID_49_CRC 160
+#define MAVLINK_MSG_ID_30040_CRC 160
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_MotorPosSensorOutput { \
-    49, \
+    30040, \
     "MotorPosSensorOutput", \
     2, \
     {  { "enc_sum_p", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_motorpossensoroutput_t, enc_sum_p) }, \

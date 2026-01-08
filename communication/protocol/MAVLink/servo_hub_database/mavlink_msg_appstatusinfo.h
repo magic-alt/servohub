@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE AppStatusInfo PACKING
 
-#define MAVLINK_MSG_ID_AppStatusInfo 64
+#define MAVLINK_MSG_ID_AppStatusInfo 30055
 
 
 typedef struct __mavlink_appstatusinfo_t {
@@ -20,17 +20,17 @@ typedef struct __mavlink_appstatusinfo_t {
 
 #define MAVLINK_MSG_ID_AppStatusInfo_LEN 41
 #define MAVLINK_MSG_ID_AppStatusInfo_MIN_LEN 41
-#define MAVLINK_MSG_ID_64_LEN 41
-#define MAVLINK_MSG_ID_64_MIN_LEN 41
+#define MAVLINK_MSG_ID_30055_LEN 41
+#define MAVLINK_MSG_ID_30055_MIN_LEN 41
 
 #define MAVLINK_MSG_ID_AppStatusInfo_CRC 89
-#define MAVLINK_MSG_ID_64_CRC 89
+#define MAVLINK_MSG_ID_30055_CRC 89
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_AppStatusInfo { \
-    64, \
+    30055, \
     "AppStatusInfo", \
     11, \
     {  { "Statusword", NULL, MAVLINK_TYPE_UINT32_T, 0, 0, offsetof(mavlink_appstatusinfo_t, Statusword) }, \

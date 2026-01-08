@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE InputShapingOutput PACKING
 
-#define MAVLINK_MSG_ID_InputShapingOutput 22
+#define MAVLINK_MSG_ID_InputShapingOutput 30013
 
 
 typedef struct __mavlink_inputshapingoutput_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_inputshapingoutput_t {
 
 #define MAVLINK_MSG_ID_InputShapingOutput_LEN 8
 #define MAVLINK_MSG_ID_InputShapingOutput_MIN_LEN 8
-#define MAVLINK_MSG_ID_22_LEN 8
-#define MAVLINK_MSG_ID_22_MIN_LEN 8
+#define MAVLINK_MSG_ID_30013_LEN 8
+#define MAVLINK_MSG_ID_30013_MIN_LEN 8
 
 #define MAVLINK_MSG_ID_InputShapingOutput_CRC 107
-#define MAVLINK_MSG_ID_22_CRC 107
+#define MAVLINK_MSG_ID_30013_CRC 107
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_InputShapingOutput { \
-    22, \
+    30013, \
     "InputShapingOutput", \
     1, \
     {  { "pos_cmd_shaping_p", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_inputshapingoutput_t, pos_cmd_shaping_p) }, \

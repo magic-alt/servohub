@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE AppBaseConfig PACKING
 
-#define MAVLINK_MSG_ID_AppBaseConfig 67
+#define MAVLINK_MSG_ID_AppBaseConfig 30058
 
 
 typedef struct __mavlink_appbaseconfig_t {
@@ -18,17 +18,17 @@ typedef struct __mavlink_appbaseconfig_t {
 
 #define MAVLINK_MSG_ID_AppBaseConfig_LEN 35
 #define MAVLINK_MSG_ID_AppBaseConfig_MIN_LEN 35
-#define MAVLINK_MSG_ID_67_LEN 35
-#define MAVLINK_MSG_ID_67_MIN_LEN 35
+#define MAVLINK_MSG_ID_30058_LEN 35
+#define MAVLINK_MSG_ID_30058_MIN_LEN 35
 
 #define MAVLINK_MSG_ID_AppBaseConfig_CRC 207
-#define MAVLINK_MSG_ID_67_CRC 207
+#define MAVLINK_MSG_ID_30058_CRC 207
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_AppBaseConfig { \
-    67, \
+    30058, \
     "AppBaseConfig", \
     9, \
     {  { "Polarity", NULL, MAVLINK_TYPE_UINT8_T, 0, 34, offsetof(mavlink_appbaseconfig_t, Polarity) }, \

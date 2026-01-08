@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE SystemConfig PACKING
 
-#define MAVLINK_MSG_ID_SystemConfig 54
+#define MAVLINK_MSG_ID_SystemConfig 30045
 
 
 typedef struct __mavlink_systemconfig_t {
@@ -13,17 +13,17 @@ typedef struct __mavlink_systemconfig_t {
 
 #define MAVLINK_MSG_ID_SystemConfig_LEN 10
 #define MAVLINK_MSG_ID_SystemConfig_MIN_LEN 10
-#define MAVLINK_MSG_ID_54_LEN 10
-#define MAVLINK_MSG_ID_54_MIN_LEN 10
+#define MAVLINK_MSG_ID_30045_LEN 10
+#define MAVLINK_MSG_ID_30045_MIN_LEN 10
 
 #define MAVLINK_MSG_ID_SystemConfig_CRC 246
-#define MAVLINK_MSG_ID_54_CRC 246
+#define MAVLINK_MSG_ID_30045_CRC 246
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_SystemConfig { \
-    54, \
+    30045, \
     "SystemConfig", \
     4, \
     {  { "param_save", NULL, MAVLINK_TYPE_INT8_T, 0, 8, offsetof(mavlink_systemconfig_t, param_save) }, \

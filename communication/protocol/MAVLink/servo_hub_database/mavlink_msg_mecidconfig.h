@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE MecIdConfig PACKING
 
-#define MAVLINK_MSG_ID_MecIdConfig 15
+#define MAVLINK_MSG_ID_MecIdConfig 30006
 
 
 typedef struct __mavlink_mecidconfig_t {
@@ -17,17 +17,17 @@ typedef struct __mavlink_mecidconfig_t {
 
 #define MAVLINK_MSG_ID_MecIdConfig_LEN 29
 #define MAVLINK_MSG_ID_MecIdConfig_MIN_LEN 29
-#define MAVLINK_MSG_ID_15_LEN 29
-#define MAVLINK_MSG_ID_15_MIN_LEN 29
+#define MAVLINK_MSG_ID_30006_LEN 29
+#define MAVLINK_MSG_ID_30006_MIN_LEN 29
 
 #define MAVLINK_MSG_ID_MecIdConfig_CRC 65
-#define MAVLINK_MSG_ID_15_CRC 65
+#define MAVLINK_MSG_ID_30006_CRC 65
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_MecIdConfig { \
-    15, \
+    30006, \
     "MecIdConfig", \
     8, \
     {  { "dt_s", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_mecidconfig_t, dt_s) }, \

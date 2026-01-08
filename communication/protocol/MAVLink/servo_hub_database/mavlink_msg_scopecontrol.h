@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE ScopeControl PACKING
 
-#define MAVLINK_MSG_ID_ScopeControl 24
+#define MAVLINK_MSG_ID_ScopeControl 30015
 
 
 typedef struct __mavlink_scopecontrol_t {
@@ -13,17 +13,17 @@ typedef struct __mavlink_scopecontrol_t {
 
 #define MAVLINK_MSG_ID_ScopeControl_LEN 40
 #define MAVLINK_MSG_ID_ScopeControl_MIN_LEN 40
-#define MAVLINK_MSG_ID_24_LEN 40
-#define MAVLINK_MSG_ID_24_MIN_LEN 40
+#define MAVLINK_MSG_ID_30015_LEN 40
+#define MAVLINK_MSG_ID_30015_MIN_LEN 40
 
 #define MAVLINK_MSG_ID_ScopeControl_CRC 108
-#define MAVLINK_MSG_ID_24_CRC 108
+#define MAVLINK_MSG_ID_30015_CRC 108
 
 #define MAVLINK_MSG_ScopeControl_FIELD_FRAME_NUM_LEN 16
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ScopeControl { \
-    24, \
+    30015, \
     "ScopeControl", \
     4, \
     {  { "control_word", NULL, MAVLINK_TYPE_UINT16_T, 0, 4, offsetof(mavlink_scopecontrol_t, control_word) }, \

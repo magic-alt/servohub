@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE CurrentCtlConfig PACKING
 
-#define MAVLINK_MSG_ID_CurrentCtlConfig 35
+#define MAVLINK_MSG_ID_CurrentCtlConfig 30026
 
 
 typedef struct __mavlink_currentctlconfig_t {
@@ -21,17 +21,17 @@ typedef struct __mavlink_currentctlconfig_t {
 
 #define MAVLINK_MSG_ID_CurrentCtlConfig_LEN 45
 #define MAVLINK_MSG_ID_CurrentCtlConfig_MIN_LEN 45
-#define MAVLINK_MSG_ID_35_LEN 45
-#define MAVLINK_MSG_ID_35_MIN_LEN 45
+#define MAVLINK_MSG_ID_30026_LEN 45
+#define MAVLINK_MSG_ID_30026_MIN_LEN 45
 
 #define MAVLINK_MSG_ID_CurrentCtlConfig_CRC 84
-#define MAVLINK_MSG_ID_35_CRC 84
+#define MAVLINK_MSG_ID_30026_CRC 84
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_CurrentCtlConfig { \
-    35, \
+    30026, \
     "CurrentCtlConfig", \
     12, \
     {  { "i_noise_A", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_currentctlconfig_t, i_noise_A) }, \

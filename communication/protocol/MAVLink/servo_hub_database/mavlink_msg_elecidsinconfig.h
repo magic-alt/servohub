@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE ElecIdSinConfig PACKING
 
-#define MAVLINK_MSG_ID_ElecIdSinConfig 13
+#define MAVLINK_MSG_ID_ElecIdSinConfig 30004
 
 
 typedef struct __mavlink_elecidsinconfig_t {
@@ -16,17 +16,17 @@ typedef struct __mavlink_elecidsinconfig_t {
 
 #define MAVLINK_MSG_ID_ElecIdSinConfig_LEN 28
 #define MAVLINK_MSG_ID_ElecIdSinConfig_MIN_LEN 28
-#define MAVLINK_MSG_ID_13_LEN 28
-#define MAVLINK_MSG_ID_13_MIN_LEN 28
+#define MAVLINK_MSG_ID_30004_LEN 28
+#define MAVLINK_MSG_ID_30004_MIN_LEN 28
 
 #define MAVLINK_MSG_ID_ElecIdSinConfig_CRC 72
-#define MAVLINK_MSG_ID_13_CRC 72
+#define MAVLINK_MSG_ID_30004_CRC 72
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ElecIdSinConfig { \
-    13, \
+    30004, \
     "ElecIdSinConfig", \
     7, \
     {  { "dt_s", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_elecidsinconfig_t, dt_s) }, \

@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE ElecAngleIdInput PACKING
 
-#define MAVLINK_MSG_ID_ElecAngleIdInput 43
+#define MAVLINK_MSG_ID_ElecAngleIdInput 30034
 
 
 typedef struct __mavlink_elecangleidinput_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_elecangleidinput_t {
 
 #define MAVLINK_MSG_ID_ElecAngleIdInput_LEN 4
 #define MAVLINK_MSG_ID_ElecAngleIdInput_MIN_LEN 4
-#define MAVLINK_MSG_ID_43_LEN 4
-#define MAVLINK_MSG_ID_43_MIN_LEN 4
+#define MAVLINK_MSG_ID_30034_LEN 4
+#define MAVLINK_MSG_ID_30034_MIN_LEN 4
 
 #define MAVLINK_MSG_ID_ElecAngleIdInput_CRC 156
-#define MAVLINK_MSG_ID_43_CRC 156
+#define MAVLINK_MSG_ID_30034_CRC 156
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ElecAngleIdInput { \
-    43, \
+    30034, \
     "ElecAngleIdInput", \
     1, \
     {  { "pos_now_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_elecangleidinput_t, pos_now_rad) }, \

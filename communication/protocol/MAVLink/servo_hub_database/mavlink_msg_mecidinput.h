@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE MecIdInput PACKING
 
-#define MAVLINK_MSG_ID_MecIdInput 19
+#define MAVLINK_MSG_ID_MecIdInput 30010
 
 
 typedef struct __mavlink_mecidinput_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_mecidinput_t {
 
 #define MAVLINK_MSG_ID_MecIdInput_LEN 4
 #define MAVLINK_MSG_ID_MecIdInput_MIN_LEN 4
-#define MAVLINK_MSG_ID_19_LEN 4
-#define MAVLINK_MSG_ID_19_MIN_LEN 4
+#define MAVLINK_MSG_ID_30010_LEN 4
+#define MAVLINK_MSG_ID_30010_MIN_LEN 4
 
 #define MAVLINK_MSG_ID_MecIdInput_CRC 37
-#define MAVLINK_MSG_ID_19_CRC 37
+#define MAVLINK_MSG_ID_30010_CRC 37
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_MecIdInput { \
-    19, \
+    30010, \
     "MecIdInput", \
     1, \
     {  { "speed_now_rad_s", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_mecidinput_t, speed_now_rad_s) }, \

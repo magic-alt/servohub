@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE ReciprocalMotionOutput PACKING
 
-#define MAVLINK_MSG_ID_ReciprocalMotionOutput 60
+#define MAVLINK_MSG_ID_ReciprocalMotionOutput 30051
 
 
 typedef struct __mavlink_reciprocalmotionoutput_t {
@@ -13,17 +13,17 @@ typedef struct __mavlink_reciprocalmotionoutput_t {
 
 #define MAVLINK_MSG_ID_ReciprocalMotionOutput_LEN 17
 #define MAVLINK_MSG_ID_ReciprocalMotionOutput_MIN_LEN 17
-#define MAVLINK_MSG_ID_60_LEN 17
-#define MAVLINK_MSG_ID_60_MIN_LEN 17
+#define MAVLINK_MSG_ID_30051_LEN 17
+#define MAVLINK_MSG_ID_30051_MIN_LEN 17
 
 #define MAVLINK_MSG_ID_ReciprocalMotionOutput_CRC 103
-#define MAVLINK_MSG_ID_60_CRC 103
+#define MAVLINK_MSG_ID_30051_CRC 103
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ReciprocalMotionOutput { \
-    60, \
+    30051, \
     "ReciprocalMotionOutput", \
     4, \
     {  { "pos_tar_p", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_reciprocalmotionoutput_t, pos_tar_p) }, \

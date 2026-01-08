@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE TqFcIdOutput PACKING
 
-#define MAVLINK_MSG_ID_TqFcIdOutput 57
+#define MAVLINK_MSG_ID_TqFcIdOutput 30048
 
 
 typedef struct __mavlink_tqfcidoutput_t {
@@ -14,17 +14,17 @@ typedef struct __mavlink_tqfcidoutput_t {
 
 #define MAVLINK_MSG_ID_TqFcIdOutput_LEN 12
 #define MAVLINK_MSG_ID_TqFcIdOutput_MIN_LEN 12
-#define MAVLINK_MSG_ID_57_LEN 12
-#define MAVLINK_MSG_ID_57_MIN_LEN 12
+#define MAVLINK_MSG_ID_30048_LEN 12
+#define MAVLINK_MSG_ID_30048_MIN_LEN 12
 
 #define MAVLINK_MSG_ID_TqFcIdOutput_CRC 116
-#define MAVLINK_MSG_ID_57_CRC 116
+#define MAVLINK_MSG_ID_30048_CRC 116
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_TqFcIdOutput { \
-    57, \
+    30048, \
     "TqFcIdOutput", \
     5, \
     {  { "pos_cmd_p", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_tqfcidoutput_t, pos_cmd_p) }, \

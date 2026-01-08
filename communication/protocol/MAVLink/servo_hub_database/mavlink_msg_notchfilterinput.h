@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE NotchFilterInput PACKING
 
-#define MAVLINK_MSG_ID_NotchFilterInput 16
+#define MAVLINK_MSG_ID_NotchFilterInput 30007
 
 
 typedef struct __mavlink_notchfilterinput_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_notchfilterinput_t {
 
 #define MAVLINK_MSG_ID_NotchFilterInput_LEN 4
 #define MAVLINK_MSG_ID_NotchFilterInput_MIN_LEN 4
-#define MAVLINK_MSG_ID_16_LEN 4
-#define MAVLINK_MSG_ID_16_MIN_LEN 4
+#define MAVLINK_MSG_ID_30007_LEN 4
+#define MAVLINK_MSG_ID_30007_MIN_LEN 4
 
 #define MAVLINK_MSG_ID_NotchFilterInput_CRC 247
-#define MAVLINK_MSG_ID_16_CRC 247
+#define MAVLINK_MSG_ID_30007_CRC 247
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_NotchFilterInput { \
-    16, \
+    30007, \
     "NotchFilterInput", \
     1, \
     {  { "iq_tar_A", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_notchfilterinput_t, iq_tar_A) }, \

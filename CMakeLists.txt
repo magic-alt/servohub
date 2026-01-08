@@ -42,6 +42,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/common/unit_conversion
     ${PROJECT_SOURCE_DIR}/communication/callback/mavlink
     ${PROJECT_SOURCE_DIR}/communication/protocol
+    # ${PROJECT_SOURCE_DIR}/communication/protocol/mavlink
     ${PROJECT_SOURCE_DIR}/communication/protocol/mavlink/servo_hub_database
     ${PROJECT_SOURCE_DIR}/motor_control
     ${PROJECT_SOURCE_DIR}/database

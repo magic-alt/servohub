@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE PolePairsIdInput PACKING
 
-#define MAVLINK_MSG_ID_PolePairsIdInput 50
+#define MAVLINK_MSG_ID_PolePairsIdInput 30041
 
 
 typedef struct __mavlink_polepairsidinput_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_polepairsidinput_t {
 
 #define MAVLINK_MSG_ID_PolePairsIdInput_LEN 8
 #define MAVLINK_MSG_ID_PolePairsIdInput_MIN_LEN 8
-#define MAVLINK_MSG_ID_50_LEN 8
-#define MAVLINK_MSG_ID_50_MIN_LEN 8
+#define MAVLINK_MSG_ID_30041_LEN 8
+#define MAVLINK_MSG_ID_30041_MIN_LEN 8
 
 #define MAVLINK_MSG_ID_PolePairsIdInput_CRC 88
-#define MAVLINK_MSG_ID_50_CRC 88
+#define MAVLINK_MSG_ID_30041_CRC 88
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_PolePairsIdInput { \
-    50, \
+    30041, \
     "PolePairsIdInput", \
     1, \
     {  { "enc_counts_sum_p", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_polepairsidinput_t, enc_counts_sum_p) }, \

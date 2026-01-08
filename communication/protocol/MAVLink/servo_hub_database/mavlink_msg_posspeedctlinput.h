@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE PosSpeedCtlInput PACKING
 
-#define MAVLINK_MSG_ID_PosSpeedCtlInput 28
+#define MAVLINK_MSG_ID_PosSpeedCtlInput 30019
 
 
 typedef struct __mavlink_posspeedctlinput_t {
@@ -15,17 +15,17 @@ typedef struct __mavlink_posspeedctlinput_t {
 
 #define MAVLINK_MSG_ID_PosSpeedCtlInput_LEN 32
 #define MAVLINK_MSG_ID_PosSpeedCtlInput_MIN_LEN 32
-#define MAVLINK_MSG_ID_28_LEN 32
-#define MAVLINK_MSG_ID_28_MIN_LEN 32
+#define MAVLINK_MSG_ID_30019_LEN 32
+#define MAVLINK_MSG_ID_30019_MIN_LEN 32
 
 #define MAVLINK_MSG_ID_PosSpeedCtlInput_CRC 220
-#define MAVLINK_MSG_ID_28_CRC 220
+#define MAVLINK_MSG_ID_30019_CRC 220
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_PosSpeedCtlInput { \
-    28, \
+    30019, \
     "PosSpeedCtlInput", \
     6, \
     {  { "pos_tar_p", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_posspeedctlinput_t, pos_tar_p) }, \

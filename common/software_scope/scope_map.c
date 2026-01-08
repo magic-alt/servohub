@@ -4,7 +4,7 @@
 #include "motor_ctl_loop.h"
 
 //DATABASE_CODE_START_1
-const InterVarStruct kParamDataBase[371] = {
+const InterVarStruct kParamDataBase[379] = {
     {1, &kAxis.pmsm_config.b, kTypeFloat32},
     {2, &kAxis.pmsm_config.fc, kTypeFloat32},
     {3, &kAxis.pmsm_config.flux, kTypeFloat32},
@@ -336,7 +336,7 @@ const InterVarStruct kParamDataBase[371] = {
     {477, &kCustomInfo.User_module_code, kTypeUint64},
     {478, &kHeartBit.Sys_init_flag, kTypeUint8},
     {481, &kHistoricalInfo.Error_records_list, kTypeUint32},
-    {483, &kAppEncoderConfig.Encoder_options, kTypeUint8},
+    {483, &kAppEncoderConfig.Motor_encoder_options, kTypeUint8},
     {484, &kAxis.reference_signal_output.signal_pos, kTypeInt64},
     {485, &kAxis.reference_signal_output.signal_vel, kTypeFloat32},
     {486, &kAxis.reference_signal_output.signal_acc, kTypeFloat32},
@@ -376,5 +376,13 @@ const InterVarStruct kParamDataBase[371] = {
     {564, &kAppDebugParam.Debug_float, kTypeFloat32},
     {565, &kAppDebugParam.Debug_uint32, kTypeUint32},
     {589, &kAxis.mit_ctl_config.kt_NM_A, kTypeFloat32},
+    {590, &kAppEncoderConfig.Motor_pps_2_rpm, kTypeFloat32},
+    {591, &kAppEncoderConfig.Motor_rpm_2_pps, kTypeFloat32},
+    {592, &kAppEncoderConfig.P_load_2_motor, kTypeFloat32},
+    {593, &kAppEncoderConfig.P_motor_2_load, kTypeFloat32},
+    {598, &kAppDebugParam.Debug_int32, kTypeInt32},
+    {599, &kAppEncoderConfig.Load_control_resolution, kTypeUint32},
+    {600, &kAppEncoderConfig.Motor_control_resolution, kTypeUint32},
+    {601, &kAppEncoderConfig.Load_encoder_options, kTypeUint8},
 };
 //DATABASE_CODE_STOP_1

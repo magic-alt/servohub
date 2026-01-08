@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE ScopeData PACKING
 
-#define MAVLINK_MSG_ID_ScopeData 25
+#define MAVLINK_MSG_ID_ScopeData 30016
 
 
 typedef struct __mavlink_scopedata_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_scopedata_t {
 
 #define MAVLINK_MSG_ID_ScopeData_LEN 128
 #define MAVLINK_MSG_ID_ScopeData_MIN_LEN 128
-#define MAVLINK_MSG_ID_25_LEN 128
-#define MAVLINK_MSG_ID_25_MIN_LEN 128
+#define MAVLINK_MSG_ID_30016_LEN 128
+#define MAVLINK_MSG_ID_30016_MIN_LEN 128
 
 #define MAVLINK_MSG_ID_ScopeData_CRC 104
-#define MAVLINK_MSG_ID_25_CRC 104
+#define MAVLINK_MSG_ID_30016_CRC 104
 
 #define MAVLINK_MSG_ScopeData_FIELD_FRAME_DATA_LEN 128
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ScopeData { \
-    25, \
+    30016, \
     "ScopeData", \
     1, \
     {  { "frame_data", NULL, MAVLINK_TYPE_UINT8_T, 128, 0, offsetof(mavlink_scopedata_t, frame_data) }, \

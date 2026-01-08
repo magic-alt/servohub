@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE NonVolatileParam PACKING
 
-#define MAVLINK_MSG_ID_NonVolatileParam 53
+#define MAVLINK_MSG_ID_NonVolatileParam 30044
 
 
 typedef struct __mavlink_nonvolatileparam_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_nonvolatileparam_t {
 
 #define MAVLINK_MSG_ID_NonVolatileParam_LEN 8
 #define MAVLINK_MSG_ID_NonVolatileParam_MIN_LEN 8
-#define MAVLINK_MSG_ID_53_LEN 8
-#define MAVLINK_MSG_ID_53_MIN_LEN 8
+#define MAVLINK_MSG_ID_30044_LEN 8
+#define MAVLINK_MSG_ID_30044_MIN_LEN 8
 
 #define MAVLINK_MSG_ID_NonVolatileParam_CRC 152
-#define MAVLINK_MSG_ID_53_CRC 152
+#define MAVLINK_MSG_ID_30044_CRC 152
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_NonVolatileParam { \
-    53, \
+    30044, \
     "NonVolatileParam", \
     2, \
     {  { "encoder_res", NULL, MAVLINK_TYPE_UINT32_T, 0, 0, offsetof(mavlink_nonvolatileparam_t, encoder_res) }, \

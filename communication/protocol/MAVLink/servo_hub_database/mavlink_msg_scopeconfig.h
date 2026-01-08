@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE ScopeConfig PACKING
 
-#define MAVLINK_MSG_ID_ScopeConfig 23
+#define MAVLINK_MSG_ID_ScopeConfig 30014
 
 
 typedef struct __mavlink_scopeconfig_t {
@@ -17,17 +17,17 @@ typedef struct __mavlink_scopeconfig_t {
 
 #define MAVLINK_MSG_ID_ScopeConfig_LEN 81
 #define MAVLINK_MSG_ID_ScopeConfig_MIN_LEN 81
-#define MAVLINK_MSG_ID_23_LEN 81
-#define MAVLINK_MSG_ID_23_MIN_LEN 81
+#define MAVLINK_MSG_ID_30014_LEN 81
+#define MAVLINK_MSG_ID_30014_MIN_LEN 81
 
 #define MAVLINK_MSG_ID_ScopeConfig_CRC 199
-#define MAVLINK_MSG_ID_23_CRC 199
+#define MAVLINK_MSG_ID_30014_CRC 199
 
 #define MAVLINK_MSG_ScopeConfig_FIELD_CHANNEL_MAP_LEN 16
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ScopeConfig { \
-    23, \
+    30014, \
     "ScopeConfig", \
     8, \
     {  { "channel_map", NULL, MAVLINK_TYPE_UINT32_T, 16, 0, offsetof(mavlink_scopeconfig_t, channel_map) }, \

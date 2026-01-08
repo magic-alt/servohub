@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE SystemStatus PACKING
 
-#define MAVLINK_MSG_ID_SystemStatus 82
+#define MAVLINK_MSG_ID_SystemStatus 30073
 
 
 typedef struct __mavlink_systemstatus_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_systemstatus_t {
 
 #define MAVLINK_MSG_ID_SystemStatus_LEN 2
 #define MAVLINK_MSG_ID_SystemStatus_MIN_LEN 2
-#define MAVLINK_MSG_ID_82_LEN 2
-#define MAVLINK_MSG_ID_82_MIN_LEN 2
+#define MAVLINK_MSG_ID_30073_LEN 2
+#define MAVLINK_MSG_ID_30073_MIN_LEN 2
 
 #define MAVLINK_MSG_ID_SystemStatus_CRC 245
-#define MAVLINK_MSG_ID_82_CRC 245
+#define MAVLINK_MSG_ID_30073_CRC 245
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_SystemStatus { \
-    82, \
+    30073, \
     "SystemStatus", \
     2, \
     {  { "Storage_status", NULL, MAVLINK_TYPE_INT8_T, 0, 0, offsetof(mavlink_systemstatus_t, Storage_status) }, \

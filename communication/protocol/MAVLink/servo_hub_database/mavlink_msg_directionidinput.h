@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE DirectionIdInput PACKING
 
-#define MAVLINK_MSG_ID_DirectionIdInput 44
+#define MAVLINK_MSG_ID_DirectionIdInput 30035
 
 
 typedef struct __mavlink_directionidinput_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_directionidinput_t {
 
 #define MAVLINK_MSG_ID_DirectionIdInput_LEN 8
 #define MAVLINK_MSG_ID_DirectionIdInput_MIN_LEN 8
-#define MAVLINK_MSG_ID_44_LEN 8
-#define MAVLINK_MSG_ID_44_MIN_LEN 8
+#define MAVLINK_MSG_ID_30035_LEN 8
+#define MAVLINK_MSG_ID_30035_MIN_LEN 8
 
 #define MAVLINK_MSG_ID_DirectionIdInput_CRC 232
-#define MAVLINK_MSG_ID_44_CRC 232
+#define MAVLINK_MSG_ID_30035_CRC 232
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_DirectionIdInput { \
-    44, \
+    30035, \
     "DirectionIdInput", \
     1, \
     {  { "enc_counts_sum_p", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_directionidinput_t, enc_counts_sum_p) }, \

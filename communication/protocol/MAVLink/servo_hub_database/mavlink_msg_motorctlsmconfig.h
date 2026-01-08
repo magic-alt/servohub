@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE MotorCtlSmConfig PACKING
 
-#define MAVLINK_MSG_ID_MotorCtlSmConfig 31
+#define MAVLINK_MSG_ID_MotorCtlSmConfig 30022
 
 
 typedef struct __mavlink_motorctlsmconfig_t {
@@ -18,17 +18,17 @@ typedef struct __mavlink_motorctlsmconfig_t {
 
 #define MAVLINK_MSG_ID_MotorCtlSmConfig_LEN 33
 #define MAVLINK_MSG_ID_MotorCtlSmConfig_MIN_LEN 33
-#define MAVLINK_MSG_ID_31_LEN 33
-#define MAVLINK_MSG_ID_31_MIN_LEN 33
+#define MAVLINK_MSG_ID_30022_LEN 33
+#define MAVLINK_MSG_ID_30022_MIN_LEN 33
 
 #define MAVLINK_MSG_ID_MotorCtlSmConfig_CRC 124
-#define MAVLINK_MSG_ID_31_CRC 124
+#define MAVLINK_MSG_ID_30022_CRC 124
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_MotorCtlSmConfig { \
-    31, \
+    30022, \
     "MotorCtlSmConfig", \
     9, \
     {  { "mode", NULL, MAVLINK_TYPE_INT8_T, 0, 32, offsetof(mavlink_motorctlsmconfig_t, mode) }, \

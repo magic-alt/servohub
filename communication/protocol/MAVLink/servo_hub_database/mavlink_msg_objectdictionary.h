@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE ObjectDictionary PACKING
 
-#define MAVLINK_MSG_ID_ObjectDictionary 58
+#define MAVLINK_MSG_ID_ObjectDictionary 30049
 
 
 typedef struct __mavlink_objectdictionary_t {
@@ -13,17 +13,17 @@ typedef struct __mavlink_objectdictionary_t {
 
 #define MAVLINK_MSG_ID_ObjectDictionary_LEN 8
 #define MAVLINK_MSG_ID_ObjectDictionary_MIN_LEN 8
-#define MAVLINK_MSG_ID_58_LEN 8
-#define MAVLINK_MSG_ID_58_MIN_LEN 8
+#define MAVLINK_MSG_ID_30049_LEN 8
+#define MAVLINK_MSG_ID_30049_MIN_LEN 8
 
 #define MAVLINK_MSG_ID_ObjectDictionary_CRC 34
-#define MAVLINK_MSG_ID_58_CRC 34
+#define MAVLINK_MSG_ID_30049_CRC 34
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ObjectDictionary { \
-    58, \
+    30049, \
     "ObjectDictionary", \
     4, \
     {  { "index", NULL, MAVLINK_TYPE_UINT16_T, 0, 4, offsetof(mavlink_objectdictionary_t, index) }, \

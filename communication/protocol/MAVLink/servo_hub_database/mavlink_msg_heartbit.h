@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE HeartBit PACKING
 
-#define MAVLINK_MSG_ID_HeartBit 86
+#define MAVLINK_MSG_ID_HeartBit 30077
 
 
 typedef struct __mavlink_heartbit_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_heartbit_t {
 
 #define MAVLINK_MSG_ID_HeartBit_LEN 1
 #define MAVLINK_MSG_ID_HeartBit_MIN_LEN 1
-#define MAVLINK_MSG_ID_86_LEN 1
-#define MAVLINK_MSG_ID_86_MIN_LEN 1
+#define MAVLINK_MSG_ID_30077_LEN 1
+#define MAVLINK_MSG_ID_30077_MIN_LEN 1
 
 #define MAVLINK_MSG_ID_HeartBit_CRC 45
-#define MAVLINK_MSG_ID_86_CRC 45
+#define MAVLINK_MSG_ID_30077_CRC 45
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_HeartBit { \
-    86, \
+    30077, \
     "HeartBit", \
     1, \
     {  { "Sys_init_flag", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_heartbit_t, Sys_init_flag) }, \

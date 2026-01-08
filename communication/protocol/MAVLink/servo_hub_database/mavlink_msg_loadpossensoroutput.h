@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE LoadPosSensorOutput PACKING
 
-#define MAVLINK_MSG_ID_LoadPosSensorOutput 81
+#define MAVLINK_MSG_ID_LoadPosSensorOutput 30072
 
 
 typedef struct __mavlink_loadpossensoroutput_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_loadpossensoroutput_t {
 
 #define MAVLINK_MSG_ID_LoadPosSensorOutput_LEN 8
 #define MAVLINK_MSG_ID_LoadPosSensorOutput_MIN_LEN 8
-#define MAVLINK_MSG_ID_81_LEN 8
-#define MAVLINK_MSG_ID_81_MIN_LEN 8
+#define MAVLINK_MSG_ID_30072_LEN 8
+#define MAVLINK_MSG_ID_30072_MIN_LEN 8
 
 #define MAVLINK_MSG_ID_LoadPosSensorOutput_CRC 228
-#define MAVLINK_MSG_ID_81_CRC 228
+#define MAVLINK_MSG_ID_30072_CRC 228
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_LoadPosSensorOutput { \
-    81, \
+    30072, \
     "LoadPosSensorOutput", \
     1, \
     {  { "enc_sum_p", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_loadpossensoroutput_t, enc_sum_p) }, \

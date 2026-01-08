@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE SimPlantOutput PACKING
 
-#define MAVLINK_MSG_ID_SimPlantOutput 89
+#define MAVLINK_MSG_ID_SimPlantOutput 30080
 
 
 typedef struct __mavlink_simplantoutput_t {
@@ -13,17 +13,17 @@ typedef struct __mavlink_simplantoutput_t {
 
 #define MAVLINK_MSG_ID_SimPlantOutput_LEN 21
 #define MAVLINK_MSG_ID_SimPlantOutput_MIN_LEN 21
-#define MAVLINK_MSG_ID_89_LEN 21
-#define MAVLINK_MSG_ID_89_MIN_LEN 21
+#define MAVLINK_MSG_ID_30080_LEN 21
+#define MAVLINK_MSG_ID_30080_MIN_LEN 21
 
 #define MAVLINK_MSG_ID_SimPlantOutput_CRC 88
-#define MAVLINK_MSG_ID_89_CRC 88
+#define MAVLINK_MSG_ID_30080_CRC 88
 
 #define MAVLINK_MSG_SimPlantOutput_FIELD_IABC_NOW_A_LEN 3
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_SimPlantOutput { \
-    89, \
+    30080, \
     "SimPlantOutput", \
     4, \
     {  { "iabc_now_A", NULL, MAVLINK_TYPE_FLOAT, 3, 0, offsetof(mavlink_simplantoutput_t, iabc_now_A) }, \

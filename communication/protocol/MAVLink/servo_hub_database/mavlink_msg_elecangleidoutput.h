@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE ElecAngleIdOutput PACKING
 
-#define MAVLINK_MSG_ID_ElecAngleIdOutput 42
+#define MAVLINK_MSG_ID_ElecAngleIdOutput 30033
 
 
 typedef struct __mavlink_elecangleidoutput_t {
@@ -14,17 +14,17 @@ typedef struct __mavlink_elecangleidoutput_t {
 
 #define MAVLINK_MSG_ID_ElecAngleIdOutput_LEN 18
 #define MAVLINK_MSG_ID_ElecAngleIdOutput_MIN_LEN 18
-#define MAVLINK_MSG_ID_42_LEN 18
-#define MAVLINK_MSG_ID_42_MIN_LEN 18
+#define MAVLINK_MSG_ID_30033_LEN 18
+#define MAVLINK_MSG_ID_30033_MIN_LEN 18
 
 #define MAVLINK_MSG_ID_ElecAngleIdOutput_CRC 25
-#define MAVLINK_MSG_ID_42_CRC 25
+#define MAVLINK_MSG_ID_30033_CRC 25
 
 #define MAVLINK_MSG_ElecAngleIdOutput_FIELD_ELEC_BIAS_BUFF_RAD_LEN 2
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ElecAngleIdOutput { \
-    42, \
+    30033, \
     "ElecAngleIdOutput", \
     5, \
     {  { "id_tar_A", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_elecangleidoutput_t, id_tar_A) }, \

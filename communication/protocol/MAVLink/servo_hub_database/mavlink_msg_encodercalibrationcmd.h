@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE EncoderCalibrationCmd PACKING
 
-#define MAVLINK_MSG_ID_EncoderCalibrationCmd 83
+#define MAVLINK_MSG_ID_EncoderCalibrationCmd 30074
 
 
 typedef struct __mavlink_encodercalibrationcmd_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_encodercalibrationcmd_t {
 
 #define MAVLINK_MSG_ID_EncoderCalibrationCmd_LEN 4
 #define MAVLINK_MSG_ID_EncoderCalibrationCmd_MIN_LEN 4
-#define MAVLINK_MSG_ID_83_LEN 4
-#define MAVLINK_MSG_ID_83_MIN_LEN 4
+#define MAVLINK_MSG_ID_30074_LEN 4
+#define MAVLINK_MSG_ID_30074_MIN_LEN 4
 
 #define MAVLINK_MSG_ID_EncoderCalibrationCmd_CRC 59
-#define MAVLINK_MSG_ID_83_CRC 59
+#define MAVLINK_MSG_ID_30074_CRC 59
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_EncoderCalibrationCmd { \
-    83, \
+    30074, \
     "EncoderCalibrationCmd", \
     2, \
     {  { "Calibration_cmd", NULL, MAVLINK_TYPE_UINT16_T, 0, 0, offsetof(mavlink_encodercalibrationcmd_t, Calibration_cmd) }, \

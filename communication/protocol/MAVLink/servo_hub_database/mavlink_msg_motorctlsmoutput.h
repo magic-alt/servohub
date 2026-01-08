@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE MotorCtlSmOutput PACKING
 
-#define MAVLINK_MSG_ID_MotorCtlSmOutput 33
+#define MAVLINK_MSG_ID_MotorCtlSmOutput 30024
 
 
 typedef struct __mavlink_motorctlsmoutput_t {
@@ -15,17 +15,17 @@ typedef struct __mavlink_motorctlsmoutput_t {
 
 #define MAVLINK_MSG_ID_MotorCtlSmOutput_LEN 12
 #define MAVLINK_MSG_ID_MotorCtlSmOutput_MIN_LEN 12
-#define MAVLINK_MSG_ID_33_LEN 12
-#define MAVLINK_MSG_ID_33_MIN_LEN 12
+#define MAVLINK_MSG_ID_30024_LEN 12
+#define MAVLINK_MSG_ID_30024_MIN_LEN 12
 
 #define MAVLINK_MSG_ID_MotorCtlSmOutput_CRC 38
-#define MAVLINK_MSG_ID_33_CRC 38
+#define MAVLINK_MSG_ID_30024_CRC 38
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_MotorCtlSmOutput { \
-    33, \
+    30024, \
     "MotorCtlSmOutput", \
     6, \
     {  { "state", NULL, MAVLINK_TYPE_INT8_T, 0, 8, offsetof(mavlink_motorctlsmoutput_t, state) }, \

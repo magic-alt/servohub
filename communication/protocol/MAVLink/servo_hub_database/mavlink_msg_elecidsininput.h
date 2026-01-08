@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE ElecIdSinInput PACKING
 
-#define MAVLINK_MSG_ID_ElecIdSinInput 11
+#define MAVLINK_MSG_ID_ElecIdSinInput 30002
 
 
 typedef struct __mavlink_elecidsininput_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_elecidsininput_t {
 
 #define MAVLINK_MSG_ID_ElecIdSinInput_LEN 12
 #define MAVLINK_MSG_ID_ElecIdSinInput_MIN_LEN 12
-#define MAVLINK_MSG_ID_11_LEN 12
-#define MAVLINK_MSG_ID_11_MIN_LEN 12
+#define MAVLINK_MSG_ID_30002_LEN 12
+#define MAVLINK_MSG_ID_30002_MIN_LEN 12
 
 #define MAVLINK_MSG_ID_ElecIdSinInput_CRC 47
-#define MAVLINK_MSG_ID_11_CRC 47
+#define MAVLINK_MSG_ID_30002_CRC 47
 
 #define MAVLINK_MSG_ElecIdSinInput_FIELD_I_ABC_NOW_A_LEN 3
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ElecIdSinInput { \
-    11, \
+    30002, \
     "ElecIdSinInput", \
     1, \
     {  { "i_abc_now_A", NULL, MAVLINK_TYPE_FLOAT, 3, 0, offsetof(mavlink_elecidsininput_t, i_abc_now_A) }, \

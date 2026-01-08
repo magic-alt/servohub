@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE SpeedObsPllOutput PACKING
 
-#define MAVLINK_MSG_ID_SpeedObsPllOutput 40
+#define MAVLINK_MSG_ID_SpeedObsPllOutput 30031
 
 
 typedef struct __mavlink_speedobsplloutput_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_speedobsplloutput_t {
 
 #define MAVLINK_MSG_ID_SpeedObsPllOutput_LEN 4
 #define MAVLINK_MSG_ID_SpeedObsPllOutput_MIN_LEN 4
-#define MAVLINK_MSG_ID_40_LEN 4
-#define MAVLINK_MSG_ID_40_MIN_LEN 4
+#define MAVLINK_MSG_ID_30031_LEN 4
+#define MAVLINK_MSG_ID_30031_MIN_LEN 4
 
 #define MAVLINK_MSG_ID_SpeedObsPllOutput_CRC 244
-#define MAVLINK_MSG_ID_40_CRC 244
+#define MAVLINK_MSG_ID_30031_CRC 244
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_SpeedObsPllOutput { \
-    40, \
+    30031, \
     "SpeedObsPllOutput", \
     1, \
     {  { "ev_rad_s", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_speedobsplloutput_t, ev_rad_s) }, \

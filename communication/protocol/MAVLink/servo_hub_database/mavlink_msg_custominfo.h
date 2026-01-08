@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE CustomInfo PACKING
 
-#define MAVLINK_MSG_ID_CustomInfo 85
+#define MAVLINK_MSG_ID_CustomInfo 30076
 
 
 typedef struct __mavlink_custominfo_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_custominfo_t {
 
 #define MAVLINK_MSG_ID_CustomInfo_LEN 8
 #define MAVLINK_MSG_ID_CustomInfo_MIN_LEN 8
-#define MAVLINK_MSG_ID_85_LEN 8
-#define MAVLINK_MSG_ID_85_MIN_LEN 8
+#define MAVLINK_MSG_ID_30076_LEN 8
+#define MAVLINK_MSG_ID_30076_MIN_LEN 8
 
 #define MAVLINK_MSG_ID_CustomInfo_CRC 1
-#define MAVLINK_MSG_ID_85_CRC 1
+#define MAVLINK_MSG_ID_30076_CRC 1
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_CustomInfo { \
-    85, \
+    30076, \
     "CustomInfo", \
     1, \
     {  { "User_module_code", NULL, MAVLINK_TYPE_UINT64_T, 0, 0, offsetof(mavlink_custominfo_t, User_module_code) }, \

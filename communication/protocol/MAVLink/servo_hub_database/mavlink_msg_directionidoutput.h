@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE DirectionIdOutput PACKING
 
-#define MAVLINK_MSG_ID_DirectionIdOutput 46
+#define MAVLINK_MSG_ID_DirectionIdOutput 30037
 
 
 typedef struct __mavlink_directionidoutput_t {
@@ -13,17 +13,17 @@ typedef struct __mavlink_directionidoutput_t {
 
 #define MAVLINK_MSG_ID_DirectionIdOutput_LEN 10
 #define MAVLINK_MSG_ID_DirectionIdOutput_MIN_LEN 10
-#define MAVLINK_MSG_ID_46_LEN 10
-#define MAVLINK_MSG_ID_46_MIN_LEN 10
+#define MAVLINK_MSG_ID_30037_LEN 10
+#define MAVLINK_MSG_ID_30037_MIN_LEN 10
 
 #define MAVLINK_MSG_ID_DirectionIdOutput_CRC 103
-#define MAVLINK_MSG_ID_46_CRC 103
+#define MAVLINK_MSG_ID_30037_CRC 103
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_DirectionIdOutput { \
-    46, \
+    30037, \
     "DirectionIdOutput", \
     4, \
     {  { "elec_angle_tar_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_directionidoutput_t, elec_angle_tar_rad) }, \

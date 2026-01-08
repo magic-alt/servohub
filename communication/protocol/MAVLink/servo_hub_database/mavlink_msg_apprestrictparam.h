@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE AppRestrictParam PACKING
 
-#define MAVLINK_MSG_ID_AppRestrictParam 69
+#define MAVLINK_MSG_ID_AppRestrictParam 30060
 
 
 typedef struct __mavlink_apprestrictparam_t {
@@ -18,17 +18,17 @@ typedef struct __mavlink_apprestrictparam_t {
 
 #define MAVLINK_MSG_ID_AppRestrictParam_LEN 52
 #define MAVLINK_MSG_ID_AppRestrictParam_MIN_LEN 52
-#define MAVLINK_MSG_ID_69_LEN 52
-#define MAVLINK_MSG_ID_69_MIN_LEN 52
+#define MAVLINK_MSG_ID_30060_LEN 52
+#define MAVLINK_MSG_ID_30060_MIN_LEN 52
 
 #define MAVLINK_MSG_ID_AppRestrictParam_CRC 217
-#define MAVLINK_MSG_ID_69_CRC 217
+#define MAVLINK_MSG_ID_30060_CRC 217
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_AppRestrictParam { \
-    69, \
+    30060, \
     "AppRestrictParam", \
     9, \
     {  { "Position_range_limit_Minimal_position_limit", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_apprestrictparam_t, Position_range_limit_Minimal_position_limit) }, \

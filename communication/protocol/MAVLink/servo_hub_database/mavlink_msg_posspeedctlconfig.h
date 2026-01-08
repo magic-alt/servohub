@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE PosSpeedCtlConfig PACKING
 
-#define MAVLINK_MSG_ID_PosSpeedCtlConfig 30
+#define MAVLINK_MSG_ID_PosSpeedCtlConfig 30021
 
 
 typedef struct __mavlink_posspeedctlconfig_t {
@@ -22,17 +22,17 @@ typedef struct __mavlink_posspeedctlconfig_t {
 
 #define MAVLINK_MSG_ID_PosSpeedCtlConfig_LEN 46
 #define MAVLINK_MSG_ID_PosSpeedCtlConfig_MIN_LEN 46
-#define MAVLINK_MSG_ID_30_LEN 46
-#define MAVLINK_MSG_ID_30_MIN_LEN 46
+#define MAVLINK_MSG_ID_30021_LEN 46
+#define MAVLINK_MSG_ID_30021_MIN_LEN 46
 
 #define MAVLINK_MSG_ID_PosSpeedCtlConfig_CRC 109
-#define MAVLINK_MSG_ID_30_CRC 109
+#define MAVLINK_MSG_ID_30021_CRC 109
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_PosSpeedCtlConfig { \
-    30, \
+    30021, \
     "PosSpeedCtlConfig", \
     13, \
     {  { "aff", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_posspeedctlconfig_t, aff) }, \

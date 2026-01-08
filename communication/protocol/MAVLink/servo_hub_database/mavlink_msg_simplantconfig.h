@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE SimPlantConfig PACKING
 
-#define MAVLINK_MSG_ID_SimPlantConfig 90
+#define MAVLINK_MSG_ID_SimPlantConfig 30081
 
 
 typedef struct __mavlink_simplantconfig_t {
@@ -28,17 +28,17 @@ typedef struct __mavlink_simplantconfig_t {
 
 #define MAVLINK_MSG_ID_SimPlantConfig_LEN 80
 #define MAVLINK_MSG_ID_SimPlantConfig_MIN_LEN 80
-#define MAVLINK_MSG_ID_90_LEN 80
-#define MAVLINK_MSG_ID_90_MIN_LEN 80
+#define MAVLINK_MSG_ID_30081_LEN 80
+#define MAVLINK_MSG_ID_30081_MIN_LEN 80
 
 #define MAVLINK_MSG_ID_SimPlantConfig_CRC 135
-#define MAVLINK_MSG_ID_90_CRC 135
+#define MAVLINK_MSG_ID_30081_CRC 135
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_SimPlantConfig { \
-    90, \
+    30081, \
     "SimPlantConfig", \
     19, \
     {  { "b", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_simplantconfig_t, b) }, \

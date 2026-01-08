@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE ElecAngleIdConfig PACKING
 
-#define MAVLINK_MSG_ID_ElecAngleIdConfig 41
+#define MAVLINK_MSG_ID_ElecAngleIdConfig 30032
 
 
 typedef struct __mavlink_elecangleidconfig_t {
@@ -16,17 +16,17 @@ typedef struct __mavlink_elecangleidconfig_t {
 
 #define MAVLINK_MSG_ID_ElecAngleIdConfig_LEN 25
 #define MAVLINK_MSG_ID_ElecAngleIdConfig_MIN_LEN 25
-#define MAVLINK_MSG_ID_41_LEN 25
-#define MAVLINK_MSG_ID_41_MIN_LEN 25
+#define MAVLINK_MSG_ID_30032_LEN 25
+#define MAVLINK_MSG_ID_30032_MIN_LEN 25
 
 #define MAVLINK_MSG_ID_ElecAngleIdConfig_CRC 112
-#define MAVLINK_MSG_ID_41_CRC 112
+#define MAVLINK_MSG_ID_30032_CRC 112
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ElecAngleIdConfig { \
-    41, \
+    30032, \
     "ElecAngleIdConfig", \
     7, \
     {  { "id_max_A", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_elecangleidconfig_t, id_max_A) }, \

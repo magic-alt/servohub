@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE MitCtlOutput PACKING
 
-#define MAVLINK_MSG_ID_MitCtlOutput 76
+#define MAVLINK_MSG_ID_MitCtlOutput 30067
 
 
 typedef struct __mavlink_mitctloutput_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_mitctloutput_t {
 
 #define MAVLINK_MSG_ID_MitCtlOutput_LEN 4
 #define MAVLINK_MSG_ID_MitCtlOutput_MIN_LEN 4
-#define MAVLINK_MSG_ID_76_LEN 4
-#define MAVLINK_MSG_ID_76_MIN_LEN 4
+#define MAVLINK_MSG_ID_30067_LEN 4
+#define MAVLINK_MSG_ID_30067_MIN_LEN 4
 
 #define MAVLINK_MSG_ID_MitCtlOutput_CRC 53
-#define MAVLINK_MSG_ID_76_CRC 53
+#define MAVLINK_MSG_ID_30067_CRC 53
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_MitCtlOutput { \
-    76, \
+    30067, \
     "MitCtlOutput", \
     1, \
     {  { "iq_tar_A", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_mitctloutput_t, iq_tar_A) }, \

@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE MitCtlConfig PACKING
 
-#define MAVLINK_MSG_ID_MitCtlConfig 75
+#define MAVLINK_MSG_ID_MitCtlConfig 30066
 
 
 typedef struct __mavlink_mitctlconfig_t {
@@ -13,17 +13,17 @@ typedef struct __mavlink_mitctlconfig_t {
 
 #define MAVLINK_MSG_ID_MitCtlConfig_LEN 16
 #define MAVLINK_MSG_ID_MitCtlConfig_MIN_LEN 16
-#define MAVLINK_MSG_ID_75_LEN 16
-#define MAVLINK_MSG_ID_75_MIN_LEN 16
+#define MAVLINK_MSG_ID_30066_LEN 16
+#define MAVLINK_MSG_ID_30066_MIN_LEN 16
 
 #define MAVLINK_MSG_ID_MitCtlConfig_CRC 147
-#define MAVLINK_MSG_ID_75_CRC 147
+#define MAVLINK_MSG_ID_30066_CRC 147
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_MitCtlConfig { \
-    75, \
+    30066, \
     "MitCtlConfig", \
     4, \
     {  { "kp_pos_NM_rad", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_mitctlconfig_t, kp_pos_NM_rad) }, \

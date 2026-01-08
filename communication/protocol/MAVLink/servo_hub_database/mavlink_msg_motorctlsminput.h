@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE MotorCtlSmInput PACKING
 
-#define MAVLINK_MSG_ID_MotorCtlSmInput 32
+#define MAVLINK_MSG_ID_MotorCtlSmInput 30023
 
 
 typedef struct __mavlink_motorctlsminput_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_motorctlsminput_t {
 
 #define MAVLINK_MSG_ID_MotorCtlSmInput_LEN 2
 #define MAVLINK_MSG_ID_MotorCtlSmInput_MIN_LEN 2
-#define MAVLINK_MSG_ID_32_LEN 2
-#define MAVLINK_MSG_ID_32_MIN_LEN 2
+#define MAVLINK_MSG_ID_30023_LEN 2
+#define MAVLINK_MSG_ID_30023_MIN_LEN 2
 
 #define MAVLINK_MSG_ID_MotorCtlSmInput_CRC 152
-#define MAVLINK_MSG_ID_32_CRC 152
+#define MAVLINK_MSG_ID_30023_CRC 152
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_MotorCtlSmInput { \
-    32, \
+    30023, \
     "MotorCtlSmInput", \
     2, \
     {  { "motor_enable", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_motorctlsminput_t, motor_enable) }, \

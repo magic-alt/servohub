@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE WaveformMap PACKING
 
-#define MAVLINK_MSG_ID_WaveformMap 27
+#define MAVLINK_MSG_ID_WaveformMap 30018
 
 
 typedef struct __mavlink_waveformmap_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_waveformmap_t {
 
 #define MAVLINK_MSG_ID_WaveformMap_LEN 24
 #define MAVLINK_MSG_ID_WaveformMap_MIN_LEN 24
-#define MAVLINK_MSG_ID_27_LEN 24
-#define MAVLINK_MSG_ID_27_MIN_LEN 24
+#define MAVLINK_MSG_ID_30018_LEN 24
+#define MAVLINK_MSG_ID_30018_MIN_LEN 24
 
 #define MAVLINK_MSG_ID_WaveformMap_CRC 96
-#define MAVLINK_MSG_ID_27_CRC 96
+#define MAVLINK_MSG_ID_30018_CRC 96
 
 #define MAVLINK_MSG_WaveformMap_FIELD_WAVEFORM_MAP_INFO_LEN 6
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_WaveformMap { \
-    27, \
+    30018, \
     "WaveformMap", \
     1, \
     {  { "waveform_map_info", NULL, MAVLINK_TYPE_INT32_T, 6, 0, offsetof(mavlink_waveformmap_t, waveform_map_info) }, \
