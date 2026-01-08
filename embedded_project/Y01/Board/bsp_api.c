@@ -334,19 +334,25 @@ float bsp_get_mcu_temperature(void)
 /**
  * @brief 编码器配置
  * @param[in] enc_id 编码器端ID： ENCODER_ID_MOTOR、ENCODER_ID_LOAD
- * @param[in] single_bits 编码器单圈位数
- * @param[in] multi_bits 编码器多圈位数(无多圈值时，设置为0)
  * @param[in] type 编码器类型
  * @param[in] options 编码器选项
+ * @param[in] a_single_res 编码器A单圈分辨率
+ * @param[in] a_single_less_factor 编码器A单圈分辨率缩降倍数
+ * @param[in] a_multi_res 编码器A多圈分辨率
+ * @param[in] b_single_res 编码器B单圈分辨率
+ * @param[in] b_single_less_factor 编码器B单圈分辨率缩降倍数
+ * @param[in] b_multi_res 编码器B多圈分辨率
  */
-void bsp_set_encoder_config(ENCODER_ID const enc_id,
-                            uint32_t const single_bits, uint32_t const multi_bits,
-                            uint16_t const type, uint8_t const options)
+void bsp_set_encoder_config(ENCODER_ID const enc_id, uint16_t const type, uint8_t const options,
+                            uint32_t const a_single_res, uint32_t const a_single_less_factor, uint32_t const a_multi_res,
+                            uint32_t const b_single_res, uint32_t const b_single_less_factor, uint32_t const b_multi_res)
 {
 #ifdef VIRTUAL_MOTOR_MODEL
     return;
 #else
     set_encoder_options(enc_id, options);
+    set_encoder_a_resolution(enc_id, a_single_res, a_single_less_factor, a_multi_res);
+    //set_encoder_b_resolution(enc_id, b_single_res, b_single_less_factor, b_multi_res);
 #endif
 }
 /**

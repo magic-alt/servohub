@@ -75,11 +75,49 @@ void AppParamInit(void)
     kAppBaseConfig.Brake_release_hold_voltage = BRAKE_RELEASE_HOLD_VOLTAGE;                     // 松闸保持电压
 
     // 初始化编码器配置
-    kAppEncoderConfig.Load_encoder_resolution = PMSM_LOAD_ENC_LINE_P_N;                         // 负载端位置反馈分辨率
-    kAppEncoderConfig.Motor_encoder_resolution = PMSM_ENC_LINE_P_N;                             // 电机端位置反馈分辨率
-    kAppEncoderConfig.Motor_encoder_options = 0;                                                // 电机编码器选项
-    kAppEncoderConfig.Load_pps_2_rpm = 60.0f / (float)PMSM_LOAD_ENC_LINE_P_N;                   // 负载端速度P/s转换RPM系数
+    kAppEncoderConfig.Load_encoder_resolution = PMSM_LOAD_ENC_LINE_ORG;                         // 负载端位置反馈分辨率
+    kAppEncoderConfig.Motor_encoder_resolution = PMSM_MOTOR_ENC_LINE_ORG;                       // 电机端位置反馈分辨率
+    kAppEncoderConfig.Motor_encoder_options = 0;                                                // 电机端编码器选项
+    kAppEncoderConfig.Motor_encoder_options |= (PMSM_MOTOR_ENC_DIR << 0);                       // 电机端编码器选项Bit0-编码器A方向
+
+    if (PMSM_LOAD_ENC_LINE_P_N == 0u && PMSM_MOTOR_ENC_LINE_P_N != 0u)                          // 负载端速度P/s转换RPM系数
+    {
+        kAppEncoderConfig.Load_pps_2_rpm = 60.0f / (float)PMSM_MOTOR_ENC_LINE_P_N;
+    }
+    else if (PMSM_LOAD_ENC_LINE_P_N != 0u)
+    {
+        kAppEncoderConfig.Load_pps_2_rpm = 60.0f / (float)PMSM_LOAD_ENC_LINE_P_N;
+    }
     kAppEncoderConfig.Load_rpm_2_pps = (float)PMSM_LOAD_ENC_LINE_P_N / 60.0f;                   // 负载端速度RPM转换P/s系数
+    if (PMSM_MOTOR_ENC_LINE_P_N == 0u && PMSM_LOAD_ENC_LINE_P_N != 0u)                          // 电机端速度P/s转换RPM系数
+    {
+        kAppEncoderConfig.Motor_pps_2_rpm = 60.0f / (float)PMSM_LOAD_ENC_LINE_P_N;
+    }
+    else if (PMSM_MOTOR_ENC_LINE_P_N != 0u)
+    {
+        kAppEncoderConfig.Motor_pps_2_rpm = 60.0f / (float)PMSM_MOTOR_ENC_LINE_P_N;
+    }
+    kAppEncoderConfig.Motor_rpm_2_pps = (float)PMSM_MOTOR_ENC_LINE_P_N / 60.0f;                 // 电机端速度RPM转换P/s系数
+    if (PMSM_LOAD_ENC_LINE_P_N != 0u)                                                           // 负载端到电机端P转换系数
+    {
+        kAppEncoderConfig.P_load_2_motor = (float)PMSM_MOTOR_ENC_LINE_P_N / (float)PMSM_LOAD_ENC_LINE_P_N;
+    }
+    else
+    {
+        kAppEncoderConfig.P_load_2_motor = 1.0f;
+    }
+    if (PMSM_MOTOR_ENC_LINE_P_N != 0u)                                                          // 电机端到负载端P转换系数
+    {
+        kAppEncoderConfig.P_motor_2_load = (float)PMSM_LOAD_ENC_LINE_P_N / (float)PMSM_MOTOR_ENC_LINE_P_N;
+    }
+    else
+    {
+        kAppEncoderConfig.P_motor_2_load = 1.0f;
+    }
+    kAppEncoderConfig.Load_control_resolution = PMSM_LOAD_ENC_LINE_P_N;                         // 负载端位置指令分辨率
+    kAppEncoderConfig.Motor_control_resolution = PMSM_MOTOR_ENC_LINE_P_N;                       // 电机端位置指令分辨率
+    kAppEncoderConfig.Load_encoder_options = 0;                                                 // 负载端编码器选项
+    kAppEncoderConfig.Load_encoder_options |= (PMSM_LOAD_ENC_DIR << 0);                         // 负载端编码器选项Bit0-编码器A方向
 
     // 初始化电机配置
     kAppMotorConfig.Motor_rated_current = PMSM_RATED_CURRENT;                                    // 电机额定电流
@@ -137,10 +175,10 @@ void AppParamInit(void)
     kAppMotionParam.MIT_kd = 0.01f;                                   // MIT速度阻尼系数
 
     // 初始化限制参数
-    kAppRestrictParam.Position_range_limit_Minimal_position_limit = 0x8000000000000000;    // 位置溢出最小值
-    kAppRestrictParam.Position_range_limit_Maximal_position_limit = 0x7FFFFFFFFFFFFFFF;    // 位置溢出最大值
-    kAppRestrictParam.Software_position_limit_Minimal_position_limit = 0x8000000000000000; // 应用位置下限
-    kAppRestrictParam.Software_position_limit_Maximal_position_limit = 0x7FFFFFFFFFFFFFFF; // 应用位置上限
+    kAppRestrictParam.Position_range_limit_Minimal_position_limit = 0x8000000000000000;     // 位置溢出最小值
+    kAppRestrictParam.Position_range_limit_Maximal_position_limit = 0x7FFFFFFFFFFFFFFF;     // 位置溢出最大值
+    kAppRestrictParam.Software_position_limit_Minimal_position_limit = 0x8000000000000000;  // 应用位置下限
+    kAppRestrictParam.Software_position_limit_Maximal_position_limit = 0x7FFFFFFFFFFFFFFF;  // 应用位置上限
     kAppRestrictParam.Max_profile_velocity = kAppMotorConfig.Motor_maximum_speed * kAppMotorConfig.Reduction_ratio_inv; // 应用速度限制
     kAppRestrictParam.Max_motor_speed = kAppMotorConfig.Motor_maximum_speed;                // 电机最大转速/速度(RPM)
     kAppRestrictParam.Max_acceleration = (float)(0xFFFFFFFF) * kAppEncoderConfig.Load_pps_2_rpm;   // 应用加速度限制
@@ -148,25 +186,25 @@ void AppParamInit(void)
     kAppRestrictParam.Max_current = kAppMotorConfig.Motor_rated_current; // 应用电流限制相对值
 
     // 初始化窗口参数
-    kAppWindowParam.Following_error_window = 10000;   // 位置跟随误差阈值
-    kAppWindowParam.Following_error_time_out = 0.02f; // 位置跟随误差阈值时间
-    kAppWindowParam.Position_window = 100;            // 位置到达检测窗口
-    kAppWindowParam.Position_window_time = 0.02f;     // 位置到达检测窗口时间
-    kAppWindowParam.Velocity_window = 10.0f;          // 速度到达检测窗口
-    kAppWindowParam.Velocity_window_time = 0.02f;     // 速度到达检测窗口时间
-    kAppWindowParam.Velocity_threshold = 10.0f;       // 零速检测窗口(RPM)
-    kAppWindowParam.Velocity_threshold_time = 0.02f;  // 零速检测窗口时间
+    kAppWindowParam.Following_error_window = 10000;     // 位置跟随误差阈值
+    kAppWindowParam.Following_error_time_out = 0.02f;   // 位置跟随误差阈值时间
+    kAppWindowParam.Position_window = 100;              // 位置到达检测窗口
+    kAppWindowParam.Position_window_time = 0.02f;       // 位置到达检测窗口时间
+    kAppWindowParam.Velocity_window = 10.0f;            // 速度到达检测窗口
+    kAppWindowParam.Velocity_window_time = 0.02f;       // 速度到达检测窗口时间
+    kAppWindowParam.Velocity_threshold = 10.0f;         // 零速检测窗口(RPM)
+    kAppWindowParam.Velocity_threshold_time = 0.02f;    // 零速检测窗口时间
 
     // 初始化系统指令
-    kSystemCmd.Sys_cmd = APP_SYSTEM_CMD_NONE;        // 系统指令
+    kSystemCmd.Sys_cmd = APP_SYSTEM_CMD_NONE;           // 系统指令
 
     // 初始化控制权限
     kAppPermissionConfig.Comm_control_authority = COMM_CONTROL_BUS;    // 默认开启进入总线控制
 
     // 其它参数初始化
-    kEncoderCalibrationCmd.Calibration_time = 5;    // 校准时间(S)
+    kEncoderCalibrationCmd.Calibration_time = 5;        // 校准时间(S)
 
-    kHeartBit.Sys_init_flag = 0xEA;                 // 系统初始化标志位(0xEA（Energy Active）)
+    kHeartBit.Sys_init_flag = 0xEA;                     // 系统初始化标志位(0xEA（Energy Active）)
 
     // 初始化历史信息
     for (int i = 0; i < ERROR_RECORD_NUM; i++)
@@ -187,6 +225,9 @@ void AppParamInit(void)
     set_app_Reduction_ratio_num(kAppMotorConfig.Reduction_ratio_num);
     set_app_Reduction_ratio_den(kAppMotorConfig.Reduction_ratio_den);
     set_app_Motor_encoder_options(kAppEncoderConfig.Motor_encoder_options);
+    set_app_Load_encoder_options(kAppEncoderConfig.Load_encoder_options);
+    set_app_Load_control_resolution(kAppEncoderConfig.Load_control_resolution);
+    set_app_Motor_control_resolution(kAppEncoderConfig.Motor_control_resolution);
 
     // 限制参数初始化
     set_app_Position_range_limit_Maximal_position_limit(kAppRestrictParam.Position_range_limit_Maximal_position_limit);
@@ -894,22 +935,16 @@ int8_t get_app_Modes_of_operation(void)
 uint32_t set_app_Load_encoder_resolution(uint32_t val)
 {
     /* USER CODE BEGIN set_app_Load_encoder_resolution 0 */
+    if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+    {
+        return APP_PARAM_WRITE_STATE_ERROR;
+    }
     /* USER CODE END set_app_Load_encoder_resolution 0 */
     kAppEncoderConfig.Load_encoder_resolution = val;
     /* USER CODE BEGIN set_app_Load_encoder_resolution 1 */
-
-    // 单位转化因子计算
-    if (kAppEncoderConfig.Load_encoder_resolution > 0)
-    {
-        kAppEncoderConfig.Load_pps_2_rpm = 60.0f / kAppEncoderConfig.Load_encoder_resolution;
-        kAppEncoderConfig.Load_rpm_2_pps = kAppEncoderConfig.Load_encoder_resolution / 60.0f;
-
-        // 关联控制层设置
-        axis->load_pos_sensor_config.enc_line_p_n = kAppEncoderConfig.Load_encoder_resolution;
-        // 失能状态下调用，设置此参数时状态先由上位机限制
-        MotorCtlParamSetUpdata(axis);
-    }
-
+    bsp_set_encoder_config(ENCODER_ID_LOAD, 0, get_app_Load_encoder_options(), \
+                           val, val / get_app_Load_control_resolution(), \
+                           PMSM_LOAD_ENC_MULTI_LINE_P_N, 0, 1, 0);
     /* USER CODE END set_app_Load_encoder_resolution 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -930,10 +965,9 @@ uint32_t set_app_Motor_encoder_resolution(uint32_t val)
     /* USER CODE END set_app_Motor_encoder_resolution 0 */
     kAppEncoderConfig.Motor_encoder_resolution = val;
     /* USER CODE BEGIN set_app_Motor_encoder_resolution 1 */
-    axis->pmsm_config.enc_line_p_n = val;
-    // 失能状态下调用，设置此参数时状态先由上位机限制
-    MotorCtlParamSetUpdata(axis);
-    bsp_set_encoder_config(ENCODER_ID_MOTOR, axis->pmsm_config.enc_line_p_n, 0, 0, get_app_Motor_encoder_options());
+    bsp_set_encoder_config(ENCODER_ID_MOTOR, 0, get_app_Motor_encoder_options(), \
+                           val, val / get_app_Motor_control_resolution(), \
+                           PMSM_MOTOR_ENC_MULTI_LINE_P_N, 0, 1, 0);
     /* USER CODE END set_app_Motor_encoder_resolution 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -981,9 +1015,18 @@ uint32_t set_app_Motor_encoder_options(uint8_t val)
     if (val < 0)
         return APP_PARAM_OUT_OF_RANGE;
     /* USER CODE BEGIN set_app_Motor_encoder_options 0 */
+    if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+    {
+        return APP_PARAM_WRITE_STATE_ERROR;
+    }
     /* USER CODE END set_app_Motor_encoder_options 0 */
     kAppEncoderConfig.Motor_encoder_options = val;
     /* USER CODE BEGIN set_app_Motor_encoder_options 1 */
+    bsp_set_encoder_config(ENCODER_ID_MOTOR, 0, val, \
+                           get_app_Motor_encoder_resolution(), \
+                           get_app_Motor_encoder_resolution() / get_app_Motor_control_resolution(), \
+                           PMSM_MOTOR_ENC_MULTI_LINE_P_N, 0, 1, 0);
+    MotorCtlParamSetUpdata(axis);
     /* USER CODE END set_app_Motor_encoder_options 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -1081,9 +1124,35 @@ float get_app_P_motor_2_load(void)
 uint32_t set_app_Load_control_resolution(uint32_t val)
 {
     /* USER CODE BEGIN set_app_Load_control_resolution 0 */
+    if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+    {
+        return APP_PARAM_WRITE_STATE_ERROR;
+    }
+    uint32_t load_encoder_resolution = get_app_Load_encoder_resolution();
+    if (val > load_encoder_resolution || \
+       (val != 0 && load_encoder_resolution % val != 0))
+    {
+        return APP_PARAM_OUT_OF_RANGE;
+    }
     /* USER CODE END set_app_Load_control_resolution 0 */
     kAppEncoderConfig.Load_control_resolution = val;
     /* USER CODE BEGIN set_app_Load_control_resolution 1 */
+    // 单位转化因子计算
+    if (val > 0)
+    {
+        kAppEncoderConfig.Load_pps_2_rpm = 60.0f / (float)val;
+        kAppEncoderConfig.Load_rpm_2_pps = (float)val / 60.0f;
+
+        kAppEncoderConfig.P_load_2_motor = (float)get_app_Motor_control_resolution() / (float)val;
+        kAppEncoderConfig.P_motor_2_load = (float)val / (float)get_app_Motor_control_resolution();
+    }
+    bsp_set_encoder_config(ENCODER_ID_LOAD, 0, get_app_Load_encoder_options(), \
+                           load_encoder_resolution, load_encoder_resolution / val, \
+                           PMSM_LOAD_ENC_MULTI_LINE_P_N, 0, 1, 0);
+    // 关联控制层设置
+    axis->load_pos_sensor_config.enc_line_p_n = val;
+    // 失能状态下调用，设置此参数时状态先由上位机限制
+    MotorCtlParamSetUpdata(axis);
     /* USER CODE END set_app_Load_control_resolution 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -1097,9 +1166,35 @@ uint32_t get_app_Load_control_resolution(void)
 uint32_t set_app_Motor_control_resolution(uint32_t val)
 {
     /* USER CODE BEGIN set_app_Motor_control_resolution 0 */
+    if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+    {
+        return APP_PARAM_WRITE_STATE_ERROR;
+    }
+    uint32_t motor_encoder_resolution = get_app_Motor_encoder_resolution();
+    if (val > motor_encoder_resolution || \
+       (val != 0 && motor_encoder_resolution % val != 0))
+    {
+        return APP_PARAM_OUT_OF_RANGE;
+    }
     /* USER CODE END set_app_Motor_control_resolution 0 */
     kAppEncoderConfig.Motor_control_resolution = val;
     /* USER CODE BEGIN set_app_Motor_control_resolution 1 */
+    // 单位转化因子计算
+    if (val > 0)
+    {
+        kAppEncoderConfig.Motor_pps_2_rpm = 60.0f / (float)val;
+        kAppEncoderConfig.Motor_rpm_2_pps = (float)val / 60.0f;
+
+        kAppEncoderConfig.P_load_2_motor = (float)val / (float)get_app_Load_control_resolution();
+        kAppEncoderConfig.P_motor_2_load = (float)get_app_Load_control_resolution() / (float)val;
+    }
+    bsp_set_encoder_config(ENCODER_ID_MOTOR, 0, get_app_Motor_encoder_options(), \
+                           motor_encoder_resolution, motor_encoder_resolution / val, \
+                           PMSM_MOTOR_ENC_MULTI_LINE_P_N, 0, 1, 0);
+    // 关联控制层设置
+    axis->pmsm_config.enc_line_p_n = val;
+    // 失能状态下调用，设置此参数时状态先由上位机限制
+    MotorCtlParamSetUpdata(axis);
     /* USER CODE END set_app_Motor_control_resolution 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -1115,9 +1210,18 @@ uint32_t set_app_Load_encoder_options(uint8_t val)
     if (val < 0)
         return APP_PARAM_OUT_OF_RANGE;
     /* USER CODE BEGIN set_app_Load_encoder_options 0 */
+    if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+    {
+        return APP_PARAM_WRITE_STATE_ERROR;
+    }
     /* USER CODE END set_app_Load_encoder_options 0 */
     kAppEncoderConfig.Load_encoder_options = val;
     /* USER CODE BEGIN set_app_Load_encoder_options 1 */
+    bsp_set_encoder_config(ENCODER_ID_LOAD, 0, val, \
+                           get_app_Load_encoder_resolution(), \
+                           get_app_Load_encoder_resolution() / get_app_Load_control_resolution(), \
+                           PMSM_LOAD_ENC_MULTI_LINE_P_N, 0, 1, 0);
+    MotorCtlParamSetUpdata(axis);
     /* USER CODE END set_app_Load_encoder_options 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -2576,7 +2680,7 @@ uint32_t set_app_Torque_constant(float val)
     // 关联设置控制层参数
     axis->pmsm_config.kt = val * 0.001f;
     //转矩常数单独关联更新，因为用户在MIT模式下可能频繁修改KT参数
-    // MotorCtlParamSetUpdata(axis);  
+    // MotorCtlParamSetUpdata(axis);
     // 转矩常数和永磁磁链 关联更新 // kt = 1.5*pn*flux
     axis->pmsm_config.flux = axis->pmsm_config.kt / (1.5f * axis->pmsm_config.pn); // flux = kt/(1.5*pn);
     axis->pos_speed_ctl_config.j_kt = axis->pmsm_config.j / axis->pmsm_config.kt;

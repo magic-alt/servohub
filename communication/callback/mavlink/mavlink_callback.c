@@ -1613,7 +1613,6 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 break;
         }
         MotorCtlParamSetUpdata(&kAxis);
-        bsp_set_encoder_config(ENCODER_ID_MOTOR, axis->pmsm_config.enc_line_p_n, 0, 0, get_app_Motor_encoder_options());
     }
 
     len = mavlink_msg_to_send_buffer(mavlink_tx_buff, &send_msg);

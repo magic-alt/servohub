@@ -11,9 +11,7 @@
 #define ENCODER_TYPE_ABS_BISSC_SMC40S   0x04 // 绝对式SPI BISS-C SMC40S 编码器
 // 其他编码器类型
 // ...
-// 编码器类型通过宏定义指定
-#define ENCODER1_TYPE_OPTION    (ENCODER_TYPE_ABS_RS485_TAMAGAWA)      // 电机端
-#define ENCODER2_TYPE_OPTION    (ENCODER_TYPE_NONE)      // 负载端
+
 // 编码器参数定义
 #define ENCODER_FRAME_MAX_LEN   16  // 数据帧最大帧长度
 #define ENCODER_COMM_ERROR_MAX  20  // 编码器连续通信错误最大次数
@@ -102,10 +100,10 @@ typedef union
     uint8_t val;
     struct
     {
-        uint8_t motor_dir : 1;        // bit0：电机端计数方向 0-默认, 1-取反
-        uint8_t load_dir : 1;         // bit1：负载端计数方向 0-默认, 1-取反
-        uint8_t turns_overflow_0 : 1; // bit2：多圈值溢出坐标为0/分辨率选项
-        uint8_t l_cnt_2_m_turns : 1;  // bit3：负载端单圈作为值电机端多圈值选项
+        uint8_t a_dir : 1;              // bit0：编码器A计数方向 0-默认, 1-取反
+        uint8_t b_dir : 1;              // bit1：编码器B计数方向 0-默认, 1-取反
+        uint8_t turns_overflow_0 : 1;   // bit2：多圈值溢出坐标为0/分辨率选项
+        uint8_t l_cnt_2_m_turns : 1;    // bit3：负载端单圈作为值电机端多圈值选项
 
         uint8_t reserved : 4;
     } bits;
@@ -133,19 +131,24 @@ struct EncoderDataInfo_t
     uint8_t enid;                               // 编码器ID
     uint8_t check_val;                          // 编码器校验值
     uint8_t err_cnt;                            // 错误计数
+
     Options_t options;                          // 编码器配置选项
-    uint8_t motor_single_less_bits;             // 电机端单圈分辨率降位位数
-    uint8_t load_single_less_bits;              // 负载端单圈分辨率降位位数
-    uint32_t motor_single_res;                  // 电机端单圈分辨率
-    uint32_t motor_multi_res;                   // 电机端多圈分辨率
-    uint32_t load_single_res;                   // 负载端单圈分辨率
-    uint32_t load_multi_res;                    // 负载端多圈分辨率
-    uint32_t motor_single_raw;                  // 电机端单圈绝对值原始数据
-    int64_t motor_multi_raw;                    // 电机端多圈绝对值原始数据
-    uint32_t load_single_raw;                   // 负载端单圈绝对值原始数据
-    int64_t load_multi_raw;                     // 负载端多圈绝对值原始数据
+    // 一个常规编码器含一套位置反馈数据，仅使用编码器A相关参数
+    // 一个特殊编码器含两套位置反馈数据，分别对应编码器A和B相关参数
+    uint32_t a_single_res;                      // 编码器A单圈分辨率
+    uint32_t a_single_less_factor;              // 编码器A单圈分辨率缩降倍数
+    uint32_t a_multi_res;                       // 编码器A多圈分辨率
+    uint32_t a_single_raw;                      // 编码器A单圈绝对值原始数据
+    int64_t  a_multi_raw;                       // 编码器A多圈绝对值原始数据
+    uint32_t b_single_res;                      // 编码器B单圈分辨率
+    uint32_t b_single_less_factor;              // 编码器B单圈分辨率缩降倍数
+    uint32_t b_multi_res;                       // 编码器B多圈分辨率
+    uint32_t b_single_raw;                      // 编码器B单圈绝对值原始数据
+    int64_t  b_multi_raw;                       // 编码器B多圈绝对值原始数据
+    // 编码器单圈值和多圈值为实际电机或负载端的位置反馈值
     volatile uint32_t single_cnt;               // 编码器单圈值
     volatile int64_t multi_turns;               // 编码器多圈值
+
     uint32_t real_motor_turns_res;              // 实际电机端编码器多圈分辨率
 
     void (*init)(EncoderDataInfo_t *enc_data);  // 编码器初始化函数指针
@@ -201,5 +204,9 @@ uint32_t get_encoder_cnt(ENCODER_ID const enc_id);
 int64_t get_encoder_turns(ENCODER_ID const enc_id);
 bool get_encoder_status(ENCODER_ID const enc_id);
 void set_encoder_options(ENCODER_ID enc_id, uint8_t const options);
+void set_encoder_a_resolution(ENCODER_ID const enc_id, uint32_t const single_res, \
+                                  uint32_t const multi_res, uint32_t const single_less_factor);
+void set_encoder_b_resolution(ENCODER_ID const enc_id, uint32_t const single_res, \
+                                  uint32_t const multi_res, uint32_t const single_less_factor);
 
 #endif // DRV_ENCODER_H

@@ -38,7 +38,7 @@ void MotorCtrlInit(void)
     kAxis.pmsm_config.r = PMSM_Rp2p * 0.5f;
     kAxis.pmsm_config.rated_current = PMSM_RATED_CURRENT;
     kAxis.pmsm_config.speed_max_rpm = PMSM_SPEED_MAX_RPM;
-    kAxis.pmsm_config.enc_line_p_n = PMSM_ENC_LINE_P_N;
+    kAxis.pmsm_config.enc_line_p_n = PMSM_MOTOR_ENC_LINE_P_N;
     kAxis.pmsm_config.kt = PMSM_TORQUE_CONSTANT_MNM_A * 0.001f;
 
     // 编码器参数
@@ -52,7 +52,7 @@ void MotorCtrlInit(void)
     kAxis.motor_ctl_sm_config.over_voltage_protection_V = OVER_VOLTAGE_PROTECTION_V;
     kAxis.motor_ctl_sm_config.over_temperature_protection_d = OVER_TEMP_PROTECTION_C;
     kAxis.motor_ctl_sm_config.under_temperature_protection_d = UNDER_TEMP_PROTECTION_C;
-    kAxis.motor_ctl_sm_config.position_following_error_protection = PMSM_ENC_LINE_P_N / 10;
+    kAxis.motor_ctl_sm_config.position_following_error_protection = PMSM_MOTOR_ENC_LINE_P_N / 10;
     kAxis.motor_ctl_sm_config.over_speed_protection_rad_s = kAxis.pmsm_config.speed_max_rpm * MOTOR_CTL_SM_TWO_PI / 60.0f * 1.2f;
 
     // 电流环参数
@@ -264,7 +264,7 @@ static void motor_ctl_test_param_updata(void)
     kAxis.pmsm_config.r = PMSM_Rp2p * 0.5f;
     kAxis.pmsm_config.rated_current = PMSM_RATED_CURRENT;
     kAxis.pmsm_config.speed_max_rpm = PMSM_SPEED_MAX_RPM;
-    kAxis.pmsm_config.enc_line_p_n = PMSM_ENC_LINE_P_N;
+    kAxis.pmsm_config.enc_line_p_n = PMSM_MOTOR_ENC_LINE_P_N;
 
     // 编码器参数
     kAxis.motor_pos_sensor_config.elec_angle_bias_rad = 0.0f; // 电角度偏移值

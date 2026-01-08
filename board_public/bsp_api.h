@@ -61,9 +61,9 @@ float bsp_get_mcu_temperature(void);
 
 #pragma region 编码器相关
 /* 编码器配置 */
-void bsp_set_encoder_config(ENCODER_ID const enc_id, \
-                        uint32_t const single_bits, uint32_t const  multi_bits, \
-                        uint16_t const type, uint8_t const options);
+void bsp_set_encoder_config(ENCODER_ID const enc_id, uint16_t const type, uint8_t const options, \
+                            uint32_t const a_single_res, uint32_t const a_single_less_factor, uint32_t const a_multi_res, \
+                            uint32_t const b_single_res, uint32_t const b_single_less_factor, uint32_t const b_multi_res);
 /* 获取编码器状态 */
 bool bsp_get_encoder_state(ENCODER_ID const enc_id);
 /* 获取编码器单圈值 */
