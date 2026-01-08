@@ -48,20 +48,20 @@ AppResult PvModeRun()
         }
         else
         {
-            kPvMode.traj.speed_tar_p = kPvMode.velocity_target * get_app_Load_rpm_2_pps() * \
-                                        get_app_Reduction_ratio();
+            kPvMode.traj.speed_tar_p = kPvMode.velocity_target * get_app_Motor_rpm_2_pps() * \
+                                       get_app_Reduction_ratio();
         }
 
         // 轮廓加速度减速度切换 目标速度绝对值 大于 当前规划速度绝对值加速 否则则加速
         if (MATH_ABS(kPvMode.velocity_target) > MATH_ABS(get_app_Velocity_demand_value()))
         {
-            kPvMode.traj.acc = get_app_Profile_acceleration() * get_app_Load_rpm_2_pps() * \
-                                get_app_Reduction_ratio();
+            kPvMode.traj.acc = get_app_Profile_acceleration() * get_app_Motor_rpm_2_pps() * \
+                               get_app_Reduction_ratio();
         }
         else
         {
-            kPvMode.traj.acc = get_app_Profile_deceleration() * get_app_Load_rpm_2_pps() * \
-                                get_app_Reduction_ratio();
+            kPvMode.traj.acc = get_app_Profile_deceleration() * get_app_Motor_rpm_2_pps() * \
+                               get_app_Reduction_ratio();
         }
     }
     else if (kPvMode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
@@ -73,14 +73,14 @@ AppResult PvModeRun()
             kPvMode.emergency_brake_mode == EMERGENCY_BRAKE_MODE_CURRENT_LIMIT ||\
             kPvMode.emergency_brake_mode == EMERGENCY_BRAKE_MODE_CURRENT_LIMIT_ENABLE)
         {
-            kPvMode.traj.acc = get_app_Quick_stop_deceleration() * get_app_Load_rpm_2_pps() * \
-                                get_app_Reduction_ratio();
+            kPvMode.traj.acc = get_app_Quick_stop_deceleration() * get_app_Motor_rpm_2_pps() * \
+                               get_app_Reduction_ratio();
         }
         else if (kPvMode.emergency_brake_mode != EMERGENCY_BRAKE_MODE_DISABLED)
         {
             //TODO: 电压限制急停先不实现按正常减速斜率停机
-            kPvMode.traj.acc = get_app_Profile_deceleration() * get_app_Load_rpm_2_pps() * \
-                                get_app_Reduction_ratio();
+            kPvMode.traj.acc = get_app_Profile_deceleration() * get_app_Motor_rpm_2_pps() * \
+                               get_app_Reduction_ratio();
         }
         // 在急停后失能电机模式下，检测到零速后电机失能
         if (kPvMode.emergency_brake_mode <= EMERGENCY_BRAKE_MODE_VOLTAGE_LIMIT)

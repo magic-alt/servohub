@@ -66,8 +66,8 @@ AppResult PpModeRun()
         }
         else
         {
-            kPpMode.traj.profile_speed = get_app_Profile_velocity() * get_app_Load_rpm_2_pps() * \
-                                            get_app_Reduction_ratio();
+            kPpMode.traj.profile_speed = get_app_Profile_velocity() * get_app_Motor_rpm_2_pps() * \
+                                         get_app_Reduction_ratio();
         }
 
         // 设置规划器参数
@@ -79,13 +79,14 @@ AppResult PpModeRun()
         }
 
         kPpMode.pos_tar_p_add = (float)(kPpMode.position_target_last - get_app_Position_actual_value()) * \
-                                get_app_Reduction_ratio();
+                                get_app_Reduction_ratio() * get_app_P_load_2_motor();
+
         kPpMode.traj.pos_tar_p = kPpMode.pos_tar_p_add + get_app_Motor_position_actual_value(); //  转化到内环目标位置
 
-        kPpMode.traj.profile_acc = get_app_Profile_acceleration() * get_app_Load_rpm_2_pps() * \
-                                    get_app_Reduction_ratio();
-        kPpMode.traj.profile_dec = get_app_Profile_deceleration() * get_app_Load_rpm_2_pps() * \
-                                    get_app_Reduction_ratio();
+        kPpMode.traj.profile_acc = get_app_Profile_acceleration() * get_app_Motor_rpm_2_pps() * \
+                                   get_app_Reduction_ratio();
+        kPpMode.traj.profile_dec = get_app_Profile_deceleration() * get_app_Motor_rpm_2_pps() * \
+                                   get_app_Reduction_ratio();
 
     }
     else if (kPpMode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
@@ -98,17 +99,17 @@ AppResult PpModeRun()
             kPpMode.emergency_brake_mode == EMERGENCY_BRAKE_MODE_CURRENT_LIMIT ||\
             kPpMode.emergency_brake_mode == EMERGENCY_BRAKE_MODE_CURRENT_LIMIT_ENABLE)
         {
-            kPpMode.traj.profile_acc = get_app_Quick_stop_deceleration() * get_app_Load_rpm_2_pps() * \
-                                        get_app_Reduction_ratio();
+            kPpMode.traj.profile_acc = get_app_Quick_stop_deceleration() * get_app_Motor_rpm_2_pps() * \
+                                       get_app_Reduction_ratio();
             kPpMode.traj.profile_dec = kPpMode.traj.profile_acc;
         }
         else if (kPpMode.emergency_brake_mode != EMERGENCY_BRAKE_MODE_DISABLED)
         {
             //TODO: 电压限制急停先不实现按正常减速斜率停机
-            kPpMode.traj.profile_acc = get_app_Profile_acceleration() * get_app_Load_rpm_2_pps() * \
-                                        get_app_Reduction_ratio();
-            kPpMode.traj.profile_dec = get_app_Profile_deceleration() * get_app_Load_rpm_2_pps() * \
-                                        get_app_Reduction_ratio();
+            kPpMode.traj.profile_acc = get_app_Profile_acceleration() * get_app_Motor_rpm_2_pps() * \
+                                       get_app_Reduction_ratio();
+            kPpMode.traj.profile_dec = get_app_Profile_deceleration() * get_app_Motor_rpm_2_pps() * \
+                                       get_app_Reduction_ratio();
         }
         // 在急停后失能电机模式下，检测到零速后电机失能
         if (kPpMode.emergency_brake_mode <= EMERGENCY_BRAKE_MODE_VOLTAGE_LIMIT)
