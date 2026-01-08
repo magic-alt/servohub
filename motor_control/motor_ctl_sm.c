@@ -546,7 +546,7 @@ static void TqFcIdStep(Axis *const axis, AxisDw *const axis_dw)
    uint32_T index = 0;
 
    axis->tq_fc_id_input.iq_com_A = axis->pos_speed_ctl_output.dob_iq_com_A;
-   axis->tq_fc_id_input.pos_abs_p = axis->motor_pos_sensor_input.enc_counts_now_p; // TODO:编码器单圈绝对位置
+   axis->tq_fc_id_input.pos_abs_p = axis->motor_pos_sensor_input.enc_counts_now_p; // 编码器单圈绝对位置
    axis->tq_fc_id_input.start = 1;
 
    tq_fc_id(&axis->tq_fc_id_input, &axis->tq_fc_id_config,
@@ -555,7 +555,7 @@ static void TqFcIdStep(Axis *const axis, AxisDw *const axis_dw)
    axis->pos_speed_ctl_input.pos_tar_p = axis->tq_fc_id_output.pos_cmd_p;
    axis->pos_speed_ctl_config.dob_enable = axis->tq_fc_id_output.iq_com_enable;
 
-   axis->pos_speed_ctl_config.mode = 1.0f;
+   axis->pos_speed_ctl_config.mode = POS_SPEED_CTL_MODE_POSITION;
    pos_speed_ctl_pip(
        &axis->pos_speed_ctl_input,
        &axis->pos_speed_ctl_config,
@@ -837,7 +837,7 @@ static void TorqueStep(Axis *const axis, AxisDw *const axis_dw)
 // 速度模式
 static void SpeedStep(Axis *const axis, AxisDw *const axis_dw)
 {
-   axis->pos_speed_ctl_config.mode = 0.0f; // 纯速度控制
+   axis->pos_speed_ctl_config.mode = POS_SPEED_CTL_MODE_SPEED; // 纯速度控制
 
 #ifdef MOTOR_CTL_DEBUG // 控制层调试模式，加入规划器
    PosSpeedCtlInput pos_speed_ctl_input = axis->pos_speed_ctl_input;
@@ -873,7 +873,7 @@ static void SpeedStep(Axis *const axis, AxisDw *const axis_dw)
 // 位置模式
 static void PositionStep(Axis *const axis, AxisDw *const axis_dw)
 {
-   axis->pos_speed_ctl_config.mode = 1.0f;
+   axis->pos_speed_ctl_config.mode = POS_SPEED_CTL_MODE_POSITION;  //位置控制模式
    // 执行末端振动抑制
    // axis->input_shaping_input.pos_cmd_p 由用户指令设置目标位置 赋值该变量
 
@@ -952,7 +952,7 @@ static void ReciprocalMotionStep(Axis *const axis, AxisDw *const axis_dw)
 
    axis->pos_speed_ctl_input.pos_tar_p = axis->input_shaping_output.pos_cmd_shaping_p;
 
-   axis->pos_speed_ctl_config.mode = 1.0f;
+   axis->pos_speed_ctl_config.mode = POS_SPEED_CTL_MODE_POSITION;
    pos_speed_ctl_pip(
        &axis->pos_speed_ctl_input,
        &axis->pos_speed_ctl_config,
@@ -1001,7 +1001,7 @@ static void ReferenceSignalStep(Axis *const axis, AxisDw *const axis_dw)
    case REFERENCE_SIGNAL_TARGET_SPEED: // 速度
       axis->pos_speed_ctl_input.speed_tar_p_s = axis->reference_signal_output.signal_out;
 
-      axis->pos_speed_ctl_config.mode = 0.0f;
+      axis->pos_speed_ctl_config.mode = POS_SPEED_CTL_MODE_SPEED;
       pos_speed_ctl_pip(
           &axis->pos_speed_ctl_input,
           &axis->pos_speed_ctl_config,
@@ -1029,7 +1029,7 @@ static void ReferenceSignalStep(Axis *const axis, AxisDw *const axis_dw)
 
       axis->pos_speed_ctl_input.pos_tar_p = axis->input_shaping_output.pos_cmd_shaping_p;
 
-      axis->pos_speed_ctl_config.mode = 1.0f;
+      axis->pos_speed_ctl_config.mode = POS_SPEED_CTL_MODE_POSITION;
       pos_speed_ctl_pip(
           &axis->pos_speed_ctl_input,
           &axis->pos_speed_ctl_config,
