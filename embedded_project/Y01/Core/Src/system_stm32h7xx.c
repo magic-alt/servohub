@@ -115,8 +115,13 @@
 #else
 #define VECT_TAB_BASE_ADDRESS   FLASH_BANK1_BASE  /*!< Vector Table base address field.
                                                        This value must be a multiple of 0x400. */
+#ifdef YH_RELEASE
+#define VECT_TAB_OFFSET         0x00020000U       /*!< Vector Table base offset field.
+                                                       This value must be a multiple of 0x400. */
+#else
 #define VECT_TAB_OFFSET         0x00000000U       /*!< Vector Table base offset field.
                                                        This value must be a multiple of 0x400. */
+#endif /* YH_RELEASE */
 #endif /* VECT_TAB_SRAM */
 #endif /* DUAL_CORE && CORE_CM4 */
 #endif /* USER_VECT_TAB_ADDRESS */
