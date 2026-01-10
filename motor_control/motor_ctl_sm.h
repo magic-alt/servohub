@@ -81,6 +81,11 @@ extern "C"
 #define REFERENCE_SIGNAL_IF_MODE            (255) // IF模式
 #pragma endregion
 
+#pragma region pos_speed_ctl_config.mode 定义//1.0f 表示位置误差会参与计算，0.0f 表示位置误差不参与计算
+#define POS_SPEED_CTL_MODE_SPEED (0.0f)     //纯速度控制模式 
+#define POS_SPEED_CTL_MODE_POSITION (1.0f)  //位置控制模式  
+#pragma endregion
+
 // 定义每个模块内部缓存数据结构,用户可自定义
 #define AxisDw DW
 
