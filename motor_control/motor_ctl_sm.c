@@ -255,7 +255,7 @@ void MotorCtlParamSetUpdata(Axis *const axis)
    // 转矩常数和永磁磁链 关联更新                                              // kt = 1.5*pn*flux
    axis->pmsm_config.flux = axis->pmsm_config.kt / (1.5f * axis->pmsm_config.pn); // flux = kt/(1.5*pn);
    axis->pos_speed_ctl_config.j_kt = axis->pmsm_config.j / axis->pmsm_config.kt;
-   axis->mit_ctl_config.kt_NM_A = axis->pmsm_config.kt; //关联设置
+   axis->mit_ctl_config.kt_NM_A = axis->pmsm_config.kt; // 关联设置
 
    // 电机最大转速
    axis->pos_speed_ctl_config.speed_max_rad_s = axis->pmsm_config.speed_max_rpm * MOTOR_CTL_SM_RPM_2_RAD_S;
@@ -515,25 +515,35 @@ static inline void CommandCurrentFilter(Axis *const axis, AxisDw *const axis_dw)
 static inline void TqFcComStep(Axis *const axis, AxisDw *const axis_dw)
 {
    uint32_T index = 0;
+
    if (axis->tq_fc_id_output.tq_com_enable == 1)
    {
-      index = (float)(axis->motor_pos_sensor_input.enc_counts_now_p) / (float)axis->pmsm_config.enc_line_p_n * 360.0f;
+      index = (float)(axis->motor_pos_sensor_input.enc_counts_now_p) /
+              (float)axis->pmsm_config.enc_line_p_n * axis_dw->tq_fc_id_InstanceData.rtdw.index_max;
 
-      if (index >= 0 && index < 360)
+      if (index >= 0 && index < axis_dw->tq_fc_id_InstanceData.rtdw.index_max)
       {
          axis->pos_speed_ctl_output.iq_tar_A -= axis_dw->tq_fc_id_InstanceData.rtdw.com_table[index];
       }
-      if (index >= 360)
+      if (index >= axis_dw->tq_fc_id_InstanceData.rtdw.index_max)
       {
-         index = 359;
-         // error
-         /* code */
+         index = axis_dw->tq_fc_id_InstanceData.rtdw.index_max - 1;
+         // TODO:error
       }
    }
 
    if (axis->tq_fc_id_output.fc_com_enable == 1)
    {
-      // 进行摩擦补偿，以指令速度方向补偿
+      //TODO：摩擦补偿这里还可以优化 更加平滑  目前是简单阶跃补偿 
+      // 进行摩擦补偿， 以指令速度方向补偿
+      if (axis->pos_speed_ctl_input.speed_tar_p_s > 0.0f)
+      {
+         axis->pos_speed_ctl_output.iq_tar_A += axis_dw->tq_fc_id_InstanceData.rtdw.fc_p_com;
+      }
+      else if (axis->pos_speed_ctl_input.speed_tar_p_s < -0.0f)
+      {
+         axis->pos_speed_ctl_output.iq_tar_A += axis_dw->tq_fc_id_InstanceData.rtdw.fc_n_com;
+      }
    }
 }
 
@@ -542,20 +552,120 @@ static inline void TqFcComStep(Axis *const axis, AxisDw *const axis_dw)
 #pragma region 模式运行函数
 // 转矩脉动辨识
 static void TqFcIdStep(Axis *const axis, AxisDw *const axis_dw)
-{
+{ 
    uint32_T index = 0;
+   float fc_hz = 100.0f;                       // 100Hz截止频率
+   float lpf_k = 0.38f;                        // 低通滤波系数
+   float speed_tar_rpm = TQ_FC_COM_MIN_SPEED_RAD_S * MATH_RAD2RPM; // 转矩脉动辨识速度低速 10RPM
 
-   axis->tq_fc_id_input.iq_com_A = axis->pos_speed_ctl_output.dob_iq_com_A;
-   axis->tq_fc_id_input.pos_abs_p = axis->motor_pos_sensor_input.enc_counts_now_p; // 编码器单圈绝对位置
-   axis->tq_fc_id_input.start = 1;
+   if (axis->tq_fc_id_output.state_now == IDENTIFICATION_MODE_STATE_IDLE)
+   {
+      axis->tq_fc_id_input.start = 1;            // 启动转矩脉动辨识
+      axis->tq_fc_id_input.pos_abs_p = 0;        // 绝对位置计数器清零
+      axis->pos_speed_ctl_config.dob_enable = 0; // 关闭扰动观测器
+      axis->tq_fc_id_output.tq_com_enable = 0;   // 关闭转矩脉动补偿
+      axis->tq_fc_id_output.fc_com_enable = 0;   // 关闭摩擦补偿
+      axis->tq_fc_id_output.state_now = IDENTIFICATION_MODE_STATE_SEARCH;
+   }
+   if (axis->tq_fc_id_input.start == 1) // 转矩脉动辨识阶段
+   {
+      if (axis->tq_fc_id_output.state_now == IDENTIFICATION_MODE_STATE_SEARCH) // 等待位置模式运行稳定 等待 0.5s
+      {
+         // 一直更新目标位置  以10RPM匀速运行
+         axis->pos_speed_ctl_input.pos_tar_p += speed_tar_rpm / 60.0f * axis->pmsm_config.enc_line_p_n * axis->pmsm_config.tp_s; // 10RPM匀速运行
 
-   tq_fc_id(&axis->tq_fc_id_input, &axis->tq_fc_id_config,
-            &axis->tq_fc_id_output, &(axis_dw->tq_fc_id_InstanceData.rtdw));
+         axis->tq_fc_id_input.pos_abs_p++;                                             // 充当计数器使用
+         if ((float)(axis->tq_fc_id_input.pos_abs_p) * axis->pmsm_config.tp_s >= 0.5f) // 等待 0.5s
+         {
+            axis->tq_fc_id_input.pos_init_p = axis->motor_pos_sensor_output.enc_sum_p;      // 记录累计初始位置
+            axis->tq_fc_id_input.pos_abs_p = axis->motor_pos_sensor_input.enc_counts_now_p; // 记录单圈绝对位置信息
+            axis->tq_fc_id_output.state_now = IDENTIFICATION_MODE_STATE_STABLE_INCENTIVE;
+         }
+      }
+      else if (axis->tq_fc_id_output.state_now == IDENTIFICATION_MODE_STATE_STABLE_INCENTIVE) // 稳定匀速运行阶段
+      {
+         // 一直更新目标位置  以10RPM匀速运行
+         axis->pos_speed_ctl_input.pos_tar_p += speed_tar_rpm / 60.0f * axis->pmsm_config.enc_line_p_n * axis->pmsm_config.tp_s; // 10RPM匀速运行
 
-   axis->pos_speed_ctl_input.pos_tar_p = axis->tq_fc_id_output.pos_cmd_p;
-   axis->pos_speed_ctl_config.dob_enable = axis->tq_fc_id_output.iq_com_enable;
+         // 记录负载观测器补偿电流值
+         axis->tq_fc_id_input.iq_com_A = axis->pos_speed_ctl_output.dob_iq_com_A;
 
-   axis->pos_speed_ctl_config.mode = POS_SPEED_CTL_MODE_POSITION;
+         index = (float)(axis->motor_pos_sensor_input.enc_counts_now_p) /
+                 (float)axis->pmsm_config.enc_line_p_n * axis_dw->tq_fc_id_InstanceData.rtdw.index_max;
+
+         if (index >= axis_dw->tq_fc_id_InstanceData.rtdw.index_max)
+         {
+            index = axis_dw->tq_fc_id_InstanceData.rtdw.index_max - 1;
+         }
+
+         axis_dw->tq_fc_id_InstanceData.rtdw.com_table[index] = axis->tq_fc_id_input.iq_com_A;
+
+         if ((axis->motor_pos_sensor_output.enc_sum_p - axis->tq_fc_id_input.pos_init_p) >=
+             axis->pmsm_config.enc_line_p_n)
+         {
+            // 旋转一圈后 进入到摩擦辨识 速度切换到 1RPM
+            // 开启摩擦辨识  此方法假设摩擦力是正负运动方向对称的
+            axis->tq_fc_id_input.start = 2;
+            axis->tq_fc_id_input.pos_abs_p = 0;
+            axis->tq_fc_id_output.state_now = IDENTIFICATION_MODE_STATE_SEARCH;
+            // 开启转矩脉动补偿
+            axis->tq_fc_id_output.tq_com_enable = 1;
+         }
+      }
+   }
+   else if (axis->tq_fc_id_input.start == 2) // 摩擦辨识阶段
+   {
+      if (axis->tq_fc_id_output.state_now == IDENTIFICATION_MODE_STATE_SEARCH)
+      {
+         // 一直更新目标位置  以-10RPM匀速运行
+         axis->pos_speed_ctl_input.pos_tar_p -= speed_tar_rpm / 60.0f * axis->pmsm_config.enc_line_p_n * axis->pmsm_config.tp_s; // -10RPM匀速运行
+
+         axis->tq_fc_id_input.pos_abs_p++; // 充当计数器使用
+
+         axis->tq_fc_id_input.iq_com_A = axis->pos_speed_ctl_output.dob_iq_com_A; // 获取反向2倍的摩擦力
+
+         // 低通滤波
+         math_lib_set_first_order_lpf_iir_config(&fc_hz, &axis->pmsm_config.tp_s, &lpf_k);
+
+         math_lib_first_order_lpf_iir(&axis->tq_fc_id_input.iq_com_A, &lpf_k,
+                                      &axis_dw->tq_fc_id_InstanceData.rtdw.fc_n_com,
+                                      &axis_dw->tq_fc_id_InstanceData.rtdw.fc_n_com);
+
+         if ((float)(axis->tq_fc_id_input.pos_abs_p) * axis->pmsm_config.tp_s >= 5.0f) // 等待 5s
+         {
+            axis->tq_fc_id_input.pos_init_p = axis->motor_pos_sensor_output.enc_sum_p;      // 记录累计初始位置
+            axis->tq_fc_id_input.pos_abs_p = axis->motor_pos_sensor_input.enc_counts_now_p; // 记录单圈绝对位置信息
+            axis->tq_fc_id_output.state_now = IDENTIFICATION_MODE_STATE_STABLE_INCENTIVE;
+         }
+      }
+      else if (axis->tq_fc_id_output.state_now == IDENTIFICATION_MODE_STATE_STABLE_INCENTIVE) // 匀速稳定后进行摩擦力辨识
+      {
+         // 一直更新目标位置  以-10RPM匀速运行
+         axis->pos_speed_ctl_input.pos_tar_p -= speed_tar_rpm / 60.0f * axis->pmsm_config.enc_line_p_n * axis->pmsm_config.tp_s; // -1RPM匀速运行
+
+         // 记录负载观测器补偿电流值
+         axis->tq_fc_id_input.iq_com_A = axis->pos_speed_ctl_output.dob_iq_com_A;
+
+         // 低通滤波
+         math_lib_set_first_order_lpf_iir_config(&fc_hz, &axis->pmsm_config.tp_s, &lpf_k);
+
+         math_lib_first_order_lpf_iir(&axis->tq_fc_id_input.iq_com_A, &lpf_k,
+                                      &axis_dw->tq_fc_id_InstanceData.rtdw.fc_n_com,
+                                      &axis_dw->tq_fc_id_InstanceData.rtdw.fc_n_com);
+
+         // 辨识完成、分离转矩脉动辨识补偿表，计算摩擦力
+         axis_dw->tq_fc_id_InstanceData.rtdw.fc_p_com = axis_dw->tq_fc_id_InstanceData.rtdw.fc_n_com * 0.5f;
+         axis_dw->tq_fc_id_InstanceData.rtdw.fc_n_com = -axis_dw->tq_fc_id_InstanceData.rtdw.fc_p_com;
+
+         for (uint32_T i = 0; i < axis_dw->tq_fc_id_InstanceData.rtdw.index_max; i++)
+         {
+            axis_dw->tq_fc_id_InstanceData.rtdw.com_table[i] += axis_dw->tq_fc_id_InstanceData.rtdw.fc_p_com;
+         }
+         axis->tq_fc_id_output.state_now = IDENTIFICATION_MODE_STATE_FINISH;
+      }
+   }
+
+   axis->pos_speed_ctl_config.mode = POS_SPEED_CTL_MODE_POSITION; // 一直运行位置模式匀速
    pos_speed_ctl_pip(
        &axis->pos_speed_ctl_input,
        &axis->pos_speed_ctl_config,
@@ -571,6 +681,9 @@ static void TqFcIdStep(Axis *const axis, AxisDw *const axis_dw)
    if (axis->tq_fc_id_output.state_now == IDENTIFICATION_MODE_STATE_FINISH) // 辨识完成 自动失能
    {
       axis->tq_fc_id_input.start = 0;
+      // 开启所有补偿开关
+      axis->tq_fc_id_output.tq_com_enable = 1; // 开启转矩脉动补偿
+      axis->tq_fc_id_output.fc_com_enable = 1; // 开启摩擦补偿
 
       axis->motor_ctl_sm_output.state = MOTOR_CTL_SM_STATE_DISABLE;
    }
@@ -873,7 +986,7 @@ static void SpeedStep(Axis *const axis, AxisDw *const axis_dw)
 // 位置模式
 static void PositionStep(Axis *const axis, AxisDw *const axis_dw)
 {
-   axis->pos_speed_ctl_config.mode = POS_SPEED_CTL_MODE_POSITION;  //位置控制模式
+   axis->pos_speed_ctl_config.mode = POS_SPEED_CTL_MODE_POSITION; // 位置控制模式
    // 执行末端振动抑制
    // axis->input_shaping_input.pos_cmd_p 由用户指令设置目标位置 赋值该变量
 

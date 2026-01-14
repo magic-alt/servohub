@@ -287,12 +287,9 @@ void tq_fc_id_step(void)               /* Explicit Task: tq_fc_id_step */
     /* RootInportFunctionCallGenerator generated from: '<Root>/tq_fc_id_step' */
 
     /* ModelReference generated from: '<Root>/tq_fc_id' incorporates:
-     *  Inport: '<Root>/tq_fc_id_config'
-     *  Inport: '<Root>/tq_fc_id_input'
      *  Outport: '<Root>/tq_fc_id_output'
      */
-    tq_fc_id(&_rt_U.tq_fc_id_input, &_rt_U.tq_fc_id_config,
-             &_rt_Y.tq_fc_id_output, &(_rt_DW.tq_fc_id_InstanceData.rtdw));
+    tq_fc_id(&_rt_Y.tq_fc_id_output);
 
     /* End of Outputs for RootInportFunctionCallGenerator generated from: '<Root>/tq_fc_id_step' */
 }

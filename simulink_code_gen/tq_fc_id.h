@@ -29,31 +29,10 @@
 /* Block signals and states (default storage) for model 'tq_fc_id' */
 typedef struct
 {
-    int64_T pos_cmd_p;                 /* '<S2>/Chart' */
-    int64_T Delay_DSTATE;              /* '<S7>/Delay' */
-    int64_T Delay_DSTATE_j;            /* '<S10>/Delay' */
-    real32_T com_table[360];           /* '<S2>/Data Store Memory' */
-    real32_T DiscreteTimeIntegrator_DSTATE;/* '<S4>/Discrete-Time Integrator' */
-    real32_T fc_p_com;                 /* '<S2>/Data Store Memory1' */
-    real32_T fc_n_com;                 /* '<S2>/Data Store Memory2' */
-    int8_T state_now;                  /* '<S2>/Chart' */
-    int8_T out_add;                    /* '<S7>/Chart' */
-    int8_T out_add_e;                  /* '<S10>/Chart' */
-    int8_T error;                      /* '<S2>/Chart' */
-    uint8_T iq_com_enable;             /* '<S2>/Chart' */
-    uint8_T tq_com_enable;             /* '<S2>/Chart' */
-    uint8_T fc_com_enable;             /* '<S2>/Chart' */
-    uint8_T is_active_c3_tq_fc_id;     /* '<S2>/Chart' */
-    uint8_T is_c3_tq_fc_id;            /* '<S2>/Chart' */
-    uint8_T counts;                    /* '<S7>/Chart' */
-    uint8_T is_active_c2_tq_fc_id;     /* '<S7>/Chart' */
-    uint8_T is_c2_tq_fc_id;            /* '<S7>/Chart' */
-    uint8_T counts_m;                  /* '<S10>/Chart' */
-    uint8_T is_active_c1_tq_fc_id;     /* '<S10>/Chart' */
-    uint8_T is_c1_tq_fc_id;            /* '<S10>/Chart' */
-    boolean_T id_state;                /* '<S2>/Chart' */
-    boolean_T icLoad;                  /* '<S7>/Delay' */
-    boolean_T icLoad_i;                /* '<S10>/Delay' */
+    real32_T com_table[360];           /* '<S1>/Data Store Memory' */
+    real32_T fc_p_com;                 /* '<S1>/Data Store Memory1' */
+    real32_T fc_n_com;                 /* '<S1>/Data Store Memory2' */
+    uint32_T index_max;                /* '<S1>/Data Store Memory4' */
 }
 tq_fc_id_DW_f;
 
@@ -64,9 +43,7 @@ typedef struct
 tq_fc_id_MdlrefDW;
 
 extern void tq_fc_id_Init(TqFcIdOutput *rty_output, tq_fc_id_DW_f *localDW);
-extern void tq_fc_id(const TqFcIdInput *rtu_input, const TqFcIdConfig
-                     *rtu_config, TqFcIdOutput *rty_output, tq_fc_id_DW_f
-                     *localDW);
+extern void tq_fc_id(TqFcIdOutput *rty_output);
 
 /*-
  * The generated code includes comments that allow you to trace directly
@@ -84,16 +61,7 @@ extern void tq_fc_id(const TqFcIdInput *rtu_input, const TqFcIdConfig
  *
  * '<Root>' : 'tq_fc_id'
  * '<S1>'   : 'tq_fc_id/tq_fc_id'
- * '<S2>'   : 'tq_fc_id/tq_fc_id/tq_fc_id'
- * '<S3>'   : 'tq_fc_id/tq_fc_id/tq_fc_id/Chart'
- * '<S4>'   : 'tq_fc_id/tq_fc_id/tq_fc_id/Chart/fc_id_fun'
- * '<S5>'   : 'tq_fc_id/tq_fc_id/tq_fc_id/Chart/tq_fc_id_fun'
- * '<S6>'   : 'tq_fc_id/tq_fc_id/tq_fc_id/Chart/tq_id_fun'
- * '<S7>'   : 'tq_fc_id/tq_fc_id/tq_fc_id/Chart/fc_id_fun/Subsystem'
- * '<S8>'   : 'tq_fc_id/tq_fc_id/tq_fc_id/Chart/fc_id_fun/Subsystem/Chart'
- * '<S9>'   : 'tq_fc_id/tq_fc_id/tq_fc_id/Chart/tq_fc_id_fun/Subsystem'
- * '<S10>'  : 'tq_fc_id/tq_fc_id/tq_fc_id/Chart/tq_id_fun/Subsystem'
- * '<S11>'  : 'tq_fc_id/tq_fc_id/tq_fc_id/Chart/tq_id_fun/Subsystem/Chart'
+ * '<S2>'   : 'tq_fc_id/tq_fc_id/Initialize Function'
  */
 
 /*-
