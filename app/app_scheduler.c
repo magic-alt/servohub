@@ -16,6 +16,7 @@ static const AppTable app_table[APP_NUM] =
     {APP_ELEC_ID_MODE, IdElecModeInit, IdElecModeStart, IdElecModeRun, IdElecModeStop, APP_TYPE_PDS},
     {APP_MEC_ID_MODE, IdMecModeInit, IdMecModeStart, IdMecModeRun, IdMecModeStop, APP_TYPE_PDS},
     {APP_POLE_PAIRS_ID_MODE, IdPolePairsModeInit, IdPolePairsModeStart, IdPolePairsModeRun, IdPolePairsModeStop, APP_TYPE_PDS},
+    {APP_TQ_FC_ID_MODE, IdTqFcModeInit, IdTqFcModeStart, IdTqFcModeRun, IdTqFcModeStop, APP_TYPE_PDS},
     {APP_NULL, NULL, NULL, NULL, NULL}, // 用于表示空闲状态
 };
 

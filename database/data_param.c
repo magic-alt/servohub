@@ -894,6 +894,10 @@ uint32_t set_app_Modes_of_operation(int8_t val)
         axis->motor_ctl_sm_config.mode = MOTOR_CTL_SM_MODE_TORQUE;
         callback_registry.set_app_callback(APP_PT_MODE);
         break;
+    case MOTOR_CTL_SM_MODE_MIT:
+        axis->motor_ctl_sm_config.mode = MOTOR_CTL_SM_MODE_MIT;
+        callback_registry.set_app_callback(APP_MIT_MODE);
+        break;
     case MOTOR_CTL_SM_MODE_HOMING: // 回零模式实际使用速度模式
         axis->motor_ctl_sm_config.mode = MOTOR_CTL_SM_MODE_SPEED;
         callback_registry.set_app_callback(APP_HM_MODE);
@@ -918,9 +922,9 @@ uint32_t set_app_Modes_of_operation(int8_t val)
         axis->motor_ctl_sm_config.mode = MOTOR_CTL_SM_MODE_POLE_PAIRS_IDENTIFICATION;
         callback_registry.set_app_callback(APP_POLE_PAIRS_ID_MODE);
         break;
-    case MOTOR_CTL_SM_MODE_MIT:
-        axis->motor_ctl_sm_config.mode = MOTOR_CTL_SM_MODE_MIT;
-        callback_registry.set_app_callback(APP_MIT_MODE);
+    case MOTOR_CTL_SM_MODE_TQ_FRICTION_IDENTIFICATION:
+        axis->motor_ctl_sm_config.mode = MOTOR_CTL_SM_MODE_TQ_FRICTION_IDENTIFICATION;
+        callback_registry.set_app_callback(APP_TQ_FC_ID_MODE);
         break;
     default:
         axis->motor_ctl_sm_config.mode = MOTOR_CTL_SM_MODE_IDLE;
@@ -3237,6 +3241,22 @@ uint32_t set_app_Sys_cmd(uint8_t val)
         break;
     case APP_SYSTEM_CMD_REBOOT:
         bsp_system_reset();
+        break;
+    case APP_SYSTEM_CMD_SAVE_TQ_FC_TABLE:
+        if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+        {
+            set_app_Storage_status(FLASH_STORE_STATUS_WARNING);
+            return APP_PARAM_WRITE_STATE_ERROR;
+        }
+        set_app_Storage_cmd(FLASH_STORE_CMD_WRITE_TQ_FC);
+        break;
+    case APP_SYSTEM_CMD_TQ_FC_TABLE_CLEAR:
+        if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+        {
+            set_app_Storage_status(FLASH_STORE_STATUS_WARNING);
+            return APP_PARAM_WRITE_STATE_ERROR;
+        }
+        set_app_Storage_cmd(FLASH_STORE_CMD_ERASE_TQ_FC);
         break;
     case APP_SYSTEM_CMD_ERROR_RECORD_CLEAR:
         if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)

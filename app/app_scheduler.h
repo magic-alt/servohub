@@ -8,6 +8,7 @@
 #include "app_id_elec_mode.h"
 #include "app_id_mec_mode.h"
 #include "app_id_pole_pairs_mode.h"
+#include "app_id_tq_fc_mode.h"
 #include "app_profile_position_mode.h"
 #include "app_profile_velocity_mode.h"
 #include "app_profile_torque_mode.h"

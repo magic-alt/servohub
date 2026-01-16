@@ -1,4 +1,4 @@
-#include "drv_spi_flash.h"
+#include "drv_flash.h"
 
 /* KVDB object */
 static fdb_err_t fdb_err_code = FDB_NO_ERR;
@@ -24,6 +24,9 @@ static void unlock(fdb_db_t db)
   */
 fdb_err_t flashdb_init(void)
 {
+    fdb_kv_t kv;
+    struct fdb_blob blob;
+
     default_kv.kvs = default_kv_table;
     default_kv.num = FLASHDB_KEYS_NUM;
 
@@ -40,7 +43,27 @@ fdb_err_t flashdb_init(void)
          * &default_kv: The default KV nodes. It will auto add to KVDB when first initialize successfully.
          *        NULL: The user data if you need, now is empty.
          */
-    return fdb_kvdb_init(&kvdb, "YuanHub", "kv_param", &default_kv, NULL);
+    fdb_err_code = fdb_kvdb_init(&kvdb, "YuanHub", "kv_param", &default_kv, NULL);
+    if (fdb_err_code != FDB_NO_ERR)
+    {
+        return fdb_err_code;
+    }
+
+    /* check if the default kv nodes are in the kvdb */
+    for (uint8_t index = 0; index < default_kv.num; index++)
+    {
+        if (fdb_kv_get_obj(&kvdb, default_kv.kvs[index].key, kv) == NULL)
+        {
+            fdb_err_code = fdb_kv_set_blob(&kvdb, default_kv.kvs[index].key, \
+            fdb_blob_make(&blob, default_kv.kvs[index].value, default_kv.kvs[index].value_len));
+            if (fdb_err_code != FDB_NO_ERR)
+            {
+                return fdb_err_code;
+            }
+        }
+    }
+
+    return fdb_err_code;
 }
 /**
   * @brief Flashdb数据读取

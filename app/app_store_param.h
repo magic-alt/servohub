@@ -167,6 +167,9 @@ typedef struct {
     uint32_t app_encoder_config_Load_control_resolution;
     uint32_t app_encoder_config_Motor_control_resolution;
     uint8_t app_encoder_config_Load_encoder_options;
+    uint8_t tq_fc_id_output_iq_com_enable;
+    uint8_t tq_fc_id_output_tq_com_enable;
+    uint8_t tq_fc_id_output_fc_com_enable;
 }FLASH_PARAM_STRUCT;
 extern FLASH_PARAM_STRUCT kFlashStorage;
 

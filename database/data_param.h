@@ -14,7 +14,9 @@ typedef enum
     APP_SYSTEM_CMD_HOMING = 1,                  // 当前位置回零
     APP_SYSTEM_CMD_SAVE_CONFIG = 2,             // 保存参数到FLASH
     APP_SYSTEM_CMD_REBOOT = 3,                  // 重启系统
+    APP_SYSTEM_CMD_SAVE_TQ_FC_TABLE = 4,        // 保存转矩脉动摩擦补偿表到FLASH
     //...
+    APP_SYSTEM_CMD_TQ_FC_TABLE_CLEAR = 253,     // 清除转矩脉动摩擦补偿表
     APP_SYSTEM_CMD_ERROR_RECORD_CLEAR = 254,    // 清除错误记录
     APP_SYSTEM_CMD_FACTORY_RESET = 255,         // 恢复出厂设置
 } APP_SYSTEM_CMD;

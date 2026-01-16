@@ -96,7 +96,7 @@ typedef enum {
 } CURRENT_CALIBRATION_STATUS;
 
 // APP控制字定义(兼容控制层的控制字定义和应用层的控制字定义)
-#define APP_NUM         11   //如果需要新增应用 在此处增加枚举定义 和 增加应用数量
+#define APP_NUM         12   //如果需要新增应用 在此处增加枚举定义 和 增加应用数量
 typedef enum
 {
     APP_NULL = 0,
@@ -110,6 +110,8 @@ typedef enum
     APP_ELEC_ID_MODE,
     APP_MEC_ID_MODE,
     APP_POLE_PAIRS_ID_MODE,
+    APP_TQ_FC_ID_MODE,
+    // ...
     APP_MAX = APP_NUM,
 } APP_NAMES;
 
@@ -158,10 +160,11 @@ typedef enum
     // SYS_TIMER_RECORD_USER_MAX_INDEX = (SYS_TIMER_RECORD_MAX_INDEX - 1),
 } SYS_TIMER_RECORD_INDEX;
 
-#define FLASHDB_KEYS_NUM     2
+#define FLASHDB_KEYS_NUM     3
 typedef enum {
     FLASHDB_KEY_INDEX_ALL_PARAM         = 0,
     FLASHDB_KEY_INDEX_ERROR_RECORD      = 1,
+    FLASHDB_KEY_INDEX_TQ_FC_TABLE       = 2,
     // ...
     FLASHDB_KEY_INDEX_MAX = FLASHDB_KEYS_NUM - 1,
 } FLASHDB_KEY_INDEX;
@@ -185,6 +188,9 @@ typedef enum {
     FLASH_STORE_CMD_READ_ERROR,     // 读取错误记录
     FLASH_STORE_CMD_WRITE_ERROR,    // 写入错误记录
     FLASH_STORE_CMD_ERASE_ERROR,    // 擦除错误记录
+    FLASH_STORE_CMD_READ_TQ_FC,     // 读取转矩脉动摩擦补偿表
+    FLASH_STORE_CMD_WRITE_TQ_FC,    // 写入转矩脉动摩擦补偿表
+    FLASH_STORE_CMD_ERASE_TQ_FC,    // 擦除转矩脉动摩擦补偿表
 } FLASH_STORE_CMD;
 typedef enum
 {

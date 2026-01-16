@@ -12,7 +12,7 @@
 #include "bsp_fdcan.h"
 #include "drv_can_app.h"
 #include "drv_encoder.h"
-#include "drv_spi_flash.h"
+#include "drv_flash.h"
 
 
 typedef struct

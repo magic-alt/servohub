@@ -1,5 +1,5 @@
-#ifndef DRV_SPI_FLASH_H
-#define DRV_SPI_FLASH_H
+#ifndef DRV_FLASH_H
+#define DRV_FLASH_H
 
 #include <flashdb.h>
 #include "board.h"
@@ -18,4 +18,4 @@ fdb_err_t flashdb_key_delete(FLASHDB_KEY_INDEX const index);
 }
 #endif
 
-#endif /* DRV_SPI_FLASH_H */
+#endif /* DRV_FLASH_H */

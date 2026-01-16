@@ -1,5 +1,5 @@
-#ifndef BSP_SPI_FLASH_H
-#define BSP_SPI_FLASH_H
+#ifndef BSP_FLASH_H
+#define BSP_FLASH_H
 
 #include <fal.h>
 #include "board.h"
@@ -56,4 +56,4 @@ static int erase(long offset, size_t size);
 }
 #endif
 
-#endif /* BSP_SPI_FLASH_H */
+#endif /* BSP_FLASH_H */

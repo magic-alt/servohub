@@ -1,4 +1,4 @@
-#include "bsp_spi_flash.h"
+#include "bsp_flash.h"
 
 struct fal_flash_dev nor_flash0 =
 {

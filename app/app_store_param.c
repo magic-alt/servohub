@@ -48,6 +48,9 @@ void flash_param_update(void)
     kFlashStorage.pos_speed_ctl_config_dob_wn_Hz = kAxis.pos_speed_ctl_config.dob_wn_Hz;
     kFlashStorage.pos_speed_ctl_config_dob_enable = kAxis.pos_speed_ctl_config.dob_enable;
     kFlashStorage.input_shaping_config_enable = kAxis.input_shaping_config.enable;
+    kFlashStorage.tq_fc_id_output_iq_com_enable = kAxis.tq_fc_id_output.iq_com_enable;
+    kFlashStorage.tq_fc_id_output_tq_com_enable = kAxis.tq_fc_id_output.tq_com_enable;
+    kFlashStorage.tq_fc_id_output_fc_com_enable = kAxis.tq_fc_id_output.fc_com_enable;
     kFlashStorage.current_ctl_config_pwm_duty_cycle_max = kAxis.current_ctl_config.pwm_duty_cycle_max;
     kFlashStorage.app_encoder_config_Load_encoder_resolution = kAppEncoderConfig.Load_encoder_resolution;
     kFlashStorage.app_encoder_config_Motor_encoder_resolution = kAppEncoderConfig.Motor_encoder_resolution;
@@ -223,6 +226,9 @@ void flash_param_init(void)
     kAxis.pos_speed_ctl_config.dob_wn_Hz = kFlashStorage.pos_speed_ctl_config_dob_wn_Hz;
     kAxis.pos_speed_ctl_config.dob_enable = kFlashStorage.pos_speed_ctl_config_dob_enable;
     kAxis.input_shaping_config.enable = kFlashStorage.input_shaping_config_enable;
+    kAxis.tq_fc_id_output.iq_com_enable = kFlashStorage.tq_fc_id_output_iq_com_enable;
+    kAxis.tq_fc_id_output.tq_com_enable = kFlashStorage.tq_fc_id_output_tq_com_enable;
+    kAxis.tq_fc_id_output.fc_com_enable = kFlashStorage.tq_fc_id_output_fc_com_enable;
     kAxis.current_ctl_config.pwm_duty_cycle_max = kFlashStorage.current_ctl_config_pwm_duty_cycle_max;
     kAppEncoderConfig.Load_encoder_resolution = kFlashStorage.app_encoder_config_Load_encoder_resolution;
     kAppEncoderConfig.Motor_encoder_resolution = kFlashStorage.app_encoder_config_Motor_encoder_resolution;
@@ -373,6 +379,13 @@ static void FlashdbDatabaseInit(void)
         sys_set_bsp_error_state(ERROR_FLASH_STORE, ERROR_SET);
         return;
     }
+    if (bsp_flashdb_key_register(FLASHDB_KEY_INDEX_TQ_FC_TABLE, "TqFcTable", \
+            &kAxisDw.tq_fc_id_InstanceData.rtdw, \
+            sizeof(kAxisDw.tq_fc_id_InstanceData.rtdw)) != FLASHDB_NO_ERR)
+    {
+        sys_set_bsp_error_state(ERROR_FLASH_STORE, ERROR_SET);
+        return;
+    }
 
     if (bsp_flashdb_init() != FLASHDB_NO_ERR)
     {
@@ -391,6 +404,8 @@ void AppStoreInit(void)
     set_app_Storage_cmd(FLASH_STORE_CMD_READ_PARAM);
     AppStoreUpdata1ms();
     set_app_Storage_cmd(FLASH_STORE_CMD_READ_ERROR);
+    AppStoreUpdata1ms();
+    set_app_Storage_cmd(FLASH_STORE_CMD_READ_TQ_FC);
     AppStoreUpdata1ms();
 }
 
@@ -433,6 +448,7 @@ void AppStoreUpdata1ms(void)
                 MotorCtrlInit();   //控制层数据库初始化
                 flash_param_update();
 
+                flashdb_status = bsp_flashdb_key_delete(FLASHDB_KEY_INDEX_TQ_FC_TABLE);
                 flashdb_status = bsp_flashdb_write(FLASHDB_KEY_INDEX_ALL_PARAM);
 
                 if (flashdb_status == FLASHDB_NO_ERR)
@@ -446,28 +462,39 @@ void AppStoreUpdata1ms(void)
 
                 if (flashdb_status == FLASHDB_NO_ERR)
                 {
-                    for (int i = 0; i < ERROR_RECORD_NUM; i++)
+                    for (uint16_t i = 0; i < ERROR_RECORD_NUM; i++)
                     {
                         p_AppErrorRecordsList[i] = kFlashHistoricalInfo.Error_records_list[i];
                     }
                 }
                 break;
             case FLASH_STORE_CMD_WRITE_ERROR:
-                for (int i = 0; i < ERROR_RECORD_NUM; i++) {
+                for (uint16_t i = 0; i < ERROR_RECORD_NUM; i++)
+                {
                     kFlashHistoricalInfo.Error_records_list[i] = p_AppErrorRecordsList[i];
                 }
 
                 flashdb_status = bsp_flashdb_write(FLASHDB_KEY_INDEX_ERROR_RECORD);
                 break;
             case FLASH_STORE_CMD_ERASE_ERROR:
-                for (int i = 0; i < ERROR_RECORD_NUM; i++) {
+                for (uint16_t i = 0; i < ERROR_RECORD_NUM; i++)
+                {
                     p_AppErrorRecordsList[i] = 0;
                     kFlashHistoricalInfo.Error_records_list[i] = p_AppErrorRecordsList[i];
                 }
 
                 flashdb_status = bsp_flashdb_write(FLASHDB_KEY_INDEX_ERROR_RECORD);
                 break;
-
+            // 转矩摩擦补偿表相关
+            case FLASH_STORE_CMD_READ_TQ_FC:
+                flashdb_status = bsp_flashdb_read(FLASHDB_KEY_INDEX_TQ_FC_TABLE);
+                break;
+            case FLASH_STORE_CMD_WRITE_TQ_FC:
+                flashdb_status = bsp_flashdb_write(FLASHDB_KEY_INDEX_TQ_FC_TABLE);
+                break;
+            case FLASH_STORE_CMD_ERASE_TQ_FC:
+                flashdb_status = bsp_flashdb_key_delete(FLASHDB_KEY_INDEX_TQ_FC_TABLE);
+                break;
             default:
                 flashdb_status = FLASHDB_PART_NOT_FOUND;
                 break;

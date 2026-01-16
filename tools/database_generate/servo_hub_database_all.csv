@@ -255,9 +255,9 @@ pos_cmd_p,位置指令值,TqFcIdOutput,RO,int64,1,0,p,196,,Visible,1,,,,,,
 pos_abs_p,当前转子绝对位置,TqFcIdInput,RO,uint32,1,0,p,197,,Visible,1,,,,,,
 pos_init_p,电机初始位置,TqFcIdInput,RO,int64,1,0,p,198,,Visible,1,,,,,,
 start,启动辨识指令,TqFcIdInput,RO,uint8,1,0,,199,,Visible,1,,,,,,
-iq_com_enable,使能负载扰动补偿开关,TqFcIdOutput,RO,uint8,1,0,,201,,Visible,1,,,,,,
-tq_com_enable,使能转矩脉动补偿开关,TqFcIdOutput,RO,uint8,1,0,,202,,Visible,1,,,,,,
-fc_com_enable,使能摩擦补偿开关,TqFcIdOutput,RO,uint8,1,0,,203,,Visible,1,,,,,,
+iq_com_enable,使能负载扰动补偿开关,TqFcIdOutput,RW,uint8,1,0,,201,,Visible,1,1,,,,,
+tq_com_enable,使能转矩脉动补偿开关,TqFcIdOutput,RW,uint8,1,0,,202,,Visible,1,1,,,,,
+fc_com_enable,使能摩擦补偿开关,TqFcIdOutput,RW,uint8,1,0,,203,,Visible,1,1,,,,,
 state_now,当前辨识状态,TqFcIdOutput,RO,int8,1,0,,204,,Visible,1,,,,,,
 motor_enable_last,电机使能控制上一个周期的值,MotorCtlSmOutput,RO,uint8,1,0,,205,"0：失能电机 PWM 关闭 自由释放电机
 1：使能电机 PWM开启 电机受控状态
@@ -322,7 +322,8 @@ bit17-电机过温;
 bit18-电机欠温;
 bit19-MCU过温;
 bit20-MCU欠温;",Visible,,,1,,,,Error_code
-Modes_of_operation,运行模式,AppOpMode,RW,int8,1,,,238," -5：机械特性辨识模式
+Modes_of_operation,运行模式,AppOpMode,RW,int8,1,,,238," -6：转矩脉动与摩擦辨识模式
+ -5：机械特性辨识模式
  -4：电角度辨识模式
  -3：方向辨识模式
  -2：极对数辨识模式
@@ -454,6 +455,8 @@ Sys_cmd,系统指令,SystemCmd,RW,uint8,1,0,,420,"0: 无动作
 1: 当前位置回零
 2：参数保存到FLASH
 3：系统软件复位
+4：保存转矩脉动摩擦补偿表
+253：清除转矩脉动摩擦补偿表
 254：清除错误记录
 255：恢复出厂设置",Visible,,,1,,,1,
 Motor_encoder_type,电机端编码器类型,AppEncoderConfig,RW,uint8,1,,,421,"0：ABZ编码器

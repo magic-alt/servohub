@@ -614,6 +614,11 @@
               <FilePath>..\..\..\app\Identify\app_id_pole_pairs_mode.c</FilePath>
             </File>
             <File>
+              <FileName>app_id_tq_fc_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\Identify\app_id_tq_fc_mode.c</FilePath>
+            </File>
+            <File>
               <FileName>app_homing_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_homing_mode.c</FilePath>
@@ -689,9 +694,9 @@
               <FilePath>..\Board\bsp_fdcan.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_spi_flash.c</FileName>
+              <FileName>bsp_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\bsp_spi_flash.c</FilePath>
+              <FilePath>..\Board\bsp_flash.c</FilePath>
             </File>
             <File>
               <FileName>drv_can_app.c</FileName>
@@ -704,9 +709,9 @@
               <FilePath>..\Board\drv_encoder.c</FilePath>
             </File>
             <File>
-              <FileName>drv_spi_flash.c</FileName>
+              <FileName>drv_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\drv_spi_flash.c</FilePath>
+              <FilePath>..\Board\drv_flash.c</FilePath>
             </File>
             <File>
               <FileName>system_timer.c</FileName>
@@ -1773,6 +1778,11 @@
               <FilePath>..\..\..\app\Identify\app_id_pole_pairs_mode.c</FilePath>
             </File>
             <File>
+              <FileName>app_id_tq_fc_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\Identify\app_id_tq_fc_mode.c</FilePath>
+            </File>
+            <File>
               <FileName>app_homing_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_homing_mode.c</FilePath>
@@ -1848,9 +1858,9 @@
               <FilePath>..\Board\bsp_fdcan.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_spi_flash.c</FileName>
+              <FileName>bsp_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\bsp_spi_flash.c</FilePath>
+              <FilePath>..\Board\bsp_flash.c</FilePath>
             </File>
             <File>
               <FileName>drv_can_app.c</FileName>
@@ -1863,9 +1873,9 @@
               <FilePath>..\Board\drv_encoder.c</FilePath>
             </File>
             <File>
-              <FileName>drv_spi_flash.c</FileName>
+              <FileName>drv_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\drv_spi_flash.c</FilePath>
+              <FilePath>..\Board\drv_flash.c</FilePath>
             </File>
             <File>
               <FileName>system_timer.c</FileName>
@@ -3070,6 +3080,11 @@
               <FilePath>..\..\..\app\Identify\app_id_pole_pairs_mode.c</FilePath>
             </File>
             <File>
+              <FileName>app_id_tq_fc_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\Identify\app_id_tq_fc_mode.c</FilePath>
+            </File>
+            <File>
               <FileName>app_homing_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_homing_mode.c</FilePath>
@@ -3145,9 +3160,9 @@
               <FilePath>..\Board\bsp_fdcan.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_spi_flash.c</FileName>
+              <FileName>bsp_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\bsp_spi_flash.c</FilePath>
+              <FilePath>..\Board\bsp_flash.c</FilePath>
             </File>
             <File>
               <FileName>drv_can_app.c</FileName>
@@ -3160,9 +3175,9 @@
               <FilePath>..\Board\drv_encoder.c</FilePath>
             </File>
             <File>
-              <FileName>drv_spi_flash.c</FileName>
+              <FileName>drv_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\drv_spi_flash.c</FilePath>
+              <FilePath>..\Board\drv_flash.c</FilePath>
             </File>
             <File>
               <FileName>system_timer.c</FileName>
@@ -4367,6 +4382,11 @@
               <FilePath>..\..\..\app\Identify\app_id_pole_pairs_mode.c</FilePath>
             </File>
             <File>
+              <FileName>app_id_tq_fc_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\Identify\app_id_tq_fc_mode.c</FilePath>
+            </File>
+            <File>
               <FileName>app_homing_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_homing_mode.c</FilePath>
@@ -4442,9 +4462,9 @@
               <FilePath>..\Board\bsp_fdcan.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_spi_flash.c</FileName>
+              <FileName>bsp_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\bsp_spi_flash.c</FilePath>
+              <FilePath>..\Board\bsp_flash.c</FilePath>
             </File>
             <File>
               <FileName>drv_can_app.c</FileName>
@@ -4457,9 +4477,9 @@
               <FilePath>..\Board\drv_encoder.c</FilePath>
             </File>
             <File>
-              <FileName>drv_spi_flash.c</FileName>
+              <FileName>drv_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\drv_spi_flash.c</FilePath>
+              <FilePath>..\Board\drv_flash.c</FilePath>
             </File>
             <File>
               <FileName>system_timer.c</FileName>
@@ -5664,6 +5684,11 @@
               <FilePath>..\..\..\app\Identify\app_id_pole_pairs_mode.c</FilePath>
             </File>
             <File>
+              <FileName>app_id_tq_fc_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\Identify\app_id_tq_fc_mode.c</FilePath>
+            </File>
+            <File>
               <FileName>app_homing_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_homing_mode.c</FilePath>
@@ -5739,9 +5764,9 @@
               <FilePath>..\Board\bsp_fdcan.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_spi_flash.c</FileName>
+              <FileName>bsp_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\bsp_spi_flash.c</FilePath>
+              <FilePath>..\Board\bsp_flash.c</FilePath>
             </File>
             <File>
               <FileName>drv_can_app.c</FileName>
@@ -5754,9 +5779,9 @@
               <FilePath>..\Board\drv_encoder.c</FilePath>
             </File>
             <File>
-              <FileName>drv_spi_flash.c</FileName>
+              <FileName>drv_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\drv_spi_flash.c</FilePath>
+              <FilePath>..\Board\drv_flash.c</FilePath>
             </File>
             <File>
               <FileName>system_timer.c</FileName>
@@ -6961,6 +6986,11 @@
               <FilePath>..\..\..\app\Identify\app_id_pole_pairs_mode.c</FilePath>
             </File>
             <File>
+              <FileName>app_id_tq_fc_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\Identify\app_id_tq_fc_mode.c</FilePath>
+            </File>
+            <File>
               <FileName>app_homing_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_homing_mode.c</FilePath>
@@ -7036,9 +7066,9 @@
               <FilePath>..\Board\bsp_fdcan.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_spi_flash.c</FileName>
+              <FileName>bsp_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\bsp_spi_flash.c</FilePath>
+              <FilePath>..\Board\bsp_flash.c</FilePath>
             </File>
             <File>
               <FileName>drv_can_app.c</FileName>
@@ -7051,9 +7081,9 @@
               <FilePath>..\Board\drv_encoder.c</FilePath>
             </File>
             <File>
-              <FileName>drv_spi_flash.c</FileName>
+              <FileName>drv_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\drv_spi_flash.c</FilePath>
+              <FilePath>..\Board\drv_flash.c</FilePath>
             </File>
             <File>
               <FileName>system_timer.c</FileName>
