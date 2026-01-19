@@ -6,56 +6,13 @@
 
 #include "data.h"
 #include "drv_can_app.h"
+
 /* Prototypes of function provided by object dictionnary */
 UNS32 SlaveOD_valueRangeTest (UNS8 typeValue, void * value);
 const indextable * SlaveOD_scanIndexOD (CO_Data *d, UNS16 wIndex, UNS32 * errorCode);
 
 /* Master node data struct */
 extern CO_Data SlaveOD_Data;
-extern UNS32 AlarmWord;		/* Mapped at index 0x3000, subindex 0x00*/
-extern INTEGER32 MIT_Feed_Torque_Current;		/* Mapped at index 0x3001, subindex 0x00*/
-extern INTEGER32 MIT_Target_Position;		/* Mapped at index 0x3002, subindex 0x00*/
-extern INTEGER32 MIT_Max_Current;		/* Mapped at index 0x3003, subindex 0x00*/
-extern INTEGER32 MIT_Target_Velicity;		/* Mapped at index 0x3004, subindex 0x00*/
-extern UNS32 MIT_Kp;		/* Mapped at index 0x3005, subindex 0x00*/
-extern UNS32 MIT_Kd;		/* Mapped at index 0x3006, subindex 0x00*/
-extern UNS8 System_Command;		/* Mapped at index 0x3007, subindex 0x00*/
-extern INTEGER8 Storage_State;		/* Mapped at index 0x3008, subindex 0x00*/
-extern UNS16 Notch_Filter_Frequency_Notch_Filter_Frequency_0;		/* Mapped at index 0x3009, subindex 0x01 */
-extern UNS16 Notch_Filter_Frequency_Notch_Filter_Frequency_1;		/* Mapped at index 0x3009, subindex 0x02 */
-extern UNS16 Notch_Filter_Frequency_Notch_Filter_Frequency_2;		/* Mapped at index 0x3009, subindex 0x03 */
-extern UNS16 Notch_Filter_Frequency_Notch_Filter_Frequency_3;		/* Mapped at index 0x3009, subindex 0x04 */
-extern UNS16 Notch_Filter_Frequency_Notch_Filter_Frequency_4;		/* Mapped at index 0x3009, subindex 0x05 */
-extern UNS16 Notch_Filter_Frequency_Notch_Filter_Frequency_5;		/* Mapped at index 0x3009, subindex 0x06 */
-extern UNS16 Notch_Filter_Width_Notch_Filter_Width_0;		/* Mapped at index 0x300A, subindex 0x01 */
-extern UNS16 Notch_Filter_Width_Notch_Filter_Width_1;		/* Mapped at index 0x300A, subindex 0x02 */
-extern UNS16 Notch_Filter_Width_Notch_Filter_Width_2;		/* Mapped at index 0x300A, subindex 0x03 */
-extern UNS16 Notch_Filter_Width_Notch_Filter_Width_3;		/* Mapped at index 0x300A, subindex 0x04 */
-extern UNS16 Notch_Filter_Width_Notch_Filter_Width_4;		/* Mapped at index 0x300A, subindex 0x05 */
-extern UNS16 Notch_Filter_Width_Notch_Filter_Width_5;		/* Mapped at index 0x300A, subindex 0x06 */
-extern UNS16 Notch_Filter_Depth_Notch_Filter_Depth_0;		/* Mapped at index 0x300B, subindex 0x01 */
-extern UNS16 Notch_Filter_Depth_Notch_Filter_Depth_1;		/* Mapped at index 0x300B, subindex 0x02 */
-extern UNS16 Notch_Filter_Depth_Notch_Filter_Depth_2;		/* Mapped at index 0x300B, subindex 0x03 */
-extern UNS16 Notch_Filter_Depth_Notch_Filter_Depth_3;		/* Mapped at index 0x300B, subindex 0x04 */
-extern UNS16 Notch_Filter_Depth_Notch_Filter_Depth_4;		/* Mapped at index 0x300B, subindex 0x05 */
-extern UNS16 Notch_Filter_Depth_Notch_Filter_Depth_5;		/* Mapped at index 0x300B, subindex 0x06 */
-extern UNS16 Input_shaping_wn;		/* Mapped at index 0x300C, subindex 0x00*/
-extern UNS16 Pos_speed_ctl_aff;		/* Mapped at index 0x300D, subindex 0x00*/
-extern UNS16 Pos_speed_ctl_vff;		/* Mapped at index 0x300E, subindex 0x00*/
-extern UNS32 Pos_speed_ctl_j_kt;		/* Mapped at index 0x300F, subindex 0x00*/
-extern UNS32 Pos_speed_ctl_ki_s;		/* Mapped at index 0x3010, subindex 0x00*/
-extern UNS16 Pos_speed_ctl_kp_p;		/* Mapped at index 0x3011, subindex 0x00*/
-extern UNS32 Pos_speed_ctl_kp_s;		/* Mapped at index 0x3012, subindex 0x00*/
-extern UNS16 Pos_speed_ctl_dob_wn;		/* Mapped at index 0x3013, subindex 0x00*/
-extern UNS8 Pos_speed_ctl_dob_enable;		/* Mapped at index 0x3014, subindex 0x00*/
-extern UNS16 Current_ctl_i_noise;		/* Mapped at index 0x3015, subindex 0x00*/
-extern UNS16 Current_ctl_comp_du;		/* Mapped at index 0x3016, subindex 0x00*/
-extern UNS16 Current_ctl_bandwidth_percentage;		/* Mapped at index 0x3017, subindex 0x00*/
-extern UNS16 Current_ctl_kp_ld;		/* Mapped at index 0x3018, subindex 0x00*/
-extern UNS16 Current_ctl_ki_ld;		/* Mapped at index 0x3019, subindex 0x00*/
-extern UNS16 Current_ctl_kp_lq;		/* Mapped at index 0x3020, subindex 0x00*/
-extern UNS16 Current_ctl_ki_lq;		/* Mapped at index 0x3021, subindex 0x00*/
-extern UNS16 Speed_obs_pll_wn;		/* Mapped at index 0x3022, subindex 0x00*/
 extern UNS16 ErrorCode;		/* Mapped at index 0x603F, subindex 0x00*/
 extern UNS16 Controlword;		/* Mapped at index 0x6040, subindex 0x00*/
 extern UNS16 Statusword;		/* Mapped at index 0x6041, subindex 0x00*/

@@ -4,11 +4,11 @@ FileVersion=1
 FileRevision=1
 EDSVersion=4.0
 Description=
-CreationTime=05:52PM
-CreationDate=07-21-2025
+CreationTime=03:50PM
+CreationDate=01-19-2026
 CreatedBy=CANFestival
-ModificationTime=05:52PM
-ModificationDate=07-21-2025
+ModificationTime=03:50PM
+ModificationDate=01-19-2026
 ModifiedBy=CANFestival
 
 [DeviceInfo]
@@ -75,7 +75,7 @@ ObjectType=0x9
 SubNumber=5
 
 [1018sub0]
-ParameterName=Number of Entries
+ParameterName=Number of entries
 ObjectType=0x7
 DataType=0x0005
 AccessType=ro
@@ -198,7 +198,7 @@ ObjectType=0x8
 SubNumber=2
 
 [1016sub0]
-ParameterName=Number of Entries
+ParameterName=Number of entries
 ObjectType=0x7
 DataType=0x0005
 AccessType=ro
@@ -227,7 +227,7 @@ ObjectType=0x9
 SubNumber=3
 
 [1200sub0]
-ParameterName=Number of Entries
+ParameterName=Number of entries
 ObjectType=0x7
 DataType=0x0005
 AccessType=ro
@@ -468,7 +468,7 @@ ObjectType=0x8
 SubNumber=9
 
 [1600sub0]
-ParameterName=Number of Entries
+ParameterName=Number of entries
 ObjectType=0x7
 DataType=0x0005
 AccessType=rw
@@ -545,7 +545,7 @@ ObjectType=0x8
 SubNumber=9
 
 [1601sub0]
-ParameterName=Number of Entries
+ParameterName=Number of entries
 ObjectType=0x7
 DataType=0x0005
 AccessType=rw
@@ -622,7 +622,7 @@ ObjectType=0x8
 SubNumber=9
 
 [1602sub0]
-ParameterName=Number of Entries
+ParameterName=Number of entries
 ObjectType=0x7
 DataType=0x0005
 AccessType=rw
@@ -699,7 +699,7 @@ ObjectType=0x8
 SubNumber=9
 
 [1603sub0]
-ParameterName=Number of Entries
+ParameterName=Number of entries
 ObjectType=0x7
 DataType=0x0005
 AccessType=rw
@@ -988,7 +988,7 @@ ObjectType=0x8
 SubNumber=9
 
 [1A00sub0]
-ParameterName=Number of Entries
+ParameterName=Number of entries
 ObjectType=0x7
 DataType=0x0005
 AccessType=rw
@@ -1065,7 +1065,7 @@ ObjectType=0x8
 SubNumber=9
 
 [1A01sub0]
-ParameterName=Number of Entries
+ParameterName=Number of entries
 ObjectType=0x7
 DataType=0x0005
 AccessType=rw
@@ -1142,7 +1142,7 @@ ObjectType=0x8
 SubNumber=9
 
 [1A02sub0]
-ParameterName=Number of Entries
+ParameterName=Number of entries
 ObjectType=0x7
 DataType=0x0005
 AccessType=rw
@@ -1219,7 +1219,7 @@ ObjectType=0x8
 SubNumber=9
 
 [1A03sub0]
-ParameterName=Number of Entries
+ParameterName=Number of entries
 ObjectType=0x7
 DataType=0x0005
 AccessType=rw
@@ -1290,6 +1290,9 @@ AccessType=rw
 DefaultValue=0
 PDOMapping=0
 
+
+[ManufacturerObjects]
+SupportedObjects=0
 [603F]
 ParameterName=ErrorCode
 ObjectType=0x7
@@ -1746,429 +1749,6 @@ PDOMapping=1
 ParameterName=Target velocity
 ObjectType=0x7
 DataType=0x0004
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[ManufacturerObjects]
-SupportedObjects=29
-1=0x3000
-2=0x3001
-3=0x3002
-4=0x3003
-5=0x3004
-6=0x3005
-7=0x3006
-8=0x3007
-9=0x3008
-10=0x3009
-11=0x300A
-12=0x300B
-13=0x300C
-14=0x300D
-15=0x300E
-16=0x300F
-17=0x3010
-18=0x3011
-19=0x3012
-20=0x3013
-21=0x3014
-22=0x3015
-23=0x3016
-24=0x3017
-25=0x3018
-26=0x3019
-27=0x3020
-28=0x3021
-29=0x3022
-
-[3000]
-ParameterName=AlarmWord
-ObjectType=0x7
-DataType=0x0007
-AccessType=ro
-DefaultValue=0
-PDOMapping=1
-
-[3001]
-ParameterName=MIT Feed Torque Current
-ObjectType=0x7
-DataType=0x0004
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3002]
-ParameterName=MIT Target Position
-ObjectType=0x7
-DataType=0x0004
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3003]
-ParameterName=MIT Max Current
-ObjectType=0x7
-DataType=0x0004
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3004]
-ParameterName=MIT Target Velicity
-ObjectType=0x7
-DataType=0x0004
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3005]
-ParameterName=MIT Kp
-ObjectType=0x7
-DataType=0x0007
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3006]
-ParameterName=MIT Kd
-ObjectType=0x7
-DataType=0x0007
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3007]
-ParameterName=System Command
-ObjectType=0x7
-DataType=0x0005
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3008]
-ParameterName=Storage State
-ObjectType=0x7
-DataType=0x0002
-AccessType=ro
-DefaultValue=0
-PDOMapping=1
-
-[3009]
-ParameterName=Notch Filter Frequency
-ObjectType=0x9
-SubNumber=7
-
-[3009sub0]
-ParameterName=Number of entries
-ObjectType=0x7
-DataType=0x0005
-AccessType=ro
-DefaultValue=6
-PDOMapping=0
-
-[3009sub1]
-ParameterName=Notch Filter Frequency 0
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3009sub2]
-ParameterName=Notch Filter Frequency 1 
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3009sub3]
-ParameterName=Notch Filter Frequency 2
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3009sub4]
-ParameterName=Notch Filter Frequency 3
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3009sub5]
-ParameterName=Notch Filter Frequency 4
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3009sub6]
-ParameterName=Notch Filter Frequency 5
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300A]
-ParameterName=Notch Filter Width
-ObjectType=0x9
-SubNumber=7
-
-[300Asub0]
-ParameterName=Number of entries
-ObjectType=0x7
-DataType=0x0005
-AccessType=ro
-DefaultValue=6
-PDOMapping=0
-
-[300Asub1]
-ParameterName=Notch Filter Width 0
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300Asub2]
-ParameterName=Notch Filter Width 1 
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300Asub3]
-ParameterName=Notch Filter Width 2
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300Asub4]
-ParameterName=Notch Filter Width 3
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300Asub5]
-ParameterName=Notch Filter Width 4
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300Asub6]
-ParameterName=Notch Filter Width 5
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300B]
-ParameterName=Notch Filter Depth
-ObjectType=0x9
-SubNumber=7
-
-[300Bsub0]
-ParameterName=Number of entries
-ObjectType=0x7
-DataType=0x0005
-AccessType=ro
-DefaultValue=6
-PDOMapping=0
-
-[300Bsub1]
-ParameterName=Notch Filter Depth 0
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300Bsub2]
-ParameterName=Notch Filter Depth 1 
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300Bsub3]
-ParameterName=Notch Filter Depth 2
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300Bsub4]
-ParameterName=Notch Filter Depth 3
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300Bsub5]
-ParameterName=Notch Filter Depth 4
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300Bsub6]
-ParameterName=Notch Filter Depth 5
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300C]
-ParameterName=Input shaping wn
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300D]
-ParameterName=Pos speed ctl aff
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300E]
-ParameterName=Pos speed ctl vff
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[300F]
-ParameterName=Pos speed ctl j kt
-ObjectType=0x7
-DataType=0x0007
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3010]
-ParameterName=Pos speed ctl ki s
-ObjectType=0x7
-DataType=0x0007
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3011]
-ParameterName=Pos speed ctl kp p
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3012]
-ParameterName=Pos speed ctl kp s
-ObjectType=0x7
-DataType=0x0007
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3013]
-ParameterName=Pos speed ctl dob wn
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3014]
-ParameterName=Pos speed ctl dob enable
-ObjectType=0x7
-DataType=0x0005
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3015]
-ParameterName=Current ctl i noise
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3016]
-ParameterName=Current ctl comp du
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3017]
-ParameterName=Current ctl bandwidth percentage
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3018]
-ParameterName=Current ctl kp ld
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3019]
-ParameterName=Current ctl ki ld
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3020]
-ParameterName=Current ctl kp lq
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3021]
-ParameterName=Current ctl ki lq
-ObjectType=0x7
-DataType=0x0006
-AccessType=rw
-DefaultValue=0
-PDOMapping=1
-
-[3022]
-ParameterName=Speed obs pll wn
-ObjectType=0x7
-DataType=0x0006
 AccessType=rw
 DefaultValue=0
 PDOMapping=1
