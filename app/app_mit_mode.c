@@ -39,35 +39,46 @@ AppResult MitModeRun()
 
     if (kMitMode.now_Controlword == APP_CTRL_ENABLE)
     {
-        if (kMitMode.pre_Controlword == APP_CTRL_DISABLE)
+        if (!get_app_Emergency_brake_requested())
         {
-            // 重新使能后初始化规划器
-            kMitMode.traj.iq_max_A = get_app_MIT_max_current();
-            MitTrajectoryPlanningInit(&kMitMode.traj);
-        }
+            if (kMitMode.pre_Controlword == APP_CTRL_DISABLE)
+            {
+                // 重新使能后初始化规划器
+                kMitMode.traj.iq_max_A = get_app_MIT_max_current();
+                MitTrajectoryPlanningInit(&kMitMode.traj);
+            }
 
-        if (get_app_Halt_running_cmd() == true)
-        {
-            kMitMode.traj.pos_tar_p = get_app_Motor_position_actual_value();
-            kMitMode.traj.speed_tar_p_s = 0;
+            if (get_app_Halt_running_cmd() == true)
+            {
+                kMitMode.traj.pos_tar_p = get_app_Motor_position_actual_value();
+                kMitMode.traj.speed_tar_p_s = 0;
+            }
+            else
+            {
+                kMitMode.pos_tar_p_add = (float)(get_app_MIT_target_position() - get_app_Position_actual_value()) *
+                                         get_app_Reduction_ratio();
+                kMitMode.traj.pos_tar_p = kMitMode.pos_tar_p_add + get_app_Motor_position_actual_value();
+
+                kMitMode.traj.speed_tar_p_s = get_app_MIT_target_velocity() * get_app_Motor_rpm_2_pps() *
+                                              get_app_Reduction_ratio();
+            }
+
+            kMitMode.traj.iq_max_A = get_app_MIT_max_current();
+            kMitMode.traj.tq_set_NM = get_app_MIT_feedforward_torque() * get_app_Reduction_ratio_inv(); // 负载端转矩  转化 为电机端
+            kMitMode.traj.kp_pos_NM_rad = get_app_MIT_kp() * get_app_Reduction_ratio_inv();             // 转化为电机端增益
+            kMitMode.traj.kd_spd_NM_rad_s = get_app_MIT_kd() * get_app_Reduction_ratio_inv();           // 转化为电机端增益
         }
         else
         {
-            kMitMode.pos_tar_p_add = (float)(get_app_MIT_target_position() - get_app_Position_actual_value()) *
-                                     get_app_Reduction_ratio();
-            kMitMode.traj.pos_tar_p = kMitMode.pos_tar_p_add + get_app_Motor_position_actual_value();
-
-            kMitMode.traj.speed_tar_p_s = get_app_MIT_target_velocity() * get_app_Motor_rpm_2_pps() *
-                                          get_app_Reduction_ratio();
+            set_app_Controlword(APP_CTRL_EMERGENCY_BRAKE); // 强制进入紧急停车（QuickStop）状态
+            kMitMode.now_Controlword = APP_CTRL_EMERGENCY_BRAKE;
         }
-
-        kMitMode.traj.iq_max_A = get_app_MIT_max_current();
-        kMitMode.traj.tq_set_NM = get_app_MIT_feedforward_torque() * get_app_Reduction_ratio_inv(); // 负载端转矩  转化 为电机端
-        kMitMode.traj.kp_pos_NM_rad = get_app_MIT_kp() * get_app_Reduction_ratio_inv();             // 转化为电机端增益
-        kMitMode.traj.kd_spd_NM_rad_s = get_app_MIT_kd() * get_app_Reduction_ratio_inv();           // 转化为电机端增益
     }
-    else if (kMitMode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
+
+    // 紧急停车（QuickStop）处理
+    if (kMitMode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
     {
+        kMitMode.traj.pos_tar_p = get_app_Motor_position_actual_value();
         kMitMode.traj.speed_tar_p_s = 0; // 如果处于急停状态，规划速度为0
 
         kMitMode.emergency_brake_mode = get_app_Quick_stop_option_code();

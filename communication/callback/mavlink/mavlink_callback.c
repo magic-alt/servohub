@@ -503,6 +503,7 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 app_status_info_t.Motor_temperature = get_app_Motor_temperature();
                 app_status_info_t.Motor_power = get_app_Motor_power();
                 app_status_info_t.Mcu_temperature = get_app_Mcu_temperature();
+                app_status_info_t.Digital_io_inputs_status = get_app_Digital_io_inputs_status();
                 mavlink_msg_appstatusinfo_encode(0, 0, &send_msg, (mavlink_appstatusinfo_t *)&app_status_info_t);
                 break;
             case MAVLINK_MSG_ID_AppOpMode:
@@ -536,6 +537,8 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 app_base_config_t.Brake_release_time = get_app_Brake_release_time();
                 app_base_config_t.Dynamic_brake_speed_threshold = get_app_Dynamic_brake_speed_threshold();
                 app_base_config_t.Brake_release_hold_voltage = get_app_Brake_release_hold_voltage();
+                app_base_config_t.Digital_io_outputs_phys = get_app_Digital_io_outputs_phys();
+                app_base_config_t.Digital_io_outputs_mask = get_app_Digital_io_outputs_mask();
                 mavlink_msg_appbaseconfig_encode(0, 0, &send_msg, (mavlink_appbaseconfig_t *)&app_base_config_t);
                 break;
             case MAVLINK_MSG_ID_AppMotionParam:
@@ -557,6 +560,7 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 app_motion_param_t.MIT_target_velocity = get_app_MIT_target_velocity();
                 app_motion_param_t.MIT_kp = get_app_MIT_kp();
                 app_motion_param_t.MIT_kd = get_app_MIT_kd();
+                app_motion_param_t.Emergency_brake_requested = get_app_Emergency_brake_requested();
                 mavlink_msg_appmotionparam_encode(0, 0, &send_msg, (mavlink_appmotionparam_t *)&app_motion_param_t);
                 break;
             case MAVLINK_MSG_ID_AppRestrictParam:
@@ -569,6 +573,7 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 app_restrict_param_t.Max_acceleration = get_app_Max_acceleration();
                 app_restrict_param_t.Max_deceleration = get_app_Max_deceleration();
                 app_restrict_param_t.Max_current = get_app_Max_current();
+                app_restrict_param_t.Position_limit_enable = get_app_Position_limit_enable();
                 mavlink_msg_apprestrictparam_encode(0, 0, &send_msg, (mavlink_apprestrictparam_t *)&app_restrict_param_t);
                 break;
             case MAVLINK_MSG_ID_AppMotionInfo:
@@ -1195,6 +1200,8 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 app_status_info_t.Motor_power = get_app_Motor_power();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Mcu_temperature(app_status_info_t.Mcu_temperature);}
                 app_status_info_t.Mcu_temperature = get_app_Mcu_temperature();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Digital_io_inputs_status(app_status_info_t.Digital_io_inputs_status);}
+                app_status_info_t.Digital_io_inputs_status = get_app_Digital_io_inputs_status();
                 mavlink_msg_appstatusinfo_encode(0, 0, &send_msg, (mavlink_appstatusinfo_t *)&app_status_info_t);
                 break;
             case MAVLINK_MSG_ID_AppOpMode:
@@ -1255,6 +1262,10 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 app_base_config_t.Dynamic_brake_speed_threshold = get_app_Dynamic_brake_speed_threshold();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Brake_release_hold_voltage(app_base_config_t.Brake_release_hold_voltage);}
                 app_base_config_t.Brake_release_hold_voltage = get_app_Brake_release_hold_voltage();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Digital_io_outputs_phys(app_base_config_t.Digital_io_outputs_phys);}
+                app_base_config_t.Digital_io_outputs_phys = get_app_Digital_io_outputs_phys();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Digital_io_outputs_mask(app_base_config_t.Digital_io_outputs_mask);}
+                app_base_config_t.Digital_io_outputs_mask = get_app_Digital_io_outputs_mask();
                 mavlink_msg_appbaseconfig_encode(0, 0, &send_msg, (mavlink_appbaseconfig_t *)&app_base_config_t);
                 break;
             case MAVLINK_MSG_ID_AppMotionParam:
@@ -1295,6 +1306,8 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 app_motion_param_t.MIT_kp = get_app_MIT_kp();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_MIT_kd(app_motion_param_t.MIT_kd);}
                 app_motion_param_t.MIT_kd = get_app_MIT_kd();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Emergency_brake_requested(app_motion_param_t.Emergency_brake_requested);}
+                app_motion_param_t.Emergency_brake_requested = get_app_Emergency_brake_requested();
                 mavlink_msg_appmotionparam_encode(0, 0, &send_msg, (mavlink_appmotionparam_t *)&app_motion_param_t);
                 break;
             case MAVLINK_MSG_ID_AppRestrictParam:
@@ -1317,6 +1330,8 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 app_restrict_param_t.Max_deceleration = get_app_Max_deceleration();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Max_current(app_restrict_param_t.Max_current);}
                 app_restrict_param_t.Max_current = get_app_Max_current();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Position_limit_enable(app_restrict_param_t.Position_limit_enable);}
+                app_restrict_param_t.Position_limit_enable = get_app_Position_limit_enable();
                 mavlink_msg_apprestrictparam_encode(0, 0, &send_msg, (mavlink_apprestrictparam_t *)&app_restrict_param_t);
                 break;
             case MAVLINK_MSG_ID_AppMotionInfo:

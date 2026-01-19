@@ -33,23 +33,33 @@ AppResult PtModeRun()
 
     if (kPtMode.now_Controlword == APP_CTRL_ENABLE)
     {
-        if (kPtMode.pre_Controlword == APP_CTRL_DISABLE)
+        if (!get_app_Emergency_brake_requested())
         {
-            // 重新使能后初始化规划器
-            TorqueTrajectoryPlanningInit();
-        }
+            if (kPtMode.pre_Controlword == APP_CTRL_DISABLE)
+            {
+                // 重新使能后初始化规划器
+                TorqueTrajectoryPlanningInit();
+            }
 
-        if (get_app_Halt_running_cmd() == true)
-        {
-            kPtMode.traj.torque_tar = 0;
+            if (get_app_Halt_running_cmd() == true)
+            {
+                kPtMode.traj.torque_tar = 0;
+            }
+            else
+            {
+                kPtMode.traj.torque_tar = get_app_Target_torque();
+                kPtMode.traj.slope = get_app_Torque_slope();
+            }
         }
         else
         {
-            kPtMode.traj.torque_tar = get_app_Target_torque();
-            kPtMode.traj.slope = get_app_Torque_slope();
+            set_app_Controlword(APP_CTRL_EMERGENCY_BRAKE); // 强制进入紧急停车（QuickStop）状态
+            kPtMode.now_Controlword = APP_CTRL_EMERGENCY_BRAKE;
         }
     }
-    else if (kPtMode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
+
+    // 紧急停车（QuickStop）处理
+    if (kPtMode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
     {
         kPtMode.traj.torque_tar = 0; // 如果处于急停状态，规划器目标力矩为0
 

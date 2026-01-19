@@ -522,6 +522,47 @@ FLASHDB_STATUS bsp_flashdb_key_delete(FLASHDB_KEY_INDEX const index)
 
 #pragma region 其它
 /**
+ * @brief 获取数字输入IO状态
+ * @param[in] io 目标数字输入IO名称
+ * @retval false 无效电平
+ * @retval true  有效电平
+ * @note
+ */
+bool bsp_get_digital_input_state(DIGITAL_INPUTS_IO const io)
+{
+    switch (io)
+    {
+    case DI_IO_NEGATIVE_LIMIT_SWITCH:
+        return (DI_IO_NEGATIVE_LIMIT_SWITCH_READ() == DI_IO_NEGATIVE_LIMIT_SWITCH_LEVEL);
+    case DI_IO_POSITIVE_LIMIT_SWITCH:
+        return (DI_IO_POSITIVE_LIMIT_SWITCH_READ() == DI_IO_POSITIVE_LIMIT_SWITCH_LEVEL);
+    case DI_IO_HOME_SWITCH:
+        return (DI_IO_HOME_SWITCH_READ() == DI_IO_HOME_SWITCH_LEVEL);
+    case DI_IO_INTERLOCK:
+        return (DI_IO_INTERLOCK_READ() == DI_IO_INTERLOCK_LEVEL);
+    default:
+        return false;
+    };
+}
+/**
+ * @brief 设置数字输出IO状态
+ * @param[in] io 目标数字输出IO名称
+ * @param[in] state 目标数字输出IO有效状态 true:有效电平 false:无效电平
+ * @return
+ * @note
+ */
+void bsp_set_digital_output_state(DIGITAL_OUTPUTS_IO const io, bool state)
+{
+    switch (io)
+    {
+    case DO_IO_SET_BRAKE:
+        DO_IO_SET_BRAKE_WRITE(state ? DO_IO_SET_BRAKE_LEVEL : !DO_IO_SET_BRAKE_LEVEL);
+        break;
+    default:
+        break;
+    };
+}
+/**
  * @brief 系统阻塞us延时
  * @param[in] us 延时时间，单位us
  * @return

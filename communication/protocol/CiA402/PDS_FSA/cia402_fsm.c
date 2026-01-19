@@ -177,7 +177,8 @@ void Transition_10_Action() {
 
 //Quick stop command from control device or local signal
 bool Transition_11_Event() {
-    if(CIA402_READ_BIT(get_Controlword(), kOd6040_QuickStopMark) == kOd6040_QuickStop){
+    if (CIA402_READ_BIT(get_Controlword(), kOd6040_QuickStopMark) == kOd6040_QuickStop || \
+        get_app_Emergency_brake_requested()) {
         //The quick stop function shall be started,when is completed, into kQuickStopActive state
         // quickstop请求后不跳转，保持当前状态进行减速急停，急停完成后通过内部自动跳转到kQuickStopActive状态
         quick_stop_start_flag = true;
@@ -325,7 +326,12 @@ void ControlwordChange_PDAS_FSA(void){
 }
 
 //轮询状态机(中断或者任务中轮询)
-void PDS_FSA_Run(void){
+void PDS_FSA_Run(void) {
+
+    //内部紧急停车（QuickStop）需求，运行一次状态机更新进入QuickStop状态
+    if (CurrentState == kOperationEnable && get_app_Emergency_brake_requested()) {
+        ControlwordChange_PDAS_FSA();
+    }
 
     //任何状态触发错误，直接跳转到故障状态
     if(Transition_13_Event()) {
@@ -346,7 +352,7 @@ void PDS_FSA_Run(void){
         }
     }
 
-   //启动quick stop功能，在kOperationEnable完成急停动作后，由内部跳转到kQuickStopActive状态
+    //启动quick stop功能，在kOperationEnable完成急停动作后，由内部跳转到kQuickStopActive状态
     if (quick_stop_start_flag == true) {
         //如果quick stop动作已经完成，则跳转到kQuickStopActive状态
         if (QuickStopRun() == true) {

@@ -321,7 +321,8 @@ bit16-CAN总线掉线错误;
 bit17-电机过温;
 bit18-电机欠温;
 bit19-MCU过温;
-bit20-MCU欠温;",Visible,,,1,,,,Error_code
+bit20-MCU欠温;
+bit21-外部抑制输入检测错误",Visible,,,1,,,,Error_code
 Modes_of_operation,运行模式,AppOpMode,RW,int8,1,,,238," -6：转矩脉动与摩擦辨识模式
  -5：机械特性辨识模式
  -4：电角度辨识模式
@@ -411,7 +412,12 @@ bit2-电机过温警告;
 bit3-电机欠温警告;
 bit4-MCU过温警告;
 bit5-MCU欠温警告;
-bit6-电机NTC异常警告;",Visible,,,1,,,,
+bit6-电机NTC异常警告;
+bit7-保留位
+bit8-负向硬件限位警告;
+bit9-正向硬件限位警告;
+bit10-负向软件限位警告;
+bit11-正向软件限位警告;",Visible,,,1,,,,
 elec_angle_speed_rad_s,电角速度,CurrentCtlInput,RO,single,1,0,rad/s,382,电角速度,Visible,1,,,,,,
 elec_angle_compensation,电角度补偿系数,CurrentCtlConfig,RW,single,1,0,100%,383,补偿多少个电流环周期,Visible,1,1,,,,,
 Modes_of_operation_display,当前模式,AppStatusInfo,RO,int8,1,,,384,Modes_of_operation一致,Visible,,,1,,,,Modes_of_operation_display
@@ -608,3 +614,18 @@ Load_encoder_options,负载端编码器选项,AppEncoderConfig,RW,uint8,1,,,601,
 bit1：负载端计数方向；0-默认, 1-取反
 bit2：多圈值溢出坐标为0/分辨率；0：默认按±一半多圈分辨率溢出，1：按0/多圈分辨率溢出
 bit3：负载端单圈作为值电机端多圈值；0：默认正常双编码器，1：负载端编码器单圈值作为电机端编码器多圈值使用",Visible,0,1,1,0,,0,
+Position_limit_enable,位置限位使能开关,AppRestrictParam,RW,uint8,1,,,602,"0：关闭位置限位功能
+1：开启位置限位功能",Visible,,1,1,0,1,,
+Digital_io_inputs_status,数字IO输入状态,AppStatusInfo,RO,uint32,1,,,603,"bit0：负向硬件限位开关
+bit1：正向硬件限位开关
+bit2：回零开关
+bit3：互锁开关
+bit4~bit15：保留
+bit16~bit31：厂商自定义",Visible,,,1,,,,Digital_inputs
+Digital_io_outputs_phys,数字IO输出物理值,AppBaseConfig,RW,uint32,1,0,,605,"bit0：刹车（抱闸）
+bit1~bit15：保留
+bit16~bit31：厂商自定义",Visible,,1,1,,,,Digital_outputs_Physical_outputs
+Digital_io_outputs_mask,数字IO输出掩码,AppBaseConfig,RW,uint32,1,0,,606,"bit0：刹车（抱闸）
+bit1~bit15：保留
+bit16~bit31：厂商自定义",Visible,0,1,1,,,0,Digital_outputs_Bit_mask
+Emergency_brake_requested,紧急制动请求,AppMotionParam,RW,uint8,1,,,607,,Visible,,,1,0,1,,

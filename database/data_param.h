@@ -51,6 +51,7 @@ typedef struct
     float Motor_temperature; //电机当前温度
     float Motor_power; //电机当前功率
     float Mcu_temperature; //Mcu当前温度
+    uint32_t Digital_io_inputs_status; //数字IO输入状态
 }AppStatusInfo;
 
 typedef struct
@@ -87,6 +88,8 @@ typedef struct
     float Brake_release_time; //松闸延迟时间
     float Dynamic_brake_speed_threshold; //抱闸制动速度阈值
     float Brake_release_hold_voltage; //松闸保持电压
+    uint32_t Digital_io_outputs_phys; //数字IO输出物理值
+    uint32_t Digital_io_outputs_mask; //数字IO输出掩码
 }AppBaseConfig;
 
 typedef struct
@@ -109,6 +112,7 @@ typedef struct
     float MIT_target_velocity; //MIT目标速度
     float MIT_kp; //位置刚度
     float MIT_kd; //速度阻尼系数
+    uint8_t Emergency_brake_requested; //紧急制动请求
 }AppMotionParam;
 
 typedef struct
@@ -122,6 +126,7 @@ typedef struct
     float Max_acceleration; //应用加速度限制
     float Max_deceleration; //应用减速度限制
     float Max_current; //应用电流限制
+    uint8_t Position_limit_enable; //位置限位使能开关
 }AppRestrictParam;
 
 typedef struct
@@ -700,6 +705,21 @@ uint32_t get_app_Motor_control_resolution(void);
 uint32_t set_app_Load_encoder_options(uint8_t val);
 uint8_t get_app_Load_encoder_options(void);
 
+uint32_t set_app_Position_limit_enable(uint8_t val);
+uint8_t get_app_Position_limit_enable(void);
+
+uint32_t set_app_Digital_io_inputs_status(uint32_t val);
+uint32_t get_app_Digital_io_inputs_status(void);
+
+uint32_t set_app_Digital_io_outputs_phys(uint32_t val);
+uint32_t get_app_Digital_io_outputs_phys(void);
+
+uint32_t set_app_Digital_io_outputs_mask(uint32_t val);
+uint32_t get_app_Digital_io_outputs_mask(void);
+
+uint32_t set_app_Emergency_brake_requested(uint8_t val);
+uint8_t get_app_Emergency_brake_requested(void);
+
 extern AppControlWord kAppControlWord;
 extern AppStatusInfo kAppStatusInfo;
 extern AppOpMode kAppOpMode;
@@ -735,6 +755,7 @@ typedef struct{
     uint32_t (*get_check_error_val)(void);
     uint32_t (*get_check_warning_val)(void);
     uint32_t (*get_check_status_val)(void);
+    uint32_t (*get_check_di_io_val)(void);
 } CallbackRegistry;
 
 //应用层数据库注册接口 典型调用  eg:
@@ -748,5 +769,6 @@ void RegisterSetAppCallback(void* callback);
 void RegisterCheckErrorCallback(void* callback);
 void RegisterCheckWarningCallback(void* callback);
 void RegisterCheckStatusCallback(void* callback);
+void RegisterCheckIoInputsStatusCallback(void* callback);
 /* USER CODE END AREA 1 */
 

@@ -32,22 +32,30 @@ AppResult HomingModeRun()
 
     if (kHmMode.now_Controlword == APP_CTRL_ENABLE)
     {
-        // 仅考虑35号回零模式，最终使用负载端的位置信息
-        if (kHmMode.pre_Controlword == APP_CTRL_DISABLE)
+        if (!get_app_Emergency_brake_requested())
         {
-            // 重新使能后初始化规划器
-            SpeedTrajectoryPlanningInit();
-        }
+            // 仅考虑35号回零模式，最终使用负载端的位置信息
+            if (kHmMode.pre_Controlword == APP_CTRL_DISABLE)
+            {
+                // 重新使能后初始化规划器
+                SpeedTrajectoryPlanningInit();
+            }
 
-        if (get_app_Halt_running_cmd() == true)
-        {
-            kHmMode.traj.speed_tar_p = 0;
+            if (get_app_Halt_running_cmd() == true)
+            {
+                kHmMode.traj.speed_tar_p = 0;
+            }
+            else
+            {
+                kHmMode.traj.speed_tar_p = 0;       //仅考虑35号回零模式，其他回零模式设置为回零加速度
+            }
+            kHmMode.traj.acc = 0;                   //仅考虑35号回零模式，其他回零模式设置为对应搜索速度
         }
         else
         {
-            kHmMode.traj.speed_tar_p = 0;       //仅考虑35号回零模式，其他回零模式设置为回零加速度
+            kHmMode.now_Controlword = APP_CTRL_DISABLE;
+            set_app_Controlword(APP_CTRL_DISABLE); // 手动禁用使能位
         }
-        kHmMode.traj.acc = 0;                   //仅考虑35号回零模式，其他回零模式设置为对应搜索速度
     }
 
     if (kHmMode.now_Controlword != APP_CTRL_DISABLE)
@@ -65,7 +73,7 @@ AppResult HomingModeRun()
         volatile int64_t offset_last = get_app_Home_position_offset_value();
         set_app_Home_position_offset_value(offset_last + get_app_Position_actual_value());
         // TODO: 自动保存回零偏移值
-        return APP_RET_SUCCESS;
+        // return APP_RET_SUCCESS; // 设置成功将停止此模式，无法重复运行
     }
 
     return APP_RET_RUNNING;

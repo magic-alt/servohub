@@ -7,7 +7,8 @@ CallbackRegistry callback_registry = {
     .set_app_callback = NULL,
     .get_check_error_val = NULL,
     .get_check_warning_val = NULL,
-    .get_check_status_val = NULL
+    .get_check_status_val = NULL,
+    .get_check_di_io_val = NULL
 };
 
 // 设置切换APP模式回调函数到注册表
@@ -28,6 +29,11 @@ void RegisterCheckWarningCallback(void* callback) {
 // 设置状态检查回调函数到注册表
 void RegisterCheckStatusCallback(void* callback) {
     callback_registry.get_check_status_val = (uint32_t (*)(void))callback;
+}
+
+// 设置输入状态检查回调函数到注册表
+void RegisterCheckIoInputsStatusCallback(void* callback) {
+    callback_registry.get_check_di_io_val = (uint32_t (*)(void))callback;
 }
 
 static Axis *const axis = &kAxis;
@@ -498,6 +504,11 @@ void app_param_update(void)
     set_app_Load_control_resolution(kAppEncoderConfig.Load_control_resolution);
     set_app_Motor_control_resolution(kAppEncoderConfig.Motor_control_resolution);
     set_app_Load_encoder_options(kAppEncoderConfig.Load_encoder_options);
+    set_app_Position_limit_enable(kAppRestrictParam.Position_limit_enable);
+    set_app_Digital_io_inputs_status(kAppStatusInfo.Digital_io_inputs_status);
+    set_app_Digital_io_outputs_phys(kAppBaseConfig.Digital_io_outputs_phys);
+    set_app_Digital_io_outputs_mask(kAppBaseConfig.Digital_io_outputs_mask);
+    set_app_Emergency_brake_requested(kAppMotionParam.Emergency_brake_requested);
 }
 
 void app_param_sync(void)
@@ -648,6 +659,11 @@ void app_param_sync(void)
     get_app_Load_control_resolution();
     get_app_Motor_control_resolution();
     get_app_Load_encoder_options();
+    get_app_Position_limit_enable();
+    get_app_Digital_io_inputs_status();
+    get_app_Digital_io_outputs_phys();
+    get_app_Digital_io_outputs_mask();
+    get_app_Emergency_brake_requested();
 }
 
 uint32_t set_app_Controlword(uint16_t val)
@@ -864,6 +880,23 @@ float get_app_Mcu_temperature(void)
     /* USER CODE BEGIN get_app_Mcu_temperature */
     /* USER CODE END get_app_Mcu_temperature */
     return kAppStatusInfo.Mcu_temperature;
+}
+
+uint32_t set_app_Digital_io_inputs_status(uint32_t val)
+{
+    /* USER CODE BEGIN set_app_Digital_io_inputs_status 0 */
+    //RO VAR CANNOT BE SET
+    /* USER CODE END set_app_Digital_io_inputs_status 0 */
+    return APP_PARAM_READ_ONLY;
+}
+uint32_t get_app_Digital_io_inputs_status(void)
+{
+    /* USER CODE BEGIN get_app_Digital_io_inputs_status */
+    if (callback_registry.get_check_di_io_val != NULL) {
+        kAppStatusInfo.Digital_io_inputs_status = callback_registry.get_check_di_io_val();
+    }
+    /* USER CODE END get_app_Digital_io_inputs_status */
+    return kAppStatusInfo.Digital_io_inputs_status;
 }
 
 uint32_t set_app_Modes_of_operation(int8_t val)
@@ -1418,6 +1451,38 @@ float get_app_Brake_release_hold_voltage(void)
     return kAppBaseConfig.Brake_release_hold_voltage;
 }
 
+uint32_t set_app_Digital_io_outputs_phys(uint32_t val)
+{
+    /* USER CODE BEGIN set_app_Digital_io_outputs_phys 0 */
+    /* USER CODE END set_app_Digital_io_outputs_phys 0 */
+    kAppBaseConfig.Digital_io_outputs_phys = val;
+    /* USER CODE BEGIN set_app_Digital_io_outputs_phys 1 */
+    /* USER CODE END set_app_Digital_io_outputs_phys 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint32_t get_app_Digital_io_outputs_phys(void)
+{
+    /* USER CODE BEGIN get_app_Digital_io_outputs_phys */
+    /* USER CODE END get_app_Digital_io_outputs_phys */
+    return kAppBaseConfig.Digital_io_outputs_phys;
+}
+
+uint32_t set_app_Digital_io_outputs_mask(uint32_t val)
+{
+    /* USER CODE BEGIN set_app_Digital_io_outputs_mask 0 */
+    /* USER CODE END set_app_Digital_io_outputs_mask 0 */
+    kAppBaseConfig.Digital_io_outputs_mask = val;
+    /* USER CODE BEGIN set_app_Digital_io_outputs_mask 1 */
+    /* USER CODE END set_app_Digital_io_outputs_mask 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint32_t get_app_Digital_io_outputs_mask(void)
+{
+    /* USER CODE BEGIN get_app_Digital_io_outputs_mask */
+    /* USER CODE END get_app_Digital_io_outputs_mask */
+    return kAppBaseConfig.Digital_io_outputs_mask;
+}
+
 uint32_t set_app_Target_position(int64_t val)
 {
     /* USER CODE BEGIN set_app_Target_position 0 */
@@ -1779,6 +1844,27 @@ float get_app_MIT_kd(void)
     return kAppMotionParam.MIT_kd;
 }
 
+uint32_t set_app_Emergency_brake_requested(uint8_t val)
+{
+    if (val < 0)
+        return APP_PARAM_OUT_OF_RANGE;
+    if (val > 1)
+        return APP_PARAM_OUT_OF_RANGE;
+
+    /* USER CODE BEGIN set_app_Emergency_brake_requested 0 */
+    /* USER CODE END set_app_Emergency_brake_requested 0 */
+    kAppMotionParam.Emergency_brake_requested = val;
+    /* USER CODE BEGIN set_app_Emergency_brake_requested 1 */
+    /* USER CODE END set_app_Emergency_brake_requested 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint8_t get_app_Emergency_brake_requested(void)
+{
+    /* USER CODE BEGIN get_app_Emergency_brake_requested */
+    /* USER CODE END get_app_Emergency_brake_requested */
+    return kAppMotionParam.Emergency_brake_requested;
+}
+
 uint32_t set_app_Position_range_limit_Minimal_position_limit(int64_t val)
 {
     /* USER CODE BEGIN set_app_Position_range_limit_Minimal_position_limit 0 */
@@ -1786,7 +1872,6 @@ uint32_t set_app_Position_range_limit_Minimal_position_limit(int64_t val)
     {
         return APP_PARAM_OUT_OF_RANGE;
     }
-
     /* USER CODE END set_app_Position_range_limit_Minimal_position_limit 0 */
     kAppRestrictParam.Position_range_limit_Minimal_position_limit = val;
     /* USER CODE BEGIN set_app_Position_range_limit_Minimal_position_limit 1 */
@@ -1827,7 +1912,6 @@ uint32_t set_app_Software_position_limit_Minimal_position_limit(int64_t val)
     {
         return APP_PARAM_OUT_OF_RANGE;
     }
-
     /* USER CODE END set_app_Software_position_limit_Minimal_position_limit 0 */
     kAppRestrictParam.Software_position_limit_Minimal_position_limit = val;
     /* USER CODE BEGIN set_app_Software_position_limit_Minimal_position_limit 1 */
@@ -1959,6 +2043,27 @@ float get_app_Max_current(void)
     /* USER CODE BEGIN get_app_Max_current */
     /* USER CODE END get_app_Max_current */
     return kAppRestrictParam.Max_current;
+}
+
+uint32_t set_app_Position_limit_enable(uint8_t val)
+{
+    if (val < 0)
+        return APP_PARAM_OUT_OF_RANGE;
+    if (val > 1)
+        return APP_PARAM_OUT_OF_RANGE;
+
+    /* USER CODE BEGIN set_app_Position_limit_enable 0 */
+    /* USER CODE END set_app_Position_limit_enable 0 */
+    kAppRestrictParam.Position_limit_enable = val;
+    /* USER CODE BEGIN set_app_Position_limit_enable 1 */
+    /* USER CODE END set_app_Position_limit_enable 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint8_t get_app_Position_limit_enable(void)
+{
+    /* USER CODE BEGIN get_app_Position_limit_enable */
+    /* USER CODE END get_app_Position_limit_enable */
+    return kAppRestrictParam.Position_limit_enable;
 }
 
 uint32_t set_app_Position_demand_value(int64_t val)

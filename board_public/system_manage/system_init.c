@@ -1,5 +1,6 @@
 #include "system_init.h"
 
+#include "app_motion_precondition.h"
 #include "app_scheduler.h"
 #include "app_store_param.h"
 #include "app_status_check.h"
@@ -26,6 +27,7 @@ void HalInit(void)
     AppStatusScanInit();
     AppStoreInit();
     ScopeInit();
+    AppMotionPreConditionInit();
 }
 
 // 检测母线电压稳定
@@ -260,6 +262,9 @@ void set_bsp_error_state(BSP_ERROR_CODE type, BSP_ERROR_OPERATION op)
         break;
     case ERROR_FIRMWARE:
         sys_msg.bsp_error_code.bit_band.error_firmware = op;
+        break;
+    case ERROR_LIMIT_SWITCH:
+        sys_msg.bsp_error_code.bit_band.error_limit_switch = op;
         break;
     default:
         break;

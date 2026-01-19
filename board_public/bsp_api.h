@@ -101,6 +101,10 @@ FLASHDB_STATUS bsp_flashdb_key_delete(FLASHDB_KEY_INDEX const index);
 #pragma endregion
 
 #pragma region 其它
+/* 获取数字输入IO状态 */
+bool bsp_get_digital_input_state(DIGITAL_INPUTS_IO const io);
+/* 设置数字输出IO状态 */
+void bsp_set_digital_output_state(DIGITAL_OUTPUTS_IO const io, bool state);
 /* 系统阻塞us延时 */
 void bsp_sys_blocking_delay_us(uint32_t us);
 /* 系统阻塞ms延时 */

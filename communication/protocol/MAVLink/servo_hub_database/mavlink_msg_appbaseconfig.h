@@ -12,17 +12,19 @@ typedef struct __mavlink_appbaseconfig_t {
  float Brake_release_time; /*<  */
  float Dynamic_brake_speed_threshold; /*<  */
  float Brake_release_hold_voltage; /*<  */
+ uint32_t Digital_io_outputs_phys; /*<  */
+ uint32_t Digital_io_outputs_mask; /*<  */
  int16_t Quick_stop_option_code; /*<  */
  uint8_t Polarity; /*<  */
 } mavlink_appbaseconfig_t;
 
-#define MAVLINK_MSG_ID_AppBaseConfig_LEN 35
-#define MAVLINK_MSG_ID_AppBaseConfig_MIN_LEN 35
-#define MAVLINK_MSG_ID_30058_LEN 35
-#define MAVLINK_MSG_ID_30058_MIN_LEN 35
+#define MAVLINK_MSG_ID_AppBaseConfig_LEN 43
+#define MAVLINK_MSG_ID_AppBaseConfig_MIN_LEN 43
+#define MAVLINK_MSG_ID_30058_LEN 43
+#define MAVLINK_MSG_ID_30058_MIN_LEN 43
 
-#define MAVLINK_MSG_ID_AppBaseConfig_CRC 207
-#define MAVLINK_MSG_ID_30058_CRC 207
+#define MAVLINK_MSG_ID_AppBaseConfig_CRC 231
+#define MAVLINK_MSG_ID_30058_CRC 231
 
 
 
@@ -30,31 +32,35 @@ typedef struct __mavlink_appbaseconfig_t {
 #define MAVLINK_MESSAGE_INFO_AppBaseConfig { \
     30058, \
     "AppBaseConfig", \
-    9, \
-    {  { "Polarity", NULL, MAVLINK_TYPE_UINT8_T, 0, 34, offsetof(mavlink_appbaseconfig_t, Polarity) }, \
+    11, \
+    {  { "Polarity", NULL, MAVLINK_TYPE_UINT8_T, 0, 42, offsetof(mavlink_appbaseconfig_t, Polarity) }, \
          { "Home_position_offset_value", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_appbaseconfig_t, Home_position_offset_value) }, \
          { "Can_id", NULL, MAVLINK_TYPE_UINT32_T, 0, 8, offsetof(mavlink_appbaseconfig_t, Can_id) }, \
          { "Can_baudrate", NULL, MAVLINK_TYPE_UINT32_T, 0, 12, offsetof(mavlink_appbaseconfig_t, Can_baudrate) }, \
-         { "Quick_stop_option_code", NULL, MAVLINK_TYPE_INT16_T, 0, 32, offsetof(mavlink_appbaseconfig_t, Quick_stop_option_code) }, \
+         { "Quick_stop_option_code", NULL, MAVLINK_TYPE_INT16_T, 0, 40, offsetof(mavlink_appbaseconfig_t, Quick_stop_option_code) }, \
          { "Brake_engage_time", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_appbaseconfig_t, Brake_engage_time) }, \
          { "Brake_release_time", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_appbaseconfig_t, Brake_release_time) }, \
          { "Dynamic_brake_speed_threshold", NULL, MAVLINK_TYPE_FLOAT, 0, 24, offsetof(mavlink_appbaseconfig_t, Dynamic_brake_speed_threshold) }, \
          { "Brake_release_hold_voltage", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_appbaseconfig_t, Brake_release_hold_voltage) }, \
+         { "Digital_io_outputs_phys", NULL, MAVLINK_TYPE_UINT32_T, 0, 32, offsetof(mavlink_appbaseconfig_t, Digital_io_outputs_phys) }, \
+         { "Digital_io_outputs_mask", NULL, MAVLINK_TYPE_UINT32_T, 0, 36, offsetof(mavlink_appbaseconfig_t, Digital_io_outputs_mask) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_AppBaseConfig { \
     "AppBaseConfig", \
-    9, \
-    {  { "Polarity", NULL, MAVLINK_TYPE_UINT8_T, 0, 34, offsetof(mavlink_appbaseconfig_t, Polarity) }, \
+    11, \
+    {  { "Polarity", NULL, MAVLINK_TYPE_UINT8_T, 0, 42, offsetof(mavlink_appbaseconfig_t, Polarity) }, \
          { "Home_position_offset_value", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_appbaseconfig_t, Home_position_offset_value) }, \
          { "Can_id", NULL, MAVLINK_TYPE_UINT32_T, 0, 8, offsetof(mavlink_appbaseconfig_t, Can_id) }, \
          { "Can_baudrate", NULL, MAVLINK_TYPE_UINT32_T, 0, 12, offsetof(mavlink_appbaseconfig_t, Can_baudrate) }, \
-         { "Quick_stop_option_code", NULL, MAVLINK_TYPE_INT16_T, 0, 32, offsetof(mavlink_appbaseconfig_t, Quick_stop_option_code) }, \
+         { "Quick_stop_option_code", NULL, MAVLINK_TYPE_INT16_T, 0, 40, offsetof(mavlink_appbaseconfig_t, Quick_stop_option_code) }, \
          { "Brake_engage_time", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_appbaseconfig_t, Brake_engage_time) }, \
          { "Brake_release_time", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_appbaseconfig_t, Brake_release_time) }, \
          { "Dynamic_brake_speed_threshold", NULL, MAVLINK_TYPE_FLOAT, 0, 24, offsetof(mavlink_appbaseconfig_t, Dynamic_brake_speed_threshold) }, \
          { "Brake_release_hold_voltage", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_appbaseconfig_t, Brake_release_hold_voltage) }, \
+         { "Digital_io_outputs_phys", NULL, MAVLINK_TYPE_UINT32_T, 0, 32, offsetof(mavlink_appbaseconfig_t, Digital_io_outputs_phys) }, \
+         { "Digital_io_outputs_mask", NULL, MAVLINK_TYPE_UINT32_T, 0, 36, offsetof(mavlink_appbaseconfig_t, Digital_io_outputs_mask) }, \
          } \
 }
 #endif
@@ -74,10 +80,12 @@ typedef struct __mavlink_appbaseconfig_t {
  * @param Brake_release_time  
  * @param Dynamic_brake_speed_threshold  
  * @param Brake_release_hold_voltage  
+ * @param Digital_io_outputs_phys  
+ * @param Digital_io_outputs_mask  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_appbaseconfig_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint8_t Polarity, int64_t Home_position_offset_value, uint32_t Can_id, uint32_t Can_baudrate, int16_t Quick_stop_option_code, float Brake_engage_time, float Brake_release_time, float Dynamic_brake_speed_threshold, float Brake_release_hold_voltage)
+                               uint8_t Polarity, int64_t Home_position_offset_value, uint32_t Can_id, uint32_t Can_baudrate, int16_t Quick_stop_option_code, float Brake_engage_time, float Brake_release_time, float Dynamic_brake_speed_threshold, float Brake_release_hold_voltage, uint32_t Digital_io_outputs_phys, uint32_t Digital_io_outputs_mask)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppBaseConfig_LEN];
@@ -88,8 +96,10 @@ static inline uint16_t mavlink_msg_appbaseconfig_pack(uint8_t system_id, uint8_t
     _mav_put_float(buf, 20, Brake_release_time);
     _mav_put_float(buf, 24, Dynamic_brake_speed_threshold);
     _mav_put_float(buf, 28, Brake_release_hold_voltage);
-    _mav_put_int16_t(buf, 32, Quick_stop_option_code);
-    _mav_put_uint8_t(buf, 34, Polarity);
+    _mav_put_uint32_t(buf, 32, Digital_io_outputs_phys);
+    _mav_put_uint32_t(buf, 36, Digital_io_outputs_mask);
+    _mav_put_int16_t(buf, 40, Quick_stop_option_code);
+    _mav_put_uint8_t(buf, 42, Polarity);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppBaseConfig_LEN);
 #else
@@ -101,6 +111,8 @@ static inline uint16_t mavlink_msg_appbaseconfig_pack(uint8_t system_id, uint8_t
     packet.Brake_release_time = Brake_release_time;
     packet.Dynamic_brake_speed_threshold = Dynamic_brake_speed_threshold;
     packet.Brake_release_hold_voltage = Brake_release_hold_voltage;
+    packet.Digital_io_outputs_phys = Digital_io_outputs_phys;
+    packet.Digital_io_outputs_mask = Digital_io_outputs_mask;
     packet.Quick_stop_option_code = Quick_stop_option_code;
     packet.Polarity = Polarity;
 
@@ -127,10 +139,12 @@ static inline uint16_t mavlink_msg_appbaseconfig_pack(uint8_t system_id, uint8_t
  * @param Brake_release_time  
  * @param Dynamic_brake_speed_threshold  
  * @param Brake_release_hold_voltage  
+ * @param Digital_io_outputs_phys  
+ * @param Digital_io_outputs_mask  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_appbaseconfig_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               uint8_t Polarity, int64_t Home_position_offset_value, uint32_t Can_id, uint32_t Can_baudrate, int16_t Quick_stop_option_code, float Brake_engage_time, float Brake_release_time, float Dynamic_brake_speed_threshold, float Brake_release_hold_voltage)
+                               uint8_t Polarity, int64_t Home_position_offset_value, uint32_t Can_id, uint32_t Can_baudrate, int16_t Quick_stop_option_code, float Brake_engage_time, float Brake_release_time, float Dynamic_brake_speed_threshold, float Brake_release_hold_voltage, uint32_t Digital_io_outputs_phys, uint32_t Digital_io_outputs_mask)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppBaseConfig_LEN];
@@ -141,8 +155,10 @@ static inline uint16_t mavlink_msg_appbaseconfig_pack_status(uint8_t system_id, 
     _mav_put_float(buf, 20, Brake_release_time);
     _mav_put_float(buf, 24, Dynamic_brake_speed_threshold);
     _mav_put_float(buf, 28, Brake_release_hold_voltage);
-    _mav_put_int16_t(buf, 32, Quick_stop_option_code);
-    _mav_put_uint8_t(buf, 34, Polarity);
+    _mav_put_uint32_t(buf, 32, Digital_io_outputs_phys);
+    _mav_put_uint32_t(buf, 36, Digital_io_outputs_mask);
+    _mav_put_int16_t(buf, 40, Quick_stop_option_code);
+    _mav_put_uint8_t(buf, 42, Polarity);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppBaseConfig_LEN);
 #else
@@ -154,6 +170,8 @@ static inline uint16_t mavlink_msg_appbaseconfig_pack_status(uint8_t system_id, 
     packet.Brake_release_time = Brake_release_time;
     packet.Dynamic_brake_speed_threshold = Dynamic_brake_speed_threshold;
     packet.Brake_release_hold_voltage = Brake_release_hold_voltage;
+    packet.Digital_io_outputs_phys = Digital_io_outputs_phys;
+    packet.Digital_io_outputs_mask = Digital_io_outputs_mask;
     packet.Quick_stop_option_code = Quick_stop_option_code;
     packet.Polarity = Polarity;
 
@@ -183,11 +201,13 @@ static inline uint16_t mavlink_msg_appbaseconfig_pack_status(uint8_t system_id, 
  * @param Brake_release_time  
  * @param Dynamic_brake_speed_threshold  
  * @param Brake_release_hold_voltage  
+ * @param Digital_io_outputs_phys  
+ * @param Digital_io_outputs_mask  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_appbaseconfig_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint8_t Polarity,int64_t Home_position_offset_value,uint32_t Can_id,uint32_t Can_baudrate,int16_t Quick_stop_option_code,float Brake_engage_time,float Brake_release_time,float Dynamic_brake_speed_threshold,float Brake_release_hold_voltage)
+                                   uint8_t Polarity,int64_t Home_position_offset_value,uint32_t Can_id,uint32_t Can_baudrate,int16_t Quick_stop_option_code,float Brake_engage_time,float Brake_release_time,float Dynamic_brake_speed_threshold,float Brake_release_hold_voltage,uint32_t Digital_io_outputs_phys,uint32_t Digital_io_outputs_mask)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppBaseConfig_LEN];
@@ -198,8 +218,10 @@ static inline uint16_t mavlink_msg_appbaseconfig_pack_chan(uint8_t system_id, ui
     _mav_put_float(buf, 20, Brake_release_time);
     _mav_put_float(buf, 24, Dynamic_brake_speed_threshold);
     _mav_put_float(buf, 28, Brake_release_hold_voltage);
-    _mav_put_int16_t(buf, 32, Quick_stop_option_code);
-    _mav_put_uint8_t(buf, 34, Polarity);
+    _mav_put_uint32_t(buf, 32, Digital_io_outputs_phys);
+    _mav_put_uint32_t(buf, 36, Digital_io_outputs_mask);
+    _mav_put_int16_t(buf, 40, Quick_stop_option_code);
+    _mav_put_uint8_t(buf, 42, Polarity);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppBaseConfig_LEN);
 #else
@@ -211,6 +233,8 @@ static inline uint16_t mavlink_msg_appbaseconfig_pack_chan(uint8_t system_id, ui
     packet.Brake_release_time = Brake_release_time;
     packet.Dynamic_brake_speed_threshold = Dynamic_brake_speed_threshold;
     packet.Brake_release_hold_voltage = Brake_release_hold_voltage;
+    packet.Digital_io_outputs_phys = Digital_io_outputs_phys;
+    packet.Digital_io_outputs_mask = Digital_io_outputs_mask;
     packet.Quick_stop_option_code = Quick_stop_option_code;
     packet.Polarity = Polarity;
 
@@ -231,7 +255,7 @@ static inline uint16_t mavlink_msg_appbaseconfig_pack_chan(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_appbaseconfig_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_appbaseconfig_t* appbaseconfig)
 {
-    return mavlink_msg_appbaseconfig_pack(system_id, component_id, msg, appbaseconfig->Polarity, appbaseconfig->Home_position_offset_value, appbaseconfig->Can_id, appbaseconfig->Can_baudrate, appbaseconfig->Quick_stop_option_code, appbaseconfig->Brake_engage_time, appbaseconfig->Brake_release_time, appbaseconfig->Dynamic_brake_speed_threshold, appbaseconfig->Brake_release_hold_voltage);
+    return mavlink_msg_appbaseconfig_pack(system_id, component_id, msg, appbaseconfig->Polarity, appbaseconfig->Home_position_offset_value, appbaseconfig->Can_id, appbaseconfig->Can_baudrate, appbaseconfig->Quick_stop_option_code, appbaseconfig->Brake_engage_time, appbaseconfig->Brake_release_time, appbaseconfig->Dynamic_brake_speed_threshold, appbaseconfig->Brake_release_hold_voltage, appbaseconfig->Digital_io_outputs_phys, appbaseconfig->Digital_io_outputs_mask);
 }
 
 /**
@@ -245,7 +269,7 @@ static inline uint16_t mavlink_msg_appbaseconfig_encode(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_appbaseconfig_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_appbaseconfig_t* appbaseconfig)
 {
-    return mavlink_msg_appbaseconfig_pack_chan(system_id, component_id, chan, msg, appbaseconfig->Polarity, appbaseconfig->Home_position_offset_value, appbaseconfig->Can_id, appbaseconfig->Can_baudrate, appbaseconfig->Quick_stop_option_code, appbaseconfig->Brake_engage_time, appbaseconfig->Brake_release_time, appbaseconfig->Dynamic_brake_speed_threshold, appbaseconfig->Brake_release_hold_voltage);
+    return mavlink_msg_appbaseconfig_pack_chan(system_id, component_id, chan, msg, appbaseconfig->Polarity, appbaseconfig->Home_position_offset_value, appbaseconfig->Can_id, appbaseconfig->Can_baudrate, appbaseconfig->Quick_stop_option_code, appbaseconfig->Brake_engage_time, appbaseconfig->Brake_release_time, appbaseconfig->Dynamic_brake_speed_threshold, appbaseconfig->Brake_release_hold_voltage, appbaseconfig->Digital_io_outputs_phys, appbaseconfig->Digital_io_outputs_mask);
 }
 
 /**
@@ -259,7 +283,7 @@ static inline uint16_t mavlink_msg_appbaseconfig_encode_chan(uint8_t system_id, 
  */
 static inline uint16_t mavlink_msg_appbaseconfig_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_appbaseconfig_t* appbaseconfig)
 {
-    return mavlink_msg_appbaseconfig_pack_status(system_id, component_id, _status, msg,  appbaseconfig->Polarity, appbaseconfig->Home_position_offset_value, appbaseconfig->Can_id, appbaseconfig->Can_baudrate, appbaseconfig->Quick_stop_option_code, appbaseconfig->Brake_engage_time, appbaseconfig->Brake_release_time, appbaseconfig->Dynamic_brake_speed_threshold, appbaseconfig->Brake_release_hold_voltage);
+    return mavlink_msg_appbaseconfig_pack_status(system_id, component_id, _status, msg,  appbaseconfig->Polarity, appbaseconfig->Home_position_offset_value, appbaseconfig->Can_id, appbaseconfig->Can_baudrate, appbaseconfig->Quick_stop_option_code, appbaseconfig->Brake_engage_time, appbaseconfig->Brake_release_time, appbaseconfig->Dynamic_brake_speed_threshold, appbaseconfig->Brake_release_hold_voltage, appbaseconfig->Digital_io_outputs_phys, appbaseconfig->Digital_io_outputs_mask);
 }
 
 /**
@@ -275,10 +299,12 @@ static inline uint16_t mavlink_msg_appbaseconfig_encode_status(uint8_t system_id
  * @param Brake_release_time  
  * @param Dynamic_brake_speed_threshold  
  * @param Brake_release_hold_voltage  
+ * @param Digital_io_outputs_phys  
+ * @param Digital_io_outputs_mask  
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_appbaseconfig_send(mavlink_channel_t chan, uint8_t Polarity, int64_t Home_position_offset_value, uint32_t Can_id, uint32_t Can_baudrate, int16_t Quick_stop_option_code, float Brake_engage_time, float Brake_release_time, float Dynamic_brake_speed_threshold, float Brake_release_hold_voltage)
+static inline void mavlink_msg_appbaseconfig_send(mavlink_channel_t chan, uint8_t Polarity, int64_t Home_position_offset_value, uint32_t Can_id, uint32_t Can_baudrate, int16_t Quick_stop_option_code, float Brake_engage_time, float Brake_release_time, float Dynamic_brake_speed_threshold, float Brake_release_hold_voltage, uint32_t Digital_io_outputs_phys, uint32_t Digital_io_outputs_mask)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppBaseConfig_LEN];
@@ -289,8 +315,10 @@ static inline void mavlink_msg_appbaseconfig_send(mavlink_channel_t chan, uint8_
     _mav_put_float(buf, 20, Brake_release_time);
     _mav_put_float(buf, 24, Dynamic_brake_speed_threshold);
     _mav_put_float(buf, 28, Brake_release_hold_voltage);
-    _mav_put_int16_t(buf, 32, Quick_stop_option_code);
-    _mav_put_uint8_t(buf, 34, Polarity);
+    _mav_put_uint32_t(buf, 32, Digital_io_outputs_phys);
+    _mav_put_uint32_t(buf, 36, Digital_io_outputs_mask);
+    _mav_put_int16_t(buf, 40, Quick_stop_option_code);
+    _mav_put_uint8_t(buf, 42, Polarity);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppBaseConfig, buf, MAVLINK_MSG_ID_AppBaseConfig_MIN_LEN, MAVLINK_MSG_ID_AppBaseConfig_LEN, MAVLINK_MSG_ID_AppBaseConfig_CRC);
 #else
@@ -302,6 +330,8 @@ static inline void mavlink_msg_appbaseconfig_send(mavlink_channel_t chan, uint8_
     packet.Brake_release_time = Brake_release_time;
     packet.Dynamic_brake_speed_threshold = Dynamic_brake_speed_threshold;
     packet.Brake_release_hold_voltage = Brake_release_hold_voltage;
+    packet.Digital_io_outputs_phys = Digital_io_outputs_phys;
+    packet.Digital_io_outputs_mask = Digital_io_outputs_mask;
     packet.Quick_stop_option_code = Quick_stop_option_code;
     packet.Polarity = Polarity;
 
@@ -317,7 +347,7 @@ static inline void mavlink_msg_appbaseconfig_send(mavlink_channel_t chan, uint8_
 static inline void mavlink_msg_appbaseconfig_send_struct(mavlink_channel_t chan, const mavlink_appbaseconfig_t* appbaseconfig)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_appbaseconfig_send(chan, appbaseconfig->Polarity, appbaseconfig->Home_position_offset_value, appbaseconfig->Can_id, appbaseconfig->Can_baudrate, appbaseconfig->Quick_stop_option_code, appbaseconfig->Brake_engage_time, appbaseconfig->Brake_release_time, appbaseconfig->Dynamic_brake_speed_threshold, appbaseconfig->Brake_release_hold_voltage);
+    mavlink_msg_appbaseconfig_send(chan, appbaseconfig->Polarity, appbaseconfig->Home_position_offset_value, appbaseconfig->Can_id, appbaseconfig->Can_baudrate, appbaseconfig->Quick_stop_option_code, appbaseconfig->Brake_engage_time, appbaseconfig->Brake_release_time, appbaseconfig->Dynamic_brake_speed_threshold, appbaseconfig->Brake_release_hold_voltage, appbaseconfig->Digital_io_outputs_phys, appbaseconfig->Digital_io_outputs_mask);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppBaseConfig, (const char *)appbaseconfig, MAVLINK_MSG_ID_AppBaseConfig_MIN_LEN, MAVLINK_MSG_ID_AppBaseConfig_LEN, MAVLINK_MSG_ID_AppBaseConfig_CRC);
 #endif
@@ -331,7 +361,7 @@ static inline void mavlink_msg_appbaseconfig_send_struct(mavlink_channel_t chan,
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_appbaseconfig_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t Polarity, int64_t Home_position_offset_value, uint32_t Can_id, uint32_t Can_baudrate, int16_t Quick_stop_option_code, float Brake_engage_time, float Brake_release_time, float Dynamic_brake_speed_threshold, float Brake_release_hold_voltage)
+static inline void mavlink_msg_appbaseconfig_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t Polarity, int64_t Home_position_offset_value, uint32_t Can_id, uint32_t Can_baudrate, int16_t Quick_stop_option_code, float Brake_engage_time, float Brake_release_time, float Dynamic_brake_speed_threshold, float Brake_release_hold_voltage, uint32_t Digital_io_outputs_phys, uint32_t Digital_io_outputs_mask)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -342,8 +372,10 @@ static inline void mavlink_msg_appbaseconfig_send_buf(mavlink_message_t *msgbuf,
     _mav_put_float(buf, 20, Brake_release_time);
     _mav_put_float(buf, 24, Dynamic_brake_speed_threshold);
     _mav_put_float(buf, 28, Brake_release_hold_voltage);
-    _mav_put_int16_t(buf, 32, Quick_stop_option_code);
-    _mav_put_uint8_t(buf, 34, Polarity);
+    _mav_put_uint32_t(buf, 32, Digital_io_outputs_phys);
+    _mav_put_uint32_t(buf, 36, Digital_io_outputs_mask);
+    _mav_put_int16_t(buf, 40, Quick_stop_option_code);
+    _mav_put_uint8_t(buf, 42, Polarity);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppBaseConfig, buf, MAVLINK_MSG_ID_AppBaseConfig_MIN_LEN, MAVLINK_MSG_ID_AppBaseConfig_LEN, MAVLINK_MSG_ID_AppBaseConfig_CRC);
 #else
@@ -355,6 +387,8 @@ static inline void mavlink_msg_appbaseconfig_send_buf(mavlink_message_t *msgbuf,
     packet->Brake_release_time = Brake_release_time;
     packet->Dynamic_brake_speed_threshold = Dynamic_brake_speed_threshold;
     packet->Brake_release_hold_voltage = Brake_release_hold_voltage;
+    packet->Digital_io_outputs_phys = Digital_io_outputs_phys;
+    packet->Digital_io_outputs_mask = Digital_io_outputs_mask;
     packet->Quick_stop_option_code = Quick_stop_option_code;
     packet->Polarity = Polarity;
 
@@ -375,7 +409,7 @@ static inline void mavlink_msg_appbaseconfig_send_buf(mavlink_message_t *msgbuf,
  */
 static inline uint8_t mavlink_msg_appbaseconfig_get_Polarity(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  34);
+    return _MAV_RETURN_uint8_t(msg,  42);
 }
 
 /**
@@ -415,7 +449,7 @@ static inline uint32_t mavlink_msg_appbaseconfig_get_Can_baudrate(const mavlink_
  */
 static inline int16_t mavlink_msg_appbaseconfig_get_Quick_stop_option_code(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  32);
+    return _MAV_RETURN_int16_t(msg,  40);
 }
 
 /**
@@ -459,6 +493,26 @@ static inline float mavlink_msg_appbaseconfig_get_Brake_release_hold_voltage(con
 }
 
 /**
+ * @brief Get field Digital_io_outputs_phys from appbaseconfig message
+ *
+ * @return  
+ */
+static inline uint32_t mavlink_msg_appbaseconfig_get_Digital_io_outputs_phys(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  32);
+}
+
+/**
+ * @brief Get field Digital_io_outputs_mask from appbaseconfig message
+ *
+ * @return  
+ */
+static inline uint32_t mavlink_msg_appbaseconfig_get_Digital_io_outputs_mask(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  36);
+}
+
+/**
  * @brief Decode a appbaseconfig message into a struct
  *
  * @param msg The message to decode
@@ -474,6 +528,8 @@ static inline void mavlink_msg_appbaseconfig_decode(const mavlink_message_t* msg
     appbaseconfig->Brake_release_time = mavlink_msg_appbaseconfig_get_Brake_release_time(msg);
     appbaseconfig->Dynamic_brake_speed_threshold = mavlink_msg_appbaseconfig_get_Dynamic_brake_speed_threshold(msg);
     appbaseconfig->Brake_release_hold_voltage = mavlink_msg_appbaseconfig_get_Brake_release_hold_voltage(msg);
+    appbaseconfig->Digital_io_outputs_phys = mavlink_msg_appbaseconfig_get_Digital_io_outputs_phys(msg);
+    appbaseconfig->Digital_io_outputs_mask = mavlink_msg_appbaseconfig_get_Digital_io_outputs_mask(msg);
     appbaseconfig->Quick_stop_option_code = mavlink_msg_appbaseconfig_get_Quick_stop_option_code(msg);
     appbaseconfig->Polarity = mavlink_msg_appbaseconfig_get_Polarity(msg);
 #else

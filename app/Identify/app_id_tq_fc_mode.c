@@ -21,11 +21,20 @@ AppResult IdTqFcModeRun()
 {
     if(get_app_Controlword() == APP_CTRL_ENABLE)
     {
-        if (axis->tq_fc_id_output.state_now == IDENTIFICATION_MODE_STATE_FINISH)
+        if (!get_app_Emergency_brake_requested())
         {
-            // 辨识完成 会自动失能电机
+            if (axis->tq_fc_id_output.state_now == IDENTIFICATION_MODE_STATE_FINISH)
+            {
+                // 辨识完成 会自动失能电机
+                set_app_Controlword(APP_CTRL_DISABLE);
+                // return APP_RET_SUCCESS;
+            }
+        }
+        else
+        {
+            // 触发急停，辨识失败 会自动失能电机
             set_app_Controlword(APP_CTRL_DISABLE);
-            return APP_RET_SUCCESS;
+            // return APP_RET_FAIL;
         }
     }
 

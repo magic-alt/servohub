@@ -4,6 +4,7 @@
 static Axis *const axis = &kAxis; // 引用电机对象实例化
 AppCheckVal kAppCheck =
 {
+    .di_io.all = 0,
     .error.all = 0,
     .warning.all = 0,
     .status.all = 0,
@@ -60,6 +61,7 @@ static inline bool AppExcessTemperatureMotorErrorCheck(void);
 static inline bool AppTooLowTemperatureMotorErrorCheck(void);
 static inline bool AppExcessTemperatureMcuErrorCheck(void);
 static inline bool AppTooLowTemperatureMcuErrorCheck(void);
+static inline bool AppExternalInhibitInputDetectedErrorCheck(void);
 
 // 错误检测函数数组注册
 static const CheckFunctionList CheckTable[] =
@@ -87,6 +89,7 @@ static const CheckFunctionList CheckTable[] =
     {AppTooLowTemperatureMotorErrorCheck, false},
     {AppExcessTemperatureMcuErrorCheck, false},
     {AppTooLowTemperatureMcuErrorCheck, false},
+    {AppExternalInhibitInputDetectedErrorCheck, true},
 };
 
 #pragma region 错误检测函数定义
@@ -122,6 +125,11 @@ static inline bool AppNfaultErrorCheck(void)
 static inline bool AppBusVoltageErrorCheck(void)
 {
     return kAppCheck.p_bsp_error->bit_band.error_bus_voltage;
+}
+
+static inline bool AppExternalInhibitInputDetectedErrorCheck(void)
+{
+    return kAppCheck.p_bsp_error->bit_band.error_limit_switch;
 }
 
 /**
@@ -757,6 +765,16 @@ uint32_t app_get_check_status_val(void)
     return kAppCheck.status.all;
 }
 
+uint32_t app_get_check_di_io_val(void)
+{
+    return kAppCheck.di_io.all;
+}
+
+CheckWarningVal* app_set_check_warning_val(void)
+{
+    return &kAppCheck.warning;
+}
+
 /**
  * @brief 应用错误状态检测初始化
  *
@@ -885,6 +903,25 @@ void AppStatusScanSlow(void)
     // 检查速度是否为零状态
     AppVelocityZeroStateCheck();
     AppTargetReachedStateCheck();
+}
+
+/**
+ * @brief 应用通用状态轮询检查函数  位置环调用
+ *
+ * 1. 遍历数字输入IO状态，更新对应bit。
+ * 2. ...
+ *
+ * @note 应周期性调用本函数以监测和更新状态。
+ */
+void AppStatusCheck(void)
+{
+    // 遍历数字输入IO状态，更新对应bit。
+    uint32_t di_io_status = 0;
+    for (DIGITAL_INPUTS_IO io = DI_IO_MIN; io <= DI_IO_MAX; io++)
+    {
+        di_io_status |= (bsp_get_digital_input_state(io) << io);
+    }
+    kAppCheck.di_io.all = di_io_status;
 }
 
 /**

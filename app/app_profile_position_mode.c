@@ -43,53 +43,62 @@ AppResult PpModeRun()
 
     if (kPpMode.now_Controlword == APP_CTRL_ENABLE)
     {
-        if (kPpMode.pre_Controlword == APP_CTRL_DISABLE)
+        if (!get_app_Emergency_brake_requested())
         {
-            // 重新使能后初始化规划器
-            PosTrajectoryPlanningInit();
-            kPpMode.position_target_last = get_app_Position_actual_value(); // 目标位置 等于 当前位置
-            kPpMode.traj.pos_tar_p = get_app_Motor_position_actual_value();
-        }
+            if (kPpMode.pre_Controlword == APP_CTRL_DISABLE)
+            {
+                // 重新使能后初始化规划器
+                PosTrajectoryPlanningInit();
+                kPpMode.position_target_last = get_app_Position_actual_value(); // 目标位置 等于 当前位置
+                kPpMode.traj.pos_tar_p = get_app_Motor_position_actual_value();
+            }
 
-        // 总线控制时pp模式下检测控制字bit4上升沿事件，或，非总线控制时bit4上升沿事件一直有效更新目标位置
-        if (kPpMode.start_upedge_state == true ||\
-            (APP_COMM_CONTROL_AUTHORITY)get_app_Comm_control_authority() == COMM_CONTROL_HOST)
-        {
-            kPpMode.start_upedge_latch = true;
-            kPpMode.start_upedge_state = false;
-        }
+            // 总线控制时pp模式下检测控制字bit4上升沿事件，或，非总线控制时bit4上升沿事件一直有效更新目标位置
+            if (kPpMode.start_upedge_state == true ||\
+                (APP_COMM_CONTROL_AUTHORITY)get_app_Comm_control_authority() == COMM_CONTROL_HOST)
+            {
+                kPpMode.start_upedge_latch = true;
+                kPpMode.start_upedge_state = false;
+            }
 
-        if (get_app_Halt_running_cmd() == true)
-        {
-            kPpMode.start_upedge_latch = false; // 暂停后重新使能
-            kPpMode.traj.profile_speed = 0; // 如果处于暂停状态，规划速度为0
+            if (get_app_Halt_running_cmd() == true)
+            {
+                kPpMode.start_upedge_latch = false; // 暂停后重新使能
+                kPpMode.traj.profile_speed = 0; // 如果处于暂停状态，规划速度为0
+            }
+            else
+            {
+                kPpMode.traj.profile_speed = get_app_Profile_velocity() * get_app_Motor_rpm_2_pps() * \
+                                            get_app_Reduction_ratio();
+            }
+
+            // 设置规划器参数
+            // 计算目标位置和当前位置差值
+            if (true == kPpMode.start_upedge_latch)
+            {
+                kPpMode.start_upedge_latch = false;
+                kPpMode.position_target_last = get_app_Target_position(); // 上升沿更新目标位置
+            }
+
+            kPpMode.pos_tar_p_add = (float)(kPpMode.position_target_last - get_app_Position_actual_value()) * \
+                                    get_app_Reduction_ratio() * get_app_P_load_2_motor();
+
+            kPpMode.traj.pos_tar_p = kPpMode.pos_tar_p_add + get_app_Motor_position_actual_value(); //  转化到内环目标位置
+
+            kPpMode.traj.profile_acc = get_app_Profile_acceleration() * get_app_Motor_rpm_2_pps() * \
+                                    get_app_Reduction_ratio();
+            kPpMode.traj.profile_dec = get_app_Profile_deceleration() * get_app_Motor_rpm_2_pps() * \
+                                    get_app_Reduction_ratio();
         }
         else
         {
-            kPpMode.traj.profile_speed = get_app_Profile_velocity() * get_app_Motor_rpm_2_pps() * \
-                                         get_app_Reduction_ratio();
+            set_app_Controlword(APP_CTRL_EMERGENCY_BRAKE); // 强制进入紧急停车（QuickStop）状态
+            kPpMode.now_Controlword = APP_CTRL_EMERGENCY_BRAKE;
         }
-
-        // 设置规划器参数
-        // 计算目标位置和当前位置差值
-        if (true == kPpMode.start_upedge_latch)
-        {
-            kPpMode.start_upedge_latch = false;
-            kPpMode.position_target_last = get_app_Target_position(); // 上升沿更新目标位置
-        }
-
-        kPpMode.pos_tar_p_add = (float)(kPpMode.position_target_last - get_app_Position_actual_value()) * \
-                                get_app_Reduction_ratio() * get_app_P_load_2_motor();
-
-        kPpMode.traj.pos_tar_p = kPpMode.pos_tar_p_add + get_app_Motor_position_actual_value(); //  转化到内环目标位置
-
-        kPpMode.traj.profile_acc = get_app_Profile_acceleration() * get_app_Motor_rpm_2_pps() * \
-                                   get_app_Reduction_ratio();
-        kPpMode.traj.profile_dec = get_app_Profile_deceleration() * get_app_Motor_rpm_2_pps() * \
-                                   get_app_Reduction_ratio();
-
     }
-    else if (kPpMode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
+
+    // 紧急停车（QuickStop）处理
+    if (kPpMode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
     {
         kPpMode.traj.profile_speed = 0; // 如果处于急停状态，规划速度为0
 

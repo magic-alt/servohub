@@ -43,9 +43,56 @@ typedef enum
     ERROR_BUS_VOLTAGE,                      // 母线电压错误
     ERROR_CURRENT_SAMPLE,                   // 电流采样错误
     ERROR_FIRMWARE,                         // 固件错误
+    ERROR_LIMIT_SWITCH,                     // 限位开关错误
     //...
     ERROR_MAX = 0xff
 } BSP_ERROR_CODE;
+
+typedef enum
+{
+    DI_IO_MIN = 0,                          // 可用为边界检查
+    DI_IO_NEGATIVE_LIMIT_SWITCH = DI_IO_MIN,
+    DI_IO_POSITIVE_LIMIT_SWITCH = 1,
+    DI_IO_HOME_SWITCH = 2,
+    DI_IO_INTERLOCK = 3,
+    // ...
+    DI_IO_MAX = DI_IO_INTERLOCK,            // 可用为边界检查
+} DIGITAL_INPUTS_IO;
+
+typedef enum
+{
+    DO_IO_MIN = 0,                          // 可用为边界检查
+    DO_IO_SET_BRAKE = DO_IO_MIN,
+    // ...
+    DO_IO_MAX = DO_IO_SET_BRAKE,            // 可用为边界检查
+} DIGITAL_OUTPUTS_IO;
+
+typedef union
+{
+    uint32_t all;
+    struct
+    {
+        uint32_t negative_limit_switch : 1;             // 负向硬件限位开关状态
+        uint32_t positive_limit_switch : 1;             // 正向硬件限位开关状态
+        uint32_t home_switch : 1;                       // 回零开关状态
+        uint32_t interlock : 1;                         // 互锁开关状态
+        uint32_t reserved : 12;                         // 保留位
+
+        uint32_t manufacturer_specific : 16;            // 厂商自定义位
+    } bits; // 位字段
+} DigitalInputsIo_t; // 数字输入IO状态（OD60FD）
+
+typedef union
+{
+    uint32_t all;
+    struct
+    {
+        uint32_t set_brake : 1;                         // 设置刹车状态
+        uint32_t reserved : 15;                         // 保留位
+
+        uint32_t manufacturer_specific : 16;            // 厂商自定义位
+    } bits; // 位字段
+} DigitalOutputsIo_t; // 数字输出IO状态（OD60FE）
 
 typedef union
 {
@@ -63,6 +110,9 @@ typedef union
         uint32_t error_bus_voltage : 1;                 // 母线电压错误
         uint32_t error_current_sample : 1;              // 电流采样错误
         uint32_t error_firmware : 1;                    // 固件错误
+        uint32_t error_limit_switch : 1;                // 限位开关错误
+
+        uint32_t reserved : 20;                         // 保留位
     } bit_band;
 } BspErrorCode_t;
 
@@ -78,6 +128,7 @@ typedef union
         uint32_t velocity_target_reached : 1; // 速度到达
         uint32_t target_torque_reached : 1;   // 力矩到达
         uint32_t motor_enable_state : 1;      // 电机使能状态
+
         uint32_t reserved : 25;
     } bits; // 位字段
 } CheckStatusVal_t;
@@ -119,7 +170,7 @@ typedef enum
 {
     APP_CTRL_DISABLE = MOTOR_CTL_SM_MOTOR_DISABLE,                 // 0: 失能电机
     APP_CTRL_ENABLE = MOTOR_CTL_SM_MOTOR_ENABLE,                   // 1: 使能电机  0->1 上升沿使能电机
-    APP_CTRL_EMERGENCY_BRAKE = MOTOR_CTL_SM_MOTOR_EMERGENCY_BRAKE, // 2: 紧急刹车
+    APP_CTRL_EMERGENCY_BRAKE = MOTOR_CTL_SM_MOTOR_EMERGENCY_BRAKE, // 2: 紧急停车（QuickStop）
     APP_CTRL_CLEAR_ERROR = MOTOR_CTL_SM_MOTOR_CLEAR_ERROR,         // 3: 清除错误  0->3 上升沿清除错误
 } APP_CONTROL_WORD;
 

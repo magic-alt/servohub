@@ -60,7 +60,7 @@ extern "C"
 #pragma region motor_ctl_sm_input.motor_enable  定义
 #define MOTOR_CTL_SM_MOTOR_DISABLE (0)         // 0：失能电机
 #define MOTOR_CTL_SM_MOTOR_ENABLE (1)          // 1：使能电机   0->1 上升沿使能电机
-#define MOTOR_CTL_SM_MOTOR_EMERGENCY_BRAKE (2) // 2：紧急刹车
+#define MOTOR_CTL_SM_MOTOR_EMERGENCY_BRAKE (2) // 2：紧急停车
 #define MOTOR_CTL_SM_MOTOR_CLEAR_ERROR (3)     // 3：清除错误  0->3 上升沿清除错误
 #pragma endregion
 

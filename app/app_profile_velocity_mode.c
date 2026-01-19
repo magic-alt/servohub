@@ -34,37 +34,47 @@ AppResult PvModeRun()
 
     if (kPvMode.now_Controlword == APP_CTRL_ENABLE)
     {
-        if (kPvMode.pre_Controlword == APP_CTRL_DISABLE)
+        if (!get_app_Emergency_brake_requested())
         {
-            // 重新使能后初始化规划器
-            SpeedTrajectoryPlanningInit();
-        }
+            if (kPvMode.pre_Controlword == APP_CTRL_DISABLE)
+            {
+                // 重新使能后初始化规划器
+                SpeedTrajectoryPlanningInit();
+            }
 
-        kPvMode.velocity_target = get_app_Target_velocity();
+            kPvMode.velocity_target = get_app_Target_velocity();
 
-        if (get_app_Halt_running_cmd() == true)
-        {
-            kPvMode.traj.speed_tar_p = 0;
+            if (get_app_Halt_running_cmd() == true)
+            {
+                kPvMode.traj.speed_tar_p = 0;
+            }
+            else
+            {
+                kPvMode.traj.speed_tar_p = kPvMode.velocity_target * get_app_Motor_rpm_2_pps() * \
+                                           get_app_Reduction_ratio();
+            }
+
+            // 轮廓加速度减速度切换 目标速度绝对值 大于 当前规划速度绝对值加速 否则则加速
+            if (MATH_ABS(kPvMode.velocity_target) > MATH_ABS(get_app_Velocity_demand_value()))
+            {
+                kPvMode.traj.acc = get_app_Profile_acceleration() * get_app_Motor_rpm_2_pps() * \
+                                   get_app_Reduction_ratio();
+            }
+            else
+            {
+                kPvMode.traj.acc = get_app_Profile_deceleration() * get_app_Motor_rpm_2_pps() * \
+                                   get_app_Reduction_ratio();
+            }
         }
         else
         {
-            kPvMode.traj.speed_tar_p = kPvMode.velocity_target * get_app_Motor_rpm_2_pps() * \
-                                       get_app_Reduction_ratio();
-        }
-
-        // 轮廓加速度减速度切换 目标速度绝对值 大于 当前规划速度绝对值加速 否则则加速
-        if (MATH_ABS(kPvMode.velocity_target) > MATH_ABS(get_app_Velocity_demand_value()))
-        {
-            kPvMode.traj.acc = get_app_Profile_acceleration() * get_app_Motor_rpm_2_pps() * \
-                               get_app_Reduction_ratio();
-        }
-        else
-        {
-            kPvMode.traj.acc = get_app_Profile_deceleration() * get_app_Motor_rpm_2_pps() * \
-                               get_app_Reduction_ratio();
+            set_app_Controlword(APP_CTRL_EMERGENCY_BRAKE); // 强制进入紧急停车（QuickStop）状态
+            kPvMode.now_Controlword = APP_CTRL_EMERGENCY_BRAKE;
         }
     }
-    else if (kPvMode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
+
+    // 紧急停车（QuickStop）处理
+    if (kPvMode.now_Controlword == APP_CTRL_EMERGENCY_BRAKE)
     {
         kPvMode.traj.speed_tar_p = 0; // 如果处于急停状态，规划速度为0
         kPvMode.emergency_brake_mode = get_app_Quick_stop_option_code();

@@ -170,6 +170,9 @@ typedef struct {
     uint8_t tq_fc_id_output_iq_com_enable;
     uint8_t tq_fc_id_output_tq_com_enable;
     uint8_t tq_fc_id_output_fc_com_enable;
+    uint8_t app_restrict_param_Position_limit_enable;
+    uint32_t app_base_config_Digital_io_outputs_phys;
+    uint32_t app_base_config_Digital_io_outputs_mask;
 }FLASH_PARAM_STRUCT;
 extern FLASH_PARAM_STRUCT kFlashStorage;
 

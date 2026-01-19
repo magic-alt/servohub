@@ -629,6 +629,11 @@
               <FilePath>..\..\..\app\app_mit_mode.c</FilePath>
             </File>
             <File>
+              <FileName>app_motion_precondition.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_motion_precondition.c</FilePath>
+            </File>
+            <File>
               <FileName>app_profile_position_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_profile_position_mode.c</FilePath>
@@ -1791,6 +1796,11 @@
               <FileName>app_mit_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_mit_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_motion_precondition.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_motion_precondition.c</FilePath>
             </File>
             <File>
               <FileName>app_profile_position_mode.c</FileName>
@@ -3095,6 +3105,11 @@
               <FilePath>..\..\..\app\app_mit_mode.c</FilePath>
             </File>
             <File>
+              <FileName>app_motion_precondition.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_motion_precondition.c</FilePath>
+            </File>
+            <File>
               <FileName>app_profile_position_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_profile_position_mode.c</FilePath>
@@ -4395,6 +4410,11 @@
               <FileName>app_mit_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_mit_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_motion_precondition.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_motion_precondition.c</FilePath>
             </File>
             <File>
               <FileName>app_profile_position_mode.c</FileName>
@@ -5699,6 +5719,11 @@
               <FilePath>..\..\..\app\app_mit_mode.c</FilePath>
             </File>
             <File>
+              <FileName>app_motion_precondition.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_motion_precondition.c</FilePath>
+            </File>
+            <File>
               <FileName>app_profile_position_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_profile_position_mode.c</FilePath>
@@ -6999,6 +7024,11 @@
               <FileName>app_mit_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_mit_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_motion_precondition.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_motion_precondition.c</FilePath>
             </File>
             <File>
               <FileName>app_profile_position_mode.c</FileName>
