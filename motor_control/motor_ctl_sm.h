@@ -86,7 +86,7 @@ extern "C"
 #define POS_SPEED_CTL_MODE_POSITION (1.0f)  //位置控制模式  
 #pragma endregion
 
-#pragma region  转矩脉动、摩擦补偿的参数宏定义
+#pragma region  转矩脉动/摩擦补偿的参数宏定义
 #define TQ_FC_COM_MIN_SPEED_RAD_S (1.0f)  //转矩脉动、摩擦辨识的转速 rad/s
 #pragma endregion
 
