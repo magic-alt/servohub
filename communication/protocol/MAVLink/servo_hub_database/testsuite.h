@@ -3082,11 +3082,16 @@ static void mavlink_test_tqfcidconfig(uint8_t system_id, uint8_t component_id, m
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_tqfcidconfig_t packet_in = {
-        963497464
+        963497464,45.0,73.0,41,108,175
     };
     mavlink_tqfcidconfig_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         packet1.enc_line_p_n = packet_in.enc_line_p_n;
+        packet1.fc_p_com = packet_in.fc_p_com;
+        packet1.fc_n_com = packet_in.fc_n_com;
+        packet1.iq_com_enable = packet_in.iq_com_enable;
+        packet1.tq_com_enable = packet_in.tq_com_enable;
+        packet1.fc_com_enable = packet_in.fc_com_enable;
         
         
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
@@ -3101,12 +3106,12 @@ static void mavlink_test_tqfcidconfig(uint8_t system_id, uint8_t component_id, m
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_tqfcidconfig_pack(system_id, component_id, &msg , packet1.enc_line_p_n );
+    mavlink_msg_tqfcidconfig_pack(system_id, component_id, &msg , packet1.enc_line_p_n , packet1.iq_com_enable , packet1.tq_com_enable , packet1.fc_com_enable , packet1.fc_p_com , packet1.fc_n_com );
     mavlink_msg_tqfcidconfig_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_tqfcidconfig_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.enc_line_p_n );
+    mavlink_msg_tqfcidconfig_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.enc_line_p_n , packet1.iq_com_enable , packet1.tq_com_enable , packet1.fc_com_enable , packet1.fc_p_com , packet1.fc_n_com );
     mavlink_msg_tqfcidconfig_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -3119,7 +3124,7 @@ static void mavlink_test_tqfcidconfig(uint8_t system_id, uint8_t component_id, m
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_tqfcidconfig_send(MAVLINK_COMM_1 , packet1.enc_line_p_n );
+    mavlink_msg_tqfcidconfig_send(MAVLINK_COMM_1 , packet1.enc_line_p_n , packet1.iq_com_enable , packet1.tq_com_enable , packet1.fc_com_enable , packet1.fc_p_com , packet1.fc_n_com );
     mavlink_msg_tqfcidconfig_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -3141,14 +3146,11 @@ static void mavlink_test_tqfcidoutput(uint8_t system_id, uint8_t component_id, m
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_tqfcidoutput_t packet_in = {
-        93372036854775807LL,29,96,163,230
+        93372036854775807LL,29
     };
     mavlink_tqfcidoutput_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         packet1.pos_cmd_p = packet_in.pos_cmd_p;
-        packet1.iq_com_enable = packet_in.iq_com_enable;
-        packet1.tq_com_enable = packet_in.tq_com_enable;
-        packet1.fc_com_enable = packet_in.fc_com_enable;
         packet1.state_now = packet_in.state_now;
         
         
@@ -3164,12 +3166,12 @@ static void mavlink_test_tqfcidoutput(uint8_t system_id, uint8_t component_id, m
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_tqfcidoutput_pack(system_id, component_id, &msg , packet1.pos_cmd_p , packet1.iq_com_enable , packet1.tq_com_enable , packet1.fc_com_enable , packet1.state_now );
+    mavlink_msg_tqfcidoutput_pack(system_id, component_id, &msg , packet1.pos_cmd_p , packet1.state_now );
     mavlink_msg_tqfcidoutput_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_tqfcidoutput_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.pos_cmd_p , packet1.iq_com_enable , packet1.tq_com_enable , packet1.fc_com_enable , packet1.state_now );
+    mavlink_msg_tqfcidoutput_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.pos_cmd_p , packet1.state_now );
     mavlink_msg_tqfcidoutput_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -3182,7 +3184,7 @@ static void mavlink_test_tqfcidoutput(uint8_t system_id, uint8_t component_id, m
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_tqfcidoutput_send(MAVLINK_COMM_1 , packet1.pos_cmd_p , packet1.iq_com_enable , packet1.tq_com_enable , packet1.fc_com_enable , packet1.state_now );
+    mavlink_msg_tqfcidoutput_send(MAVLINK_COMM_1 , packet1.pos_cmd_p , packet1.state_now );
     mavlink_msg_tqfcidoutput_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 

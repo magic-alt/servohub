@@ -4,7 +4,7 @@
 #include "motor_ctl_loop.h"
 
 //DATABASE_CODE_START_1
-const InterVarStruct kParamDataBase[384] = {
+const InterVarStruct kParamDataBase[386] = {
     {1, &kAxis.pmsm_config.b, kTypeFloat32},
     {2, &kAxis.pmsm_config.fc, kTypeFloat32},
     {3, &kAxis.pmsm_config.flux, kTypeFloat32},
@@ -151,9 +151,9 @@ const InterVarStruct kParamDataBase[384] = {
     {197, &kAxis.tq_fc_id_input.pos_abs_p, kTypeUint32},
     {198, &kAxis.tq_fc_id_input.pos_init_p, kTypeInt64},
     {199, &kAxis.tq_fc_id_input.start, kTypeUint8},
-    {201, &kAxis.tq_fc_id_output.iq_com_enable, kTypeUint8},
-    {202, &kAxis.tq_fc_id_output.tq_com_enable, kTypeUint8},
-    {203, &kAxis.tq_fc_id_output.fc_com_enable, kTypeUint8},
+    {201, &kAxis.tq_fc_id_config.iq_com_enable, kTypeUint8},
+    {202, &kAxis.tq_fc_id_config.tq_com_enable, kTypeUint8},
+    {203, &kAxis.tq_fc_id_config.fc_com_enable, kTypeUint8},
     {204, &kAxis.tq_fc_id_output.state_now, kTypeInt8},
     {205, &kAxis.motor_ctl_sm_output.motor_enable_last, kTypeUint8},
     {210, &kAxis.current_ctl_config.pwm_duty_cycle_max, kTypeFloat32},
@@ -389,5 +389,7 @@ const InterVarStruct kParamDataBase[384] = {
     {605, &kAppBaseConfig.Digital_io_outputs_phys, kTypeUint32},
     {606, &kAppBaseConfig.Digital_io_outputs_mask, kTypeUint32},
     {607, &kAppMotionParam.Emergency_brake_requested, kTypeUint8},
+    {611, &kAxis.tq_fc_id_config.fc_p_com, kTypeFloat32},
+    {612, &kAxis.tq_fc_id_config.fc_n_com, kTypeFloat32},
 };
 //DATABASE_CODE_STOP_1

@@ -442,13 +442,15 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 break;
             case MAVLINK_MSG_ID_TqFcIdConfig:
                 tq_fc_id_config_t.enc_line_p_n = axis->tq_fc_id_config.enc_line_p_n;
+                tq_fc_id_config_t.iq_com_enable = axis->tq_fc_id_config.iq_com_enable;
+                tq_fc_id_config_t.tq_com_enable = axis->tq_fc_id_config.tq_com_enable;
+                tq_fc_id_config_t.fc_com_enable = axis->tq_fc_id_config.fc_com_enable;
+                tq_fc_id_config_t.fc_p_com = axis->tq_fc_id_config.fc_p_com;
+                tq_fc_id_config_t.fc_n_com = axis->tq_fc_id_config.fc_n_com;
                 mavlink_msg_tqfcidconfig_encode(0, 0, &send_msg, (mavlink_tqfcidconfig_t *)&tq_fc_id_config_t);
                 break;
             case MAVLINK_MSG_ID_TqFcIdOutput:
                 tq_fc_id_output_t.pos_cmd_p = axis->tq_fc_id_output.pos_cmd_p;
-                tq_fc_id_output_t.iq_com_enable = axis->tq_fc_id_output.iq_com_enable;
-                tq_fc_id_output_t.tq_com_enable = axis->tq_fc_id_output.tq_com_enable;
-                tq_fc_id_output_t.fc_com_enable = axis->tq_fc_id_output.fc_com_enable;
                 tq_fc_id_output_t.state_now = axis->tq_fc_id_output.state_now;
                 mavlink_msg_tqfcidoutput_encode(0, 0, &send_msg, (mavlink_tqfcidoutput_t *)&tq_fc_id_output_t);
                 break;
@@ -1119,14 +1121,16 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
             case MAVLINK_MSG_ID_TqFcIdConfig:
                 mavlink_msg_tqfcidconfig_decode(&msg, (mavlink_tqfcidconfig_t *)&tq_fc_id_config_t);
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_config.enc_line_p_n = tq_fc_id_config_t.enc_line_p_n;}
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_config.iq_com_enable = tq_fc_id_config_t.iq_com_enable;}
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_config.tq_com_enable = tq_fc_id_config_t.tq_com_enable;}
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_config.fc_com_enable = tq_fc_id_config_t.fc_com_enable;}
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_config.fc_p_com = tq_fc_id_config_t.fc_p_com;}
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_config.fc_n_com = tq_fc_id_config_t.fc_n_com;}
                 mavlink_msg_tqfcidconfig_encode(0, 0, &send_msg, (mavlink_tqfcidconfig_t *)&tq_fc_id_config_t);
                 break;
             case MAVLINK_MSG_ID_TqFcIdOutput:
                 mavlink_msg_tqfcidoutput_decode(&msg, (mavlink_tqfcidoutput_t *)&tq_fc_id_output_t);
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_output.pos_cmd_p = tq_fc_id_output_t.pos_cmd_p;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_output.iq_com_enable = tq_fc_id_output_t.iq_com_enable;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_output.tq_com_enable = tq_fc_id_output_t.tq_com_enable;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_output.fc_com_enable = tq_fc_id_output_t.fc_com_enable;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_output.state_now = tq_fc_id_output_t.state_now;}
                 mavlink_msg_tqfcidoutput_encode(0, 0, &send_msg, (mavlink_tqfcidoutput_t *)&tq_fc_id_output_t);
                 break;

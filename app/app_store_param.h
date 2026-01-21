@@ -167,12 +167,14 @@ typedef struct {
     uint32_t app_encoder_config_Load_control_resolution;
     uint32_t app_encoder_config_Motor_control_resolution;
     uint8_t app_encoder_config_Load_encoder_options;
-    uint8_t tq_fc_id_output_iq_com_enable;
-    uint8_t tq_fc_id_output_tq_com_enable;
-    uint8_t tq_fc_id_output_fc_com_enable;
     uint8_t app_restrict_param_Position_limit_enable;
     uint32_t app_base_config_Digital_io_outputs_phys;
     uint32_t app_base_config_Digital_io_outputs_mask;
+    uint8_t tq_fc_id_config_iq_com_enable;
+    uint8_t tq_fc_id_config_tq_com_enable;
+    uint8_t tq_fc_id_config_fc_com_enable;
+    float tq_fc_id_config_fc_p_com;
+    float tq_fc_id_config_fc_n_com;
 }FLASH_PARAM_STRUCT;
 extern FLASH_PARAM_STRUCT kFlashStorage;
 

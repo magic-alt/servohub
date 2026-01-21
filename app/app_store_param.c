@@ -48,9 +48,9 @@ void flash_param_update(void)
     kFlashStorage.pos_speed_ctl_config_dob_wn_Hz = kAxis.pos_speed_ctl_config.dob_wn_Hz;
     kFlashStorage.pos_speed_ctl_config_dob_enable = kAxis.pos_speed_ctl_config.dob_enable;
     kFlashStorage.input_shaping_config_enable = kAxis.input_shaping_config.enable;
-    kFlashStorage.tq_fc_id_output_iq_com_enable = kAxis.tq_fc_id_output.iq_com_enable;
-    kFlashStorage.tq_fc_id_output_tq_com_enable = kAxis.tq_fc_id_output.tq_com_enable;
-    kFlashStorage.tq_fc_id_output_fc_com_enable = kAxis.tq_fc_id_output.fc_com_enable;
+    kFlashStorage.tq_fc_id_config_iq_com_enable = kAxis.tq_fc_id_config.iq_com_enable;
+    kFlashStorage.tq_fc_id_config_tq_com_enable = kAxis.tq_fc_id_config.tq_com_enable;
+    kFlashStorage.tq_fc_id_config_fc_com_enable = kAxis.tq_fc_id_config.fc_com_enable;
     kFlashStorage.current_ctl_config_pwm_duty_cycle_max = kAxis.current_ctl_config.pwm_duty_cycle_max;
     kFlashStorage.app_encoder_config_Load_encoder_resolution = kAppEncoderConfig.Load_encoder_resolution;
     kFlashStorage.app_encoder_config_Motor_encoder_resolution = kAppEncoderConfig.Motor_encoder_resolution;
@@ -185,6 +185,8 @@ void flash_param_update(void)
     kFlashStorage.app_restrict_param_Position_limit_enable = kAppRestrictParam.Position_limit_enable;
     kFlashStorage.app_base_config_Digital_io_outputs_phys = kAppBaseConfig.Digital_io_outputs_phys;
     kFlashStorage.app_base_config_Digital_io_outputs_mask = kAppBaseConfig.Digital_io_outputs_mask;
+    kFlashStorage.tq_fc_id_config_fc_p_com = kAxis.tq_fc_id_config.fc_p_com;
+    kFlashStorage.tq_fc_id_config_fc_n_com = kAxis.tq_fc_id_config.fc_n_com;
 }
 
 void flash_param_init(void)
@@ -229,9 +231,9 @@ void flash_param_init(void)
     kAxis.pos_speed_ctl_config.dob_wn_Hz = kFlashStorage.pos_speed_ctl_config_dob_wn_Hz;
     kAxis.pos_speed_ctl_config.dob_enable = kFlashStorage.pos_speed_ctl_config_dob_enable;
     kAxis.input_shaping_config.enable = kFlashStorage.input_shaping_config_enable;
-    kAxis.tq_fc_id_output.iq_com_enable = kFlashStorage.tq_fc_id_output_iq_com_enable;
-    kAxis.tq_fc_id_output.tq_com_enable = kFlashStorage.tq_fc_id_output_tq_com_enable;
-    kAxis.tq_fc_id_output.fc_com_enable = kFlashStorage.tq_fc_id_output_fc_com_enable;
+    kAxis.tq_fc_id_config.iq_com_enable = kFlashStorage.tq_fc_id_config_iq_com_enable;
+    kAxis.tq_fc_id_config.tq_com_enable = kFlashStorage.tq_fc_id_config_tq_com_enable;
+    kAxis.tq_fc_id_config.fc_com_enable = kFlashStorage.tq_fc_id_config_fc_com_enable;
     kAxis.current_ctl_config.pwm_duty_cycle_max = kFlashStorage.current_ctl_config_pwm_duty_cycle_max;
     kAppEncoderConfig.Load_encoder_resolution = kFlashStorage.app_encoder_config_Load_encoder_resolution;
     kAppEncoderConfig.Motor_encoder_resolution = kFlashStorage.app_encoder_config_Motor_encoder_resolution;
@@ -366,6 +368,8 @@ void flash_param_init(void)
     kAppRestrictParam.Position_limit_enable = kFlashStorage.app_restrict_param_Position_limit_enable;
     kAppBaseConfig.Digital_io_outputs_phys = kFlashStorage.app_base_config_Digital_io_outputs_phys;
     kAppBaseConfig.Digital_io_outputs_mask = kFlashStorage.app_base_config_Digital_io_outputs_mask;
+    kAxis.tq_fc_id_config.fc_p_com = kFlashStorage.tq_fc_id_config_fc_p_com;
+    kAxis.tq_fc_id_config.fc_n_com = kFlashStorage.tq_fc_id_config_fc_n_com;
 }
 /* USER CODE BEGIN AREA 1 */
 static HistoricalInfo kFlashHistoricalInfo;
