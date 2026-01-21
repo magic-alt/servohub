@@ -7,7 +7,6 @@ AppResult IdPolePairsModeInit()
 {
     set_app_Controlword(APP_CTRL_DISABLE); //上升沿使能，初始化置0
 
-    axis->pole_pairs_id_output.state_now = IDENTIFICATION_MODE_STATE_IDLE; // 重置辨识状态
     axis->pole_pairs_id_config.id_tar_max_A = get_app_Motor_rated_current(); // 设置辨识最大电流，一般设置为电机额定电流
 
     return APP_RET_SUCCESS;
@@ -24,7 +23,8 @@ AppResult IdPolePairsModeRun()
     {
         if (!get_app_Emergency_brake_requested())
         {
-            if (axis->pole_pairs_id_output.state_now == IDENTIFICATION_MODE_STATE_FINISH)
+            if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_STATE_ENABLE && \
+                axis->pole_pairs_id_output.state_now == IDENTIFICATION_MODE_STATE_FINISH)
             {
                 // 辨识完成 会自动失能电机
                 set_app_Controlword(APP_CTRL_DISABLE);

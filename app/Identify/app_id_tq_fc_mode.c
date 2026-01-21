@@ -7,8 +7,6 @@ AppResult IdTqFcModeInit()
 {
     set_app_Controlword(APP_CTRL_DISABLE); //上升沿使能，初始化置0
 
-    axis->tq_fc_id_output.state_now = IDENTIFICATION_MODE_STATE_IDLE; // 重置辨识状态
-
     return APP_RET_SUCCESS;
 }
 
@@ -23,7 +21,8 @@ AppResult IdTqFcModeRun()
     {
         if (!get_app_Emergency_brake_requested())
         {
-            if (axis->tq_fc_id_output.state_now == IDENTIFICATION_MODE_STATE_FINISH)
+            if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_STATE_ENABLE && \
+                axis->tq_fc_id_output.state_now == IDENTIFICATION_MODE_STATE_FINISH)
             {
                 // 辨识完成 会自动失能电机
                 set_app_Controlword(APP_CTRL_DISABLE);

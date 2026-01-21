@@ -7,8 +7,6 @@ AppResult IdMecModeInit()
 {
     set_app_Controlword(APP_CTRL_DISABLE); //上升沿使能，初始化置0
 
-    axis->mec_id_output.state_now = IDENTIFICATION_MODE_STATE_IDLE; // 重置辨识状态
-
     axis->mec_id_config.i_max_A = get_app_Motor_rated_current(); // 设置辨识最大电流，一般设置为电机额定电流
     axis->mec_id_config.signal_type = 0; // 机械特性辨识信号类型 0：chirp 一般默认 1：阶跃信号，超大惯量辨识适用
 
@@ -26,7 +24,8 @@ AppResult IdMecModeRun()
     {
         if (!get_app_Emergency_brake_requested())
         {
-            if (axis->mec_id_output.state_now == IDENTIFICATION_MODE_STATE_FINISH)
+            if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_STATE_ENABLE && \
+                axis->mec_id_output.state_now == IDENTIFICATION_MODE_STATE_FINISH)
             {
                 // 辨识完成 会自动失能电机
                 set_app_Controlword(APP_CTRL_DISABLE);

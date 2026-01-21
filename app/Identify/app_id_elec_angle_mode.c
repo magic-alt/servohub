@@ -7,7 +7,6 @@ AppResult IdElecAngleModeInit()
 {
     set_app_Controlword(APP_CTRL_DISABLE); //上升沿使能，初始化置0
 
-    axis->elec_angle_id_output.state_now = IDENTIFICATION_MODE_STATE_IDLE; // 重置辨识状态
     axis->elec_angle_id_config.id_max_A = get_app_Motor_rated_current(); // 设置电角度辨识正弦波幅值，一般设置为电机额定电流
 
     return APP_RET_SUCCESS;
@@ -24,7 +23,8 @@ AppResult IdElecAngleModeRun()
     {
         if (!get_app_Emergency_brake_requested())
         {
-            if (axis->elec_angle_id_output.state_now == IDENTIFICATION_MODE_STATE_FINISH)
+            if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_STATE_ENABLE && \
+                axis->elec_angle_id_output.state_now == IDENTIFICATION_MODE_STATE_FINISH)
             {
                 // 辨识完成 会自动失能电机
                 set_app_Controlword(APP_CTRL_DISABLE);
