@@ -14,15 +14,16 @@ typedef struct __mavlink_apprestrictparam_t {
  float Max_acceleration; /*<  */
  float Max_deceleration; /*<  */
  float Max_current; /*<  */
+ uint8_t Position_limit_enable; /*<  */
 } mavlink_apprestrictparam_t;
 
-#define MAVLINK_MSG_ID_AppRestrictParam_LEN 52
-#define MAVLINK_MSG_ID_AppRestrictParam_MIN_LEN 52
-#define MAVLINK_MSG_ID_30060_LEN 52
-#define MAVLINK_MSG_ID_30060_MIN_LEN 52
+#define MAVLINK_MSG_ID_AppRestrictParam_LEN 53
+#define MAVLINK_MSG_ID_AppRestrictParam_MIN_LEN 53
+#define MAVLINK_MSG_ID_30060_LEN 53
+#define MAVLINK_MSG_ID_30060_MIN_LEN 53
 
-#define MAVLINK_MSG_ID_AppRestrictParam_CRC 217
-#define MAVLINK_MSG_ID_30060_CRC 217
+#define MAVLINK_MSG_ID_AppRestrictParam_CRC 34
+#define MAVLINK_MSG_ID_30060_CRC 34
 
 
 
@@ -30,7 +31,7 @@ typedef struct __mavlink_apprestrictparam_t {
 #define MAVLINK_MESSAGE_INFO_AppRestrictParam { \
     30060, \
     "AppRestrictParam", \
-    9, \
+    10, \
     {  { "Position_range_limit_Minimal_position_limit", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_apprestrictparam_t, Position_range_limit_Minimal_position_limit) }, \
          { "Position_range_limit_Maximal_position_limit", NULL, MAVLINK_TYPE_INT64_T, 0, 8, offsetof(mavlink_apprestrictparam_t, Position_range_limit_Maximal_position_limit) }, \
          { "Software_position_limit_Minimal_position_limit", NULL, MAVLINK_TYPE_INT64_T, 0, 16, offsetof(mavlink_apprestrictparam_t, Software_position_limit_Minimal_position_limit) }, \
@@ -40,12 +41,13 @@ typedef struct __mavlink_apprestrictparam_t {
          { "Max_acceleration", NULL, MAVLINK_TYPE_FLOAT, 0, 40, offsetof(mavlink_apprestrictparam_t, Max_acceleration) }, \
          { "Max_deceleration", NULL, MAVLINK_TYPE_FLOAT, 0, 44, offsetof(mavlink_apprestrictparam_t, Max_deceleration) }, \
          { "Max_current", NULL, MAVLINK_TYPE_FLOAT, 0, 48, offsetof(mavlink_apprestrictparam_t, Max_current) }, \
+         { "Position_limit_enable", NULL, MAVLINK_TYPE_UINT8_T, 0, 52, offsetof(mavlink_apprestrictparam_t, Position_limit_enable) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_AppRestrictParam { \
     "AppRestrictParam", \
-    9, \
+    10, \
     {  { "Position_range_limit_Minimal_position_limit", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_apprestrictparam_t, Position_range_limit_Minimal_position_limit) }, \
          { "Position_range_limit_Maximal_position_limit", NULL, MAVLINK_TYPE_INT64_T, 0, 8, offsetof(mavlink_apprestrictparam_t, Position_range_limit_Maximal_position_limit) }, \
          { "Software_position_limit_Minimal_position_limit", NULL, MAVLINK_TYPE_INT64_T, 0, 16, offsetof(mavlink_apprestrictparam_t, Software_position_limit_Minimal_position_limit) }, \
@@ -55,6 +57,7 @@ typedef struct __mavlink_apprestrictparam_t {
          { "Max_acceleration", NULL, MAVLINK_TYPE_FLOAT, 0, 40, offsetof(mavlink_apprestrictparam_t, Max_acceleration) }, \
          { "Max_deceleration", NULL, MAVLINK_TYPE_FLOAT, 0, 44, offsetof(mavlink_apprestrictparam_t, Max_deceleration) }, \
          { "Max_current", NULL, MAVLINK_TYPE_FLOAT, 0, 48, offsetof(mavlink_apprestrictparam_t, Max_current) }, \
+         { "Position_limit_enable", NULL, MAVLINK_TYPE_UINT8_T, 0, 52, offsetof(mavlink_apprestrictparam_t, Position_limit_enable) }, \
          } \
 }
 #endif
@@ -74,10 +77,11 @@ typedef struct __mavlink_apprestrictparam_t {
  * @param Max_acceleration  
  * @param Max_deceleration  
  * @param Max_current  
+ * @param Position_limit_enable  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_apprestrictparam_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               int64_t Position_range_limit_Minimal_position_limit, int64_t Position_range_limit_Maximal_position_limit, int64_t Software_position_limit_Minimal_position_limit, int64_t Software_position_limit_Maximal_position_limit, float Max_profile_velocity, float Max_motor_speed, float Max_acceleration, float Max_deceleration, float Max_current)
+                               int64_t Position_range_limit_Minimal_position_limit, int64_t Position_range_limit_Maximal_position_limit, int64_t Software_position_limit_Minimal_position_limit, int64_t Software_position_limit_Maximal_position_limit, float Max_profile_velocity, float Max_motor_speed, float Max_acceleration, float Max_deceleration, float Max_current, uint8_t Position_limit_enable)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppRestrictParam_LEN];
@@ -90,6 +94,7 @@ static inline uint16_t mavlink_msg_apprestrictparam_pack(uint8_t system_id, uint
     _mav_put_float(buf, 40, Max_acceleration);
     _mav_put_float(buf, 44, Max_deceleration);
     _mav_put_float(buf, 48, Max_current);
+    _mav_put_uint8_t(buf, 52, Position_limit_enable);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppRestrictParam_LEN);
 #else
@@ -103,6 +108,7 @@ static inline uint16_t mavlink_msg_apprestrictparam_pack(uint8_t system_id, uint
     packet.Max_acceleration = Max_acceleration;
     packet.Max_deceleration = Max_deceleration;
     packet.Max_current = Max_current;
+    packet.Position_limit_enable = Position_limit_enable;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_AppRestrictParam_LEN);
 #endif
@@ -127,10 +133,11 @@ static inline uint16_t mavlink_msg_apprestrictparam_pack(uint8_t system_id, uint
  * @param Max_acceleration  
  * @param Max_deceleration  
  * @param Max_current  
+ * @param Position_limit_enable  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_apprestrictparam_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               int64_t Position_range_limit_Minimal_position_limit, int64_t Position_range_limit_Maximal_position_limit, int64_t Software_position_limit_Minimal_position_limit, int64_t Software_position_limit_Maximal_position_limit, float Max_profile_velocity, float Max_motor_speed, float Max_acceleration, float Max_deceleration, float Max_current)
+                               int64_t Position_range_limit_Minimal_position_limit, int64_t Position_range_limit_Maximal_position_limit, int64_t Software_position_limit_Minimal_position_limit, int64_t Software_position_limit_Maximal_position_limit, float Max_profile_velocity, float Max_motor_speed, float Max_acceleration, float Max_deceleration, float Max_current, uint8_t Position_limit_enable)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppRestrictParam_LEN];
@@ -143,6 +150,7 @@ static inline uint16_t mavlink_msg_apprestrictparam_pack_status(uint8_t system_i
     _mav_put_float(buf, 40, Max_acceleration);
     _mav_put_float(buf, 44, Max_deceleration);
     _mav_put_float(buf, 48, Max_current);
+    _mav_put_uint8_t(buf, 52, Position_limit_enable);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppRestrictParam_LEN);
 #else
@@ -156,6 +164,7 @@ static inline uint16_t mavlink_msg_apprestrictparam_pack_status(uint8_t system_i
     packet.Max_acceleration = Max_acceleration;
     packet.Max_deceleration = Max_deceleration;
     packet.Max_current = Max_current;
+    packet.Position_limit_enable = Position_limit_enable;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_AppRestrictParam_LEN);
 #endif
@@ -183,11 +192,12 @@ static inline uint16_t mavlink_msg_apprestrictparam_pack_status(uint8_t system_i
  * @param Max_acceleration  
  * @param Max_deceleration  
  * @param Max_current  
+ * @param Position_limit_enable  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_apprestrictparam_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   int64_t Position_range_limit_Minimal_position_limit,int64_t Position_range_limit_Maximal_position_limit,int64_t Software_position_limit_Minimal_position_limit,int64_t Software_position_limit_Maximal_position_limit,float Max_profile_velocity,float Max_motor_speed,float Max_acceleration,float Max_deceleration,float Max_current)
+                                   int64_t Position_range_limit_Minimal_position_limit,int64_t Position_range_limit_Maximal_position_limit,int64_t Software_position_limit_Minimal_position_limit,int64_t Software_position_limit_Maximal_position_limit,float Max_profile_velocity,float Max_motor_speed,float Max_acceleration,float Max_deceleration,float Max_current,uint8_t Position_limit_enable)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppRestrictParam_LEN];
@@ -200,6 +210,7 @@ static inline uint16_t mavlink_msg_apprestrictparam_pack_chan(uint8_t system_id,
     _mav_put_float(buf, 40, Max_acceleration);
     _mav_put_float(buf, 44, Max_deceleration);
     _mav_put_float(buf, 48, Max_current);
+    _mav_put_uint8_t(buf, 52, Position_limit_enable);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppRestrictParam_LEN);
 #else
@@ -213,6 +224,7 @@ static inline uint16_t mavlink_msg_apprestrictparam_pack_chan(uint8_t system_id,
     packet.Max_acceleration = Max_acceleration;
     packet.Max_deceleration = Max_deceleration;
     packet.Max_current = Max_current;
+    packet.Position_limit_enable = Position_limit_enable;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_AppRestrictParam_LEN);
 #endif
@@ -231,7 +243,7 @@ static inline uint16_t mavlink_msg_apprestrictparam_pack_chan(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_apprestrictparam_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_apprestrictparam_t* apprestrictparam)
 {
-    return mavlink_msg_apprestrictparam_pack(system_id, component_id, msg, apprestrictparam->Position_range_limit_Minimal_position_limit, apprestrictparam->Position_range_limit_Maximal_position_limit, apprestrictparam->Software_position_limit_Minimal_position_limit, apprestrictparam->Software_position_limit_Maximal_position_limit, apprestrictparam->Max_profile_velocity, apprestrictparam->Max_motor_speed, apprestrictparam->Max_acceleration, apprestrictparam->Max_deceleration, apprestrictparam->Max_current);
+    return mavlink_msg_apprestrictparam_pack(system_id, component_id, msg, apprestrictparam->Position_range_limit_Minimal_position_limit, apprestrictparam->Position_range_limit_Maximal_position_limit, apprestrictparam->Software_position_limit_Minimal_position_limit, apprestrictparam->Software_position_limit_Maximal_position_limit, apprestrictparam->Max_profile_velocity, apprestrictparam->Max_motor_speed, apprestrictparam->Max_acceleration, apprestrictparam->Max_deceleration, apprestrictparam->Max_current, apprestrictparam->Position_limit_enable);
 }
 
 /**
@@ -245,7 +257,7 @@ static inline uint16_t mavlink_msg_apprestrictparam_encode(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_apprestrictparam_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_apprestrictparam_t* apprestrictparam)
 {
-    return mavlink_msg_apprestrictparam_pack_chan(system_id, component_id, chan, msg, apprestrictparam->Position_range_limit_Minimal_position_limit, apprestrictparam->Position_range_limit_Maximal_position_limit, apprestrictparam->Software_position_limit_Minimal_position_limit, apprestrictparam->Software_position_limit_Maximal_position_limit, apprestrictparam->Max_profile_velocity, apprestrictparam->Max_motor_speed, apprestrictparam->Max_acceleration, apprestrictparam->Max_deceleration, apprestrictparam->Max_current);
+    return mavlink_msg_apprestrictparam_pack_chan(system_id, component_id, chan, msg, apprestrictparam->Position_range_limit_Minimal_position_limit, apprestrictparam->Position_range_limit_Maximal_position_limit, apprestrictparam->Software_position_limit_Minimal_position_limit, apprestrictparam->Software_position_limit_Maximal_position_limit, apprestrictparam->Max_profile_velocity, apprestrictparam->Max_motor_speed, apprestrictparam->Max_acceleration, apprestrictparam->Max_deceleration, apprestrictparam->Max_current, apprestrictparam->Position_limit_enable);
 }
 
 /**
@@ -259,7 +271,7 @@ static inline uint16_t mavlink_msg_apprestrictparam_encode_chan(uint8_t system_i
  */
 static inline uint16_t mavlink_msg_apprestrictparam_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_apprestrictparam_t* apprestrictparam)
 {
-    return mavlink_msg_apprestrictparam_pack_status(system_id, component_id, _status, msg,  apprestrictparam->Position_range_limit_Minimal_position_limit, apprestrictparam->Position_range_limit_Maximal_position_limit, apprestrictparam->Software_position_limit_Minimal_position_limit, apprestrictparam->Software_position_limit_Maximal_position_limit, apprestrictparam->Max_profile_velocity, apprestrictparam->Max_motor_speed, apprestrictparam->Max_acceleration, apprestrictparam->Max_deceleration, apprestrictparam->Max_current);
+    return mavlink_msg_apprestrictparam_pack_status(system_id, component_id, _status, msg,  apprestrictparam->Position_range_limit_Minimal_position_limit, apprestrictparam->Position_range_limit_Maximal_position_limit, apprestrictparam->Software_position_limit_Minimal_position_limit, apprestrictparam->Software_position_limit_Maximal_position_limit, apprestrictparam->Max_profile_velocity, apprestrictparam->Max_motor_speed, apprestrictparam->Max_acceleration, apprestrictparam->Max_deceleration, apprestrictparam->Max_current, apprestrictparam->Position_limit_enable);
 }
 
 /**
@@ -275,10 +287,11 @@ static inline uint16_t mavlink_msg_apprestrictparam_encode_status(uint8_t system
  * @param Max_acceleration  
  * @param Max_deceleration  
  * @param Max_current  
+ * @param Position_limit_enable  
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_apprestrictparam_send(mavlink_channel_t chan, int64_t Position_range_limit_Minimal_position_limit, int64_t Position_range_limit_Maximal_position_limit, int64_t Software_position_limit_Minimal_position_limit, int64_t Software_position_limit_Maximal_position_limit, float Max_profile_velocity, float Max_motor_speed, float Max_acceleration, float Max_deceleration, float Max_current)
+static inline void mavlink_msg_apprestrictparam_send(mavlink_channel_t chan, int64_t Position_range_limit_Minimal_position_limit, int64_t Position_range_limit_Maximal_position_limit, int64_t Software_position_limit_Minimal_position_limit, int64_t Software_position_limit_Maximal_position_limit, float Max_profile_velocity, float Max_motor_speed, float Max_acceleration, float Max_deceleration, float Max_current, uint8_t Position_limit_enable)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppRestrictParam_LEN];
@@ -291,6 +304,7 @@ static inline void mavlink_msg_apprestrictparam_send(mavlink_channel_t chan, int
     _mav_put_float(buf, 40, Max_acceleration);
     _mav_put_float(buf, 44, Max_deceleration);
     _mav_put_float(buf, 48, Max_current);
+    _mav_put_uint8_t(buf, 52, Position_limit_enable);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppRestrictParam, buf, MAVLINK_MSG_ID_AppRestrictParam_MIN_LEN, MAVLINK_MSG_ID_AppRestrictParam_LEN, MAVLINK_MSG_ID_AppRestrictParam_CRC);
 #else
@@ -304,6 +318,7 @@ static inline void mavlink_msg_apprestrictparam_send(mavlink_channel_t chan, int
     packet.Max_acceleration = Max_acceleration;
     packet.Max_deceleration = Max_deceleration;
     packet.Max_current = Max_current;
+    packet.Position_limit_enable = Position_limit_enable;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppRestrictParam, (const char *)&packet, MAVLINK_MSG_ID_AppRestrictParam_MIN_LEN, MAVLINK_MSG_ID_AppRestrictParam_LEN, MAVLINK_MSG_ID_AppRestrictParam_CRC);
 #endif
@@ -317,7 +332,7 @@ static inline void mavlink_msg_apprestrictparam_send(mavlink_channel_t chan, int
 static inline void mavlink_msg_apprestrictparam_send_struct(mavlink_channel_t chan, const mavlink_apprestrictparam_t* apprestrictparam)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_apprestrictparam_send(chan, apprestrictparam->Position_range_limit_Minimal_position_limit, apprestrictparam->Position_range_limit_Maximal_position_limit, apprestrictparam->Software_position_limit_Minimal_position_limit, apprestrictparam->Software_position_limit_Maximal_position_limit, apprestrictparam->Max_profile_velocity, apprestrictparam->Max_motor_speed, apprestrictparam->Max_acceleration, apprestrictparam->Max_deceleration, apprestrictparam->Max_current);
+    mavlink_msg_apprestrictparam_send(chan, apprestrictparam->Position_range_limit_Minimal_position_limit, apprestrictparam->Position_range_limit_Maximal_position_limit, apprestrictparam->Software_position_limit_Minimal_position_limit, apprestrictparam->Software_position_limit_Maximal_position_limit, apprestrictparam->Max_profile_velocity, apprestrictparam->Max_motor_speed, apprestrictparam->Max_acceleration, apprestrictparam->Max_deceleration, apprestrictparam->Max_current, apprestrictparam->Position_limit_enable);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppRestrictParam, (const char *)apprestrictparam, MAVLINK_MSG_ID_AppRestrictParam_MIN_LEN, MAVLINK_MSG_ID_AppRestrictParam_LEN, MAVLINK_MSG_ID_AppRestrictParam_CRC);
 #endif
@@ -331,7 +346,7 @@ static inline void mavlink_msg_apprestrictparam_send_struct(mavlink_channel_t ch
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_apprestrictparam_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int64_t Position_range_limit_Minimal_position_limit, int64_t Position_range_limit_Maximal_position_limit, int64_t Software_position_limit_Minimal_position_limit, int64_t Software_position_limit_Maximal_position_limit, float Max_profile_velocity, float Max_motor_speed, float Max_acceleration, float Max_deceleration, float Max_current)
+static inline void mavlink_msg_apprestrictparam_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int64_t Position_range_limit_Minimal_position_limit, int64_t Position_range_limit_Maximal_position_limit, int64_t Software_position_limit_Minimal_position_limit, int64_t Software_position_limit_Maximal_position_limit, float Max_profile_velocity, float Max_motor_speed, float Max_acceleration, float Max_deceleration, float Max_current, uint8_t Position_limit_enable)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -344,6 +359,7 @@ static inline void mavlink_msg_apprestrictparam_send_buf(mavlink_message_t *msgb
     _mav_put_float(buf, 40, Max_acceleration);
     _mav_put_float(buf, 44, Max_deceleration);
     _mav_put_float(buf, 48, Max_current);
+    _mav_put_uint8_t(buf, 52, Position_limit_enable);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppRestrictParam, buf, MAVLINK_MSG_ID_AppRestrictParam_MIN_LEN, MAVLINK_MSG_ID_AppRestrictParam_LEN, MAVLINK_MSG_ID_AppRestrictParam_CRC);
 #else
@@ -357,6 +373,7 @@ static inline void mavlink_msg_apprestrictparam_send_buf(mavlink_message_t *msgb
     packet->Max_acceleration = Max_acceleration;
     packet->Max_deceleration = Max_deceleration;
     packet->Max_current = Max_current;
+    packet->Position_limit_enable = Position_limit_enable;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppRestrictParam, (const char *)packet, MAVLINK_MSG_ID_AppRestrictParam_MIN_LEN, MAVLINK_MSG_ID_AppRestrictParam_LEN, MAVLINK_MSG_ID_AppRestrictParam_CRC);
 #endif
@@ -459,6 +476,16 @@ static inline float mavlink_msg_apprestrictparam_get_Max_current(const mavlink_m
 }
 
 /**
+ * @brief Get field Position_limit_enable from apprestrictparam message
+ *
+ * @return  
+ */
+static inline uint8_t mavlink_msg_apprestrictparam_get_Position_limit_enable(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  52);
+}
+
+/**
  * @brief Decode a apprestrictparam message into a struct
  *
  * @param msg The message to decode
@@ -476,6 +503,7 @@ static inline void mavlink_msg_apprestrictparam_decode(const mavlink_message_t* 
     apprestrictparam->Max_acceleration = mavlink_msg_apprestrictparam_get_Max_acceleration(msg);
     apprestrictparam->Max_deceleration = mavlink_msg_apprestrictparam_get_Max_deceleration(msg);
     apprestrictparam->Max_current = mavlink_msg_apprestrictparam_get_Max_current(msg);
+    apprestrictparam->Position_limit_enable = mavlink_msg_apprestrictparam_get_Position_limit_enable(msg);
 #else
         uint8_t len = msg->len < MAVLINK_MSG_ID_AppRestrictParam_LEN? msg->len : MAVLINK_MSG_ID_AppRestrictParam_LEN;
         memset(apprestrictparam, 0, MAVLINK_MSG_ID_AppRestrictParam_LEN);

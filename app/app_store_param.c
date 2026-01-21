@@ -182,6 +182,9 @@ void flash_param_update(void)
     kFlashStorage.app_encoder_config_Load_control_resolution = kAppEncoderConfig.Load_control_resolution;
     kFlashStorage.app_encoder_config_Motor_control_resolution = kAppEncoderConfig.Motor_control_resolution;
     kFlashStorage.app_encoder_config_Load_encoder_options = kAppEncoderConfig.Load_encoder_options;
+    kFlashStorage.app_restrict_param_Position_limit_enable = kAppRestrictParam.Position_limit_enable;
+    kFlashStorage.app_base_config_Digital_io_outputs_phys = kAppBaseConfig.Digital_io_outputs_phys;
+    kFlashStorage.app_base_config_Digital_io_outputs_mask = kAppBaseConfig.Digital_io_outputs_mask;
 }
 
 void flash_param_init(void)
@@ -360,6 +363,9 @@ void flash_param_init(void)
     kAppEncoderConfig.Load_control_resolution = kFlashStorage.app_encoder_config_Load_control_resolution;
     kAppEncoderConfig.Motor_control_resolution = kFlashStorage.app_encoder_config_Motor_control_resolution;
     kAppEncoderConfig.Load_encoder_options = kFlashStorage.app_encoder_config_Load_encoder_options;
+    kAppRestrictParam.Position_limit_enable = kFlashStorage.app_restrict_param_Position_limit_enable;
+    kAppBaseConfig.Digital_io_outputs_phys = kFlashStorage.app_base_config_Digital_io_outputs_phys;
+    kAppBaseConfig.Digital_io_outputs_mask = kFlashStorage.app_base_config_Digital_io_outputs_mask;
 }
 /* USER CODE BEGIN AREA 1 */
 static HistoricalInfo kFlashHistoricalInfo;

@@ -187,6 +187,7 @@ int main(void)
   RegisterCheckErrorCallback(app_get_check_error_val);
   RegisterCheckWarningCallback(app_get_check_warning_val);
   RegisterCheckStatusCallback(app_get_check_status_val);
+  RegisterCheckIoInputsStatusCallback(app_get_check_di_io_val);
   RegisterSendCallback(mavlink_send_data);
 
   // 硬件及应用初始化

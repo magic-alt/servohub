@@ -4,6 +4,7 @@
 #include "bsp_api.h"
 
 // 关联应用层接口
+#include "app_motion_precondition.h"
 #include "app_scheduler.h"
 #include "app_store_param.h"
 #include "app_status_check.h"
@@ -191,7 +192,9 @@ void PosSpeedLoopCtrl(void)
 
     if (get_app_Internal_control_authority() == INTERNAL_CONTROL_APP)
     {
+        AppStatusCheck();
         AppStatusScanFast();
+        AppMotionPreConditionRun();
 #ifdef USE_CIA402
         Cia402ErrorCodeScan();
         PDS_FSA_Run();

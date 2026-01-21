@@ -39,6 +39,7 @@ typedef union
         uint32_t under_temperature_motor : 1;     // 电机欠温
         uint32_t over_temperature_mcu : 1;        // MCU过温
         uint32_t under_temperature_mcu : 1;       // MCU欠温
+        uint32_t external_inhibit_input_detected : 1; // 外部抑制输入检测错误
 
         uint32_t reserved : 11;
     } bits; // 位字段
@@ -49,19 +50,26 @@ typedef union
     uint32_t all;
     struct
     {
-        uint32_t over_temperature_drive : 1;      // 驱动器过温警告
-        uint32_t under_temperature_drive : 1;     // 驱动器欠温警告
-        uint32_t over_temperature_motor : 1;      // 电机过温警告
-        uint32_t under_temperature_motor : 1;     // 电机欠温警告
-        uint32_t over_temperature_mcu : 1;        // MCU过温警告
-        uint32_t under_temperature_mcu : 1;       // MCU欠温警告
-        uint32_t motor_temperature_ntc : 1;       // 电机温度NTC异常警告
+        uint32_t over_temperature_drive : 1;        // 驱动器过温警告
+        uint32_t under_temperature_drive : 1;       // 驱动器欠温警告
+        uint32_t over_temperature_motor : 1;        // 电机过温警告
+        uint32_t under_temperature_motor : 1;       // 电机欠温警告
+        uint32_t over_temperature_mcu : 1;          // MCU过温警告
+        uint32_t under_temperature_mcu : 1;         // MCU欠温警告
+        uint32_t motor_temperature_ntc : 1;         // 电机温度NTC异常警告
+        uint32_t reserved0 : 1;                     // 保留位
 
-        uint32_t reserved : 25;
+        uint32_t hardware_limit_negative : 1;       // 负向硬件限位警告
+        uint32_t hardware_limit_positive : 1;       // 正向硬件限位警告
+        uint32_t software_limit_negative : 1;       // 负向软件限位警告
+        uint32_t software_limit_positive : 1;       // 正向软件限位警告
+
+        uint32_t reserved : 20;
     } bits; // 位字段
 } CheckWarningVal;
 
 typedef struct {
+    DigitalInputsIo_t di_io;
     CheckErrorCode_t error;
     CheckWarningVal warning;
     CheckStatusVal_t status;
@@ -106,9 +114,9 @@ typedef struct {
 }CheckFunctionList;
 
 // 任务循环调用接口
+void AppStatusCheck(void);           // 通用状态轮询检查函数  位置环调用
 void AppStatusScanInit(void);        // 应用状态扫描初始化函数
 void AppStatusScanFast(void);        // 错误轮询检查函数  位置环调用
-void AppStatusCheck(void);           // 通用状态轮询检查函数  位置环调用
 void AppStatusScanSlow(void);        // 错误轮询检查函数  1ms任务调用
 void AppLedStateUpdata1ms(void);     // LED状态更新函数   1ms任务调用
 
@@ -117,6 +125,9 @@ void AppLedStateUpdata1ms(void);     // LED状态更新函数   1ms任务调用
 uint32_t app_get_check_error_val(void);
 uint32_t app_get_check_warning_val(void);
 uint32_t app_get_check_status_val(void);
+uint32_t app_get_check_di_io_val(void);
+
+CheckWarningVal* app_set_check_warning_val(void);
 
 // 状态检测
 bool AppMotorEnableStateCheck(void);

@@ -4,7 +4,7 @@
 #include "motor_ctl_loop.h"
 
 //DATABASE_CODE_START_1
-const InterVarStruct kParamDataBase[379] = {
+const InterVarStruct kParamDataBase[384] = {
     {1, &kAxis.pmsm_config.b, kTypeFloat32},
     {2, &kAxis.pmsm_config.fc, kTypeFloat32},
     {3, &kAxis.pmsm_config.flux, kTypeFloat32},
@@ -384,5 +384,10 @@ const InterVarStruct kParamDataBase[379] = {
     {599, &kAppEncoderConfig.Load_control_resolution, kTypeUint32},
     {600, &kAppEncoderConfig.Motor_control_resolution, kTypeUint32},
     {601, &kAppEncoderConfig.Load_encoder_options, kTypeUint8},
+    {602, &kAppRestrictParam.Position_limit_enable, kTypeUint8},
+    {603, &kAppStatusInfo.Digital_io_inputs_status, kTypeUint32},
+    {605, &kAppBaseConfig.Digital_io_outputs_phys, kTypeUint32},
+    {606, &kAppBaseConfig.Digital_io_outputs_mask, kTypeUint32},
+    {607, &kAppMotionParam.Emergency_brake_requested, kTypeUint8},
 };
 //DATABASE_CODE_STOP_1
