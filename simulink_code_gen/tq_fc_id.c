@@ -37,7 +37,7 @@ void tq_fc_id_Init(TqFcIdOutput *rty_output, tq_fc_id_DW_f *localDW)
     /* DataStoreWrite: '<S2>/Data Store Write4' incorporates:
      *  Constant: '<S2>/Constant5'
      */
-    localDW->index_max = 1U;
+    localDW->index_max = 360U;
 
     /* End of Outputs for SubSystem: '<S1>/Initialize Function' */
 }
