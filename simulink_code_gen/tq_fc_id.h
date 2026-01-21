@@ -30,8 +30,6 @@
 typedef struct
 {
     real32_T com_table[360];           /* '<S1>/Data Store Memory' */
-    real32_T fc_p_com;                 /* '<S1>/Data Store Memory1' */
-    real32_T fc_n_com;                 /* '<S1>/Data Store Memory2' */
     uint32_T index_max;                /* '<S1>/Data Store Memory4' */
 }
 tq_fc_id_DW_f;

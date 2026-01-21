@@ -28,32 +28,16 @@ void tq_fc_id_Init(TqFcIdOutput *rty_output, tq_fc_id_DW_f *localDW)
      *  Constant: '<S1>/Constant'
      */
     rty_output->pos_cmd_p = 0LL;
-    rty_output->iq_com_enable = 0U;
-    rty_output->tq_com_enable = 0U;
-    rty_output->fc_com_enable = 0U;
     rty_output->state_now = 0;
-
-    /* SystemInitialize for Atomic SubSystem: '<S1>/Initialize Function' */
-    /* Start for Width: '<S2>/Width' incorporates:
-     *  DataStoreWrite: '<S2>/Data Store Write4'
-     */
-    localDW->index_max = 360U;
-
-    /* End of SystemInitialize for SubSystem: '<S1>/Initialize Function' */
 
     /* Outputs for Atomic SubSystem: '<S1>/Initialize Function' */
     /* DataStoreWrite: '<S2>/Data Store Write' */
     memset(&localDW->com_table[0], 0, 360U * sizeof(real32_T));
 
-    /* DataStoreWrite: '<S2>/Data Store Write1' incorporates:
-     *  Constant: '<S2>/Constant2'
+    /* DataStoreWrite: '<S2>/Data Store Write4' incorporates:
+     *  Constant: '<S2>/Constant5'
      */
-    localDW->fc_p_com = 0.0F;
-
-    /* DataStoreWrite: '<S2>/Data Store Write2' incorporates:
-     *  Constant: '<S2>/Constant3'
-     */
-    localDW->fc_n_com = 0.0F;
+    localDW->index_max = 1U;
 
     /* End of Outputs for SubSystem: '<S1>/Initialize Function' */
 }
@@ -65,9 +49,6 @@ void tq_fc_id(TqFcIdOutput *rty_output)
      *  Constant: '<S1>/Constant'
      */
     rty_output->pos_cmd_p = 0LL;
-    rty_output->iq_com_enable = 0U;
-    rty_output->tq_com_enable = 0U;
-    rty_output->fc_com_enable = 0U;
     rty_output->state_now = 0;
 }
 

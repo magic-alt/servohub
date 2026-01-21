@@ -255,9 +255,9 @@ pos_cmd_p,位置指令值,TqFcIdOutput,RO,int64,1,0,p,196,,Visible,1,,,,,,
 pos_abs_p,当前转子绝对位置,TqFcIdInput,RO,uint32,1,0,p,197,,Visible,1,,,,,,
 pos_init_p,电机初始位置,TqFcIdInput,RO,int64,1,0,p,198,,Visible,1,,,,,,
 start,启动辨识指令,TqFcIdInput,RO,uint8,1,0,,199,,Visible,1,,,,,,
-iq_com_enable,使能负载扰动补偿开关,TqFcIdOutput,RW,uint8,1,0,,201,,Visible,1,1,,,,,
-tq_com_enable,使能转矩脉动补偿开关,TqFcIdOutput,RW,uint8,1,0,,202,,Visible,1,1,,,,,
-fc_com_enable,使能摩擦补偿开关,TqFcIdOutput,RW,uint8,1,0,,203,,Visible,1,1,,,,,
+iq_com_enable,使能负载扰动补偿开关,TqFcIdConfig,RW,uint8,1,0,,201,,Visible,1,1,,,,,
+tq_com_enable,使能转矩脉动补偿开关,TqFcIdConfig,RW,uint8,1,0,,202,,Visible,1,1,,,,,
+fc_com_enable,使能摩擦补偿开关,TqFcIdConfig,RW,uint8,1,0,,203,,Visible,1,1,,,,,
 state_now,当前辨识状态,TqFcIdOutput,RO,int8,1,0,,204,,Visible,1,,,,,,
 motor_enable_last,电机使能控制上一个周期的值,MotorCtlSmOutput,RO,uint8,1,0,,205,"0：失能电机 PWM 关闭 自由释放电机
 1：使能电机 PWM开启 电机受控状态
@@ -629,3 +629,5 @@ Digital_io_outputs_mask,数字IO输出掩码,AppBaseConfig,RW,uint32,1,0,,606,"b
 bit1~bit15：保留
 bit16~bit31：厂商自定义",Visible,0,1,1,,,0,Digital_outputs_Bit_mask
 Emergency_brake_requested,紧急制动请求,AppMotionParam,RW,uint8,1,,,607,,Visible,,,1,0,1,,
+fc_p_com,摩擦补偿正方向补偿值,TqFcIdConfig,RW,single,1,0,A,611,,Visible,1,1,,,,,
+fc_n_com,摩擦补偿负方向补偿值,TqFcIdConfig,RW,single,1,0,A,612,,Visible,1,1,,,,,

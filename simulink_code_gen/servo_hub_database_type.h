@@ -945,6 +945,21 @@ typedef struct
 {
     /* 编码器分辨率 */
     uint32_T enc_line_p_n;
+
+    /* 使能负载扰动补偿开关 */
+    uint8_T iq_com_enable;
+
+    /* 使能转矩脉动补偿开关 */
+    uint8_T tq_com_enable;
+
+    /* 使能摩擦补偿开关 */
+    uint8_T fc_com_enable;
+
+    /* 摩擦补偿正方向补偿值 */
+    real32_T fc_p_com;
+
+    /* 摩擦补偿负方向补偿值 */
+    real32_T fc_n_com;
 }
 
 TqFcIdConfig;
@@ -970,15 +985,6 @@ typedef struct
 {
     /* 位置指令值 */
     int64_T pos_cmd_p;
-
-    /* 使能负载扰动补偿开关 */
-    uint8_T iq_com_enable;
-
-    /* 使能转矩脉动补偿开关 */
-    uint8_T tq_com_enable;
-
-    /* 使能摩擦补偿开关 */
-    uint8_T fc_com_enable;
 
     /* 当前辨识状态 */
     int8_T state_now;

@@ -516,7 +516,7 @@ static inline void TqFcComStep(Axis *const axis, AxisDw *const axis_dw)
 {
    uint32_T index = 0;
 
-   if (axis->tq_fc_id_output.tq_com_enable == 1)
+   if (axis->tq_fc_id_config.tq_com_enable == 1)
    {
       index = (float)(axis->motor_pos_sensor_input.enc_counts_now_p) /
               (float)axis->pmsm_config.enc_line_p_n * axis_dw->tq_fc_id_InstanceData.rtdw.index_max;
@@ -532,17 +532,17 @@ static inline void TqFcComStep(Axis *const axis, AxisDw *const axis_dw)
       }
    }
 
-   if (axis->tq_fc_id_output.fc_com_enable == 1)
+   if (axis->tq_fc_id_config.fc_com_enable == 1)
    {
       //TODO：摩擦补偿这里还可以优化 更加平滑  目前是简单阶跃补偿 
       // 进行摩擦补偿， 以指令速度方向补偿
       if (axis->pos_speed_ctl_input.speed_tar_p_s > 0.0f)
       {
-         axis->pos_speed_ctl_output.iq_tar_A += axis_dw->tq_fc_id_InstanceData.rtdw.fc_p_com;
+         axis->pos_speed_ctl_output.iq_tar_A += axis->tq_fc_id_config.fc_p_com;
       }
       else if (axis->pos_speed_ctl_input.speed_tar_p_s < -0.0f)
       {
-         axis->pos_speed_ctl_output.iq_tar_A += axis_dw->tq_fc_id_InstanceData.rtdw.fc_n_com;
+         axis->pos_speed_ctl_output.iq_tar_A += axis->tq_fc_id_config.fc_n_com;
       }
    }
 }
@@ -563,8 +563,8 @@ static void TqFcIdStep(Axis *const axis, AxisDw *const axis_dw)
       axis->tq_fc_id_input.start = 1;            // 启动转矩脉动辨识
       axis->tq_fc_id_input.pos_abs_p = 0;        // 绝对位置计数器清零
       axis->pos_speed_ctl_config.dob_enable = 0; // 关闭扰动观测器
-      axis->tq_fc_id_output.tq_com_enable = 0;   // 关闭转矩脉动补偿
-      axis->tq_fc_id_output.fc_com_enable = 0;   // 关闭摩擦补偿
+      axis->tq_fc_id_config.tq_com_enable = 0;   // 关闭转矩脉动补偿
+      axis->tq_fc_id_config.fc_com_enable = 0;   // 关闭摩擦补偿
       axis->tq_fc_id_output.state_now = IDENTIFICATION_MODE_STATE_SEARCH;
    }
    if (axis->tq_fc_id_input.start == 1) // 转矩脉动辨识阶段
@@ -609,7 +609,7 @@ static void TqFcIdStep(Axis *const axis, AxisDw *const axis_dw)
             axis->tq_fc_id_input.pos_abs_p = 0;
             axis->tq_fc_id_output.state_now = IDENTIFICATION_MODE_STATE_SEARCH;
             // 开启转矩脉动补偿
-            axis->tq_fc_id_output.tq_com_enable = 1;
+            axis->tq_fc_id_config.tq_com_enable = 1;
          }
       }
    }
@@ -628,8 +628,8 @@ static void TqFcIdStep(Axis *const axis, AxisDw *const axis_dw)
          math_lib_set_first_order_lpf_iir_config(&fc_hz, &axis->pmsm_config.tp_s, &lpf_k);
 
          math_lib_first_order_lpf_iir(&axis->tq_fc_id_input.iq_com_A, &lpf_k,
-                                      &axis_dw->tq_fc_id_InstanceData.rtdw.fc_n_com,
-                                      &axis_dw->tq_fc_id_InstanceData.rtdw.fc_n_com);
+                                      &axis->tq_fc_id_config.fc_n_com,
+                                      &axis->tq_fc_id_config.fc_n_com);
 
          if ((float)(axis->tq_fc_id_input.pos_abs_p) * axis->pmsm_config.tp_s >= 5.0f) // 等待 5s
          {
@@ -650,16 +650,16 @@ static void TqFcIdStep(Axis *const axis, AxisDw *const axis_dw)
          math_lib_set_first_order_lpf_iir_config(&fc_hz, &axis->pmsm_config.tp_s, &lpf_k);
 
          math_lib_first_order_lpf_iir(&axis->tq_fc_id_input.iq_com_A, &lpf_k,
-                                      &axis_dw->tq_fc_id_InstanceData.rtdw.fc_n_com,
-                                      &axis_dw->tq_fc_id_InstanceData.rtdw.fc_n_com);
+                                      &axis->tq_fc_id_config.fc_n_com,
+                                      &axis->tq_fc_id_config.fc_n_com);
 
          // 辨识完成、分离转矩脉动辨识补偿表，计算摩擦力
-         axis_dw->tq_fc_id_InstanceData.rtdw.fc_p_com = axis_dw->tq_fc_id_InstanceData.rtdw.fc_n_com * 0.5f;
-         axis_dw->tq_fc_id_InstanceData.rtdw.fc_n_com = -axis_dw->tq_fc_id_InstanceData.rtdw.fc_p_com;
+         axis->tq_fc_id_config.fc_p_com = axis->tq_fc_id_config.fc_n_com * 0.5f;
+         axis->tq_fc_id_config.fc_n_com = -axis->tq_fc_id_config.fc_p_com;
 
          for (uint32_T i = 0; i < axis_dw->tq_fc_id_InstanceData.rtdw.index_max; i++)
          {
-            axis_dw->tq_fc_id_InstanceData.rtdw.com_table[i] += axis_dw->tq_fc_id_InstanceData.rtdw.fc_p_com;
+            axis_dw->tq_fc_id_InstanceData.rtdw.com_table[i] += axis->tq_fc_id_config.fc_p_com;
          }
          axis->tq_fc_id_output.state_now = IDENTIFICATION_MODE_STATE_FINISH;
       }
@@ -682,8 +682,8 @@ static void TqFcIdStep(Axis *const axis, AxisDw *const axis_dw)
    {
       axis->tq_fc_id_input.start = 0;
       // 开启所有补偿开关
-      axis->tq_fc_id_output.tq_com_enable = 1; // 开启转矩脉动补偿
-      axis->tq_fc_id_output.fc_com_enable = 1; // 开启摩擦补偿
+      axis->tq_fc_id_config.tq_com_enable = 1; // 开启转矩脉动补偿
+      axis->tq_fc_id_config.fc_com_enable = 1; // 开启摩擦补偿
 
       axis->motor_ctl_sm_output.state = MOTOR_CTL_SM_STATE_DISABLE;
    }
