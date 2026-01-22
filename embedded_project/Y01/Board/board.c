@@ -275,11 +275,11 @@ void HOST_UART_IRQ_TASK(void)
     {
         __HAL_UART_CLEAR_IDLEFLAG(&HOST_UART_HANDLE);
 
-        HAL_UART_DMAStop(&HOST_UART_HANDLE);
+        HAL_UART_DMAStop(&HOST_UART_HANDLE);    
 
         // 调用Mavlink数据接收回调函数，处理接收到的数据
         // 参数为接收缓冲区和实际接收到的数据长度
-        MavlinkRecvCallback(&kAxis, mavlink_rx_buff, MAVLINK_RECV_BUFF_SIZE - __HAL_DMA_GET_COUNTER(HOST_UART_HANDLE.hdmarx));
+        MavlinkRecvCallback(&kAxis, &kAxisDw, mavlink_rx_buff, MAVLINK_RECV_BUFF_SIZE - __HAL_DMA_GET_COUNTER(HOST_UART_HANDLE.hdmarx));
 
         // 重新启动DMA接收，准备接收下一批数据
         HAL_UART_Receive_DMA(&HOST_UART_HANDLE, mavlink_rx_buff, MAVLINK_RECV_BUFF_SIZE);

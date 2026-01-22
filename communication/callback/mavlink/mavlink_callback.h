@@ -62,7 +62,7 @@ extern uint8_t mavlink_rx_buff[MAVLINK_RECV_BUFF_SIZE];
 extern uint8_t mavlink_tx_buff[MAVLINK_SEND_BUFF_SIZE];
 #endif
 
-void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len);
+void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_t len);
 
 #ifdef __cplusplus
 }

@@ -28,11 +28,11 @@ int main(void)
     RegisterSendCallback(ZmqSendData);
     RegisterRecvCallback(&MavlinkRecvCallback);
 
-    HighPrecisionTimer* motor_ctrl_timer = CreateHighPrecisionTimer(MotorCtrlTimerCallback, NULL);
+    HighPrecisionTimer* motor_ctrl_timer = CreateHighPrecisionTimer(MotorCtrlTimerCallback, NULL, NULL);
     StartHighPrecisionTimer(motor_ctrl_timer, 0, 1);
-    HighPrecisionTimer* unreal_time_timer = CreateHighPrecisionTimer(UnrealTimeCallback, NULL);
+    HighPrecisionTimer* unreal_time_timer = CreateHighPrecisionTimer(UnrealTimeCallback, NULL, NULL);
     StartHighPrecisionTimer(unreal_time_timer, 0, 1);
-    HighPrecisionTimer* zmq_recv_timer = CreateHighPrecisionTimer(ZmqRecvTimerCallback, &kAxis);
+    HighPrecisionTimer* zmq_recv_timer = CreateHighPrecisionTimer(ZmqRecvTimerCallback, &kAxis, &kAxisDw);
     StartHighPrecisionTimer(zmq_recv_timer, 0, 1);
 
     printf("The virtual driver and motor are running, press Enter to stop...\n");
@@ -45,7 +45,7 @@ int main(void)
     ZmqDestroy();
 }
 
-void MotorCtrlTimerCallback(void* arg)
+void MotorCtrlTimerCallback(void* arg, void* arg_dw)
 {
     for (size_t i = 0; i < 20; i++)
     {
@@ -64,23 +64,24 @@ void MotorCtrlTimerCallback(void* arg)
     }
 }
 
-void UnrealTimeCallback(void* arg)
+void UnrealTimeCallback(void* arg, void* arg_dw)
 {
     UnrealTimeBase1ms();
 }
 
-void ZmqRecvTimerCallback(void* arg)
+void ZmqRecvTimerCallback(void* arg, void* arg_dw)
 {
-    ZmqAsyncRecv(arg);
+    ZmqAsyncRecv(arg, arg_dw);
 }
 
 // 创建高精度定时器
-HighPrecisionTimer* CreateHighPrecisionTimer(TimerCallback callback, void* context) {
+HighPrecisionTimer* CreateHighPrecisionTimer(TimerCallback callback, void* context, void* context_dw) {
     HighPrecisionTimer* timer = (HighPrecisionTimer*)malloc(sizeof(HighPrecisionTimer));
     if (!timer) return NULL;
 
     timer->callback = callback;
     timer->context = context;
+    timer->context_dw = context_dw;
     timer->timerHandle = NULL;
     timer->dueTime.QuadPart = 0;
     timer->period = 0;
@@ -94,7 +95,7 @@ static VOID CALLBACK TimerAPCProc(LPVOID lpArgToCompletionRoutine,
                                  DWORD dwTimerHighValue) {
     HighPrecisionTimer* timer = (HighPrecisionTimer*)lpArgToCompletionRoutine;
     if (timer && timer->callback) {
-        timer->callback(timer->context);
+        timer->callback(timer->context, timer->context_dw);
     }
 }
 

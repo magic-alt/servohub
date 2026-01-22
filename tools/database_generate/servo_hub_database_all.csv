@@ -631,3 +631,7 @@ bit16~bit31：厂商自定义",Visible,0,1,1,,,0,Digital_outputs_Bit_mask
 Emergency_brake_requested,紧急制动请求,AppMotionParam,RW,uint8,1,,,607,,Visible,,,1,0,1,,
 fc_p_com,摩擦补偿正方向补偿值,TqFcIdConfig,RW,single,1,0,A,611,,Visible,1,1,,,,,
 fc_n_com,摩擦补偿负方向补偿值,TqFcIdConfig,RW,single,1,0,A,612,,Visible,1,1,,,,,
+table_data,数据表缓存,TableData,RW,single,20,,A,613,,Invisible,,,,,,,
+table_id,数据表id,TableConfig,RW,uint8,1,1,,614,"需要写入或者读取的目标表格ID。
+1-转矩脉动补偿表",Invisible,,,,,,,
+table_index_offset,数据表索引偏移,TableConfig,RW,uint8,1,0,,615,,Invisible,,,,,,,

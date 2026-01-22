@@ -27,6 +27,8 @@ mavlink_read_param_t read_param;
 mavlink_waveformmap_t waveform_map;
 mavlink_waveformdata_t waveform_data;
 mavlink_systemconfig_t system_config_t;
+mavlink_tableconfig_t table_config_t;
+mavlink_tabledata_t table_data_t;
 
 //DATABASE_CODE_START_1
 mavlink_pmsmconfig_t pmsm_config_t;
@@ -108,7 +110,7 @@ mavlink_appdebugparam_t app_debug_param_t;
 static mavlink_message_t msg;
 static mavlink_status_t status;
 static mavlink_message_t send_msg;
-void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
+void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_t len)
 {
     uint8_t mavlink_flag = 0;
     
@@ -157,6 +159,13 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 system_config_t.current_loop_freq = kSystemConfig.current_loop_freq;
                 system_config_t.position_loop_freq = kSystemConfig.position_loop_freq;
                 mavlink_msg_systemconfig_encode(0, 0, &send_msg, (mavlink_systemconfig_t *)&system_config_t);
+                break;
+            case MAVLINK_MSG_ID_TableConfig:
+                mavlink_msg_tableconfig_encode(0, 0, &send_msg, (mavlink_tableconfig_t *)&table_config_t);
+                break;
+            case MAVLINK_MSG_ID_TableData:
+                memcpy(&table_data_t.table_data, axis_dw->tq_fc_id_InstanceData.rtdw.com_table + table_config_t.table_index_offset * 20, sizeof(table_data_t.table_data));
+                mavlink_msg_tabledata_encode(0, 0, &send_msg, (mavlink_tabledata_t *)&table_data_t);
                 break;
 //DATABASE_CODE_START_2
             case MAVLINK_MSG_ID_PmsmConfig:
@@ -796,6 +805,15 @@ void MavlinkRecvCallback(Axis *axis, uint8_t rx_data[], uint32_t len)
                 kSystemConfig.current_loop_freq = system_config_t.current_loop_freq;
                 kSystemConfig.position_loop_freq = system_config_t.position_loop_freq;
                 mavlink_msg_systemconfig_encode(0, 0, &send_msg, &system_config_t);
+                break;
+            case MAVLINK_MSG_ID_TableConfig:
+                mavlink_msg_tableconfig_decode(&msg, (mavlink_tableconfig_t *)&table_config_t);
+                mavlink_msg_tableconfig_encode(0, 0, &send_msg, (mavlink_tableconfig_t *)&table_config_t);
+                break;
+            case MAVLINK_MSG_ID_TableData:
+                mavlink_msg_tabledata_decode(&msg, (mavlink_tabledata_t *)&table_data_t);
+                memcpy(axis_dw->tq_fc_id_InstanceData.rtdw.com_table + table_config_t.table_index_offset * 20, table_data_t.table_data, sizeof(table_data_t.table_data));
+                mavlink_msg_tableconfig_encode(0, 0, &send_msg, (mavlink_tableconfig_t *)&table_config_t);
                 break;
 //DATABASE_CODE_START_3
             case MAVLINK_MSG_ID_PmsmConfig:

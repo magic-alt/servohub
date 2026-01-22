@@ -33,7 +33,7 @@ void ZmqSendData(uint8_t *pdata, uint32_t len)
 
 
 // zmq异步接收函数
-void ZmqAsyncRecv(void* args) {
+void ZmqAsyncRecv(void* args, void* args_dw) {
     zmq_msg_t msg;
     zmq_msg_init(&msg);
     
@@ -48,11 +48,11 @@ void ZmqAsyncRecv(void* args) {
     size_t size = zmq_msg_size(&msg);
     // 调用注册的回调函数
     if (msgs_callback.recv_callback != NULL) {
-        msgs_callback.recv_callback(args, (uint8_t*)zmq_msg_data(&msg), size);
+        msgs_callback.recv_callback(args, args_dw, (uint8_t*)zmq_msg_data(&msg), size);
     }
     zmq_msg_close(&msg);
 }
 
 void RegisterRecvCallback(void* callback) {
-    msgs_callback.recv_callback = (void (*)(void *args, uint8_t rx_data[], uint32_t len))callback;
+    msgs_callback.recv_callback = (void (*)(void *args, void *args_dw, uint8_t rx_data[], uint32_t len))callback;
 }

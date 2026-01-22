@@ -3,13 +3,13 @@
 #include "zmq.h"
 
 typedef struct {
-    void (*recv_callback)(void *args, uint8_t rx_data[], uint32_t len);
+    void (*recv_callback)(void *args, void* args_dw, uint8_t rx_data[], uint32_t len);
 } ZmqRecvCallback;
 
 // 初始化zmq
 int ZmqHandlerInit(void);
 // zmq异步接收函数
-void ZmqAsyncRecv(void* args);
+void ZmqAsyncRecv(void* args, void* args_dw);
 // zmq发送数据
 void ZmqSendData(uint8_t *pdata, uint32_t len);
 // zmq销毁
