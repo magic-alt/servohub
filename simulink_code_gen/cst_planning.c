@@ -76,9 +76,9 @@ void cst_planning(const real32_T rtu_iq_target_ip_buff[4], const real32_T
     /* MATLAB Function: '<S1>/MATLAB Function' incorporates:
      *  Delay: '<S4>/Delay6'
      */
-    /*  计算pchip插值在指定点的函数值、一阶导数和二阶导数 */
+    /*  可选插值方法pchip、 makima 、spline一阶导数和二阶导数 */
     /*  输入: */
-    /*    pp - spline返回的分段多项式结构 */
+    /*    pp - 返回的分段多项式结构 */
     /*    x0 - 要计算的点（可以是向量） */
     /*  输出: */
     /*    y0  - 函数值 */
