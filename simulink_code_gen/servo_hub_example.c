@@ -19,6 +19,9 @@
 
 #include "servo_hub_example.h"
 #include "rtwtypes.h"
+#include "csp_planning.h"
+#include "cst_planning.h"
+#include "csv_planning.h"
 #include "direction_id.h"
 #include "pole_pairs_id.h"
 #include "current_ctl_loop_task.h"
@@ -417,9 +420,77 @@ void sim_plant_step(void)              /* Explicit Task: sim_plant_step */
     /* End of Outputs for RootInportFunctionCallGenerator generated from: '<Root>/sim_plant_step' */
 }
 
+/* Model step function for TID22 */
+void csv_planning_step(void)           /* Explicit Task: csv_planning_step */
+{
+    /* RootInportFunctionCallGenerator generated from: '<Root>/csv_planning_step' */
+
+    /* ModelReference generated from: '<Root>/csv_planning' incorporates:
+     *  Inport: '<Root>/ip_dt'
+     *  Inport: '<Root>/ip_dt1'
+     *  Inport: '<Root>/v_target_ip_buff'
+     *  Outport: '<Root>/acc_cmd'
+     *  Outport: '<Root>/v_cmd'
+     */
+    csv_planning(&_rt_U.v_target_ip_buff[0], &_rt_U.ip_dt, &_rt_U.ip_dt1,
+                 &_rt_Y.v_cmd, &_rt_Y.acc_cmd,
+                 &(_rt_DW.csv_planning_InstanceData.rtdw),
+                 &(_rt_DW.csv_planning_InstanceData.rtzce));
+
+    /* End of Outputs for RootInportFunctionCallGenerator generated from: '<Root>/csv_planning_step' */
+}
+
+/* Model step function for TID23 */
+void cst_planning_step(void)           /* Explicit Task: cst_planning_step */
+{
+    /* RootInportFunctionCallGenerator generated from: '<Root>/cst_planning_step' */
+
+    /* ModelReference generated from: '<Root>/cst_planning' incorporates:
+     *  Inport: '<Root>/ip_dt2'
+     *  Inport: '<Root>/ip_dt3'
+     *  Inport: '<Root>/iq_target_ip_buff'
+     *  Outport: '<Root>/iq_cmd'
+     */
+    cst_planning(&_rt_U.iq_target_ip_buff[0], &_rt_U.ip_dt2, &_rt_U.ip_dt3,
+                 &_rt_Y.iq_cmd, &(_rt_DW.cst_planning_InstanceData.rtdw),
+                 &(_rt_DW.cst_planning_InstanceData.rtzce));
+
+    /* End of Outputs for RootInportFunctionCallGenerator generated from: '<Root>/cst_planning_step' */
+}
+
+/* Model step function for TID24 */
+void csp_planning_step(void)           /* Explicit Task: csp_planning_step */
+{
+    /* RootInportFunctionCallGenerator generated from: '<Root>/csp_planning_step' */
+
+    /* ModelReference generated from: '<Root>/csp_planning' incorporates:
+     *  Inport: '<Root>/ip_dt4'
+     *  Inport: '<Root>/ip_dt5'
+     *  Inport: '<Root>/pos_target_ip_buff'
+     *  Outport: '<Root>/acc_cmd1'
+     *  Outport: '<Root>/pos_cmd'
+     *  Outport: '<Root>/v_cmd1'
+     */
+    csp_planning(&_rt_U.pos_target_ip_buff[0], &_rt_U.ip_dt4, &_rt_U.ip_dt5,
+                 &_rt_Y.pos_cmd, &_rt_Y.v_cmd1, &_rt_Y.acc_cmd1,
+                 &(_rt_DW.csp_planning_InstanceData.rtdw),
+                 &(_rt_DW.csp_planning_InstanceData.rtzce));
+
+    /* End of Outputs for RootInportFunctionCallGenerator generated from: '<Root>/csp_planning_step' */
+}
+
 /* Model initialize function */
 void servo_hub_example_initialize(void)
 {
+    /* Model Initialize function for ModelReference Block: '<Root>/csp_planning' */
+    csp_planning_initialize(&(_rt_DW.csp_planning_InstanceData.rtzce));
+
+    /* Model Initialize function for ModelReference Block: '<Root>/cst_planning' */
+    cst_planning_initialize(&(_rt_DW.cst_planning_InstanceData.rtzce));
+
+    /* Model Initialize function for ModelReference Block: '<Root>/csv_planning' */
+    csv_planning_initialize(&(_rt_DW.csv_planning_InstanceData.rtzce));
+
     /* Model Initialize function for ModelReference Block: '<Root>/direction_id' */
     direction_id_initialize(&(_rt_DW.direction_id_InstanceData.rtzce));
 
@@ -537,6 +608,27 @@ void servo_hub_example_initialize(void)
     sim_plant_Init(&(_rt_DW.sim_plant_InstanceData.rtdw));
 
     /* End of SystemInitialize for RootInportFunctionCallGenerator generated from: '<Root>/sim_plant_step' */
+
+    /* SystemInitialize for RootInportFunctionCallGenerator generated from: '<Root>/csv_planning_step' */
+
+    /* SystemInitialize for ModelReference generated from: '<Root>/csv_planning' */
+    csv_planning_Init(&(_rt_DW.csv_planning_InstanceData.rtdw));
+
+    /* End of SystemInitialize for RootInportFunctionCallGenerator generated from: '<Root>/csv_planning_step' */
+
+    /* SystemInitialize for RootInportFunctionCallGenerator generated from: '<Root>/cst_planning_step' */
+
+    /* SystemInitialize for ModelReference generated from: '<Root>/cst_planning' */
+    cst_planning_Init(&(_rt_DW.cst_planning_InstanceData.rtdw));
+
+    /* End of SystemInitialize for RootInportFunctionCallGenerator generated from: '<Root>/cst_planning_step' */
+
+    /* SystemInitialize for RootInportFunctionCallGenerator generated from: '<Root>/csp_planning_step' */
+
+    /* SystemInitialize for ModelReference generated from: '<Root>/csp_planning' */
+    csp_planning_Init(&(_rt_DW.csp_planning_InstanceData.rtdw));
+
+    /* End of SystemInitialize for RootInportFunctionCallGenerator generated from: '<Root>/csp_planning_step' */
 }
 
 /*

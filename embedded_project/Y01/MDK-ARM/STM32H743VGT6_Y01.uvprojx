@@ -863,6 +863,21 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\simulink_code_gen\tq_fc_id.c</FilePath>
             </File>
+            <File>
+              <FileName>csv_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\csv_planning.c</FilePath>
+            </File>
+            <File>
+              <FileName>csp_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\csp_planning.c</FilePath>
+            </File>
+            <File>
+              <FileName>cst_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\cst_planning.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2031,6 +2046,21 @@
               <FileName>tq_fc_id.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\simulink_code_gen\tq_fc_id.c</FilePath>
+            </File>
+            <File>
+              <FileName>csv_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\csv_planning.c</FilePath>
+            </File>
+            <File>
+              <FileName>csp_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\csp_planning.c</FilePath>
+            </File>
+            <File>
+              <FileName>cst_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\cst_planning.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3339,6 +3369,21 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\simulink_code_gen\tq_fc_id.c</FilePath>
             </File>
+            <File>
+              <FileName>csv_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\csv_planning.c</FilePath>
+            </File>
+            <File>
+              <FileName>csp_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\csp_planning.c</FilePath>
+            </File>
+            <File>
+              <FileName>cst_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\cst_planning.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4645,6 +4690,21 @@
               <FileName>tq_fc_id.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\simulink_code_gen\tq_fc_id.c</FilePath>
+            </File>
+            <File>
+              <FileName>csv_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\csv_planning.c</FilePath>
+            </File>
+            <File>
+              <FileName>csp_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\csp_planning.c</FilePath>
+            </File>
+            <File>
+              <FileName>cst_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\cst_planning.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5953,6 +6013,21 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\simulink_code_gen\tq_fc_id.c</FilePath>
             </File>
+            <File>
+              <FileName>csv_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\csv_planning.c</FilePath>
+            </File>
+            <File>
+              <FileName>csp_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\csp_planning.c</FilePath>
+            </File>
+            <File>
+              <FileName>cst_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\cst_planning.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -7259,6 +7334,21 @@
               <FileName>tq_fc_id.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\simulink_code_gen\tq_fc_id.c</FilePath>
+            </File>
+            <File>
+              <FileName>csv_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\csv_planning.c</FilePath>
+            </File>
+            <File>
+              <FileName>csp_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\csp_planning.c</FilePath>
+            </File>
+            <File>
+              <FileName>cst_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\simulink_code_gen\cst_planning.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -25,6 +25,9 @@
 #endif                                 /* servo_hub_example_COMMON_INCLUDES_ */
 
 #include "servo_hub_database_type.h"
+#include "csp_planning.h"
+#include "cst_planning.h"
+#include "csv_planning.h"
 #include "current_ctl_loop_task.h"
 #include "database_init.h"
 #include "direction_id.h"
@@ -51,6 +54,9 @@
 /* Block signals and states (default storage) for system '<Root>' */
 typedef struct
 {
+    csp_planning_MdlrefDW csp_planning_InstanceData;/* '<Root>/csp_planning' */
+    cst_planning_MdlrefDW cst_planning_InstanceData;/* '<Root>/cst_planning' */
+    csv_planning_MdlrefDW csv_planning_InstanceData;/* '<Root>/csv_planning' */
     current_ctl_loop_task_MdlrefDW current_ctl_loop_task_InstanceData;/* '<Root>/current_ctl_loop_task' */
     direction_id_MdlrefDW direction_id_InstanceData;/* '<Root>/direction_id' */
     elec_angle_id_MdlrefDW elec_angle_id_InstanceData;/* '<Root>/elec_angle_id' */
@@ -126,6 +132,15 @@ typedef struct
     SimPlantInput sim_plant_input;     /* '<Root>/sim_plant_input' */
     SimPlantConfig sim_plant_config;   /* '<Root>/sim_plant_config' */
     Axis database_init_input;          /* '<Root>/database_init_input' */
+    real32_T v_target_ip_buff[4];      /* '<Root>/v_target_ip_buff' */
+    real32_T ip_dt;                    /* '<Root>/ip_dt' */
+    real32_T ip_dt1;                   /* '<Root>/ip_dt1' */
+    real32_T iq_target_ip_buff[4];     /* '<Root>/iq_target_ip_buff' */
+    real32_T ip_dt2;                   /* '<Root>/ip_dt2' */
+    real32_T ip_dt3;                   /* '<Root>/ip_dt3' */
+    int64_T pos_target_ip_buff[4];     /* '<Root>/pos_target_ip_buff' */
+    real32_T ip_dt4;                   /* '<Root>/ip_dt4' */
+    real32_T ip_dt5;                   /* '<Root>/ip_dt5' */
 }
 ExtU;
 
@@ -161,6 +176,12 @@ typedef struct
     LoadPosSensorOutput load_pos_sensor_output;/* '<Root>/load_pos_sensor_output' */
     SimPlantOutput sim_plant_output;   /* '<Root>/sim_plant_output' */
     Axis database_init_output;         /* '<Root>/database_init_output' */
+    real32_T v_cmd;                    /* '<Root>/v_cmd' */
+    real32_T acc_cmd;                  /* '<Root>/acc_cmd' */
+    real32_T iq_cmd;                   /* '<Root>/iq_cmd' */
+    int64_T pos_cmd;                   /* '<Root>/pos_cmd' */
+    real32_T v_cmd1;                   /* '<Root>/v_cmd1' */
+    real32_T acc_cmd1;                 /* '<Root>/acc_cmd1' */
 }
 ExtY;
 
@@ -238,6 +259,15 @@ extern void load_pos_sensor_step(void);
 
 /* Exported entry point function */
 extern void sim_plant_step(void);
+
+/* Exported entry point function */
+extern void csv_planning_step(void);
+
+/* Exported entry point function */
+extern void cst_planning_step(void);
+
+/* Exported entry point function */
+extern void csp_planning_step(void);
 
 /*-
  * The generated code includes comments that allow you to trace directly
