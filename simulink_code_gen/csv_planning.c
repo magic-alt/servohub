@@ -20,7 +20,6 @@
 #include "csv_planning.h"
 #include "rtwtypes.h"
 #include <math.h>
-#include "zero_crossing_types.h"
 
 /* System initialize for referenced model: 'csv_planning' */
 void csv_planning_Init(csv_planning_DW_f *localDW)
@@ -29,7 +28,7 @@ void csv_planning_Init(csv_planning_DW_f *localDW)
     /* StateWriter: '<S2>/State Writer' incorporates:
      *  Constant: '<S2>/Constant1'
      */
-    localDW->x0_init_flag = false;
+    localDW->x0_sum = 0.0F;
 
     /* End of Outputs for SubSystem: '<S1>/Initialize Function' */
 }
@@ -37,8 +36,7 @@ void csv_planning_Init(csv_planning_DW_f *localDW)
 /* Output and update for referenced model: 'csv_planning' */
 void csv_planning(const real32_T rtu_v_target_ip_buff[4], const real32_T
                   *rtu_ip_dt, const real32_T *rtu_dt_p, real32_T *rty_v_cmd,
-                  real32_T *rty_acc_cmd, csv_planning_DW_f *localDW,
-                  csv_planning_ZCE *localZCE)
+                  real32_T *rty_acc_cmd, csv_planning_DW_f *localDW)
 {
     int32_T high_i;
     int32_T low_i;
@@ -59,24 +57,6 @@ void csv_planning(const real32_T rtu_v_target_ip_buff[4], const real32_T
     /* Product: '<S1>/Product' incorporates:
      *  Constant: '<S1>/Constant'
      */
-    localDW->Product[0] = 0.0F;
-    localDW->Product[1] = *rtu_ip_dt;
-    localDW->Product[2] = *rtu_ip_dt * 2.0F;
-    localDW->Product[3] = *rtu_ip_dt * 3.0F;
-
-    /* Delay: '<S4>/Delay6' incorporates:
-     *  Delay: '<S4>/Delay'
-     */
-    if (localDW->x0_init_flag && (localZCE->Delay6_Reset_ZCE != POS_ZCSIG))
-    {
-        localDW->x0_now = 0.0F;
-    }
-
-    localZCE->Delay6_Reset_ZCE = localDW->x0_init_flag;
-
-    /* MATLAB Function: '<S1>/MATLAB Function' incorporates:
-     *  Delay: '<S4>/Delay6'
-     */
     /*  可选插值方法pchip、 makima 、spline一阶导数和二阶导数 */
     /*  输入: */
     /*    pp - 返回的分段多项式结构 */
@@ -89,8 +69,28 @@ void csv_planning(const real32_T rtu_v_target_ip_buff[4], const real32_T
     /*  提取分段插值起点, 插值计算都减去起点 */
     /* '<S3>:1:13' y_init = y(1); */
     /* '<S3>:1:14' yy = y - y_init; */
+    localDW->Product[0] = 0.0F;
+    localDW->Product[1] = *rtu_ip_dt;
+
+    /* MATLAB Function: '<S1>/MATLAB Function' */
     y_idx_1 = rtu_v_target_ip_buff[1] - rtu_v_target_ip_buff[0];
+
+    /* Product: '<S1>/Product' incorporates:
+     *  Constant: '<S1>/Constant'
+     */
+    localDW->Product[2] = *rtu_ip_dt * 2.0F;
+
+    /* MATLAB Function: '<S1>/MATLAB Function' */
     y_idx_2 = rtu_v_target_ip_buff[2] - rtu_v_target_ip_buff[0];
+
+    /* Product: '<S1>/Product' incorporates:
+     *  Constant: '<S1>/Constant'
+     */
+    localDW->Product[3] = *rtu_ip_dt * 3.0F;
+
+    /* MATLAB Function: '<S1>/MATLAB Function' incorporates:
+     *  DiscreteIntegrator: '<S4>/Discrete-Time Integrator'
+     */
     slopes_idx_0 = rtu_v_target_ip_buff[3] - rtu_v_target_ip_buff[0];
 
     /* '<S3>:1:16' pp = makima(x, yy); */
@@ -189,7 +189,7 @@ void csv_planning(const real32_T rtu_v_target_ip_buff[4], const real32_T
     {
         int32_T mid_i;
         mid_i = ((low_i + high_i) + 1) >> 1;
-        if (localDW->x0_now >= localDW->Product[mid_i - 1])
+        if (localDW->x0_sum >= localDW->Product[mid_i - 1])
         {
             low_i = mid_i - 1;
             low_ip1 = mid_i + 1;
@@ -200,7 +200,7 @@ void csv_planning(const real32_T rtu_v_target_ip_buff[4], const real32_T
         }
     }
 
-    localDW->delta_m1 = localDW->x0_now - localDW->Product[low_i];
+    localDW->delta_m1 = localDW->x0_sum - localDW->Product[low_i];
     *rty_v_cmd = (((localDW->delta_m1 * localDW->pp_coefs[low_i] +
                     localDW->pp_coefs[low_i + 3]) * localDW->delta_m1 +
                    localDW->pp_coefs[low_i + 6]) * localDW->delta_m1 +
@@ -215,39 +215,14 @@ void csv_planning(const real32_T rtu_v_target_ip_buff[4], const real32_T
     /* '<S3>:1:29' t = x0 - breaks(1); */
     /*  一阶导数 */
     /* '<S3>:1:31' dy0 = 3*c(1)*t^2 + 2*c(2)*t + c(3); */
-    *rty_acc_cmd = (3.0F * localDW->pp_coefs[0] * (localDW->x0_now *
-                     localDW->x0_now) + 2.0F * localDW->pp_coefs[3] *
-                    localDW->x0_now) + slopes_idx_0;
+    *rty_acc_cmd = (3.0F * localDW->pp_coefs[0] * (localDW->x0_sum *
+                     localDW->x0_sum) + 2.0F * localDW->pp_coefs[3] *
+                    localDW->x0_sum) + slopes_idx_0;
 
-    /* End of MATLAB Function: '<S1>/MATLAB Function' */
-
-    /* Sum: '<S4>/Add' incorporates:
-     *  Delay: '<S4>/Delay6'
-     */
+    /* Update for DiscreteIntegrator: '<S4>/Discrete-Time Integrator' */
     /*  二阶导数 */
     /* '<S3>:1:33' d2y0 = 6*c(1)*t + 2*c(2); */
-    localDW->delta_0 = localDW->x0_now + *rtu_dt_p;
-
-    /* Gain: '<S4>/Gain' */
-    localDW->delta_m1 = 2.0F * *rtu_dt_p;
-
-    /* Sum: '<S4>/Add1' */
-    localDW->delta_m1 = *rtu_ip_dt - localDW->delta_m1;
-
-    /* Update for Delay: '<S4>/Delay' incorporates:
-     *  Delay: '<S4>/Delay6'
-     *  RelationalOperator: '<S4>/Relational Operator'
-     */
-    localDW->x0_init_flag = (localDW->x0_now >= localDW->delta_m1);
-
-    /* Update for Delay: '<S4>/Delay6' */
-    localDW->x0_now = localDW->delta_0;
-}
-
-/* Model initialize function */
-void csv_planning_initialize(csv_planning_ZCE *localZCE)
-{
-    localZCE->Delay6_Reset_ZCE = POS_ZCSIG;
+    localDW->x0_sum += *rtu_dt_p;
 }
 
 /*

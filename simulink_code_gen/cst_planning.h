@@ -24,48 +24,28 @@
 #include "rtwtypes.h"
 #endif                                 /* cst_planning_COMMON_INCLUDES_ */
 
-#include "zero_crossing_types.h"
-
 /* Block signals and states (default storage) for model 'cst_planning' */
 typedef struct
 {
     real32_T pp_coefs[12];
     real32_T Product[4];               /* '<S1>/Product' */
-    real32_T x0_now;                   /* '<S4>/Delay6' */
+    real32_T x0_sum;                   /* '<S4>/Discrete-Time Integrator' */
     real32_T delta_0;
     real32_T delta_m1;
     real32_T delta_n;
-    boolean_T x0_init_flag;            /* '<S4>/Delay' */
 }
 cst_planning_DW_f;
-
-/* Zero-crossing (trigger) state for model 'cst_planning' */
-typedef struct
-{
-    real_T Delay6_Reset_ZC;            /* '<S4>/Delay6' */
-}
-cst_planning_ZCV_g;
-
-/* Zero-crossing (trigger) state for model 'cst_planning' */
-typedef struct
-{
-    ZCSigState Delay6_Reset_ZCE;       /* '<S4>/Delay6' */
-}
-cst_planning_ZCE;
 
 typedef struct
 {
     cst_planning_DW_f rtdw;
-    cst_planning_ZCE rtzce;
 }
 cst_planning_MdlrefDW;
 
-/* Model reference registration function */
-extern void cst_planning_initialize(cst_planning_ZCE *localZCE);
 extern void cst_planning_Init(cst_planning_DW_f *localDW);
 extern void cst_planning(const real32_T rtu_iq_target_ip_buff[4], const real32_T
-    *rtu_ip_dt, const real32_T *rtu_dt_p, real32_T *rty_iq_cmd,
-    cst_planning_DW_f *localDW, cst_planning_ZCE *localZCE);
+    *rtu_ip_dt, const real32_T *rtu_dt_p, real32_T *rty_v_cmd, cst_planning_DW_f
+    *localDW);
 
 /*-
  * The generated code includes comments that allow you to trace directly

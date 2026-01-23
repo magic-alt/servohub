@@ -19,9 +19,6 @@
 
 #include "servo_hub_example.h"
 #include "rtwtypes.h"
-#include "csp_planning.h"
-#include "cst_planning.h"
-#include "csv_planning.h"
 #include "direction_id.h"
 #include "pole_pairs_id.h"
 #include "current_ctl_loop_task.h"
@@ -43,6 +40,9 @@
 #include "linear_trajectory_planning.h"
 #include "load_pos_sensor.h"
 #include "sim_plant.h"
+#include "csv_planning.h"
+#include "cst_planning.h"
+#include "csp_planning.h"
 
 /* Block signals and states (default storage) */
 DW _rt_DW;
@@ -434,8 +434,7 @@ void csv_planning_step(void)           /* Explicit Task: csv_planning_step */
      */
     csv_planning(&_rt_U.v_target_ip_buff[0], &_rt_U.ip_dt, &_rt_U.ip_dt1,
                  &_rt_Y.v_cmd, &_rt_Y.acc_cmd,
-                 &(_rt_DW.csv_planning_InstanceData.rtdw),
-                 &(_rt_DW.csv_planning_InstanceData.rtzce));
+                 &(_rt_DW.csv_planning_InstanceData.rtdw));
 
     /* End of Outputs for RootInportFunctionCallGenerator generated from: '<Root>/csv_planning_step' */
 }
@@ -452,8 +451,7 @@ void cst_planning_step(void)           /* Explicit Task: cst_planning_step */
      *  Outport: '<Root>/iq_cmd'
      */
     cst_planning(&_rt_U.iq_target_ip_buff[0], &_rt_U.ip_dt2, &_rt_U.ip_dt3,
-                 &_rt_Y.iq_cmd, &(_rt_DW.cst_planning_InstanceData.rtdw),
-                 &(_rt_DW.cst_planning_InstanceData.rtzce));
+                 &_rt_Y.iq_cmd, &(_rt_DW.cst_planning_InstanceData.rtdw));
 
     /* End of Outputs for RootInportFunctionCallGenerator generated from: '<Root>/cst_planning_step' */
 }
@@ -473,8 +471,7 @@ void csp_planning_step(void)           /* Explicit Task: csp_planning_step */
      */
     csp_planning(&_rt_U.pos_target_ip_buff[0], &_rt_U.ip_dt4, &_rt_U.ip_dt5,
                  &_rt_Y.pos_cmd, &_rt_Y.v_cmd1, &_rt_Y.acc_cmd1,
-                 &(_rt_DW.csp_planning_InstanceData.rtdw),
-                 &(_rt_DW.csp_planning_InstanceData.rtzce));
+                 &(_rt_DW.csp_planning_InstanceData.rtdw));
 
     /* End of Outputs for RootInportFunctionCallGenerator generated from: '<Root>/csp_planning_step' */
 }
@@ -482,15 +479,6 @@ void csp_planning_step(void)           /* Explicit Task: csp_planning_step */
 /* Model initialize function */
 void servo_hub_example_initialize(void)
 {
-    /* Model Initialize function for ModelReference Block: '<Root>/csp_planning' */
-    csp_planning_initialize(&(_rt_DW.csp_planning_InstanceData.rtzce));
-
-    /* Model Initialize function for ModelReference Block: '<Root>/cst_planning' */
-    cst_planning_initialize(&(_rt_DW.cst_planning_InstanceData.rtzce));
-
-    /* Model Initialize function for ModelReference Block: '<Root>/csv_planning' */
-    csv_planning_initialize(&(_rt_DW.csv_planning_InstanceData.rtzce));
-
     /* Model Initialize function for ModelReference Block: '<Root>/direction_id' */
     direction_id_initialize(&(_rt_DW.direction_id_InstanceData.rtzce));
 
