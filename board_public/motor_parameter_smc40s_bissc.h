@@ -12,8 +12,8 @@ extern "C"
 // 电机及负载参数
 // --------------------------
 // 电机参数
-#define PMSM_J                          (3.3E-6f)                       // 电机转动惯量（kg*m^2）
-#define PMSM_Lp2p                       (1.9e-03f)                      // 相间电感（H）
+#define PMSM_J                          (3.30e-06f)                     // 电机转动惯量（kg*m^2）
+#define PMSM_Lp2p                       (1.90e-03f)                     // 相间电感（H）
 #define PMSM_Rp2p                       (1.5f)                          // 相间电阻（Ω）
 #define PMSM_RATED_CURRENT              (3.2f)                          // 电机额定电流（A）
 #define PMSM_PEAK_CURRENT               (9.6f)                          // 电机峰值电流（A）

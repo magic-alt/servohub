@@ -7,8 +7,10 @@
 #define ENCODER_TYPE_NONE               0x00 // 无编码器
 #define ENCODER_TYPE_INC_AB_ABZ         0x01 // 增量式通用AB/ABZ编码器，注：由于Y01硬件单接口，只可配置电机端/负载端任选一端
 #define ENCODER_TYPE_ABS_RS485_TAMAGAWA 0x02 // 绝对式通用RS485多摩川编码器
-#define ENCODER_TYPE_ABS_SPI_KTM59XX    0x03 // 绝对式SPI KTM59xx 编码器
-#define ENCODER_TYPE_ABS_BISSC_SMC40S   0x04 // 绝对式SPI BISS-C SMC40S 编码器
+#define ENCODER_TYPE_ABS_SPI_MT68XX     0x03 // 绝对式SPI MT68XX 编码器
+#define ENCODER_TYPE_ABS_SPI_KTM59XX    0x04 // 绝对式SPI KTM59xx 编码器
+#define ENCODER_TYPE_ABS_BISSC_SMC40S   0x05 // 绝对式SPI BISS-C SMC40S 编码器
+
 // 其他编码器类型
 // ...
 
@@ -32,7 +34,7 @@ typedef enum : uint8_t
     TAMAGAWA_CF_ID_6 = 0x32,        // 写入EEPROM
     TAMAGAWA_CF_ID_D = 0xEA,        // 从EEPROM读取
 
-    // KTM59xx编码器 CF_ID（bit31~24） 宏定义（协议标准值）
+    // KTM59xx SPI编码器 CF_ID（bit31~24） 宏定义（协议标准值）
     KTM59XX_CF_ID_1 = 0x5B,         // 指令1：控制寄存器写入
     KTM59XX_CF_ID_2 = 0x62,         // 指令2：控制寄存器读取
     KTM59XX_CF_ID_3 = 0x23,         // 指令3：角度和内部信号读取
@@ -40,8 +42,12 @@ typedef enum : uint8_t
     KTM59XX_REG_ADD_CALIB = 0xA0,       // 校准寄存器地址
     KTM59XX_REG_VAL_CALIB_OFF = 0x00,   // 校准寄存器值：关闭校准
 
-    // BISSC SMC40S BISS-C编码器 宏定义
+    // SMC40S BISS-C编码器 宏定义
     SMC40S_CF_ID_0 = 0x00,          // 读取单圈数据，无需命令
+
+    // MT68XX SPI编码器 宏定义（bit15~8）（协议标准值）
+    MT68XX_CF_ID_RD = 0x30,         // 读寄存器 （0b0011 << 12）
+    MT68XX_CF_ID_WR = 0x60,         // 写寄存器 （0b0110 << 12）
 
     // 其他编码器类型
     // ...
@@ -90,6 +96,13 @@ typedef enum : uint8_t
     SMC40S_FRAME_LEN_WARNING_BW = 1,     // SMC40S 数据帧警告位宽
     SMC40S_FRAME_LEN_CRC_BW = 6,         // SMC40S 数据帧CRC校验位宽
     SMC40S_FRAME_LEN_TOTAL_BW = SMC40S_FRAME_LEN_DATA_BW + SMC40S_FRAME_LEN_ERROR_BW + SMC40S_FRAME_LEN_WARNING_BW + SMC40S_FRAME_LEN_CRC_BW, // SMC40S 数据帧总位宽
+
+    // MT68XX SPI编码器 各CF_ID对应的帧长度（单位：字节）
+    MT68XX_FRAME_LEN_RD_ANGLE = 6,      // MT68XX_CF_ID_RD：读角度寄存器帧长度
+    MT68XX_DATA_LEN_RD_ANGLE = 4,       // MT68XX_CF_ID_RD：读角度寄存器有效数据长度
+
+    MT68XX_RD_ANGLE_STATUS_BW = 3,      // MT68XX_CF_ID_RD：读角度寄存器状态位宽
+
 
     // 其他编码器类型
     // ...
@@ -192,6 +205,8 @@ struct EncoderDataInfo_t
 // 编码器校验值最终异或值
 #define KTM5XXX_CRC8_FINAL_XOR      (0xFF)  // KTM5XXX校验值最终异或值
 #define SMC40S_CRC6_FINAL_XOR       (0x43)  // SMC40S校验值最终异或值
+// 编码器校验值多项式
+#define MT68XX_CRC8_POLY            (0x07)  // MT68XX校验值多项式
 
 // 其他参数
 #define ENCODER_ABZ_ERROR_RATIO     (0.05f) // 编码器ABZ通信错误最大偏差比例（基于分辨率）
@@ -205,8 +220,8 @@ int64_t get_encoder_turns(ENCODER_ID const enc_id);
 bool get_encoder_status(ENCODER_ID const enc_id);
 void set_encoder_options(ENCODER_ID enc_id, uint8_t const options);
 void set_encoder_a_resolution(ENCODER_ID const enc_id, uint32_t const single_res, \
-                                  uint32_t const multi_res, uint32_t const single_less_factor);
+                              uint32_t const multi_res, uint32_t const single_less_factor);
 void set_encoder_b_resolution(ENCODER_ID const enc_id, uint32_t const single_res, \
-                                  uint32_t const multi_res, uint32_t const single_less_factor);
+                              uint32_t const multi_res, uint32_t const single_less_factor);
 
 #endif // DRV_ENCODER_H

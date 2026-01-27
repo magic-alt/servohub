@@ -5,6 +5,7 @@ __attribute__((section(".RAM_D1"))) uint8_t encoder_tx_buff[ENCODER_NUM][ENCODER
 __attribute__((section(".RAM_D1"))) uint8_t encoder_rx_buff[ENCODER_NUM][ENCODER_FRAME_MAX_LEN] = { 0 };
 
 static inline void Encoder_None(EncoderDataInfo_t* enc_data);
+static inline uint8_t crc8(uint8_t const *data, size_t length, uint8_t polynomial);
 #if ENCODER1_TYPE_OPTION == ENCODER_TYPE_INC_AB_ABZ || ENCODER2_TYPE_OPTION == ENCODER_TYPE_INC_AB_ABZ
 static void ABZ_Encoder_Init(EncoderDataInfo_t* enc_data);
 static void ABZ_Encoder_Data_Read(EncoderDataInfo_t* enc_data);
@@ -15,6 +16,12 @@ static void TAMAGAWA_Encoder_Init(EncoderDataInfo_t* enc_data);
 static void TAMAGAWA_Encoder_Data_Read(EncoderDataInfo_t* enc_data);
 static void TAMAGAWA_Encoder_Data_Process(EncoderDataInfo_t* enc_data);
 #endif // ENCODER_TYPE_ABS_RS485_TAMAGAWA
+#if ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_SPI_MT68XX || ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_SPI_MT68XX
+static void MT68XX_Encoder_Init(EncoderDataInfo_t* enc_data);
+static void MT68XX_Encoder_Data_Read(EncoderDataInfo_t* enc_data);
+static void MT68XX_Encoder_Data_Process(EncoderDataInfo_t* enc_data);
+static inline bool MT68XX_Encoder_Crc8_Check(uint64_t input, int32_t len);
+#endif // ENCODER_TYPE_ABS_SPI_MT68XX
 #if ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_SPI_KTM59XX || ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_SPI_KTM59XX
 static void KTM59XX_Encoder_Init(EncoderDataInfo_t* enc_data);
 static void KTM59XX_Encoder_Data_Read(EncoderDataInfo_t* enc_data);
@@ -69,6 +76,10 @@ EncoderDataInfo_t encoder_data[ENCODER_NUM] = {
         .init = TAMAGAWA_Encoder_Init,
         .read = TAMAGAWA_Encoder_Data_Read,
         .process = TAMAGAWA_Encoder_Data_Process,
+    #elif ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_SPI_MT68XX
+        .init = MT68XX_Encoder_Init,
+        .read = MT68XX_Encoder_Data_Read,
+        .process = MT68XX_Encoder_Data_Process,
     #elif ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_SPI_KTM59XX
         .init = KTM59XX_Encoder_Init,
         .read = KTM59XX_Encoder_Data_Read,
@@ -123,6 +134,10 @@ EncoderDataInfo_t encoder_data[ENCODER_NUM] = {
         .init = TAMAGAWA_Encoder_Init,
         .read = TAMAGAWA_Encoder_Data_Read,
         .process = TAMAGAWA_Encoder_Data_Process,
+    #elif ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_SPI_MT68XX
+        .init = MT68XX_Encoder_Init,
+        .read = MT68XX_Encoder_Data_Read,
+        .process = MT68XX_Encoder_Data_Process,
     #elif ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_SPI_KTM59XX
         .init = KTM59XX_Encoder_Init,
         .read = KTM59XX_Encoder_Data_Read,
@@ -363,6 +378,7 @@ static inline void Encoder_None(EncoderDataInfo_t* enc_data)
     enc_data->type = ENCODER_TYPE_NONE;
     return;
 }
+#pragma region ENCODER_TYPE_INC_AB_ABZ
 #if ENCODER1_TYPE_OPTION == ENCODER_TYPE_INC_AB_ABZ || ENCODER2_TYPE_OPTION == ENCODER_TYPE_INC_AB_ABZ
 /**
  * @brief ABZ编码器初始化
@@ -469,6 +485,9 @@ void ENCODER_ABZ_TIM_Z_IRQ_TASK(TIM_HandleTypeDef *htim)
     }
 }
 #endif // ENCODER_TYPE_INC_AB_ABZ
+#pragma endregion ENCODER_TYPE_INC_AB_ABZ
+
+#pragma region ENCODER_TYPE_ABS_RS485_TAMAGAWA
 #if ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_RS485_TAMAGAWA || ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_RS485_TAMAGAWA
 /**
  * @brief TAMAGAWA编码器初始化
@@ -569,6 +588,108 @@ static void TAMAGAWA_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
     enc_data->enid = ENCODER_CONNECTED_ID;
 }
 #endif // ENCODER_TYPE_ABS_RS485_TAMAGAWA
+#pragma endregion ENCODER_TYPE_ABS_RS485_TAMAGAWA
+
+#pragma region ENCODER_TYPE_ABS_SPI_MT68XX
+#if ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_SPI_MT68XX || ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_SPI_MT68XX
+/**
+ * @brief MT68XX编码器初始化
+ * @param[in] enc_data 编码器数据信息结构体指针
+ * @retval
+ */
+static void MT68XX_Encoder_Init(EncoderDataInfo_t* enc_data)
+{
+    enc_data->type = ENCODER_TYPE_ABS_SPI_MT68XX;
+    if (enc_data->id == ENCODER_ID_1)
+    {
+        enc_data->spi_handle = &ENCODER1_SPI_HANDLE;
+        /* SPI parameter configuration*/
+        // enc_data->spi_handle->Init.CLKPolarity = SPI_POLARITY_HIGH;
+        // enc_data->spi_handle->Init.CLKPhase = SPI_PHASE_2EDGE;
+        // if (HAL_SPI_Init(enc_data->spi_handle) != HAL_OK)
+        // {
+        //     sys_set_bsp_error_state((BSP_ERROR_CODE)enc_data->id, ERROR_SET);
+        // }
+    }
+    else if (enc_data->id == ENCODER_ID_2)
+    {
+        enc_data->spi_handle = &ENCODER2_SPI_HANDLE;
+        /* SPI parameter configuration*/
+        // enc_data->spi_handle->Init.CLKPolarity = SPI_POLARITY_HIGH;
+        // enc_data->spi_handle->Init.CLKPhase = SPI_PHASE_2EDGE;
+        // if (HAL_SPI_Init(enc_data->spi_handle) != HAL_OK)
+        // {
+        //     sys_set_bsp_error_state((BSP_ERROR_CODE)enc_data->id, ERROR_SET);
+        // }
+    }
+    else
+    {
+        enc_data->type = ENCODER_TYPE_NONE;
+        return;
+    }
+    enc_data->frame_len = MT68XX_FRAME_LEN_RD_ANGLE;
+    enc_data->cf = MT68XX_CF_ID_RD;
+    // 首2字节为cf+reg，其他字节均为0
+    uint16_t tx_cmd = enc_data->cf << 8 | MT_REG_ANGLE_H;
+    encoder_tx_buff[enc_data->id][0] = tx_cmd >> 8;
+    encoder_tx_buff[enc_data->id][1] = tx_cmd & 0xFF;
+    for (uint8_t i = 2; i < enc_data->frame_len; i++)
+    {
+        encoder_tx_buff[enc_data->id][i] = 0x00;
+    }
+}
+/**
+ * @brief MT68XX编码器数据读取
+ * @param[in] enc_data 编码器数据信息结构体指针
+ * @retval
+ */
+static void MT68XX_Encoder_Data_Read(EncoderDataInfo_t* enc_data)
+{
+    if (HAL_SPI_TransmitReceive_DMA(enc_data->spi_handle, encoder_tx_buff[enc_data->id], \
+                                    encoder_rx_buff[enc_data->id], enc_data->frame_len) != HAL_OK)
+    {
+        // 传输启动失败，增加错误计数
+        enc_data->err_cnt++;
+    }
+}
+/**
+ * @brief MT68XX编码器数据处理
+ * @param[in] enc_data 编码器数据信息结构体指针
+ * @retval
+ */
+static void MT68XX_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
+{
+    if (crc8(&encoder_data[enc_data->id].data_raw[MT68XX_FRAME_LEN_RD_ANGLE - MT68XX_DATA_LEN_RD_ANGLE], \
+             MT68XX_DATA_LEN_RD_ANGLE - 1, MT68XX_CRC8_POLY) != \
+             encoder_data[enc_data->id].data_raw[MT68XX_FRAME_LEN_RD_ANGLE - 1])
+    {
+        if (enc_data->err_cnt >= ENCODER_COMM_ERROR_MAX)
+        {
+            enc_data->err_cnt = ENCODER_COMM_ERROR_MAX;
+            sys_set_bsp_error_state((BSP_ERROR_CODE)enc_data->id, ERROR_SET);
+        }
+        return;
+    }
+    else if (enc_data->err_cnt > 0)
+    {
+        enc_data->err_cnt --;
+    }
+
+    enc_data->a_single_raw = (uint32_t)encoder_data[enc_data->id].data_raw[2] << 13 | /*bit20 ~ bit13*/ \
+                             ((uint32_t)encoder_data[enc_data->id].data_raw[3] << 5) |  /*bit12 ~ bit5*/ \
+                             (encoder_data[enc_data->id].data_raw[4] >> MT68XX_RD_ANGLE_STATUS_BW); /*bit4 ~ bit0*/
+    enc_data->a_single_raw /= enc_data->a_single_less_factor;
+    enc_data->a_multi_raw = 0;
+    enc_data->b_single_raw = 0;
+    enc_data->b_multi_raw = 0;
+    enc_data->sf = (uint8_t)(encoder_data[enc_data->id].data_raw[4] & ((0x01 << MT68XX_RD_ANGLE_STATUS_BW) - 1));
+    enc_data->almc = 0;
+    enc_data->enid = ENCODER_CONNECTED_ID;
+}
+#endif // ENCODER_TYPE_ABS_SPI_MT68XX
+#pragma endregion ENCODER_TYPE_ABS_SPI_MT68XX
+
+#pragma region ENCODER_TYPE_ABS_SPI_KTM59XX
 #if ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_SPI_KTM59XX || ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_SPI_KTM59XX
 /**
  * @brief KTM59XX编码器初始化
@@ -687,6 +808,9 @@ static inline bool KTM59XX_Encoder_Crc8_Check(uint64_t input, int32_t len)
     return (inputTemp == data) ? true : false;
 }
 #endif // ENCODER_TYPE_ABS_SPI_KTM59XX
+#pragma endregion ENCODER_TYPE_ABS_SPI_KTM59XX
+
+#pragma region ENCODER_TYPE_ABS_BISSC_SMC40S
 #if ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_SMC40S || ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_SMC40S
 /**
  * @brief SMC40S编码器初始化
@@ -793,3 +917,35 @@ static void SMC40S_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
 //     return crc ^ 0x3F;  // 输出反转（0x3F=6位全1）
 // }
 #endif // ENCODER_TYPE_ABS_BISSC_SMC40S
+#pragma endregion ENCODER_TYPE_ABS_BISSC_SMC40S
+
+#pragma region 其它公共组件
+/**
+ * @brief CRC8校验值计算
+ * @param[in] data 待校验数据
+ * @param[in] length 校验数据长度
+ * @param[in] polynomial 校验多项式
+ * @retval uint8_t CRC8校验值
+ */
+static inline uint8_t crc8(uint8_t const *data, size_t length, uint8_t polynomial)
+{
+    uint8_t crc = 0x00;
+
+    for (size_t i = 0; i < length; i++)
+    {
+        crc ^= data[i];
+        for (uint8_t j = 0; j < 8; j++)
+        {
+            if (crc & 0x80)
+            {
+                crc = (crc << 1) ^ polynomial;
+            }
+            else
+            {
+                crc <<= 1;
+            }
+        }
+    }
+
+    return crc;
+}

@@ -1,5 +1,5 @@
-#ifndef MOTOR_PARAMETER_ACM80_ABZ_H
-#define MOTOR_PARAMETER_ACM80_ABZ_H
+#ifndef MOTOR_PARAMETER_GIM6010_SPI_H
+#define MOTOR_PARAMETER_GIM6010_SPI_H
 
 // 整个模组参数，电机参数、编码器参数、减速器参数
 
@@ -12,31 +12,31 @@ extern "C"
 // 电机及负载参数
 // --------------------------
 // 电机参数
-#define PMSM_J                          (1.50e-04f)                     // 电机转动惯量（kg*m^2）
-#define PMSM_Lp2p                       (0.31e-03f)                     // 相间电感（H）
-#define PMSM_Rp2p                       (0.09f)                         // 相间电阻（Ω）
-#define PMSM_RATED_CURRENT              (3.0f)                          // 电机额定电流（A）
-#define PMSM_PEAK_CURRENT               (9.0f)                          // 电机峰值电流（A）
-#define PMSM_PN                         (4.0f)                          // 极对数（N）
-#define PMSM_SPEED_MAX_RPM              (4000.0f)                       // 电机最大转速（RPM）
-#define PMSM_TORQUE_CONSTANT_MNM_A      (130.0f)                        // 电机转矩常数（mN*M/A）
+#define PMSM_J                          (5.00e-06f)                     // 电机转动惯量（kg*m^2）
+#define PMSM_Lp2p                       (2.30e-04f)                     // 相间电感（H）
+#define PMSM_Rp2p                       (4.40e-01f)                     // 相间电阻（Ω）
+#define PMSM_RATED_CURRENT              (10.0f)                         // 电机额定电流（A）
+#define PMSM_PEAK_CURRENT               (23.0f)                         // 电机峰值电流（A）
+#define PMSM_PN                         (14.0f)                         // 极对数（N）
+#define PMSM_SPEED_MAX_RPM              (3300.0f)                       // 电机最大转速（RPM）
+#define PMSM_TORQUE_CONSTANT_MNM_A      (470.00f)                       // 电机转矩常数（mN*M/A）
 // 编码器类型通过宏定义指定
-#define ENCODER1_TYPE_OPTION            (ENCODER_TYPE_INC_AB_ABZ)       // 电机端编码器类型
-#define ENCODER2_TYPE_OPTION            (ENCODER_TYPE_NONE)             // 负载端编码器类型
+#define ENCODER1_TYPE_OPTION            (ENCODER_TYPE_ABS_SPI_MT68XX)   // 电机端编码器类型
+#define ENCODER2_TYPE_OPTION            (ENCODER_TYPE_ABS_SPI_MT68XX)   // 负载端编码器类型
 // 电机端编码器参数
-#define PMSM_MOTOR_ENC_LINE_ORG         (4000u)                         // 电机端编码器原始分辨率（P/R）
+#define PMSM_MOTOR_ENC_LINE_ORG         (2097152u)                      // 电机端编码器原始分辨率（P/R）
 #define PMSM_MOTOR_ENC_LINE_P_N         (PMSM_MOTOR_ENC_LINE_ORG / 1u)  // 电机端编码器控制分辨率（P/R）
 #define PMSM_MOTOR_ENC_MULTI_LINE_P_N   (0u)                            // 电机端编码器多圈分辨率（P/R）
 #define PMSM_MOTOR_ENC_DIR              (0u)                            // 电机端编码器方向（0：不变，1：反向）
 // 负载端编码器参数
-#define PMSM_LOAD_ENC_LINE_ORG          (4000u)                         // 负载端编码器原始分辨率（P/R）
+#define PMSM_LOAD_ENC_LINE_ORG          (2097152u)                      // 负载端编码器原始分辨率（P/R）
 #define PMSM_LOAD_ENC_LINE_P_N          (PMSM_LOAD_ENC_LINE_ORG / 1u)   // 负载端编码器实际分辨率（P/R）
 #define PMSM_LOAD_ENC_MULTI_LINE_P_N    (0u)                            // 负载端编码器多圈分辨率（P/R）
-#define PMSM_LOAD_ENC_DIR               (0u)                            // 负载端编码器方向（0：不变，1：反向）
+#define PMSM_LOAD_ENC_DIR               (1u)                            // 负载端编码器方向（0：不变，1：反向）
 // 负载端（齿轮/减速机...）参数
-#define GEAR_RATIO_NUM                  (1u)                            // 减速比分子
+#define GEAR_RATIO_NUM                  (8u)                            // 减速比分子
 #define GEAR_RATIO_DEN                  (1u)                            // 减速比分母
-#define GEAR_RATIO                      (1.0f)                          // 减速比
+#define GEAR_RATIO                      (8.0f)                          // 减速比
 
 // --------------------------
 // 电机保护参数
@@ -59,19 +59,19 @@ extern "C"
 // 电机控制参数
 // --------------------------
 // 电流环参数
-#define CURRENT_CTL_CONFIG_KP_LD                    (5.16e-01f)         // d轴电流环比例增益
-#define CURRENT_CTL_CONFIG_KI_LD                    (2.90e+02f)         // d轴电流环积分增益
-#define CURRENT_CTL_CONFIG_KP_LQ                    (5.16e-01f)         // q轴电流环比例增益
-#define CURRENT_CTL_CONFIG_KI_LQ                    (2.90e+02f)         // q轴电流环积分增益
-#define CURRENT_CTL_CONFIG_PWM_DUTY_CYCLE_MAX       (1.0f)              // 最大占空比
-#define CURRENT_CTL_CONFIG_ELEC_ANGLE_COMPENSATION  (4.0f)              // 电角度补偿系数
+#define CURRENT_CTL_CONFIG_KP_LD                    (1.86e-01f)         // d轴电流环比例增益
+#define CURRENT_CTL_CONFIG_KI_LD                    (3.96e+03f)         // d轴电流环积分增益
+#define CURRENT_CTL_CONFIG_KP_LQ                    (1.86e-01f)         // q轴电流环比例增益
+#define CURRENT_CTL_CONFIG_KI_LQ                    (3.96e+03f)         // q轴电流环积分增益
+#define CURRENT_CTL_CONFIG_PWM_DUTY_CYCLE_MAX       (0.9f)              // 最大占空比
+#define CURRENT_CTL_CONFIG_ELEC_ANGLE_COMPENSATION  (2.0f)              // 电角度补偿系数
 #define CURRENT_CTL_CONFIG_PHASE_DIR                (1)                 // 电机相序 1:abc -1:cba
 
 // 位置速度环参数
-#define POS_SPEED_CTL_CONFIG_KP_P                   (1.47e+02f)         // 位置环比例增益
-#define POS_SPEED_CTL_CONFIG_KI_S                   (1.47e+02f)         // 速度环积分增益
-#define POS_SPEED_CTL_CONFIG_KP_S                   (1.36e+00f)         // 速度环比例增益
-#define POS_SPEED_CTL_CONFIG_J_KT                   (1.15e-03f)         // 惯性系数
+#define POS_SPEED_CTL_CONFIG_KP_P                   (3.28e+02f)         // 位置环比例增益
+#define POS_SPEED_CTL_CONFIG_KI_S                   (6.24e+01f)         // 速度环积分增益
+#define POS_SPEED_CTL_CONFIG_KP_S                   (2.92e+00f)         // 速度环比例增益
+#define POS_SPEED_CTL_CONFIG_J_KT                   (9.97e-04f)         // 惯性系数
 #define POS_SPEED_CTL_CONFIG_AFF                    (0.0f)              // 加速度前馈增益
 #define POS_SPEED_CTL_CONFIG_VFF                    (1.0f)              // 速度前馈增益
 
@@ -97,8 +97,30 @@ extern "C"
 #define ENC_CALI_CHECK_CNT              (6u)                            // 编码器状态查询周期（s）
 #define ENC_CALI_TIMEOUT                (600u)                          // 启动app120s后编码器校准模式超时（s）
 
+// 编码器其它参数定义
+typedef enum
+{
+    MT_STAS_NORMAL_BIT          = 0,        // 正常状态
+    MT_STAS_OVER_SPEED_BIT      = 1,        // 转速过快报警（超过12万转/分钟）
+    MT_STAS_MAGNETIC_WEAK_BIT   = 2,        // 外加磁场太弱报警
+    MT_STAS_UNDER_VOL_BIT       = 4,        // 芯片供电欠压报警
+    MT_STAS_CRC_CHECK_ERROR_BIT = 8,        // CRC8校验错误
+} MT6835_STATUS_DEF;
+
+typedef enum
+{
+    MT_REG_USER         = (0x001),          // 用户自定义EEPROM寄存器
+    MT_REG_ANGLE_H      = (0x003),          // 角度数据寄存器高字节：角度值[b20:b13]
+    MT_REG_ANGLE_M      = (0x004),          // 角度数据寄存器中字节：角度值[b12:b5]
+    MT_REG_ANGLE_L      = (0x005),          // 角度数据寄存器低字节：角度值[b4:b0] + 状态值[b2:b0]
+    MT_REG_CRC8         = (0x006),          // CRC8校验码寄存器值
+    // ...
+    MT_REG_IO_CALSPD    = (0x00E),          // IO驱动能力、自校转速寄存器：IO驱动能力[b7] + 自校转速[b6:b4] + 保留[b3:b0]
+    MT_REG_CAL_STAS     = (0x113),          // 自校准状态寄存器Bit[7,6]：00b=未校准，01b=校准中，10b=失败，11b=成功
+} MT6835_REG_DEF;
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif // MOTOR_PARAMETER_ACM80_ABZ_H
+#endif // MOTOR_PARAMETER_GIM6010_SPI_H
