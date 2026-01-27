@@ -52,6 +52,7 @@ typedef struct
     float Motor_power; //电机当前功率
     float Mcu_temperature; //Mcu当前温度
     uint32_t Digital_io_inputs_status; //数字IO输入状态
+    uint8_t Brake_state; //抱闸状态
 }AppStatusInfo;
 
 typedef struct
@@ -84,12 +85,18 @@ typedef struct
     uint32_t Can_id; //CAN ID
     uint32_t Can_baudrate; //CAN 波特率
     int16_t Quick_stop_option_code; //快速停机方式选择
-    float Brake_engage_time; //抱闸延迟时间
-    float Brake_release_time; //松闸延迟时间
+    float Brake_engage_time; //抱闸动作时间
+    float Brake_release_time; //松闸动作时间
     float Dynamic_brake_speed_threshold; //抱闸制动速度阈值
     float Brake_release_hold_voltage; //松闸保持电压
     uint32_t Digital_io_outputs_phys; //数字IO输出物理值
     uint32_t Digital_io_outputs_mask; //数字IO输出掩码
+    uint8_t Brake_control_mode; //抱闸控制模式
+    float Brake_rated_voltage; //抱闸器额定电压
+    float Brake_release_action_voltage; //松闸动作电压
+    uint16_t Brake_release_pwm_freq; //松闸PWM频率
+    float Brake_engage_delay_time; //抱闸延迟时间
+    float Brake_release_delay_time; //松闸延迟时间
 }AppBaseConfig;
 
 typedef struct
@@ -113,6 +120,8 @@ typedef struct
     float MIT_kp; //位置刚度
     float MIT_kd; //速度阻尼系数
     uint8_t Emergency_brake_requested; //紧急制动请求
+    uint8_t Interp_time_period; //插值时间基数
+    int8_t Interp_time_index; //插值时间指数
 }AppMotionParam;
 
 typedef struct
@@ -262,6 +271,12 @@ typedef struct
     uint32_t Debug_uint32[16]; //临时debug变量 uint32 类型
     int32_t Debug_int32[16]; //临时debug变量 int32 类型
 }AppDebugParam;
+
+typedef struct
+{
+    uint8_t Sys_id; //mavlink系统ID
+    uint8_t Comp_id; //mavlink组件ID
+}AppMavlinkConfig;
 
 uint32_t set_app_Controlword(uint16_t val);
 uint16_t get_app_Controlword(void);
@@ -720,6 +735,39 @@ uint32_t get_app_Digital_io_outputs_mask(void);
 uint32_t set_app_Emergency_brake_requested(uint8_t val);
 uint8_t get_app_Emergency_brake_requested(void);
 
+uint32_t set_app_Brake_state(uint8_t val);
+uint8_t get_app_Brake_state(void);
+
+uint32_t set_app_Brake_control_mode(uint8_t val);
+uint8_t get_app_Brake_control_mode(void);
+
+uint32_t set_app_Brake_rated_voltage(float val);
+float get_app_Brake_rated_voltage(void);
+
+uint32_t set_app_Brake_release_action_voltage(float val);
+float get_app_Brake_release_action_voltage(void);
+
+uint32_t set_app_Brake_release_pwm_freq(uint16_t val);
+uint16_t get_app_Brake_release_pwm_freq(void);
+
+uint32_t set_app_Brake_engage_delay_time(float val);
+float get_app_Brake_engage_delay_time(void);
+
+uint32_t set_app_Brake_release_delay_time(float val);
+float get_app_Brake_release_delay_time(void);
+
+uint32_t set_app_Interp_time_period(uint8_t val);
+uint8_t get_app_Interp_time_period(void);
+
+uint32_t set_app_Interp_time_index(int8_t val);
+int8_t get_app_Interp_time_index(void);
+
+uint32_t set_app_Sys_id(uint8_t val);
+uint8_t get_app_Sys_id(void);
+
+uint32_t set_app_Comp_id(uint8_t val);
+uint8_t get_app_Comp_id(void);
+
 extern AppControlWord kAppControlWord;
 extern AppStatusInfo kAppStatusInfo;
 extern AppOpMode kAppOpMode;
@@ -740,6 +788,7 @@ extern CustomInfo kCustomInfo;
 extern HeartBit kHeartBit;
 extern HistoricalInfo kHistoricalInfo;
 extern AppDebugParam kAppDebugParam;
+extern AppMavlinkConfig kAppMavlinkConfig;
 
 /* USER CODE BEGIN AREA 1 */
 #define ERROR_RECORD_NUM    (sizeof(kHistoricalInfo.Error_records_list) / \

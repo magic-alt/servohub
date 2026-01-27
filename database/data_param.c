@@ -355,6 +355,7 @@ CustomInfo kCustomInfo;
 HeartBit kHeartBit;
 HistoricalInfo kHistoricalInfo;
 AppDebugParam kAppDebugParam;
+AppMavlinkConfig kAppMavlinkConfig;
 
 void app_param_update(void)
 {
@@ -509,6 +510,17 @@ void app_param_update(void)
     set_app_Digital_io_outputs_phys(kAppBaseConfig.Digital_io_outputs_phys);
     set_app_Digital_io_outputs_mask(kAppBaseConfig.Digital_io_outputs_mask);
     set_app_Emergency_brake_requested(kAppMotionParam.Emergency_brake_requested);
+    set_app_Brake_state(kAppStatusInfo.Brake_state);
+    set_app_Brake_control_mode(kAppBaseConfig.Brake_control_mode);
+    set_app_Brake_rated_voltage(kAppBaseConfig.Brake_rated_voltage);
+    set_app_Brake_release_action_voltage(kAppBaseConfig.Brake_release_action_voltage);
+    set_app_Brake_release_pwm_freq(kAppBaseConfig.Brake_release_pwm_freq);
+    set_app_Brake_engage_delay_time(kAppBaseConfig.Brake_engage_delay_time);
+    set_app_Brake_release_delay_time(kAppBaseConfig.Brake_release_delay_time);
+    set_app_Interp_time_period(kAppMotionParam.Interp_time_period);
+    set_app_Interp_time_index(kAppMotionParam.Interp_time_index);
+    set_app_Sys_id(kAppMavlinkConfig.Sys_id);
+    set_app_Comp_id(kAppMavlinkConfig.Comp_id);
 }
 
 void app_param_sync(void)
@@ -664,6 +676,17 @@ void app_param_sync(void)
     get_app_Digital_io_outputs_phys();
     get_app_Digital_io_outputs_mask();
     get_app_Emergency_brake_requested();
+    get_app_Brake_state();
+    get_app_Brake_control_mode();
+    get_app_Brake_rated_voltage();
+    get_app_Brake_release_action_voltage();
+    get_app_Brake_release_pwm_freq();
+    get_app_Brake_engage_delay_time();
+    get_app_Brake_release_delay_time();
+    get_app_Interp_time_period();
+    get_app_Interp_time_index();
+    get_app_Sys_id();
+    get_app_Comp_id();
 }
 
 uint32_t set_app_Controlword(uint16_t val)
@@ -897,6 +920,20 @@ uint32_t get_app_Digital_io_inputs_status(void)
     }
     /* USER CODE END get_app_Digital_io_inputs_status */
     return kAppStatusInfo.Digital_io_inputs_status;
+}
+
+uint32_t set_app_Brake_state(uint8_t val)
+{
+    /* USER CODE BEGIN set_app_Brake_state 0 */
+    //RO VAR CANNOT BE SET
+    /* USER CODE END set_app_Brake_state 0 */
+    return APP_PARAM_READ_ONLY;
+}
+uint8_t get_app_Brake_state(void)
+{
+    /* USER CODE BEGIN get_app_Brake_state */
+    /* USER CODE END get_app_Brake_state */
+    return kAppStatusInfo.Brake_state;
 }
 
 uint32_t set_app_Modes_of_operation(int8_t val)
@@ -1483,6 +1520,120 @@ uint32_t get_app_Digital_io_outputs_mask(void)
     return kAppBaseConfig.Digital_io_outputs_mask;
 }
 
+uint32_t set_app_Brake_control_mode(uint8_t val)
+{
+    if (val < 0)
+        return APP_PARAM_OUT_OF_RANGE;
+    if (val > 3)
+        return APP_PARAM_OUT_OF_RANGE;
+
+    /* USER CODE BEGIN set_app_Brake_control_mode 0 */
+    /* USER CODE END set_app_Brake_control_mode 0 */
+    kAppBaseConfig.Brake_control_mode = val;
+    /* USER CODE BEGIN set_app_Brake_control_mode 1 */
+    /* USER CODE END set_app_Brake_control_mode 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint8_t get_app_Brake_control_mode(void)
+{
+    /* USER CODE BEGIN get_app_Brake_control_mode */
+    /* USER CODE END get_app_Brake_control_mode */
+    return kAppBaseConfig.Brake_control_mode;
+}
+
+uint32_t set_app_Brake_rated_voltage(float val)
+{
+    if (val < 0.0)
+        return APP_PARAM_OUT_OF_RANGE;
+    /* USER CODE BEGIN set_app_Brake_rated_voltage 0 */
+    /* USER CODE END set_app_Brake_rated_voltage 0 */
+    kAppBaseConfig.Brake_rated_voltage = val;
+    /* USER CODE BEGIN set_app_Brake_rated_voltage 1 */
+    /* USER CODE END set_app_Brake_rated_voltage 1 */
+    return APP_PARAM_SUCCESS;
+}
+float get_app_Brake_rated_voltage(void)
+{
+    /* USER CODE BEGIN get_app_Brake_rated_voltage */
+    /* USER CODE END get_app_Brake_rated_voltage */
+    return kAppBaseConfig.Brake_rated_voltage;
+}
+
+uint32_t set_app_Brake_release_action_voltage(float val)
+{
+    if (val < 0.0)
+        return APP_PARAM_OUT_OF_RANGE;
+    /* USER CODE BEGIN set_app_Brake_release_action_voltage 0 */
+    /* USER CODE END set_app_Brake_release_action_voltage 0 */
+    kAppBaseConfig.Brake_release_action_voltage = val;
+    /* USER CODE BEGIN set_app_Brake_release_action_voltage 1 */
+    /* USER CODE END set_app_Brake_release_action_voltage 1 */
+    return APP_PARAM_SUCCESS;
+}
+float get_app_Brake_release_action_voltage(void)
+{
+    /* USER CODE BEGIN get_app_Brake_release_action_voltage */
+    /* USER CODE END get_app_Brake_release_action_voltage */
+    return kAppBaseConfig.Brake_release_action_voltage;
+}
+
+uint32_t set_app_Brake_release_pwm_freq(uint16_t val)
+{
+    if (val < 1)
+        return APP_PARAM_OUT_OF_RANGE;
+    if (val > 1000000)
+        return APP_PARAM_OUT_OF_RANGE;
+
+    /* USER CODE BEGIN set_app_Brake_release_pwm_freq 0 */
+    /* USER CODE END set_app_Brake_release_pwm_freq 0 */
+    kAppBaseConfig.Brake_release_pwm_freq = val;
+    /* USER CODE BEGIN set_app_Brake_release_pwm_freq 1 */
+    /* USER CODE END set_app_Brake_release_pwm_freq 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint16_t get_app_Brake_release_pwm_freq(void)
+{
+    /* USER CODE BEGIN get_app_Brake_release_pwm_freq */
+    /* USER CODE END get_app_Brake_release_pwm_freq */
+    return kAppBaseConfig.Brake_release_pwm_freq;
+}
+
+uint32_t set_app_Brake_engage_delay_time(float val)
+{
+    if (val < 0.0)
+        return APP_PARAM_OUT_OF_RANGE;
+    /* USER CODE BEGIN set_app_Brake_engage_delay_time 0 */
+    /* USER CODE END set_app_Brake_engage_delay_time 0 */
+    kAppBaseConfig.Brake_engage_delay_time = val;
+    /* USER CODE BEGIN set_app_Brake_engage_delay_time 1 */
+    /* USER CODE END set_app_Brake_engage_delay_time 1 */
+    return APP_PARAM_SUCCESS;
+}
+float get_app_Brake_engage_delay_time(void)
+{
+    /* USER CODE BEGIN get_app_Brake_engage_delay_time */
+    /* USER CODE END get_app_Brake_engage_delay_time */
+    return kAppBaseConfig.Brake_engage_delay_time;
+}
+
+uint32_t set_app_Brake_release_delay_time(float val)
+{
+    if (val < 0.0)
+        return APP_PARAM_OUT_OF_RANGE;
+    /* USER CODE BEGIN set_app_Brake_release_delay_time 0 */
+    /* USER CODE END set_app_Brake_release_delay_time 0 */
+    kAppBaseConfig.Brake_release_delay_time = val;
+    /* USER CODE BEGIN set_app_Brake_release_delay_time 1 */
+    /* USER CODE END set_app_Brake_release_delay_time 1 */
+    return APP_PARAM_SUCCESS;
+}
+float get_app_Brake_release_delay_time(void)
+{
+    /* USER CODE BEGIN get_app_Brake_release_delay_time */
+    /* USER CODE END get_app_Brake_release_delay_time */
+    return kAppBaseConfig.Brake_release_delay_time;
+}
+
 uint32_t set_app_Target_position(int64_t val)
 {
     /* USER CODE BEGIN set_app_Target_position 0 */
@@ -1863,6 +2014,43 @@ uint8_t get_app_Emergency_brake_requested(void)
     /* USER CODE BEGIN get_app_Emergency_brake_requested */
     /* USER CODE END get_app_Emergency_brake_requested */
     return kAppMotionParam.Emergency_brake_requested;
+}
+
+uint32_t set_app_Interp_time_period(uint8_t val)
+{
+    /* USER CODE BEGIN set_app_Interp_time_period 0 */
+    /* USER CODE END set_app_Interp_time_period 0 */
+    kAppMotionParam.Interp_time_period = val;
+    /* USER CODE BEGIN set_app_Interp_time_period 1 */
+    /* USER CODE END set_app_Interp_time_period 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint8_t get_app_Interp_time_period(void)
+{
+    /* USER CODE BEGIN get_app_Interp_time_period */
+    /* USER CODE END get_app_Interp_time_period */
+    return kAppMotionParam.Interp_time_period;
+}
+
+uint32_t set_app_Interp_time_index(int8_t val)
+{
+    if (val < -128)
+        return APP_PARAM_OUT_OF_RANGE;
+    if (val > 63)
+        return APP_PARAM_OUT_OF_RANGE;
+
+    /* USER CODE BEGIN set_app_Interp_time_index 0 */
+    /* USER CODE END set_app_Interp_time_index 0 */
+    kAppMotionParam.Interp_time_index = val;
+    /* USER CODE BEGIN set_app_Interp_time_index 1 */
+    /* USER CODE END set_app_Interp_time_index 1 */
+    return APP_PARAM_SUCCESS;
+}
+int8_t get_app_Interp_time_index(void)
+{
+    /* USER CODE BEGIN get_app_Interp_time_index */
+    /* USER CODE END get_app_Interp_time_index */
+    return kAppMotionParam.Interp_time_index;
 }
 
 uint32_t set_app_Position_range_limit_Minimal_position_limit(int64_t val)
@@ -3593,6 +3781,38 @@ int32_t* get_app_Debug_int32_addr(void)
     /* USER CODE BEGIN get_app_Debug_int32_addr */
     /* USER CODE END get_app_Debug_int32_addr */
     return kAppDebugParam.Debug_int32;
+}
+
+uint32_t set_app_Sys_id(uint8_t val)
+{
+    /* USER CODE BEGIN set_app_Sys_id 0 */
+    /* USER CODE END set_app_Sys_id 0 */
+    kAppMavlinkConfig.Sys_id = val;
+    /* USER CODE BEGIN set_app_Sys_id 1 */
+    /* USER CODE END set_app_Sys_id 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint8_t get_app_Sys_id(void)
+{
+    /* USER CODE BEGIN get_app_Sys_id */
+    /* USER CODE END get_app_Sys_id */
+    return kAppMavlinkConfig.Sys_id;
+}
+
+uint32_t set_app_Comp_id(uint8_t val)
+{
+    /* USER CODE BEGIN set_app_Comp_id 0 */
+    /* USER CODE END set_app_Comp_id 0 */
+    kAppMavlinkConfig.Comp_id = val;
+    /* USER CODE BEGIN set_app_Comp_id 1 */
+    /* USER CODE END set_app_Comp_id 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint8_t get_app_Comp_id(void)
+{
+    /* USER CODE BEGIN get_app_Comp_id */
+    /* USER CODE END get_app_Comp_id */
+    return kAppMavlinkConfig.Comp_id;
 }
 
 

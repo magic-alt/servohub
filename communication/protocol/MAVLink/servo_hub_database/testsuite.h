@@ -3582,7 +3582,7 @@ static void mavlink_test_appstatusinfo(uint8_t system_id, uint8_t component_id, 
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_appstatusinfo_t packet_in = {
-        963497464,963497672,73.0,101.0,129.0,963498504,963498712,213.0,241.0,269.0,963499544,137
+        963497464,963497672,73.0,101.0,129.0,963498504,963498712,213.0,241.0,269.0,963499544,137,204
     };
     mavlink_appstatusinfo_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
@@ -3598,6 +3598,7 @@ static void mavlink_test_appstatusinfo(uint8_t system_id, uint8_t component_id, 
         packet1.Mcu_temperature = packet_in.Mcu_temperature;
         packet1.Digital_io_inputs_status = packet_in.Digital_io_inputs_status;
         packet1.Modes_of_operation_display = packet_in.Modes_of_operation_display;
+        packet1.Brake_state = packet_in.Brake_state;
         
         
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
@@ -3612,12 +3613,12 @@ static void mavlink_test_appstatusinfo(uint8_t system_id, uint8_t component_id, 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_appstatusinfo_pack(system_id, component_id, &msg , packet1.Statusword , packet1.Error_word , packet1.DC_link_circuit_voltage , packet1.Drive_accumulated_heat , packet1.Drive_temperature , packet1.Alarm_word , packet1.Modes_of_operation_display , packet1.Version , packet1.Motor_temperature , packet1.Motor_power , packet1.Mcu_temperature , packet1.Digital_io_inputs_status );
+    mavlink_msg_appstatusinfo_pack(system_id, component_id, &msg , packet1.Statusword , packet1.Error_word , packet1.DC_link_circuit_voltage , packet1.Drive_accumulated_heat , packet1.Drive_temperature , packet1.Alarm_word , packet1.Modes_of_operation_display , packet1.Version , packet1.Motor_temperature , packet1.Motor_power , packet1.Mcu_temperature , packet1.Digital_io_inputs_status , packet1.Brake_state );
     mavlink_msg_appstatusinfo_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_appstatusinfo_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.Statusword , packet1.Error_word , packet1.DC_link_circuit_voltage , packet1.Drive_accumulated_heat , packet1.Drive_temperature , packet1.Alarm_word , packet1.Modes_of_operation_display , packet1.Version , packet1.Motor_temperature , packet1.Motor_power , packet1.Mcu_temperature , packet1.Digital_io_inputs_status );
+    mavlink_msg_appstatusinfo_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.Statusword , packet1.Error_word , packet1.DC_link_circuit_voltage , packet1.Drive_accumulated_heat , packet1.Drive_temperature , packet1.Alarm_word , packet1.Modes_of_operation_display , packet1.Version , packet1.Motor_temperature , packet1.Motor_power , packet1.Mcu_temperature , packet1.Digital_io_inputs_status , packet1.Brake_state );
     mavlink_msg_appstatusinfo_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -3630,7 +3631,7 @@ static void mavlink_test_appstatusinfo(uint8_t system_id, uint8_t component_id, 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_appstatusinfo_send(MAVLINK_COMM_1 , packet1.Statusword , packet1.Error_word , packet1.DC_link_circuit_voltage , packet1.Drive_accumulated_heat , packet1.Drive_temperature , packet1.Alarm_word , packet1.Modes_of_operation_display , packet1.Version , packet1.Motor_temperature , packet1.Motor_power , packet1.Mcu_temperature , packet1.Digital_io_inputs_status );
+    mavlink_msg_appstatusinfo_send(MAVLINK_COMM_1 , packet1.Statusword , packet1.Error_word , packet1.DC_link_circuit_voltage , packet1.Drive_accumulated_heat , packet1.Drive_temperature , packet1.Alarm_word , packet1.Modes_of_operation_display , packet1.Version , packet1.Motor_temperature , packet1.Motor_power , packet1.Mcu_temperature , packet1.Digital_io_inputs_status , packet1.Brake_state );
     mavlink_msg_appstatusinfo_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -3783,7 +3784,7 @@ static void mavlink_test_appbaseconfig(uint8_t system_id, uint8_t component_id, 
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_appbaseconfig_t packet_in = {
-        93372036854775807LL,963497880,963498088,129.0,157.0,185.0,213.0,963499128,963499336,19315,3
+        93372036854775807LL,963497880,963498088,129.0,157.0,185.0,213.0,963499128,963499336,297.0,325.0,353.0,381.0,20147,20251,185,252
     };
     mavlink_appbaseconfig_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
@@ -3796,8 +3797,14 @@ static void mavlink_test_appbaseconfig(uint8_t system_id, uint8_t component_id, 
         packet1.Brake_release_hold_voltage = packet_in.Brake_release_hold_voltage;
         packet1.Digital_io_outputs_phys = packet_in.Digital_io_outputs_phys;
         packet1.Digital_io_outputs_mask = packet_in.Digital_io_outputs_mask;
+        packet1.Brake_rated_voltage = packet_in.Brake_rated_voltage;
+        packet1.Brake_release_action_voltage = packet_in.Brake_release_action_voltage;
+        packet1.Brake_engage_delay_time = packet_in.Brake_engage_delay_time;
+        packet1.Brake_release_delay_time = packet_in.Brake_release_delay_time;
         packet1.Quick_stop_option_code = packet_in.Quick_stop_option_code;
+        packet1.Brake_release_pwm_freq = packet_in.Brake_release_pwm_freq;
         packet1.Polarity = packet_in.Polarity;
+        packet1.Brake_control_mode = packet_in.Brake_control_mode;
         
         
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
@@ -3812,12 +3819,12 @@ static void mavlink_test_appbaseconfig(uint8_t system_id, uint8_t component_id, 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_appbaseconfig_pack(system_id, component_id, &msg , packet1.Polarity , packet1.Home_position_offset_value , packet1.Can_id , packet1.Can_baudrate , packet1.Quick_stop_option_code , packet1.Brake_engage_time , packet1.Brake_release_time , packet1.Dynamic_brake_speed_threshold , packet1.Brake_release_hold_voltage , packet1.Digital_io_outputs_phys , packet1.Digital_io_outputs_mask );
+    mavlink_msg_appbaseconfig_pack(system_id, component_id, &msg , packet1.Polarity , packet1.Home_position_offset_value , packet1.Can_id , packet1.Can_baudrate , packet1.Quick_stop_option_code , packet1.Brake_engage_time , packet1.Brake_release_time , packet1.Dynamic_brake_speed_threshold , packet1.Brake_release_hold_voltage , packet1.Digital_io_outputs_phys , packet1.Digital_io_outputs_mask , packet1.Brake_control_mode , packet1.Brake_rated_voltage , packet1.Brake_release_action_voltage , packet1.Brake_release_pwm_freq , packet1.Brake_engage_delay_time , packet1.Brake_release_delay_time );
     mavlink_msg_appbaseconfig_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_appbaseconfig_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.Polarity , packet1.Home_position_offset_value , packet1.Can_id , packet1.Can_baudrate , packet1.Quick_stop_option_code , packet1.Brake_engage_time , packet1.Brake_release_time , packet1.Dynamic_brake_speed_threshold , packet1.Brake_release_hold_voltage , packet1.Digital_io_outputs_phys , packet1.Digital_io_outputs_mask );
+    mavlink_msg_appbaseconfig_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.Polarity , packet1.Home_position_offset_value , packet1.Can_id , packet1.Can_baudrate , packet1.Quick_stop_option_code , packet1.Brake_engage_time , packet1.Brake_release_time , packet1.Dynamic_brake_speed_threshold , packet1.Brake_release_hold_voltage , packet1.Digital_io_outputs_phys , packet1.Digital_io_outputs_mask , packet1.Brake_control_mode , packet1.Brake_rated_voltage , packet1.Brake_release_action_voltage , packet1.Brake_release_pwm_freq , packet1.Brake_engage_delay_time , packet1.Brake_release_delay_time );
     mavlink_msg_appbaseconfig_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -3830,7 +3837,7 @@ static void mavlink_test_appbaseconfig(uint8_t system_id, uint8_t component_id, 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_appbaseconfig_send(MAVLINK_COMM_1 , packet1.Polarity , packet1.Home_position_offset_value , packet1.Can_id , packet1.Can_baudrate , packet1.Quick_stop_option_code , packet1.Brake_engage_time , packet1.Brake_release_time , packet1.Dynamic_brake_speed_threshold , packet1.Brake_release_hold_voltage , packet1.Digital_io_outputs_phys , packet1.Digital_io_outputs_mask );
+    mavlink_msg_appbaseconfig_send(MAVLINK_COMM_1 , packet1.Polarity , packet1.Home_position_offset_value , packet1.Can_id , packet1.Can_baudrate , packet1.Quick_stop_option_code , packet1.Brake_engage_time , packet1.Brake_release_time , packet1.Dynamic_brake_speed_threshold , packet1.Brake_release_hold_voltage , packet1.Digital_io_outputs_phys , packet1.Digital_io_outputs_mask , packet1.Brake_control_mode , packet1.Brake_rated_voltage , packet1.Brake_release_action_voltage , packet1.Brake_release_pwm_freq , packet1.Brake_engage_delay_time , packet1.Brake_release_delay_time );
     mavlink_msg_appbaseconfig_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -3852,7 +3859,7 @@ static void mavlink_test_appmotionparam(uint8_t system_id, uint8_t component_id,
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_appmotionparam_t packet_in = {
-        93372036854775807LL,93372036854776311LL,93372036854776815LL,185.0,213.0,241.0,269.0,963499544,325.0,353.0,381.0,409.0,437.0,465.0,493.0,521.0,549.0,245,56
+        93372036854775807LL,93372036854776311LL,93372036854776815LL,185.0,213.0,241.0,269.0,963499544,325.0,353.0,381.0,409.0,437.0,465.0,493.0,521.0,549.0,245,56,123,190
     };
     mavlink_appmotionparam_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
@@ -3875,6 +3882,8 @@ static void mavlink_test_appmotionparam(uint8_t system_id, uint8_t component_id,
         packet1.MIT_kd = packet_in.MIT_kd;
         packet1.Homing_method = packet_in.Homing_method;
         packet1.Emergency_brake_requested = packet_in.Emergency_brake_requested;
+        packet1.Interp_time_period = packet_in.Interp_time_period;
+        packet1.Interp_time_index = packet_in.Interp_time_index;
         
         
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
@@ -3889,12 +3898,12 @@ static void mavlink_test_appmotionparam(uint8_t system_id, uint8_t component_id,
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_appmotionparam_pack(system_id, component_id, &msg , packet1.Target_position , packet1.Profile_velocity , packet1.Profile_acceleration , packet1.Profile_deceleration , packet1.Quick_stop_deceleration , packet1.Motion_profile_type , packet1.Home_offset , packet1.Homing_method , packet1.Target_velocity , packet1.Target_torque , packet1.Torque_slope , packet1.Encoder_calibration_speed , packet1.MIT_feedforward_torque , packet1.MIT_target_position , packet1.MIT_max_current , packet1.MIT_target_velocity , packet1.MIT_kp , packet1.MIT_kd , packet1.Emergency_brake_requested );
+    mavlink_msg_appmotionparam_pack(system_id, component_id, &msg , packet1.Target_position , packet1.Profile_velocity , packet1.Profile_acceleration , packet1.Profile_deceleration , packet1.Quick_stop_deceleration , packet1.Motion_profile_type , packet1.Home_offset , packet1.Homing_method , packet1.Target_velocity , packet1.Target_torque , packet1.Torque_slope , packet1.Encoder_calibration_speed , packet1.MIT_feedforward_torque , packet1.MIT_target_position , packet1.MIT_max_current , packet1.MIT_target_velocity , packet1.MIT_kp , packet1.MIT_kd , packet1.Emergency_brake_requested , packet1.Interp_time_period , packet1.Interp_time_index );
     mavlink_msg_appmotionparam_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_appmotionparam_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.Target_position , packet1.Profile_velocity , packet1.Profile_acceleration , packet1.Profile_deceleration , packet1.Quick_stop_deceleration , packet1.Motion_profile_type , packet1.Home_offset , packet1.Homing_method , packet1.Target_velocity , packet1.Target_torque , packet1.Torque_slope , packet1.Encoder_calibration_speed , packet1.MIT_feedforward_torque , packet1.MIT_target_position , packet1.MIT_max_current , packet1.MIT_target_velocity , packet1.MIT_kp , packet1.MIT_kd , packet1.Emergency_brake_requested );
+    mavlink_msg_appmotionparam_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.Target_position , packet1.Profile_velocity , packet1.Profile_acceleration , packet1.Profile_deceleration , packet1.Quick_stop_deceleration , packet1.Motion_profile_type , packet1.Home_offset , packet1.Homing_method , packet1.Target_velocity , packet1.Target_torque , packet1.Torque_slope , packet1.Encoder_calibration_speed , packet1.MIT_feedforward_torque , packet1.MIT_target_position , packet1.MIT_max_current , packet1.MIT_target_velocity , packet1.MIT_kp , packet1.MIT_kd , packet1.Emergency_brake_requested , packet1.Interp_time_period , packet1.Interp_time_index );
     mavlink_msg_appmotionparam_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -3907,7 +3916,7 @@ static void mavlink_test_appmotionparam(uint8_t system_id, uint8_t component_id,
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_appmotionparam_send(MAVLINK_COMM_1 , packet1.Target_position , packet1.Profile_velocity , packet1.Profile_acceleration , packet1.Profile_deceleration , packet1.Quick_stop_deceleration , packet1.Motion_profile_type , packet1.Home_offset , packet1.Homing_method , packet1.Target_velocity , packet1.Target_torque , packet1.Torque_slope , packet1.Encoder_calibration_speed , packet1.MIT_feedforward_torque , packet1.MIT_target_position , packet1.MIT_max_current , packet1.MIT_target_velocity , packet1.MIT_kp , packet1.MIT_kd , packet1.Emergency_brake_requested );
+    mavlink_msg_appmotionparam_send(MAVLINK_COMM_1 , packet1.Target_position , packet1.Profile_velocity , packet1.Profile_acceleration , packet1.Profile_deceleration , packet1.Quick_stop_deceleration , packet1.Motion_profile_type , packet1.Home_offset , packet1.Homing_method , packet1.Target_velocity , packet1.Target_torque , packet1.Torque_slope , packet1.Encoder_calibration_speed , packet1.MIT_feedforward_torque , packet1.MIT_target_position , packet1.MIT_max_current , packet1.MIT_target_velocity , packet1.MIT_kp , packet1.MIT_kd , packet1.Emergency_brake_requested , packet1.Interp_time_period , packet1.Interp_time_index );
     mavlink_msg_appmotionparam_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -5503,6 +5512,66 @@ static void mavlink_test_tableconfig(uint8_t system_id, uint8_t component_id, ma
 #endif
 }
 
+static void mavlink_test_appmavlinkconfig(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_AppMavlinkConfig >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_appmavlinkconfig_t packet_in = {
+        5,72
+    };
+    mavlink_appmavlinkconfig_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.Sys_id = packet_in.Sys_id;
+        packet1.Comp_id = packet_in.Comp_id;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_AppMavlinkConfig_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_AppMavlinkConfig_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appmavlinkconfig_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_appmavlinkconfig_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appmavlinkconfig_pack(system_id, component_id, &msg , packet1.Sys_id , packet1.Comp_id );
+    mavlink_msg_appmavlinkconfig_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appmavlinkconfig_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.Sys_id , packet1.Comp_id );
+    mavlink_msg_appmavlinkconfig_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_appmavlinkconfig_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appmavlinkconfig_send(MAVLINK_COMM_1 , packet1.Sys_id , packet1.Comp_id );
+    mavlink_msg_appmavlinkconfig_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+#ifdef MAVLINK_HAVE_GET_MESSAGE_INFO
+    MAVLINK_ASSERT(mavlink_get_message_info_by_name("AppMavlinkConfig") != NULL);
+    MAVLINK_ASSERT(mavlink_get_message_info_by_id(MAVLINK_MSG_ID_AppMavlinkConfig) != NULL);
+#endif
+}
+
 static void mavlink_test_servo_hub_database(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
 {
     mavlink_test_command_long(system_id, component_id, last_msg);
@@ -5592,6 +5661,7 @@ static void mavlink_test_servo_hub_database(uint8_t system_id, uint8_t component
     mavlink_test_appdebugparam(system_id, component_id, last_msg);
     mavlink_test_tabledata(system_id, component_id, last_msg);
     mavlink_test_tableconfig(system_id, component_id, last_msg);
+    mavlink_test_appmavlinkconfig(system_id, component_id, last_msg);
 }
 
 #ifdef __cplusplus

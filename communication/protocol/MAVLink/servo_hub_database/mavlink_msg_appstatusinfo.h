@@ -17,15 +17,16 @@ typedef struct __mavlink_appstatusinfo_t {
  float Mcu_temperature; /*<  */
  uint32_t Digital_io_inputs_status; /*<  */
  int8_t Modes_of_operation_display; /*<  */
+ uint8_t Brake_state; /*<  */
 } mavlink_appstatusinfo_t;
 
-#define MAVLINK_MSG_ID_AppStatusInfo_LEN 45
-#define MAVLINK_MSG_ID_AppStatusInfo_MIN_LEN 45
-#define MAVLINK_MSG_ID_30055_LEN 45
-#define MAVLINK_MSG_ID_30055_MIN_LEN 45
+#define MAVLINK_MSG_ID_AppStatusInfo_LEN 46
+#define MAVLINK_MSG_ID_AppStatusInfo_MIN_LEN 46
+#define MAVLINK_MSG_ID_30055_LEN 46
+#define MAVLINK_MSG_ID_30055_MIN_LEN 46
 
-#define MAVLINK_MSG_ID_AppStatusInfo_CRC 143
-#define MAVLINK_MSG_ID_30055_CRC 143
+#define MAVLINK_MSG_ID_AppStatusInfo_CRC 3
+#define MAVLINK_MSG_ID_30055_CRC 3
 
 
 
@@ -33,7 +34,7 @@ typedef struct __mavlink_appstatusinfo_t {
 #define MAVLINK_MESSAGE_INFO_AppStatusInfo { \
     30055, \
     "AppStatusInfo", \
-    12, \
+    13, \
     {  { "Statusword", NULL, MAVLINK_TYPE_UINT32_T, 0, 0, offsetof(mavlink_appstatusinfo_t, Statusword) }, \
          { "Error_word", NULL, MAVLINK_TYPE_UINT32_T, 0, 4, offsetof(mavlink_appstatusinfo_t, Error_word) }, \
          { "DC_link_circuit_voltage", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_appstatusinfo_t, DC_link_circuit_voltage) }, \
@@ -46,12 +47,13 @@ typedef struct __mavlink_appstatusinfo_t {
          { "Motor_power", NULL, MAVLINK_TYPE_FLOAT, 0, 32, offsetof(mavlink_appstatusinfo_t, Motor_power) }, \
          { "Mcu_temperature", NULL, MAVLINK_TYPE_FLOAT, 0, 36, offsetof(mavlink_appstatusinfo_t, Mcu_temperature) }, \
          { "Digital_io_inputs_status", NULL, MAVLINK_TYPE_UINT32_T, 0, 40, offsetof(mavlink_appstatusinfo_t, Digital_io_inputs_status) }, \
+         { "Brake_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 45, offsetof(mavlink_appstatusinfo_t, Brake_state) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_AppStatusInfo { \
     "AppStatusInfo", \
-    12, \
+    13, \
     {  { "Statusword", NULL, MAVLINK_TYPE_UINT32_T, 0, 0, offsetof(mavlink_appstatusinfo_t, Statusword) }, \
          { "Error_word", NULL, MAVLINK_TYPE_UINT32_T, 0, 4, offsetof(mavlink_appstatusinfo_t, Error_word) }, \
          { "DC_link_circuit_voltage", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_appstatusinfo_t, DC_link_circuit_voltage) }, \
@@ -64,6 +66,7 @@ typedef struct __mavlink_appstatusinfo_t {
          { "Motor_power", NULL, MAVLINK_TYPE_FLOAT, 0, 32, offsetof(mavlink_appstatusinfo_t, Motor_power) }, \
          { "Mcu_temperature", NULL, MAVLINK_TYPE_FLOAT, 0, 36, offsetof(mavlink_appstatusinfo_t, Mcu_temperature) }, \
          { "Digital_io_inputs_status", NULL, MAVLINK_TYPE_UINT32_T, 0, 40, offsetof(mavlink_appstatusinfo_t, Digital_io_inputs_status) }, \
+         { "Brake_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 45, offsetof(mavlink_appstatusinfo_t, Brake_state) }, \
          } \
 }
 #endif
@@ -86,10 +89,11 @@ typedef struct __mavlink_appstatusinfo_t {
  * @param Motor_power  
  * @param Mcu_temperature  
  * @param Digital_io_inputs_status  
+ * @param Brake_state  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_appstatusinfo_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint32_t Statusword, uint32_t Error_word, float DC_link_circuit_voltage, float Drive_accumulated_heat, float Drive_temperature, uint32_t Alarm_word, int8_t Modes_of_operation_display, uint32_t Version, float Motor_temperature, float Motor_power, float Mcu_temperature, uint32_t Digital_io_inputs_status)
+                               uint32_t Statusword, uint32_t Error_word, float DC_link_circuit_voltage, float Drive_accumulated_heat, float Drive_temperature, uint32_t Alarm_word, int8_t Modes_of_operation_display, uint32_t Version, float Motor_temperature, float Motor_power, float Mcu_temperature, uint32_t Digital_io_inputs_status, uint8_t Brake_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppStatusInfo_LEN];
@@ -105,6 +109,7 @@ static inline uint16_t mavlink_msg_appstatusinfo_pack(uint8_t system_id, uint8_t
     _mav_put_float(buf, 36, Mcu_temperature);
     _mav_put_uint32_t(buf, 40, Digital_io_inputs_status);
     _mav_put_int8_t(buf, 44, Modes_of_operation_display);
+    _mav_put_uint8_t(buf, 45, Brake_state);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppStatusInfo_LEN);
 #else
@@ -121,6 +126,7 @@ static inline uint16_t mavlink_msg_appstatusinfo_pack(uint8_t system_id, uint8_t
     packet.Mcu_temperature = Mcu_temperature;
     packet.Digital_io_inputs_status = Digital_io_inputs_status;
     packet.Modes_of_operation_display = Modes_of_operation_display;
+    packet.Brake_state = Brake_state;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_AppStatusInfo_LEN);
 #endif
@@ -148,10 +154,11 @@ static inline uint16_t mavlink_msg_appstatusinfo_pack(uint8_t system_id, uint8_t
  * @param Motor_power  
  * @param Mcu_temperature  
  * @param Digital_io_inputs_status  
+ * @param Brake_state  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_appstatusinfo_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               uint32_t Statusword, uint32_t Error_word, float DC_link_circuit_voltage, float Drive_accumulated_heat, float Drive_temperature, uint32_t Alarm_word, int8_t Modes_of_operation_display, uint32_t Version, float Motor_temperature, float Motor_power, float Mcu_temperature, uint32_t Digital_io_inputs_status)
+                               uint32_t Statusword, uint32_t Error_word, float DC_link_circuit_voltage, float Drive_accumulated_heat, float Drive_temperature, uint32_t Alarm_word, int8_t Modes_of_operation_display, uint32_t Version, float Motor_temperature, float Motor_power, float Mcu_temperature, uint32_t Digital_io_inputs_status, uint8_t Brake_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppStatusInfo_LEN];
@@ -167,6 +174,7 @@ static inline uint16_t mavlink_msg_appstatusinfo_pack_status(uint8_t system_id, 
     _mav_put_float(buf, 36, Mcu_temperature);
     _mav_put_uint32_t(buf, 40, Digital_io_inputs_status);
     _mav_put_int8_t(buf, 44, Modes_of_operation_display);
+    _mav_put_uint8_t(buf, 45, Brake_state);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppStatusInfo_LEN);
 #else
@@ -183,6 +191,7 @@ static inline uint16_t mavlink_msg_appstatusinfo_pack_status(uint8_t system_id, 
     packet.Mcu_temperature = Mcu_temperature;
     packet.Digital_io_inputs_status = Digital_io_inputs_status;
     packet.Modes_of_operation_display = Modes_of_operation_display;
+    packet.Brake_state = Brake_state;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_AppStatusInfo_LEN);
 #endif
@@ -213,11 +222,12 @@ static inline uint16_t mavlink_msg_appstatusinfo_pack_status(uint8_t system_id, 
  * @param Motor_power  
  * @param Mcu_temperature  
  * @param Digital_io_inputs_status  
+ * @param Brake_state  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_appstatusinfo_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint32_t Statusword,uint32_t Error_word,float DC_link_circuit_voltage,float Drive_accumulated_heat,float Drive_temperature,uint32_t Alarm_word,int8_t Modes_of_operation_display,uint32_t Version,float Motor_temperature,float Motor_power,float Mcu_temperature,uint32_t Digital_io_inputs_status)
+                                   uint32_t Statusword,uint32_t Error_word,float DC_link_circuit_voltage,float Drive_accumulated_heat,float Drive_temperature,uint32_t Alarm_word,int8_t Modes_of_operation_display,uint32_t Version,float Motor_temperature,float Motor_power,float Mcu_temperature,uint32_t Digital_io_inputs_status,uint8_t Brake_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppStatusInfo_LEN];
@@ -233,6 +243,7 @@ static inline uint16_t mavlink_msg_appstatusinfo_pack_chan(uint8_t system_id, ui
     _mav_put_float(buf, 36, Mcu_temperature);
     _mav_put_uint32_t(buf, 40, Digital_io_inputs_status);
     _mav_put_int8_t(buf, 44, Modes_of_operation_display);
+    _mav_put_uint8_t(buf, 45, Brake_state);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppStatusInfo_LEN);
 #else
@@ -249,6 +260,7 @@ static inline uint16_t mavlink_msg_appstatusinfo_pack_chan(uint8_t system_id, ui
     packet.Mcu_temperature = Mcu_temperature;
     packet.Digital_io_inputs_status = Digital_io_inputs_status;
     packet.Modes_of_operation_display = Modes_of_operation_display;
+    packet.Brake_state = Brake_state;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_AppStatusInfo_LEN);
 #endif
@@ -267,7 +279,7 @@ static inline uint16_t mavlink_msg_appstatusinfo_pack_chan(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_appstatusinfo_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_appstatusinfo_t* appstatusinfo)
 {
-    return mavlink_msg_appstatusinfo_pack(system_id, component_id, msg, appstatusinfo->Statusword, appstatusinfo->Error_word, appstatusinfo->DC_link_circuit_voltage, appstatusinfo->Drive_accumulated_heat, appstatusinfo->Drive_temperature, appstatusinfo->Alarm_word, appstatusinfo->Modes_of_operation_display, appstatusinfo->Version, appstatusinfo->Motor_temperature, appstatusinfo->Motor_power, appstatusinfo->Mcu_temperature, appstatusinfo->Digital_io_inputs_status);
+    return mavlink_msg_appstatusinfo_pack(system_id, component_id, msg, appstatusinfo->Statusword, appstatusinfo->Error_word, appstatusinfo->DC_link_circuit_voltage, appstatusinfo->Drive_accumulated_heat, appstatusinfo->Drive_temperature, appstatusinfo->Alarm_word, appstatusinfo->Modes_of_operation_display, appstatusinfo->Version, appstatusinfo->Motor_temperature, appstatusinfo->Motor_power, appstatusinfo->Mcu_temperature, appstatusinfo->Digital_io_inputs_status, appstatusinfo->Brake_state);
 }
 
 /**
@@ -281,7 +293,7 @@ static inline uint16_t mavlink_msg_appstatusinfo_encode(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_appstatusinfo_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_appstatusinfo_t* appstatusinfo)
 {
-    return mavlink_msg_appstatusinfo_pack_chan(system_id, component_id, chan, msg, appstatusinfo->Statusword, appstatusinfo->Error_word, appstatusinfo->DC_link_circuit_voltage, appstatusinfo->Drive_accumulated_heat, appstatusinfo->Drive_temperature, appstatusinfo->Alarm_word, appstatusinfo->Modes_of_operation_display, appstatusinfo->Version, appstatusinfo->Motor_temperature, appstatusinfo->Motor_power, appstatusinfo->Mcu_temperature, appstatusinfo->Digital_io_inputs_status);
+    return mavlink_msg_appstatusinfo_pack_chan(system_id, component_id, chan, msg, appstatusinfo->Statusword, appstatusinfo->Error_word, appstatusinfo->DC_link_circuit_voltage, appstatusinfo->Drive_accumulated_heat, appstatusinfo->Drive_temperature, appstatusinfo->Alarm_word, appstatusinfo->Modes_of_operation_display, appstatusinfo->Version, appstatusinfo->Motor_temperature, appstatusinfo->Motor_power, appstatusinfo->Mcu_temperature, appstatusinfo->Digital_io_inputs_status, appstatusinfo->Brake_state);
 }
 
 /**
@@ -295,7 +307,7 @@ static inline uint16_t mavlink_msg_appstatusinfo_encode_chan(uint8_t system_id, 
  */
 static inline uint16_t mavlink_msg_appstatusinfo_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_appstatusinfo_t* appstatusinfo)
 {
-    return mavlink_msg_appstatusinfo_pack_status(system_id, component_id, _status, msg,  appstatusinfo->Statusword, appstatusinfo->Error_word, appstatusinfo->DC_link_circuit_voltage, appstatusinfo->Drive_accumulated_heat, appstatusinfo->Drive_temperature, appstatusinfo->Alarm_word, appstatusinfo->Modes_of_operation_display, appstatusinfo->Version, appstatusinfo->Motor_temperature, appstatusinfo->Motor_power, appstatusinfo->Mcu_temperature, appstatusinfo->Digital_io_inputs_status);
+    return mavlink_msg_appstatusinfo_pack_status(system_id, component_id, _status, msg,  appstatusinfo->Statusword, appstatusinfo->Error_word, appstatusinfo->DC_link_circuit_voltage, appstatusinfo->Drive_accumulated_heat, appstatusinfo->Drive_temperature, appstatusinfo->Alarm_word, appstatusinfo->Modes_of_operation_display, appstatusinfo->Version, appstatusinfo->Motor_temperature, appstatusinfo->Motor_power, appstatusinfo->Mcu_temperature, appstatusinfo->Digital_io_inputs_status, appstatusinfo->Brake_state);
 }
 
 /**
@@ -314,10 +326,11 @@ static inline uint16_t mavlink_msg_appstatusinfo_encode_status(uint8_t system_id
  * @param Motor_power  
  * @param Mcu_temperature  
  * @param Digital_io_inputs_status  
+ * @param Brake_state  
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_appstatusinfo_send(mavlink_channel_t chan, uint32_t Statusword, uint32_t Error_word, float DC_link_circuit_voltage, float Drive_accumulated_heat, float Drive_temperature, uint32_t Alarm_word, int8_t Modes_of_operation_display, uint32_t Version, float Motor_temperature, float Motor_power, float Mcu_temperature, uint32_t Digital_io_inputs_status)
+static inline void mavlink_msg_appstatusinfo_send(mavlink_channel_t chan, uint32_t Statusword, uint32_t Error_word, float DC_link_circuit_voltage, float Drive_accumulated_heat, float Drive_temperature, uint32_t Alarm_word, int8_t Modes_of_operation_display, uint32_t Version, float Motor_temperature, float Motor_power, float Mcu_temperature, uint32_t Digital_io_inputs_status, uint8_t Brake_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppStatusInfo_LEN];
@@ -333,6 +346,7 @@ static inline void mavlink_msg_appstatusinfo_send(mavlink_channel_t chan, uint32
     _mav_put_float(buf, 36, Mcu_temperature);
     _mav_put_uint32_t(buf, 40, Digital_io_inputs_status);
     _mav_put_int8_t(buf, 44, Modes_of_operation_display);
+    _mav_put_uint8_t(buf, 45, Brake_state);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppStatusInfo, buf, MAVLINK_MSG_ID_AppStatusInfo_MIN_LEN, MAVLINK_MSG_ID_AppStatusInfo_LEN, MAVLINK_MSG_ID_AppStatusInfo_CRC);
 #else
@@ -349,6 +363,7 @@ static inline void mavlink_msg_appstatusinfo_send(mavlink_channel_t chan, uint32
     packet.Mcu_temperature = Mcu_temperature;
     packet.Digital_io_inputs_status = Digital_io_inputs_status;
     packet.Modes_of_operation_display = Modes_of_operation_display;
+    packet.Brake_state = Brake_state;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppStatusInfo, (const char *)&packet, MAVLINK_MSG_ID_AppStatusInfo_MIN_LEN, MAVLINK_MSG_ID_AppStatusInfo_LEN, MAVLINK_MSG_ID_AppStatusInfo_CRC);
 #endif
@@ -362,7 +377,7 @@ static inline void mavlink_msg_appstatusinfo_send(mavlink_channel_t chan, uint32
 static inline void mavlink_msg_appstatusinfo_send_struct(mavlink_channel_t chan, const mavlink_appstatusinfo_t* appstatusinfo)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_appstatusinfo_send(chan, appstatusinfo->Statusword, appstatusinfo->Error_word, appstatusinfo->DC_link_circuit_voltage, appstatusinfo->Drive_accumulated_heat, appstatusinfo->Drive_temperature, appstatusinfo->Alarm_word, appstatusinfo->Modes_of_operation_display, appstatusinfo->Version, appstatusinfo->Motor_temperature, appstatusinfo->Motor_power, appstatusinfo->Mcu_temperature, appstatusinfo->Digital_io_inputs_status);
+    mavlink_msg_appstatusinfo_send(chan, appstatusinfo->Statusword, appstatusinfo->Error_word, appstatusinfo->DC_link_circuit_voltage, appstatusinfo->Drive_accumulated_heat, appstatusinfo->Drive_temperature, appstatusinfo->Alarm_word, appstatusinfo->Modes_of_operation_display, appstatusinfo->Version, appstatusinfo->Motor_temperature, appstatusinfo->Motor_power, appstatusinfo->Mcu_temperature, appstatusinfo->Digital_io_inputs_status, appstatusinfo->Brake_state);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppStatusInfo, (const char *)appstatusinfo, MAVLINK_MSG_ID_AppStatusInfo_MIN_LEN, MAVLINK_MSG_ID_AppStatusInfo_LEN, MAVLINK_MSG_ID_AppStatusInfo_CRC);
 #endif
@@ -376,7 +391,7 @@ static inline void mavlink_msg_appstatusinfo_send_struct(mavlink_channel_t chan,
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_appstatusinfo_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint32_t Statusword, uint32_t Error_word, float DC_link_circuit_voltage, float Drive_accumulated_heat, float Drive_temperature, uint32_t Alarm_word, int8_t Modes_of_operation_display, uint32_t Version, float Motor_temperature, float Motor_power, float Mcu_temperature, uint32_t Digital_io_inputs_status)
+static inline void mavlink_msg_appstatusinfo_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint32_t Statusword, uint32_t Error_word, float DC_link_circuit_voltage, float Drive_accumulated_heat, float Drive_temperature, uint32_t Alarm_word, int8_t Modes_of_operation_display, uint32_t Version, float Motor_temperature, float Motor_power, float Mcu_temperature, uint32_t Digital_io_inputs_status, uint8_t Brake_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -392,6 +407,7 @@ static inline void mavlink_msg_appstatusinfo_send_buf(mavlink_message_t *msgbuf,
     _mav_put_float(buf, 36, Mcu_temperature);
     _mav_put_uint32_t(buf, 40, Digital_io_inputs_status);
     _mav_put_int8_t(buf, 44, Modes_of_operation_display);
+    _mav_put_uint8_t(buf, 45, Brake_state);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppStatusInfo, buf, MAVLINK_MSG_ID_AppStatusInfo_MIN_LEN, MAVLINK_MSG_ID_AppStatusInfo_LEN, MAVLINK_MSG_ID_AppStatusInfo_CRC);
 #else
@@ -408,6 +424,7 @@ static inline void mavlink_msg_appstatusinfo_send_buf(mavlink_message_t *msgbuf,
     packet->Mcu_temperature = Mcu_temperature;
     packet->Digital_io_inputs_status = Digital_io_inputs_status;
     packet->Modes_of_operation_display = Modes_of_operation_display;
+    packet->Brake_state = Brake_state;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppStatusInfo, (const char *)packet, MAVLINK_MSG_ID_AppStatusInfo_MIN_LEN, MAVLINK_MSG_ID_AppStatusInfo_LEN, MAVLINK_MSG_ID_AppStatusInfo_CRC);
 #endif
@@ -540,6 +557,16 @@ static inline uint32_t mavlink_msg_appstatusinfo_get_Digital_io_inputs_status(co
 }
 
 /**
+ * @brief Get field Brake_state from appstatusinfo message
+ *
+ * @return  
+ */
+static inline uint8_t mavlink_msg_appstatusinfo_get_Brake_state(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  45);
+}
+
+/**
  * @brief Decode a appstatusinfo message into a struct
  *
  * @param msg The message to decode
@@ -560,6 +587,7 @@ static inline void mavlink_msg_appstatusinfo_decode(const mavlink_message_t* msg
     appstatusinfo->Mcu_temperature = mavlink_msg_appstatusinfo_get_Mcu_temperature(msg);
     appstatusinfo->Digital_io_inputs_status = mavlink_msg_appstatusinfo_get_Digital_io_inputs_status(msg);
     appstatusinfo->Modes_of_operation_display = mavlink_msg_appstatusinfo_get_Modes_of_operation_display(msg);
+    appstatusinfo->Brake_state = mavlink_msg_appstatusinfo_get_Brake_state(msg);
 #else
         uint8_t len = msg->len < MAVLINK_MSG_ID_AppStatusInfo_LEN? msg->len : MAVLINK_MSG_ID_AppStatusInfo_LEN;
         memset(appstatusinfo, 0, MAVLINK_MSG_ID_AppStatusInfo_LEN);

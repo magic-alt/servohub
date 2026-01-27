@@ -187,6 +187,14 @@ void flash_param_update(void)
     kFlashStorage.app_base_config_Digital_io_outputs_mask = kAppBaseConfig.Digital_io_outputs_mask;
     kFlashStorage.tq_fc_id_config_fc_p_com = kAxis.tq_fc_id_config.fc_p_com;
     kFlashStorage.tq_fc_id_config_fc_n_com = kAxis.tq_fc_id_config.fc_n_com;
+    kFlashStorage.app_base_config_Brake_control_mode = kAppBaseConfig.Brake_control_mode;
+    kFlashStorage.app_base_config_Brake_rated_voltage = kAppBaseConfig.Brake_rated_voltage;
+    kFlashStorage.app_base_config_Brake_release_action_voltage = kAppBaseConfig.Brake_release_action_voltage;
+    kFlashStorage.app_base_config_Brake_release_pwm_freq = kAppBaseConfig.Brake_release_pwm_freq;
+    kFlashStorage.app_base_config_Brake_engage_delay_time = kAppBaseConfig.Brake_engage_delay_time;
+    kFlashStorage.app_base_config_Brake_release_delay_time = kAppBaseConfig.Brake_release_delay_time;
+    kFlashStorage.app_motion_param_Interp_time_period = kAppMotionParam.Interp_time_period;
+    kFlashStorage.app_motion_param_Interp_time_index = kAppMotionParam.Interp_time_index;
 }
 
 void flash_param_init(void)
@@ -370,6 +378,14 @@ void flash_param_init(void)
     kAppBaseConfig.Digital_io_outputs_mask = kFlashStorage.app_base_config_Digital_io_outputs_mask;
     kAxis.tq_fc_id_config.fc_p_com = kFlashStorage.tq_fc_id_config_fc_p_com;
     kAxis.tq_fc_id_config.fc_n_com = kFlashStorage.tq_fc_id_config_fc_n_com;
+    kAppBaseConfig.Brake_control_mode = kFlashStorage.app_base_config_Brake_control_mode;
+    kAppBaseConfig.Brake_rated_voltage = kFlashStorage.app_base_config_Brake_rated_voltage;
+    kAppBaseConfig.Brake_release_action_voltage = kFlashStorage.app_base_config_Brake_release_action_voltage;
+    kAppBaseConfig.Brake_release_pwm_freq = kFlashStorage.app_base_config_Brake_release_pwm_freq;
+    kAppBaseConfig.Brake_engage_delay_time = kFlashStorage.app_base_config_Brake_engage_delay_time;
+    kAppBaseConfig.Brake_release_delay_time = kFlashStorage.app_base_config_Brake_release_delay_time;
+    kAppMotionParam.Interp_time_period = kFlashStorage.app_motion_param_Interp_time_period;
+    kAppMotionParam.Interp_time_index = kFlashStorage.app_motion_param_Interp_time_index;
 }
 /* USER CODE BEGIN AREA 1 */
 static HistoricalInfo kFlashHistoricalInfo;

@@ -4,7 +4,7 @@
 #include "motor_ctl_loop.h"
 
 //DATABASE_CODE_START_1
-const InterVarStruct kParamDataBase[386] = {
+const InterVarStruct kParamDataBase[397] = {
     {1, &kAxis.pmsm_config.b, kTypeFloat32},
     {2, &kAxis.pmsm_config.fc, kTypeFloat32},
     {3, &kAxis.pmsm_config.flux, kTypeFloat32},
@@ -391,5 +391,16 @@ const InterVarStruct kParamDataBase[386] = {
     {607, &kAppMotionParam.Emergency_brake_requested, kTypeUint8},
     {611, &kAxis.tq_fc_id_config.fc_p_com, kTypeFloat32},
     {612, &kAxis.tq_fc_id_config.fc_n_com, kTypeFloat32},
+    {617, &kAppStatusInfo.Brake_state, kTypeUint8},
+    {618, &kAppBaseConfig.Brake_control_mode, kTypeUint8},
+    {619, &kAppBaseConfig.Brake_rated_voltage, kTypeFloat32},
+    {620, &kAppBaseConfig.Brake_release_action_voltage, kTypeFloat32},
+    {622, &kAppBaseConfig.Brake_release_pwm_freq, kTypeUint16},
+    {623, &kAppBaseConfig.Brake_engage_delay_time, kTypeFloat32},
+    {624, &kAppBaseConfig.Brake_release_delay_time, kTypeFloat32},
+    {625, &kAppMotionParam.Interp_time_period, kTypeUint8},
+    {626, &kAppMotionParam.Interp_time_index, kTypeInt8},
+    {630, &kAppMavlinkConfig.Sys_id, kTypeUint8},
+    {631, &kAppMavlinkConfig.Comp_id, kTypeUint8},
 };
 //DATABASE_CODE_STOP_1

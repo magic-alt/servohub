@@ -175,6 +175,14 @@ typedef struct {
     uint8_t tq_fc_id_config_fc_com_enable;
     float tq_fc_id_config_fc_p_com;
     float tq_fc_id_config_fc_n_com;
+    uint8_t app_base_config_Brake_control_mode;
+    float app_base_config_Brake_rated_voltage;
+    float app_base_config_Brake_release_action_voltage;
+    uint16_t app_base_config_Brake_release_pwm_freq;
+    float app_base_config_Brake_engage_delay_time;
+    float app_base_config_Brake_release_delay_time;
+    uint8_t app_motion_param_Interp_time_period;
+    int8_t app_motion_param_Interp_time_index;
 }FLASH_PARAM_STRUCT;
 extern FLASH_PARAM_STRUCT kFlashStorage;
 
