@@ -29,13 +29,13 @@
 /* Block signals and states (default storage) for model 'pos_speed_ctl_pip' */
 typedef struct
 {
-    int64_T pos_now_pulse_last;        /* '<S9>/Delay1' */
-    real32_T iq_tar_last;              /* '<S10>/Delay1' */
-    real32_T speed_ki_int;             /* '<S10>/Delay' */
-    real32_T x_err_last;               /* '<S9>/Delay2' */
-    real32_T x3;                       /* '<S12>/Delay3' */
-    real32_T x2_ev_rad_s;              /* '<S11>/Delay3' */
-    real32_T ev_last;                  /* '<S9>/Delay' */
+    int64_T pos_now_pulse_last;        /* '<S10>/Delay1' */
+    real32_T iq_tar_last;              /* '<S11>/Delay1' */
+    real32_T speed_ki_int;             /* '<S11>/Delay' */
+    real32_T x_err_last;               /* '<S10>/Delay2' */
+    real32_T x3;                       /* '<S13>/Delay3' */
+    real32_T x2_ev_rad_s;              /* '<S12>/Delay3' */
+    real32_T ev_last;                  /* '<S10>/Delay' */
 }
 pos_speed_ctl_pip_DW_f;
 
@@ -57,15 +57,15 @@ extern void pos_speed_ctl_pip(const PosSpeedCtlInput *rtu_input, const
  * Block '<S4>/Data Type Propagation' : Unused code path elimination
  * Block '<S5>/Data Type Duplicate' : Unused code path elimination
  * Block '<S5>/Data Type Propagation' : Unused code path elimination
- * Block '<S14>/Data Type Duplicate' : Unused code path elimination
- * Block '<S14>/Data Type Propagation' : Unused code path elimination
  * Block '<S15>/Data Type Duplicate' : Unused code path elimination
  * Block '<S15>/Data Type Propagation' : Unused code path elimination
  * Block '<S16>/Data Type Duplicate' : Unused code path elimination
  * Block '<S16>/Data Type Propagation' : Unused code path elimination
  * Block '<S17>/Data Type Duplicate' : Unused code path elimination
  * Block '<S17>/Data Type Propagation' : Unused code path elimination
- * Block '<S9>/l3' : Eliminated nontunable gain of 1
+ * Block '<S18>/Data Type Duplicate' : Unused code path elimination
+ * Block '<S18>/Data Type Propagation' : Unused code path elimination
+ * Block '<S10>/l3' : Eliminated nontunable gain of 1
  */
 
 /*-
@@ -91,15 +91,16 @@ extern void pos_speed_ctl_pip(const PosSpeedCtlInput *rtu_input, const
  * '<S6>'   : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/pulse_to_rad1'
  * '<S7>'   : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/pulse_to_rad2'
  * '<S8>'   : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/pulse_to_rad3'
- * '<S9>'   : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/tl_dob'
- * '<S10>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/vel_ctl_pi'
- * '<S11>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/tl_dob/dis_int'
- * '<S12>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/tl_dob/dis_int1'
- * '<S13>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/tl_dob/p_to_rad'
- * '<S14>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/tl_dob/dis_int/Saturation Dynamic'
- * '<S15>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/tl_dob/dis_int1/Saturation Dynamic'
- * '<S16>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/vel_ctl_pi/Saturation Dynamic'
- * '<S17>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/vel_ctl_pi/Saturation Dynamic1'
+ * '<S9>'   : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/pulse_to_rad4'
+ * '<S10>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/tl_dob'
+ * '<S11>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/vel_ctl_pi'
+ * '<S12>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/tl_dob/dis_int'
+ * '<S13>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/tl_dob/dis_int1'
+ * '<S14>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/tl_dob/p_to_rad'
+ * '<S15>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/tl_dob/dis_int/Saturation Dynamic'
+ * '<S16>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/tl_dob/dis_int1/Saturation Dynamic'
+ * '<S17>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/vel_ctl_pi/Saturation Dynamic'
+ * '<S18>'  : 'pos_speed_ctl_pip/pos_speed_ctl_pip/pos_speed_ctl/vel_ctl_pi/Saturation Dynamic1'
  */
 
 /*-

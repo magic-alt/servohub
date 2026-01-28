@@ -80,6 +80,9 @@ typedef struct
 
     /* 电角速度 */
     real32_T elec_angle_speed_rad_s;
+
+    /* iq 目标电流偏置 */
+    real32_T iq_offset_A;
 }
 
 CurrentCtlInput;
@@ -714,6 +717,12 @@ typedef struct
 
     /* 当前转速 */
     real32_T speed_now_rad_s;
+
+    /* 目标位置偏置 */
+    int64_T position_offset_p;
+
+    /* 目标速度偏置 */
+    real32_T speed_offset_p_s;
 }
 
 PosSpeedCtlInput;

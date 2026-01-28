@@ -243,8 +243,9 @@ void current_ctl_loop_task(const CurrentCtlInput *rtu_input, const
      *  Gain: '<S21>/Gain2'
      *  Product: '<S21>/Product3'
      *  Sum: '<S15>/Add1'
+     *  Sum: '<S6>/Add'
      */
-    rtb_u_tar_comp_j = (rtu_input->idq_tar_A[1] -
+    rtb_u_tar_comp_j = ((rtu_input->idq_tar_A[1] + rtu_input->iq_offset_A) -
                         rtb_TmpSignalConversionAtBusCreatorInport2_idx_1) *
         rtu_config->bandwidth_percentage * 0.01F * rtu_config->kp_lq;
 
