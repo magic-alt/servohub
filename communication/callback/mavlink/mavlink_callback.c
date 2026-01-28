@@ -269,6 +269,8 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 pos_speed_ctl_input_t.speed_tar_p_s = axis->pos_speed_ctl_input.speed_tar_p_s;
                 pos_speed_ctl_input_t.acc_tar_p_ss = axis->pos_speed_ctl_input.acc_tar_p_ss;
                 pos_speed_ctl_input_t.speed_now_rad_s = axis->pos_speed_ctl_input.speed_now_rad_s;
+                pos_speed_ctl_input_t.position_offset_p = axis->pos_speed_ctl_input.position_offset_p;
+                pos_speed_ctl_input_t.speed_offset_p_s = axis->pos_speed_ctl_input.speed_offset_p_s;
                 mavlink_msg_posspeedctlinput_encode(sys_id, comp_id, &send_msg, (mavlink_posspeedctlinput_t *)&pos_speed_ctl_input_t);
                 break;
             case MAVLINK_MSG_ID_PosSpeedCtlOutput:
@@ -328,6 +330,7 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 memcpy(&current_ctl_input_t.uabc_tar_V, axis->current_ctl_input.uabc_tar_V, sizeof(current_ctl_input_t.uabc_tar_V));
                 current_ctl_input_t.driver_temp = axis->current_ctl_input.driver_temp;
                 current_ctl_input_t.elec_angle_speed_rad_s = axis->current_ctl_input.elec_angle_speed_rad_s;
+                current_ctl_input_t.iq_offset_A = axis->current_ctl_input.iq_offset_A;
                 mavlink_msg_currentctlinput_encode(sys_id, comp_id, &send_msg, (mavlink_currentctlinput_t *)&current_ctl_input_t);
                 break;
             case MAVLINK_MSG_ID_CurrentCtlConfig:
@@ -582,8 +585,7 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 app_motion_param_t.MIT_target_velocity = get_app_MIT_target_velocity();
                 app_motion_param_t.MIT_kp = get_app_MIT_kp();
                 app_motion_param_t.MIT_kd = get_app_MIT_kd();
-                app_motion_param_t.Emergency_brake_requested = get_app_Emergency_brake_requested();
-                app_motion_param_t.Interp_time_period = get_app_Interp_time_period();
+                app_motion_param_t.Interp_time_value = get_app_Interp_time_value();
                 app_motion_param_t.Interp_time_index = get_app_Interp_time_index();
                 mavlink_msg_appmotionparam_encode(sys_id, comp_id, &send_msg, (mavlink_appmotionparam_t *)&app_motion_param_t);
                 break;
@@ -626,6 +628,9 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 app_motion_info_t.Position_loop_time = get_app_Position_loop_time();
                 app_motion_info_t.Current_loop_cycle = get_app_Current_loop_cycle();
                 app_motion_info_t.Position_loop_cycle = get_app_Position_loop_cycle();
+                app_motion_info_t.Interp_period = get_app_Interp_period();
+                app_motion_info_t.Emergency_brake_requested = get_app_Emergency_brake_requested();
+                app_motion_info_t.Target_update_state = get_app_Target_update_state();
                 mavlink_msg_appmotioninfo_encode(sys_id, comp_id, &send_msg, (mavlink_appmotioninfo_t *)&app_motion_info_t);
                 break;
             case MAVLINK_MSG_ID_AppWindowParam:
@@ -855,15 +860,10 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_ElecIdSinInput:
                 mavlink_msg_elecidsininput_decode(&msg, (mavlink_elecidsininput_t *)&elec_id_sin_input_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->elec_id_sin_input.i_abc_now_A, elec_id_sin_input_t.i_abc_now_A, sizeof(elec_id_sin_input_t.i_abc_now_A));}
                 mavlink_msg_elecidsininput_encode(sys_id, comp_id, &send_msg, (mavlink_elecidsininput_t *)&elec_id_sin_input_t);
                 break;
             case MAVLINK_MSG_ID_ElecIdSinOutput:
                 mavlink_msg_elecidsinoutput_decode(&msg, (mavlink_elecidsinoutput_t *)&elec_id_sin_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_id_sin_output.state_now = elec_id_sin_output_t.state_now;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->elec_id_sin_output.u_abc_tar_V, elec_id_sin_output_t.u_abc_tar_V, sizeof(elec_id_sin_output_t.u_abc_tar_V));}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_id_sin_output.u_alpha_now_V = elec_id_sin_output_t.u_alpha_now_V;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_id_sin_output.i_alpha_now_A = elec_id_sin_output_t.i_alpha_now_A;}
                 mavlink_msg_elecidsinoutput_encode(sys_id, comp_id, &send_msg, (mavlink_elecidsinoutput_t *)&elec_id_sin_output_t);
                 break;
             case MAVLINK_MSG_ID_ElecIdSinConfig:
@@ -879,8 +879,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_MecIdOutput:
                 mavlink_msg_mecidoutput_decode(&msg, (mavlink_mecidoutput_t *)&mec_id_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mec_id_output.iq_tar_A = mec_id_output_t.iq_tar_A;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mec_id_output.state_now = mec_id_output_t.state_now;}
                 mavlink_msg_mecidoutput_encode(sys_id, comp_id, &send_msg, (mavlink_mecidoutput_t *)&mec_id_output_t);
                 break;
             case MAVLINK_MSG_ID_MecIdConfig:
@@ -897,26 +895,18 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_NotchFilterInput:
                 mavlink_msg_notchfilterinput_decode(&msg, (mavlink_notchfilterinput_t *)&notch_filter_input_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->notch_filter_input.iq_tar_A = notch_filter_input_t.iq_tar_A;}
                 mavlink_msg_notchfilterinput_encode(sys_id, comp_id, &send_msg, (mavlink_notchfilterinput_t *)&notch_filter_input_t);
                 break;
             case MAVLINK_MSG_ID_NotchFilterInternal:
                 mavlink_msg_notchfilterinternal_decode(&msg, (mavlink_notchfilterinternal_t *)&notch_filter_internal_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->notch_filter_internal.u0, notch_filter_internal_t.u0, sizeof(notch_filter_internal_t.u0));}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->notch_filter_internal.u1, notch_filter_internal_t.u1, sizeof(notch_filter_internal_t.u1));}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->notch_filter_internal.u2, notch_filter_internal_t.u2, sizeof(notch_filter_internal_t.u2));}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->notch_filter_internal.y0, notch_filter_internal_t.y0, sizeof(notch_filter_internal_t.y0));}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->notch_filter_internal.y1, notch_filter_internal_t.y1, sizeof(notch_filter_internal_t.y1));}
                 mavlink_msg_notchfilterinternal_encode(sys_id, comp_id, &send_msg, (mavlink_notchfilterinternal_t *)&notch_filter_internal_t);
                 break;
             case MAVLINK_MSG_ID_NotchFilterOutput:
                 mavlink_msg_notchfilteroutput_decode(&msg, (mavlink_notchfilteroutput_t *)&notch_filter_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->notch_filter_output.iq_tar_filter_A = notch_filter_output_t.iq_tar_filter_A;}
                 mavlink_msg_notchfilteroutput_encode(sys_id, comp_id, &send_msg, (mavlink_notchfilteroutput_t *)&notch_filter_output_t);
                 break;
             case MAVLINK_MSG_ID_MecIdInput:
                 mavlink_msg_mecidinput_decode(&msg, (mavlink_mecidinput_t *)&mec_id_input_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mec_id_input.speed_now_rad_s = mec_id_input_t.speed_now_rad_s;}
                 mavlink_msg_mecidinput_encode(sys_id, comp_id, &send_msg, (mavlink_mecidinput_t *)&mec_id_input_t);
                 break;
             case MAVLINK_MSG_ID_InputShapingInput:
@@ -934,24 +924,20 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_InputShapingOutput:
                 mavlink_msg_inputshapingoutput_decode(&msg, (mavlink_inputshapingoutput_t *)&input_shaping_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->input_shaping_output.pos_cmd_shaping_p = input_shaping_output_t.pos_cmd_shaping_p;}
                 mavlink_msg_inputshapingoutput_encode(sys_id, comp_id, &send_msg, (mavlink_inputshapingoutput_t *)&input_shaping_output_t);
                 break;
             case MAVLINK_MSG_ID_PosSpeedCtlInput:
                 mavlink_msg_posspeedctlinput_decode(&msg, (mavlink_posspeedctlinput_t *)&pos_speed_ctl_input_t);
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pos_speed_ctl_input.pos_tar_p = pos_speed_ctl_input_t.pos_tar_p;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pos_speed_ctl_input.pos_now_p = pos_speed_ctl_input_t.pos_now_p;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pos_speed_ctl_input.iq_max_A = pos_speed_ctl_input_t.iq_max_A;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pos_speed_ctl_input.speed_tar_p_s = pos_speed_ctl_input_t.speed_tar_p_s;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pos_speed_ctl_input.acc_tar_p_ss = pos_speed_ctl_input_t.acc_tar_p_ss;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pos_speed_ctl_input.speed_now_rad_s = pos_speed_ctl_input_t.speed_now_rad_s;}
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pos_speed_ctl_input.position_offset_p = pos_speed_ctl_input_t.position_offset_p;}
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pos_speed_ctl_input.speed_offset_p_s = pos_speed_ctl_input_t.speed_offset_p_s;}
                 mavlink_msg_posspeedctlinput_encode(sys_id, comp_id, &send_msg, (mavlink_posspeedctlinput_t *)&pos_speed_ctl_input_t);
                 break;
             case MAVLINK_MSG_ID_PosSpeedCtlOutput:
                 mavlink_msg_posspeedctloutput_decode(&msg, (mavlink_posspeedctloutput_t *)&pos_speed_ctl_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pos_speed_ctl_output.iq_tar_A = pos_speed_ctl_output_t.iq_tar_A;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pos_speed_ctl_output.pos_ctl_error_p = pos_speed_ctl_output_t.pos_ctl_error_p;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pos_speed_ctl_output.dob_iq_com_A = pos_speed_ctl_output_t.dob_iq_com_A;}
                 mavlink_msg_posspeedctloutput_encode(sys_id, comp_id, &send_msg, (mavlink_posspeedctloutput_t *)&pos_speed_ctl_output_t);
                 break;
             case MAVLINK_MSG_ID_PosSpeedCtlConfig:
@@ -987,29 +973,17 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
             case MAVLINK_MSG_ID_MotorCtlSmInput:
                 mavlink_msg_motorctlsminput_decode(&msg, (mavlink_motorctlsminput_t *)&motor_ctl_sm_input_t);
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->motor_ctl_sm_input.motor_enable = motor_ctl_sm_input_t.motor_enable;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->motor_ctl_sm_input.hw_ready_state = motor_ctl_sm_input_t.hw_ready_state;}
                 mavlink_msg_motorctlsminput_encode(sys_id, comp_id, &send_msg, (mavlink_motorctlsminput_t *)&motor_ctl_sm_input_t);
                 break;
             case MAVLINK_MSG_ID_MotorCtlSmOutput:
                 mavlink_msg_motorctlsmoutput_decode(&msg, (mavlink_motorctlsmoutput_t *)&motor_ctl_sm_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->motor_ctl_sm_output.state = motor_ctl_sm_output_t.state;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->motor_ctl_sm_output.error = motor_ctl_sm_output_t.error;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->motor_ctl_sm_output.warning = motor_ctl_sm_output_t.warning;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->motor_ctl_sm_output.mode_now = motor_ctl_sm_output_t.mode_now;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->motor_ctl_sm_output.motor_enable_last = motor_ctl_sm_output_t.motor_enable_last;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->motor_ctl_sm_output.state_last = motor_ctl_sm_output_t.state_last;}
                 mavlink_msg_motorctlsmoutput_encode(sys_id, comp_id, &send_msg, (mavlink_motorctlsmoutput_t *)&motor_ctl_sm_output_t);
                 break;
             case MAVLINK_MSG_ID_CurrentCtlInput:
                 mavlink_msg_currentctlinput_decode(&msg, (mavlink_currentctlinput_t *)&current_ctl_input_t);
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->current_ctl_input.idq_tar_A, current_ctl_input_t.idq_tar_A, sizeof(current_ctl_input_t.idq_tar_A));}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->current_ctl_input.iabc_now_A, current_ctl_input_t.iabc_now_A, sizeof(current_ctl_input_t.iabc_now_A));}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->current_ctl_input.elec_theta_rad = current_ctl_input_t.elec_theta_rad;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->current_ctl_input.dc_bus_now_V = current_ctl_input_t.dc_bus_now_V;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->current_ctl_input.mode = current_ctl_input_t.mode;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->current_ctl_input.uabc_tar_V, current_ctl_input_t.uabc_tar_V, sizeof(current_ctl_input_t.uabc_tar_V));}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->current_ctl_input.driver_temp = current_ctl_input_t.driver_temp;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->current_ctl_input.elec_angle_speed_rad_s = current_ctl_input_t.elec_angle_speed_rad_s;}
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->current_ctl_input.iq_offset_A = current_ctl_input_t.iq_offset_A;}
                 mavlink_msg_currentctlinput_encode(sys_id, comp_id, &send_msg, (mavlink_currentctlinput_t *)&current_ctl_input_t);
                 break;
             case MAVLINK_MSG_ID_CurrentCtlConfig:
@@ -1030,9 +1004,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_CurrentCtlOutput:
                 mavlink_msg_currentctloutput_decode(&msg, (mavlink_currentctloutput_t *)&current_ctl_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->current_ctl_output.uabc_tar_comp_V, current_ctl_output_t.uabc_tar_comp_V, sizeof(current_ctl_output_t.uabc_tar_comp_V));}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->current_ctl_output.idq_now_A, current_ctl_output_t.idq_now_A, sizeof(current_ctl_output_t.idq_now_A));}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->current_ctl_output.uabc_tar_org_V, current_ctl_output_t.uabc_tar_org_V, sizeof(current_ctl_output_t.uabc_tar_org_V));}
                 mavlink_msg_currentctloutput_encode(sys_id, comp_id, &send_msg, (mavlink_currentctloutput_t *)&current_ctl_output_t);
                 break;
             case MAVLINK_MSG_ID_NotchFilterConfig:
@@ -1044,7 +1015,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_SpeedObsPllInput:
                 mavlink_msg_speedobspllinput_decode(&msg, (mavlink_speedobspllinput_t *)&speed_obs_pll_input_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->speed_obs_pll_input.pos_now_p = speed_obs_pll_input_t.pos_now_p;}
                 mavlink_msg_speedobspllinput_encode(sys_id, comp_id, &send_msg, (mavlink_speedobspllinput_t *)&speed_obs_pll_input_t);
                 break;
             case MAVLINK_MSG_ID_SpeedObsPllConfig:
@@ -1057,7 +1027,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_SpeedObsPllOutput:
                 mavlink_msg_speedobsplloutput_decode(&msg, (mavlink_speedobsplloutput_t *)&speed_obs_pll_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->speed_obs_pll_output.ev_rad_s = speed_obs_pll_output_t.ev_rad_s;}
                 mavlink_msg_speedobsplloutput_encode(sys_id, comp_id, &send_msg, (mavlink_speedobsplloutput_t *)&speed_obs_pll_output_t);
                 break;
             case MAVLINK_MSG_ID_ElecAngleIdConfig:
@@ -1073,21 +1042,14 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_ElecAngleIdOutput:
                 mavlink_msg_elecangleidoutput_decode(&msg, (mavlink_elecangleidoutput_t *)&elec_angle_id_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_output.id_tar_A = elec_angle_id_output_t.id_tar_A;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_output.elec_bias_rad = elec_angle_id_output_t.elec_bias_rad;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_output.state_now = elec_angle_id_output_t.state_now;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->elec_angle_id_output.elec_bias_buff_rad, elec_angle_id_output_t.elec_bias_buff_rad, sizeof(elec_angle_id_output_t.elec_bias_buff_rad));}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_output.step_num = elec_angle_id_output_t.step_num;}
                 mavlink_msg_elecangleidoutput_encode(sys_id, comp_id, &send_msg, (mavlink_elecangleidoutput_t *)&elec_angle_id_output_t);
                 break;
             case MAVLINK_MSG_ID_ElecAngleIdInput:
                 mavlink_msg_elecangleidinput_decode(&msg, (mavlink_elecangleidinput_t *)&elec_angle_id_input_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->elec_angle_id_input.pos_now_rad = elec_angle_id_input_t.pos_now_rad;}
                 mavlink_msg_elecangleidinput_encode(sys_id, comp_id, &send_msg, (mavlink_elecangleidinput_t *)&elec_angle_id_input_t);
                 break;
             case MAVLINK_MSG_ID_DirectionIdInput:
                 mavlink_msg_directionidinput_decode(&msg, (mavlink_directionidinput_t *)&direction_id_input_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->direction_id_input.enc_counts_sum_p = direction_id_input_t.enc_counts_sum_p;}
                 mavlink_msg_directionidinput_encode(sys_id, comp_id, &send_msg, (mavlink_directionidinput_t *)&direction_id_input_t);
                 break;
             case MAVLINK_MSG_ID_DirectionIdConfig:
@@ -1099,15 +1061,10 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_DirectionIdOutput:
                 mavlink_msg_directionidoutput_decode(&msg, (mavlink_directionidoutput_t *)&direction_id_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->direction_id_output.elec_angle_tar_rad = direction_id_output_t.elec_angle_tar_rad;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->direction_id_output.direction = direction_id_output_t.direction;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->direction_id_output.state_now = direction_id_output_t.state_now;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->direction_id_output.id_tar_A = direction_id_output_t.id_tar_A;}
                 mavlink_msg_directionidoutput_encode(sys_id, comp_id, &send_msg, (mavlink_directionidoutput_t *)&direction_id_output_t);
                 break;
             case MAVLINK_MSG_ID_MotorPosSensorInput:
                 mavlink_msg_motorpossensorinput_decode(&msg, (mavlink_motorpossensorinput_t *)&motor_pos_sensor_input_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->motor_pos_sensor_input.enc_counts_now_p = motor_pos_sensor_input_t.enc_counts_now_p;}
                 mavlink_msg_motorpossensorinput_encode(sys_id, comp_id, &send_msg, (mavlink_motorpossensorinput_t *)&motor_pos_sensor_input_t);
                 break;
             case MAVLINK_MSG_ID_MotorPosSensorConfig:
@@ -1121,13 +1078,10 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_MotorPosSensorOutput:
                 mavlink_msg_motorpossensoroutput_decode(&msg, (mavlink_motorpossensoroutput_t *)&motor_pos_sensor_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->motor_pos_sensor_output.enc_sum_p = motor_pos_sensor_output_t.enc_sum_p;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->motor_pos_sensor_output.elec_angle_now_rad = motor_pos_sensor_output_t.elec_angle_now_rad;}
                 mavlink_msg_motorpossensoroutput_encode(sys_id, comp_id, &send_msg, (mavlink_motorpossensoroutput_t *)&motor_pos_sensor_output_t);
                 break;
             case MAVLINK_MSG_ID_PolePairsIdInput:
                 mavlink_msg_polepairsidinput_decode(&msg, (mavlink_polepairsidinput_t *)&pole_pairs_id_input_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pole_pairs_id_input.enc_counts_sum_p = pole_pairs_id_input_t.enc_counts_sum_p;}
                 mavlink_msg_polepairsidinput_encode(sys_id, comp_id, &send_msg, (mavlink_polepairsidinput_t *)&pole_pairs_id_input_t);
                 break;
             case MAVLINK_MSG_ID_PolePairsIdConfig:
@@ -1140,18 +1094,10 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_PolePairsIdOutput:
                 mavlink_msg_polepairsidoutput_decode(&msg, (mavlink_polepairsidoutput_t *)&pole_pairs_id_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pole_pairs_id_output.pn_id = pole_pairs_id_output_t.pn_id;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pole_pairs_id_output.state_now = pole_pairs_id_output_t.state_now;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pole_pairs_id_output.elec_angle_tar_rad = pole_pairs_id_output_t.elec_angle_tar_rad;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->pole_pairs_id_output.id_tar_A = pole_pairs_id_output_t.id_tar_A;}
                 mavlink_msg_polepairsidoutput_encode(sys_id, comp_id, &send_msg, (mavlink_polepairsidoutput_t *)&pole_pairs_id_output_t);
                 break;
             case MAVLINK_MSG_ID_TqFcIdInput:
                 mavlink_msg_tqfcidinput_decode(&msg, (mavlink_tqfcidinput_t *)&tq_fc_id_input_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_input.iq_com_A = tq_fc_id_input_t.iq_com_A;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_input.pos_abs_p = tq_fc_id_input_t.pos_abs_p;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_input.pos_init_p = tq_fc_id_input_t.pos_init_p;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_input.start = tq_fc_id_input_t.start;}
                 mavlink_msg_tqfcidinput_encode(sys_id, comp_id, &send_msg, (mavlink_tqfcidinput_t *)&tq_fc_id_input_t);
                 break;
             case MAVLINK_MSG_ID_TqFcIdConfig:
@@ -1166,8 +1112,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_TqFcIdOutput:
                 mavlink_msg_tqfcidoutput_decode(&msg, (mavlink_tqfcidoutput_t *)&tq_fc_id_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_output.pos_cmd_p = tq_fc_id_output_t.pos_cmd_p;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->tq_fc_id_output.state_now = tq_fc_id_output_t.state_now;}
                 mavlink_msg_tqfcidoutput_encode(sys_id, comp_id, &send_msg, (mavlink_tqfcidoutput_t *)&tq_fc_id_output_t);
                 break;
             case MAVLINK_MSG_ID_ReciprocalMotionConfig:
@@ -1183,10 +1127,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_ReciprocalMotionOutput:
                 mavlink_msg_reciprocalmotionoutput_decode(&msg, (mavlink_reciprocalmotionoutput_t *)&reciprocal_motion_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->reciprocal_motion_output.pos_tar_p = reciprocal_motion_output_t.pos_tar_p;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->reciprocal_motion_output.v_tar_p_s = reciprocal_motion_output_t.v_tar_p_s;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->reciprocal_motion_output.acc_tar_p_ss = reciprocal_motion_output_t.acc_tar_p_ss;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->reciprocal_motion_output.state_now = reciprocal_motion_output_t.state_now;}
                 mavlink_msg_reciprocalmotionoutput_encode(sys_id, comp_id, &send_msg, (mavlink_reciprocalmotionoutput_t *)&reciprocal_motion_output_t);
                 break;
             case MAVLINK_MSG_ID_ReferenceSignalConfig:
@@ -1197,15 +1137,10 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->reference_signal_config.frq_Hz = reference_signal_config_t.frq_Hz;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->reference_signal_config.bias = reference_signal_config_t.bias;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->reference_signal_config.signal_target = reference_signal_config_t.signal_target;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->reference_signal_config.signal_start_pos = reference_signal_config_t.signal_start_pos;}
                 mavlink_msg_referencesignalconfig_encode(sys_id, comp_id, &send_msg, (mavlink_referencesignalconfig_t *)&reference_signal_config_t);
                 break;
             case MAVLINK_MSG_ID_ReferenceSignalOutput:
                 mavlink_msg_referencesignaloutput_decode(&msg, (mavlink_referencesignaloutput_t *)&reference_signal_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->reference_signal_output.signal_out = reference_signal_output_t.signal_out;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->reference_signal_output.signal_pos = reference_signal_output_t.signal_pos;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->reference_signal_output.signal_vel = reference_signal_output_t.signal_vel;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->reference_signal_output.signal_acc = reference_signal_output_t.signal_acc;}
                 mavlink_msg_referencesignaloutput_encode(sys_id, comp_id, &send_msg, (mavlink_referencesignaloutput_t *)&reference_signal_output_t);
                 break;
             case MAVLINK_MSG_ID_AppControlWord:
@@ -1218,32 +1153,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_AppStatusInfo:
                 mavlink_msg_appstatusinfo_decode(&msg, (mavlink_appstatusinfo_t *)&app_status_info_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Statusword(app_status_info_t.Statusword);}
-                app_status_info_t.Statusword = get_app_Statusword();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Error_word(app_status_info_t.Error_word);}
-                app_status_info_t.Error_word = get_app_Error_word();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_DC_link_circuit_voltage(app_status_info_t.DC_link_circuit_voltage);}
-                app_status_info_t.DC_link_circuit_voltage = get_app_DC_link_circuit_voltage();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Drive_accumulated_heat(app_status_info_t.Drive_accumulated_heat);}
-                app_status_info_t.Drive_accumulated_heat = get_app_Drive_accumulated_heat();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Drive_temperature(app_status_info_t.Drive_temperature);}
-                app_status_info_t.Drive_temperature = get_app_Drive_temperature();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Alarm_word(app_status_info_t.Alarm_word);}
-                app_status_info_t.Alarm_word = get_app_Alarm_word();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Modes_of_operation_display(app_status_info_t.Modes_of_operation_display);}
-                app_status_info_t.Modes_of_operation_display = get_app_Modes_of_operation_display();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Version(app_status_info_t.Version);}
-                app_status_info_t.Version = get_app_Version();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_temperature(app_status_info_t.Motor_temperature);}
-                app_status_info_t.Motor_temperature = get_app_Motor_temperature();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_power(app_status_info_t.Motor_power);}
-                app_status_info_t.Motor_power = get_app_Motor_power();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Mcu_temperature(app_status_info_t.Mcu_temperature);}
-                app_status_info_t.Mcu_temperature = get_app_Mcu_temperature();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Digital_io_inputs_status(app_status_info_t.Digital_io_inputs_status);}
-                app_status_info_t.Digital_io_inputs_status = get_app_Digital_io_inputs_status();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Brake_state(app_status_info_t.Brake_state);}
-                app_status_info_t.Brake_state = get_app_Brake_state();
                 mavlink_msg_appstatusinfo_encode(sys_id, comp_id, &send_msg, (mavlink_appstatusinfo_t *)&app_status_info_t);
                 break;
             case MAVLINK_MSG_ID_AppOpMode:
@@ -1264,18 +1173,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 app_encoder_config_t.Load_encoder_type = get_app_Load_encoder_type();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_encoder_options(app_encoder_config_t.Motor_encoder_options);}
                 app_encoder_config_t.Motor_encoder_options = get_app_Motor_encoder_options();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Load_pps_2_rpm(app_encoder_config_t.Load_pps_2_rpm);}
-                app_encoder_config_t.Load_pps_2_rpm = get_app_Load_pps_2_rpm();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Load_rpm_2_pps(app_encoder_config_t.Load_rpm_2_pps);}
-                app_encoder_config_t.Load_rpm_2_pps = get_app_Load_rpm_2_pps();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_pps_2_rpm(app_encoder_config_t.Motor_pps_2_rpm);}
-                app_encoder_config_t.Motor_pps_2_rpm = get_app_Motor_pps_2_rpm();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_rpm_2_pps(app_encoder_config_t.Motor_rpm_2_pps);}
-                app_encoder_config_t.Motor_rpm_2_pps = get_app_Motor_rpm_2_pps();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_P_load_2_motor(app_encoder_config_t.P_load_2_motor);}
-                app_encoder_config_t.P_load_2_motor = get_app_P_load_2_motor();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_P_motor_2_load(app_encoder_config_t.P_motor_2_load);}
-                app_encoder_config_t.P_motor_2_load = get_app_P_motor_2_load();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Load_control_resolution(app_encoder_config_t.Load_control_resolution);}
                 app_encoder_config_t.Load_control_resolution = get_app_Load_control_resolution();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_control_resolution(app_encoder_config_t.Motor_control_resolution);}
@@ -1288,8 +1185,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 mavlink_msg_appbaseconfig_decode(&msg, (mavlink_appbaseconfig_t *)&app_base_config_t);
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Polarity(app_base_config_t.Polarity);}
                 app_base_config_t.Polarity = get_app_Polarity();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Home_position_offset_value(app_base_config_t.Home_position_offset_value);}
-                app_base_config_t.Home_position_offset_value = get_app_Home_position_offset_value();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Can_id(app_base_config_t.Can_id);}
                 app_base_config_t.Can_id = get_app_Can_id();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Can_baudrate(app_base_config_t.Can_baudrate);}
@@ -1360,10 +1255,8 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 app_motion_param_t.MIT_kp = get_app_MIT_kp();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_MIT_kd(app_motion_param_t.MIT_kd);}
                 app_motion_param_t.MIT_kd = get_app_MIT_kd();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Emergency_brake_requested(app_motion_param_t.Emergency_brake_requested);}
-                app_motion_param_t.Emergency_brake_requested = get_app_Emergency_brake_requested();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Interp_time_period(app_motion_param_t.Interp_time_period);}
-                app_motion_param_t.Interp_time_period = get_app_Interp_time_period();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Interp_time_value(app_motion_param_t.Interp_time_value);}
+                app_motion_param_t.Interp_time_value = get_app_Interp_time_value();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Interp_time_index(app_motion_param_t.Interp_time_index);}
                 app_motion_param_t.Interp_time_index = get_app_Interp_time_index();
                 mavlink_msg_appmotionparam_encode(sys_id, comp_id, &send_msg, (mavlink_appmotionparam_t *)&app_motion_param_t);
@@ -1394,56 +1287,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_AppMotionInfo:
                 mavlink_msg_appmotioninfo_decode(&msg, (mavlink_appmotioninfo_t *)&app_motion_info_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Position_demand_value(app_motion_info_t.Position_demand_value);}
-                app_motion_info_t.Position_demand_value = get_app_Position_demand_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Position_actual_value_inc(app_motion_info_t.Position_actual_value_inc);}
-                app_motion_info_t.Position_actual_value_inc = get_app_Position_actual_value_inc();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Position_actual_value(app_motion_info_t.Position_actual_value);}
-                app_motion_info_t.Position_actual_value = get_app_Position_actual_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Following_error_actual_value(app_motion_info_t.Following_error_actual_value);}
-                app_motion_info_t.Following_error_actual_value = get_app_Following_error_actual_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Velocity_demand_value(app_motion_info_t.Velocity_demand_value);}
-                app_motion_info_t.Velocity_demand_value = get_app_Velocity_demand_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Velocity_actual_value(app_motion_info_t.Velocity_actual_value);}
-                app_motion_info_t.Velocity_actual_value = get_app_Velocity_actual_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Torque_demand_value(app_motion_info_t.Torque_demand_value);}
-                app_motion_info_t.Torque_demand_value = get_app_Torque_demand_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Torque_actual_value(app_motion_info_t.Torque_actual_value);}
-                app_motion_info_t.Torque_actual_value = get_app_Torque_actual_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Current_actual_value(app_motion_info_t.Current_actual_value);}
-                app_motion_info_t.Current_actual_value = get_app_Current_actual_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_D_current_actual_value(app_motion_info_t.D_current_actual_value);}
-                app_motion_info_t.D_current_actual_value = get_app_D_current_actual_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_U_current_actual_value(app_motion_info_t.U_current_actual_value);}
-                app_motion_info_t.U_current_actual_value = get_app_U_current_actual_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_V_current_actual_value(app_motion_info_t.V_current_actual_value);}
-                app_motion_info_t.V_current_actual_value = get_app_V_current_actual_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_W_current_actual_value(app_motion_info_t.W_current_actual_value);}
-                app_motion_info_t.W_current_actual_value = get_app_W_current_actual_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_position_demand_value(app_motion_info_t.Motor_position_demand_value);}
-                app_motion_info_t.Motor_position_demand_value = get_app_Motor_position_demand_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_position_actual_value(app_motion_info_t.Motor_position_actual_value);}
-                app_motion_info_t.Motor_position_actual_value = get_app_Motor_position_actual_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_following_error_actual_value(app_motion_info_t.Motor_following_error_actual_value);}
-                app_motion_info_t.Motor_following_error_actual_value = get_app_Motor_following_error_actual_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_velocity_demand_value(app_motion_info_t.Motor_velocity_demand_value);}
-                app_motion_info_t.Motor_velocity_demand_value = get_app_Motor_velocity_demand_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_velocity_actual_value(app_motion_info_t.Motor_velocity_actual_value);}
-                app_motion_info_t.Motor_velocity_actual_value = get_app_Motor_velocity_actual_value();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_U_adc_mid_val(app_motion_info_t.U_adc_mid_val);}
-                app_motion_info_t.U_adc_mid_val = get_app_U_adc_mid_val();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_V_adc_mid_val(app_motion_info_t.V_adc_mid_val);}
-                app_motion_info_t.V_adc_mid_val = get_app_V_adc_mid_val();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_W_adc_mid_val(app_motion_info_t.W_adc_mid_val);}
-                app_motion_info_t.W_adc_mid_val = get_app_W_adc_mid_val();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Current_loop_time(app_motion_info_t.Current_loop_time);}
-                app_motion_info_t.Current_loop_time = get_app_Current_loop_time();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Position_loop_time(app_motion_info_t.Position_loop_time);}
-                app_motion_info_t.Position_loop_time = get_app_Position_loop_time();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Current_loop_cycle(app_motion_info_t.Current_loop_cycle);}
-                app_motion_info_t.Current_loop_cycle = get_app_Current_loop_cycle();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Position_loop_cycle(app_motion_info_t.Position_loop_cycle);}
-                app_motion_info_t.Position_loop_cycle = get_app_Position_loop_cycle();
                 mavlink_msg_appmotioninfo_encode(sys_id, comp_id, &send_msg, (mavlink_appmotioninfo_t *)&app_motion_info_t);
                 break;
             case MAVLINK_MSG_ID_AppWindowParam:
@@ -1488,10 +1331,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 app_motor_config_t.Reduction_ratio_den = get_app_Reduction_ratio_den();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Torque_constant(app_motor_config_t.Torque_constant);}
                 app_motor_config_t.Torque_constant = get_app_Torque_constant();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Reduction_ratio(app_motor_config_t.Reduction_ratio);}
-                app_motor_config_t.Reduction_ratio = get_app_Reduction_ratio();
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Reduction_ratio_inv(app_motor_config_t.Reduction_ratio_inv);}
-                app_motor_config_t.Reduction_ratio_inv = get_app_Reduction_ratio_inv();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Motor_rotor_inertia(app_motor_config_t.Motor_rotor_inertia);}
                 app_motor_config_t.Motor_rotor_inertia = get_app_Motor_rotor_inertia();
                 mavlink_msg_appmotorconfig_encode(sys_id, comp_id, &send_msg, (mavlink_appmotorconfig_t *)&app_motor_config_t);
@@ -1548,10 +1387,8 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 mavlink_msg_mitctlinput_decode(&msg, (mavlink_mitctlinput_t *)&mit_ctl_input_t);
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_input.tq_set_NM = mit_ctl_input_t.tq_set_NM;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_input.pos_tar_p = mit_ctl_input_t.pos_tar_p;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_input.pos_now_p = mit_ctl_input_t.pos_now_p;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_input.iq_max_A = mit_ctl_input_t.iq_max_A;}
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_input.speed_tar_p_s = mit_ctl_input_t.speed_tar_p_s;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_input.speed_now_rad_s = mit_ctl_input_t.speed_now_rad_s;}
                 mavlink_msg_mitctlinput_encode(sys_id, comp_id, &send_msg, (mavlink_mitctlinput_t *)&mit_ctl_input_t);
                 break;
             case MAVLINK_MSG_ID_MitCtlConfig:
@@ -1564,7 +1401,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_MitCtlOutput:
                 mavlink_msg_mitctloutput_decode(&msg, (mavlink_mitctloutput_t *)&mit_ctl_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->mit_ctl_output.iq_tar_A = mit_ctl_output_t.iq_tar_A;}
                 mavlink_msg_mitctloutput_encode(sys_id, comp_id, &send_msg, (mavlink_mitctloutput_t *)&mit_ctl_output_t);
                 break;
             case MAVLINK_MSG_ID_AppPermissionConfig:
@@ -1583,7 +1419,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_LoadPosSensorInput:
                 mavlink_msg_loadpossensorinput_decode(&msg, (mavlink_loadpossensorinput_t *)&load_pos_sensor_input_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->load_pos_sensor_input.enc_counts_now_p = load_pos_sensor_input_t.enc_counts_now_p;}
                 mavlink_msg_loadpossensorinput_encode(sys_id, comp_id, &send_msg, (mavlink_loadpossensorinput_t *)&load_pos_sensor_input_t);
                 break;
             case MAVLINK_MSG_ID_LoadPosSensorConfig:
@@ -1595,7 +1430,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_LoadPosSensorOutput:
                 mavlink_msg_loadpossensoroutput_decode(&msg, (mavlink_loadpossensoroutput_t *)&load_pos_sensor_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->load_pos_sensor_output.enc_sum_p = load_pos_sensor_output_t.enc_sum_p;}
                 mavlink_msg_loadpossensoroutput_encode(sys_id, comp_id, &send_msg, (mavlink_loadpossensoroutput_t *)&load_pos_sensor_output_t);
                 break;
             case MAVLINK_MSG_ID_SystemStatus:
@@ -1622,8 +1456,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_CustomInfo:
                 mavlink_msg_custominfo_decode(&msg, (mavlink_custominfo_t *)&custom_info_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_User_module_code(custom_info_t.User_module_code);}
-                custom_info_t.User_module_code = get_app_User_module_code();
                 mavlink_msg_custominfo_encode(sys_id, comp_id, &send_msg, (mavlink_custominfo_t *)&custom_info_t);
                 break;
             case MAVLINK_MSG_ID_HeartBit:
@@ -1634,7 +1466,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_HistoricalInfo:
                 mavlink_msg_historicalinfo_decode(&msg, (mavlink_historicalinfo_t *)&historical_info_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(get_app_Error_records_list_addr(), historical_info_t.Error_records_list, sizeof(historical_info_t.Error_records_list));}
                 mavlink_msg_historicalinfo_encode(sys_id, comp_id, &send_msg, (mavlink_historicalinfo_t *)&historical_info_t);
                 break;
             case MAVLINK_MSG_ID_SimPlantInput:
@@ -1645,10 +1476,6 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 break;
             case MAVLINK_MSG_ID_SimPlantOutput:
                 mavlink_msg_simplantoutput_decode(&msg, (mavlink_simplantoutput_t *)&sim_plant_output_t);
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){memcpy(axis->sim_plant_output.iabc_now_A, sim_plant_output_t.iabc_now_A, sizeof(sim_plant_output_t.iabc_now_A));}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->sim_plant_output.enc_counts_P = sim_plant_output_t.enc_counts_P;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->sim_plant_output.hall_state = sim_plant_output_t.hall_state;}
-                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){axis->sim_plant_output.dc_bus_V = sim_plant_output_t.dc_bus_V;}
                 mavlink_msg_simplantoutput_encode(sys_id, comp_id, &send_msg, (mavlink_simplantoutput_t *)&sim_plant_output_t);
                 break;
             case MAVLINK_MSG_ID_SimPlantConfig:

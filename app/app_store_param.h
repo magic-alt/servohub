@@ -181,8 +181,10 @@ typedef struct {
     uint16_t app_base_config_Brake_release_pwm_freq;
     float app_base_config_Brake_engage_delay_time;
     float app_base_config_Brake_release_delay_time;
-    uint8_t app_motion_param_Interp_time_period;
+    uint8_t app_motion_param_Interp_time_value;
     int8_t app_motion_param_Interp_time_index;
+    uint8_t app_mavlink_config_Sys_id;
+    uint8_t app_mavlink_config_Comp_id;
 }FLASH_PARAM_STRUCT;
 extern FLASH_PARAM_STRUCT kFlashStorage;
 

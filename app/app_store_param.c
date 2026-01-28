@@ -193,8 +193,10 @@ void flash_param_update(void)
     kFlashStorage.app_base_config_Brake_release_pwm_freq = kAppBaseConfig.Brake_release_pwm_freq;
     kFlashStorage.app_base_config_Brake_engage_delay_time = kAppBaseConfig.Brake_engage_delay_time;
     kFlashStorage.app_base_config_Brake_release_delay_time = kAppBaseConfig.Brake_release_delay_time;
-    kFlashStorage.app_motion_param_Interp_time_period = kAppMotionParam.Interp_time_period;
+    kFlashStorage.app_motion_param_Interp_time_value = kAppMotionParam.Interp_time_value;
     kFlashStorage.app_motion_param_Interp_time_index = kAppMotionParam.Interp_time_index;
+    kFlashStorage.app_mavlink_config_Sys_id = kAppMavlinkConfig.Sys_id;
+    kFlashStorage.app_mavlink_config_Comp_id = kAppMavlinkConfig.Comp_id;
 }
 
 void flash_param_init(void)
@@ -384,8 +386,10 @@ void flash_param_init(void)
     kAppBaseConfig.Brake_release_pwm_freq = kFlashStorage.app_base_config_Brake_release_pwm_freq;
     kAppBaseConfig.Brake_engage_delay_time = kFlashStorage.app_base_config_Brake_engage_delay_time;
     kAppBaseConfig.Brake_release_delay_time = kFlashStorage.app_base_config_Brake_release_delay_time;
-    kAppMotionParam.Interp_time_period = kFlashStorage.app_motion_param_Interp_time_period;
+    kAppMotionParam.Interp_time_value = kFlashStorage.app_motion_param_Interp_time_value;
     kAppMotionParam.Interp_time_index = kFlashStorage.app_motion_param_Interp_time_index;
+    kAppMavlinkConfig.Sys_id = kFlashStorage.app_mavlink_config_Sys_id;
+    kAppMavlinkConfig.Comp_id = kFlashStorage.app_mavlink_config_Comp_id;
 }
 /* USER CODE BEGIN AREA 1 */
 static HistoricalInfo kFlashHistoricalInfo;

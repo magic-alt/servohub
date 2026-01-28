@@ -628,7 +628,6 @@ bit16~bit31：厂商自定义",Visible,,1,1,,,,Digital_outputs_Physical_outputs
 Digital_io_outputs_mask,数字IO输出掩码,AppBaseConfig,RW,uint32,1,0,,606,"bit0：刹车（抱闸）
 bit1~bit15：保留
 bit16~bit31：厂商自定义",Visible,0,1,1,,,0,Digital_outputs_Bit_mask
-Emergency_brake_requested,紧急制动请求,AppMotionParam,RW,uint8,1,,,607,,Visible,,,1,0,1,,
 fc_p_com,摩擦补偿正方向补偿值,TqFcIdConfig,RW,single,1,0,A,611,,Visible,1,1,,,,,
 fc_n_com,摩擦补偿负方向补偿值,TqFcIdConfig,RW,single,1,0,A,612,,Visible,1,1,,,,,
 table_data,数据表缓存,TableData,RW,single,20,,A,613,,Invisible,,,,,,,
@@ -648,10 +647,13 @@ Brake_release_action_voltage,松闸动作电压,AppBaseConfig,RW,single,1,24,V,6
 Brake_release_pwm_freq,松闸PWM频率,AppBaseConfig,RW,uint16,1,10000,Hz,622,,Visible,,1,1,1,,,
 Brake_engage_delay_time,抱闸延迟时间,AppBaseConfig,RW,single,1,0,s,623,,Visible,,1,1,0,,,
 Brake_release_delay_time,松闸延迟时间,AppBaseConfig,RW,single,1,0,s,624,,Visible,0,1,1,0,,0,
-Interp_time_period,插值时间基数,AppMotionParam,RW,uint8,1,1,s,625,,Visible,,1,1,,,,Interpolation_time_period_Ip_time_units
-Interp_time_index,插值时间指数,AppMotionParam,RW,int8,1,-3,,626,,Visible,0,1,1,-128,63,0,Interpolation_time_period_Ip_time_index
+Interp_time_value,插值时间基数,AppMotionParam,RW,uint8,1,1,s,625,,Visible,,1,1,,,,Interpolation_time_period_Ip_time_units
+Interp_time_index,插值时间指数,AppMotionParam,RW,int8,1,-3,,626,,Visible,0,1,1,-5,5,0,Interpolation_time_period_Ip_time_index
 Sys_id,mavlink系统ID,AppMavlinkConfig,RW,uint8,1,0,,630,,Visible,,1,1,,,,
 Comp_id,mavlink组件ID,AppMavlinkConfig,RW,uint8,1,0,,631,,Visible,,1,1,,,,
 iq_offset_A,iq 目标电流偏置,CurrentCtlInput,RW,single,1,0,A,632,iq 电流偏置，对应402字典 0x60B2,Visible,1,,,,,,
 position_offset_p,目标位置偏置,PosSpeedCtlInput,RW,int64,1,0,P,633,目标位置偏置，对应字典0X60B0,Visible,1,,,,,,
 speed_offset_p_s,目标速度偏置,PosSpeedCtlInput,RW,single,1,0,P/s,634,目标速度偏置，对应字典 0X60B1,Visible,1,,,,,,
+Interp_period,插值时间周期,AppMotionInfo,RO,single,1,,s,635,,Visible,,,1,,,,
+Emergency_brake_requested,紧急制动请求值,AppMotionInfo,RO,uint8,1,,,636,,Visible,,,1,,,,
+Target_update_state,目标值更新状态,AppMotionInfo,RO,uint8,1,,,637,,Visible,,,1,,,,

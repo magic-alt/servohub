@@ -119,8 +119,7 @@ typedef struct
     float MIT_target_velocity; //MIT目标速度
     float MIT_kp; //位置刚度
     float MIT_kd; //速度阻尼系数
-    uint8_t Emergency_brake_requested; //紧急制动请求
-    uint8_t Interp_time_period; //插值时间基数
+    uint8_t Interp_time_value; //插值时间基数
     int8_t Interp_time_index; //插值时间指数
 }AppMotionParam;
 
@@ -165,6 +164,9 @@ typedef struct
     float Position_loop_time; //位置环耗时
     float Current_loop_cycle; //电流环周期
     float Position_loop_cycle; //位置环周期
+    float Interp_period; //插值时间周期
+    uint8_t Emergency_brake_requested; //紧急制动请求值
+    uint8_t Target_update_state; //目标值更新状态
 }AppMotionInfo;
 
 typedef struct
@@ -732,9 +734,6 @@ uint32_t get_app_Digital_io_outputs_phys(void);
 uint32_t set_app_Digital_io_outputs_mask(uint32_t val);
 uint32_t get_app_Digital_io_outputs_mask(void);
 
-uint32_t set_app_Emergency_brake_requested(uint8_t val);
-uint8_t get_app_Emergency_brake_requested(void);
-
 uint32_t set_app_Brake_state(uint8_t val);
 uint8_t get_app_Brake_state(void);
 
@@ -756,8 +755,8 @@ float get_app_Brake_engage_delay_time(void);
 uint32_t set_app_Brake_release_delay_time(float val);
 float get_app_Brake_release_delay_time(void);
 
-uint32_t set_app_Interp_time_period(uint8_t val);
-uint8_t get_app_Interp_time_period(void);
+uint32_t set_app_Interp_time_value(uint8_t val);
+uint8_t get_app_Interp_time_value(void);
 
 uint32_t set_app_Interp_time_index(int8_t val);
 int8_t get_app_Interp_time_index(void);
@@ -767,6 +766,15 @@ uint8_t get_app_Sys_id(void);
 
 uint32_t set_app_Comp_id(uint8_t val);
 uint8_t get_app_Comp_id(void);
+
+uint32_t set_app_Interp_period(float val);
+float get_app_Interp_period(void);
+
+uint32_t set_app_Emergency_brake_requested(uint8_t val);
+uint8_t get_app_Emergency_brake_requested(void);
+
+uint32_t set_app_Target_update_state(uint8_t val);
+uint8_t get_app_Target_update_state(void);
 
 extern AppControlWord kAppControlWord;
 extern AppStatusInfo kAppStatusInfo;

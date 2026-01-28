@@ -509,7 +509,6 @@ void app_param_update(void)
     set_app_Digital_io_inputs_status(kAppStatusInfo.Digital_io_inputs_status);
     set_app_Digital_io_outputs_phys(kAppBaseConfig.Digital_io_outputs_phys);
     set_app_Digital_io_outputs_mask(kAppBaseConfig.Digital_io_outputs_mask);
-    set_app_Emergency_brake_requested(kAppMotionParam.Emergency_brake_requested);
     set_app_Brake_state(kAppStatusInfo.Brake_state);
     set_app_Brake_control_mode(kAppBaseConfig.Brake_control_mode);
     set_app_Brake_rated_voltage(kAppBaseConfig.Brake_rated_voltage);
@@ -517,10 +516,13 @@ void app_param_update(void)
     set_app_Brake_release_pwm_freq(kAppBaseConfig.Brake_release_pwm_freq);
     set_app_Brake_engage_delay_time(kAppBaseConfig.Brake_engage_delay_time);
     set_app_Brake_release_delay_time(kAppBaseConfig.Brake_release_delay_time);
-    set_app_Interp_time_period(kAppMotionParam.Interp_time_period);
+    set_app_Interp_time_value(kAppMotionParam.Interp_time_value);
     set_app_Interp_time_index(kAppMotionParam.Interp_time_index);
     set_app_Sys_id(kAppMavlinkConfig.Sys_id);
     set_app_Comp_id(kAppMavlinkConfig.Comp_id);
+    set_app_Interp_period(kAppMotionInfo.Interp_period);
+    set_app_Emergency_brake_requested(kAppMotionInfo.Emergency_brake_requested);
+    set_app_Target_update_state(kAppMotionInfo.Target_update_state);
 }
 
 void app_param_sync(void)
@@ -675,7 +677,6 @@ void app_param_sync(void)
     get_app_Digital_io_inputs_status();
     get_app_Digital_io_outputs_phys();
     get_app_Digital_io_outputs_mask();
-    get_app_Emergency_brake_requested();
     get_app_Brake_state();
     get_app_Brake_control_mode();
     get_app_Brake_rated_voltage();
@@ -683,10 +684,13 @@ void app_param_sync(void)
     get_app_Brake_release_pwm_freq();
     get_app_Brake_engage_delay_time();
     get_app_Brake_release_delay_time();
-    get_app_Interp_time_period();
+    get_app_Interp_time_value();
     get_app_Interp_time_index();
     get_app_Sys_id();
     get_app_Comp_id();
+    get_app_Interp_period();
+    get_app_Emergency_brake_requested();
+    get_app_Target_update_state();
 }
 
 uint32_t set_app_Controlword(uint16_t val)
@@ -742,7 +746,9 @@ uint32_t set_app_Statusword(uint32_t val)
     /* USER CODE BEGIN set_app_Statusword 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Statusword 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppStatusInfo.Statusword = val;
+
+    return APP_PARAM_SUCCESS;
 }
 uint32_t get_app_Statusword(void)
 {
@@ -759,7 +765,9 @@ uint32_t set_app_Error_word(uint32_t val)
     /* USER CODE BEGIN set_app_Error_word 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Error_word 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppStatusInfo.Error_word = val;
+
+    return APP_PARAM_SUCCESS;
 }
 uint32_t get_app_Error_word(void)
 {
@@ -776,7 +784,9 @@ uint32_t set_app_DC_link_circuit_voltage(float val)
     /* USER CODE BEGIN set_app_DC_link_circuit_voltage 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_DC_link_circuit_voltage 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppStatusInfo.DC_link_circuit_voltage = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_DC_link_circuit_voltage(void)
 {
@@ -790,7 +800,9 @@ uint32_t set_app_Drive_accumulated_heat(float val)
 {
     /* USER CODE BEGIN set_app_Drive_accumulated_heat 0 */
     /* USER CODE END set_app_Drive_accumulated_heat 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppStatusInfo.Drive_accumulated_heat = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Drive_accumulated_heat(void)
 {
@@ -804,7 +816,9 @@ uint32_t set_app_Drive_temperature(float val)
     /* USER CODE BEGIN set_app_Drive_temperature 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Drive_temperature 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppStatusInfo.Drive_temperature = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Drive_temperature(void)
 {
@@ -819,7 +833,9 @@ uint32_t set_app_Alarm_word(uint32_t val)
     /* USER CODE BEGIN set_app_Alarm_word 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Alarm_word 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppStatusInfo.Alarm_word = val;
+
+    return APP_PARAM_SUCCESS;
 }
 uint32_t get_app_Alarm_word(void)
 {
@@ -836,7 +852,9 @@ uint32_t set_app_Modes_of_operation_display(int8_t val)
     /* USER CODE BEGIN set_app_Modes_of_operation_display 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Modes_of_operation_display 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppStatusInfo.Modes_of_operation_display = val;
+
+    return APP_PARAM_SUCCESS;
 }
 int8_t get_app_Modes_of_operation_display(void)
 {
@@ -851,7 +869,9 @@ uint32_t set_app_Version(uint32_t val)
     /* USER CODE BEGIN set_app_Version 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Version 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppStatusInfo.Version = val;
+
+    return APP_PARAM_SUCCESS;
 }
 uint32_t get_app_Version(void)
 {
@@ -866,7 +886,9 @@ uint32_t set_app_Motor_temperature(float val)
     /* USER CODE BEGIN set_app_Motor_temperature 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Motor_temperature 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppStatusInfo.Motor_temperature = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Motor_temperature(void)
 {
@@ -880,7 +902,9 @@ uint32_t set_app_Motor_power(float val)
     /* USER CODE BEGIN set_app_Motor_power 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Motor_power 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppStatusInfo.Motor_power = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Motor_power(void)
 {
@@ -896,7 +920,9 @@ uint32_t set_app_Mcu_temperature(float val)
     /* USER CODE BEGIN set_app_Mcu_temperature 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Mcu_temperature 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppStatusInfo.Mcu_temperature = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Mcu_temperature(void)
 {
@@ -910,7 +936,9 @@ uint32_t set_app_Digital_io_inputs_status(uint32_t val)
     /* USER CODE BEGIN set_app_Digital_io_inputs_status 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Digital_io_inputs_status 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppStatusInfo.Digital_io_inputs_status = val;
+
+    return APP_PARAM_SUCCESS;
 }
 uint32_t get_app_Digital_io_inputs_status(void)
 {
@@ -927,7 +955,9 @@ uint32_t set_app_Brake_state(uint8_t val)
     /* USER CODE BEGIN set_app_Brake_state 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Brake_state 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppStatusInfo.Brake_state = val;
+
+    return APP_PARAM_SUCCESS;
 }
 uint8_t get_app_Brake_state(void)
 {
@@ -1120,7 +1150,9 @@ uint32_t set_app_Load_pps_2_rpm(float val)
     /* USER CODE BEGIN set_app_Load_pps_2_rpm 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Load_pps_2_rpm 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppEncoderConfig.Load_pps_2_rpm = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Load_pps_2_rpm(void)
 {
@@ -1134,7 +1166,9 @@ uint32_t set_app_Load_rpm_2_pps(float val)
     /* USER CODE BEGIN set_app_Load_rpm_2_pps 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Load_rpm_2_pps 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppEncoderConfig.Load_rpm_2_pps = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Load_rpm_2_pps(void)
 {
@@ -1148,7 +1182,9 @@ uint32_t set_app_Motor_pps_2_rpm(float val)
     /* USER CODE BEGIN set_app_Motor_pps_2_rpm 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Motor_pps_2_rpm 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppEncoderConfig.Motor_pps_2_rpm = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Motor_pps_2_rpm(void)
 {
@@ -1162,7 +1198,9 @@ uint32_t set_app_Motor_rpm_2_pps(float val)
     /* USER CODE BEGIN set_app_Motor_rpm_2_pps 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Motor_rpm_2_pps 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppEncoderConfig.Motor_rpm_2_pps = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Motor_rpm_2_pps(void)
 {
@@ -1176,7 +1214,9 @@ uint32_t set_app_P_load_2_motor(float val)
     /* USER CODE BEGIN set_app_P_load_2_motor 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_P_load_2_motor 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppEncoderConfig.P_load_2_motor = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_P_load_2_motor(void)
 {
@@ -1190,7 +1230,9 @@ uint32_t set_app_P_motor_2_load(float val)
     /* USER CODE BEGIN set_app_P_motor_2_load 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_P_motor_2_load 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppEncoderConfig.P_motor_2_load = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_P_motor_2_load(void)
 {
@@ -1350,7 +1392,9 @@ uint32_t set_app_Home_position_offset_value(int64_t val)
     // 只能内部写入，外部可以考虑
     kAppBaseConfig.Home_position_offset_value = val;
     /* USER CODE END set_app_Home_position_offset_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppBaseConfig.Home_position_offset_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 int64_t get_app_Home_position_offset_value(void)
 {
@@ -1581,9 +1625,6 @@ uint32_t set_app_Brake_release_pwm_freq(uint16_t val)
 {
     if (val < 1)
         return APP_PARAM_OUT_OF_RANGE;
-    if (val > 1000000)
-        return APP_PARAM_OUT_OF_RANGE;
-
     /* USER CODE BEGIN set_app_Brake_release_pwm_freq 0 */
     /* USER CODE END set_app_Brake_release_pwm_freq 0 */
     kAppBaseConfig.Brake_release_pwm_freq = val;
@@ -1995,48 +2036,27 @@ float get_app_MIT_kd(void)
     return kAppMotionParam.MIT_kd;
 }
 
-uint32_t set_app_Emergency_brake_requested(uint8_t val)
+uint32_t set_app_Interp_time_value(uint8_t val)
 {
-    if (val < 0)
-        return APP_PARAM_OUT_OF_RANGE;
-    if (val > 1)
-        return APP_PARAM_OUT_OF_RANGE;
-
-    /* USER CODE BEGIN set_app_Emergency_brake_requested 0 */
-    /* USER CODE END set_app_Emergency_brake_requested 0 */
-    kAppMotionParam.Emergency_brake_requested = val;
-    /* USER CODE BEGIN set_app_Emergency_brake_requested 1 */
-    /* USER CODE END set_app_Emergency_brake_requested 1 */
+    /* USER CODE BEGIN set_app_Interp_time_value 0 */
+    /* USER CODE END set_app_Interp_time_value 0 */
+    kAppMotionParam.Interp_time_value = val;
+    /* USER CODE BEGIN set_app_Interp_time_value 1 */
+    /* USER CODE END set_app_Interp_time_value 1 */
     return APP_PARAM_SUCCESS;
 }
-uint8_t get_app_Emergency_brake_requested(void)
+uint8_t get_app_Interp_time_value(void)
 {
-    /* USER CODE BEGIN get_app_Emergency_brake_requested */
-    /* USER CODE END get_app_Emergency_brake_requested */
-    return kAppMotionParam.Emergency_brake_requested;
-}
-
-uint32_t set_app_Interp_time_period(uint8_t val)
-{
-    /* USER CODE BEGIN set_app_Interp_time_period 0 */
-    /* USER CODE END set_app_Interp_time_period 0 */
-    kAppMotionParam.Interp_time_period = val;
-    /* USER CODE BEGIN set_app_Interp_time_period 1 */
-    /* USER CODE END set_app_Interp_time_period 1 */
-    return APP_PARAM_SUCCESS;
-}
-uint8_t get_app_Interp_time_period(void)
-{
-    /* USER CODE BEGIN get_app_Interp_time_period */
-    /* USER CODE END get_app_Interp_time_period */
-    return kAppMotionParam.Interp_time_period;
+    /* USER CODE BEGIN get_app_Interp_time_value */
+    /* USER CODE END get_app_Interp_time_value */
+    return kAppMotionParam.Interp_time_value;
 }
 
 uint32_t set_app_Interp_time_index(int8_t val)
 {
-    if (val < -128)
+    if (val < -5)
         return APP_PARAM_OUT_OF_RANGE;
-    if (val > 63)
+    if (val > 5)
         return APP_PARAM_OUT_OF_RANGE;
 
     /* USER CODE BEGIN set_app_Interp_time_index 0 */
@@ -2259,7 +2279,9 @@ uint32_t set_app_Position_demand_value(int64_t val)
     /* USER CODE BEGIN set_app_Position_demand_value 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Position_demand_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Position_demand_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 int64_t get_app_Position_demand_value(void)
 {
@@ -2275,7 +2297,9 @@ uint32_t set_app_Position_actual_value_inc(int64_t val)
     /* USER CODE BEGIN set_app_Position_actual_value_inc 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Position_actual_value_inc 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Position_actual_value_inc = val;
+
+    return APP_PARAM_SUCCESS;
 }
 int64_t get_app_Position_actual_value_inc(void)
 {
@@ -2290,7 +2314,9 @@ uint32_t set_app_Position_actual_value(int64_t val)
     /* USER CODE BEGIN set_app_Position_actual_value 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Position_actual_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Position_actual_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 int64_t get_app_Position_actual_value(void)
 {
@@ -2305,7 +2331,9 @@ uint32_t set_app_Following_error_actual_value(int64_t val)
     /* USER CODE BEGIN set_app_Following_error_actual_value 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Following_error_actual_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Following_error_actual_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 int64_t get_app_Following_error_actual_value(void)
 {
@@ -2320,7 +2348,9 @@ uint32_t set_app_Velocity_demand_value(float val)
     /* USER CODE BEGIN set_app_Velocity_demand_value 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Velocity_demand_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Velocity_demand_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Velocity_demand_value(void)
 {
@@ -2336,7 +2366,9 @@ uint32_t set_app_Velocity_actual_value(float val)
     /* USER CODE BEGIN set_app_Velocity_actual_value 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Velocity_actual_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Velocity_actual_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Velocity_actual_value(void)
 {
@@ -2351,7 +2383,9 @@ uint32_t set_app_Torque_demand_value(float val)
     /* USER CODE BEGIN set_app_Torque_demand_value 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Torque_demand_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Torque_demand_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Torque_demand_value(void)
 {
@@ -2366,7 +2400,9 @@ uint32_t set_app_Torque_actual_value(float val)
     /* USER CODE BEGIN set_app_Torque_actual_value 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Torque_actual_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Torque_actual_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Torque_actual_value(void)
 {
@@ -2382,7 +2418,9 @@ uint32_t set_app_Current_actual_value(float val)
     /* USER CODE BEGIN set_app_Current_actual_value 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Current_actual_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Current_actual_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Current_actual_value(void)
 {
@@ -2397,7 +2435,9 @@ uint32_t set_app_D_current_actual_value(float val)
     /* USER CODE BEGIN set_app_D_current_actual_value 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_D_current_actual_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.D_current_actual_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_D_current_actual_value(void)
 {
@@ -2411,7 +2451,9 @@ uint32_t set_app_U_current_actual_value(float val)
 {
     /* USER CODE BEGIN set_app_U_current_actual_value 0 */
     /* USER CODE END set_app_U_current_actual_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.U_current_actual_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_U_current_actual_value(void)
 {
@@ -2425,7 +2467,9 @@ uint32_t set_app_V_current_actual_value(float val)
 {
     /* USER CODE BEGIN set_app_V_current_actual_value 0 */
     /* USER CODE END set_app_V_current_actual_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.V_current_actual_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_V_current_actual_value(void)
 {
@@ -2439,7 +2483,9 @@ uint32_t set_app_W_current_actual_value(float val)
 {
     /* USER CODE BEGIN set_app_W_current_actual_value 0 */
     /* USER CODE END set_app_W_current_actual_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.W_current_actual_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_W_current_actual_value(void)
 {
@@ -2453,7 +2499,9 @@ uint32_t set_app_Motor_position_demand_value(int64_t val)
 {
     /* USER CODE BEGIN set_app_Motor_position_demand_value 0 */
     /* USER CODE END set_app_Motor_position_demand_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Motor_position_demand_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 int64_t get_app_Motor_position_demand_value(void)
 {
@@ -2467,7 +2515,9 @@ uint32_t set_app_Motor_position_actual_value(int64_t val)
 {
     /* USER CODE BEGIN set_app_Motor_position_actual_value 0 */
     /* USER CODE END set_app_Motor_position_actual_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Motor_position_actual_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 int64_t get_app_Motor_position_actual_value(void)
 {
@@ -2481,7 +2531,9 @@ uint32_t set_app_Motor_following_error_actual_value(int64_t val)
 {
     /* USER CODE BEGIN set_app_Motor_following_error_actual_value 0 */
     /* USER CODE END set_app_Motor_following_error_actual_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Motor_following_error_actual_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 int64_t get_app_Motor_following_error_actual_value(void)
 {
@@ -2495,7 +2547,9 @@ uint32_t set_app_Motor_velocity_demand_value(float val)
 {
     /* USER CODE BEGIN set_app_Motor_velocity_demand_value 0 */
     /* USER CODE END set_app_Motor_velocity_demand_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Motor_velocity_demand_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Motor_velocity_demand_value(void)
 {
@@ -2511,7 +2565,9 @@ uint32_t set_app_Motor_velocity_actual_value(float val)
 {
     /* USER CODE BEGIN set_app_Motor_velocity_actual_value 0 */
     /* USER CODE END set_app_Motor_velocity_actual_value 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Motor_velocity_actual_value = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Motor_velocity_actual_value(void)
 {
@@ -2526,7 +2582,9 @@ uint32_t set_app_U_adc_mid_val(uint16_t val)
     /* USER CODE BEGIN set_app_U_adc_mid_val 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_U_adc_mid_val 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.U_adc_mid_val = val;
+
+    return APP_PARAM_SUCCESS;
 }
 uint16_t get_app_U_adc_mid_val(void)
 {
@@ -2543,7 +2601,9 @@ uint32_t set_app_V_adc_mid_val(uint16_t val)
     /* USER CODE BEGIN set_app_V_adc_mid_val 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_V_adc_mid_val 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.V_adc_mid_val = val;
+
+    return APP_PARAM_SUCCESS;
 }
 uint16_t get_app_V_adc_mid_val(void)
 {
@@ -2560,7 +2620,9 @@ uint32_t set_app_W_adc_mid_val(uint16_t val)
     /* USER CODE BEGIN set_app_W_adc_mid_val 0 */
     // RO VAR CANNOT BE SET
     /* USER CODE END set_app_W_adc_mid_val 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.W_adc_mid_val = val;
+
+    return APP_PARAM_SUCCESS;
 }
 uint16_t get_app_W_adc_mid_val(void)
 {
@@ -2577,7 +2639,9 @@ uint32_t set_app_Current_loop_time(float val)
     /* USER CODE BEGIN set_app_Current_loop_time 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Current_loop_time 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Current_loop_time = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Current_loop_time(void)
 {
@@ -2592,7 +2656,9 @@ uint32_t set_app_Position_loop_time(float val)
     /* USER CODE BEGIN set_app_Position_loop_time 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Position_loop_time 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Position_loop_time = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Position_loop_time(void)
 {
@@ -2608,7 +2674,9 @@ uint32_t set_app_Current_loop_cycle(float val)
     /* USER CODE BEGIN set_app_Current_loop_cycle 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Current_loop_cycle 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Current_loop_cycle = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Current_loop_cycle(void)
 {
@@ -2623,7 +2691,9 @@ uint32_t set_app_Position_loop_cycle(float val)
     /* USER CODE BEGIN set_app_Position_loop_cycle 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Position_loop_cycle 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotionInfo.Position_loop_cycle = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Position_loop_cycle(void)
 {
@@ -2631,6 +2701,54 @@ float get_app_Position_loop_cycle(void)
     kAppMotionInfo.Position_loop_cycle = bsp_get_timer_duration_records_us(SYS_TIMER_RECORD_POSITION_LOOP_CYCLE_INDEX);
     /* USER CODE END get_app_Position_loop_cycle */
     return kAppMotionInfo.Position_loop_cycle;
+}
+
+uint32_t set_app_Interp_period(float val)
+{
+    /* USER CODE BEGIN set_app_Interp_period 0 */
+    /* USER CODE END set_app_Interp_period 0 */
+    kAppMotionInfo.Interp_period = val;
+    /* USER CODE BEGIN set_app_Interp_period 1 */
+    /* USER CODE END set_app_Interp_period 1 */
+    return APP_PARAM_SUCCESS;
+}
+float get_app_Interp_period(void)
+{
+    /* USER CODE BEGIN get_app_Interp_period */
+    /* USER CODE END get_app_Interp_period */
+    return kAppMotionInfo.Interp_period;
+}
+
+uint32_t set_app_Emergency_brake_requested(uint8_t val)
+{
+    /* USER CODE BEGIN set_app_Emergency_brake_requested 0 */
+    /* USER CODE END set_app_Emergency_brake_requested 0 */
+    kAppMotionInfo.Emergency_brake_requested = val;
+    /* USER CODE BEGIN set_app_Emergency_brake_requested 1 */
+    /* USER CODE END set_app_Emergency_brake_requested 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint8_t get_app_Emergency_brake_requested(void)
+{
+    /* USER CODE BEGIN get_app_Emergency_brake_requested */
+    /* USER CODE END get_app_Emergency_brake_requested */
+    return kAppMotionInfo.Emergency_brake_requested;
+}
+
+uint32_t set_app_Target_update_state(uint8_t val)
+{
+    /* USER CODE BEGIN set_app_Target_update_state 0 */
+    /* USER CODE END set_app_Target_update_state 0 */
+    kAppMotionInfo.Target_update_state = val;
+    /* USER CODE BEGIN set_app_Target_update_state 1 */
+    /* USER CODE END set_app_Target_update_state 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint8_t get_app_Target_update_state(void)
+{
+    /* USER CODE BEGIN get_app_Target_update_state */
+    /* USER CODE END get_app_Target_update_state */
+    return kAppMotionInfo.Target_update_state;
 }
 
 uint32_t set_app_Following_error_window(int64_t val)
@@ -3002,7 +3120,9 @@ uint32_t set_app_Reduction_ratio(float val)
     /* USER CODE BEGIN set_app_Reduction_ratio 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Reduction_ratio 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotorConfig.Reduction_ratio = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Reduction_ratio(void)
 {
@@ -3016,7 +3136,9 @@ uint32_t set_app_Reduction_ratio_inv(float val)
     /* USER CODE BEGIN set_app_Reduction_ratio_inv 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Reduction_ratio_inv 0 */
-    return APP_PARAM_READ_ONLY;
+    kAppMotorConfig.Reduction_ratio_inv = val;
+
+    return APP_PARAM_SUCCESS;
 }
 float get_app_Reduction_ratio_inv(void)
 {
@@ -3668,7 +3790,9 @@ uint32_t set_app_User_module_code(uint64_t val)
     /* USER CODE BEGIN set_app_User_module_code 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_User_module_code 0 */
-    return APP_PARAM_READ_ONLY;
+    kCustomInfo.User_module_code = val;
+
+    return APP_PARAM_SUCCESS;
 }
 uint64_t get_app_User_module_code(void)
 {
@@ -3698,7 +3822,9 @@ uint32_t set_app_Error_records_list(uint32_t index, uint32_t val)
     /* USER CODE BEGIN set_app_Error_records_list 0 */
     //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Error_records_list 0 */
-    return APP_PARAM_READ_ONLY;
+    kHistoricalInfo.Error_records_list[index] = val;
+
+    return APP_PARAM_SUCCESS;
 }
 uint32_t get_app_Error_records_list(uint32_t index)
 {
