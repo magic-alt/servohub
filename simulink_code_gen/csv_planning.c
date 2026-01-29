@@ -201,11 +201,12 @@ void csv_planning(const real32_T rtu_v_target_ip_buff[4], const real32_T
     }
 
     localDW->delta_m1 = localDW->x0_sum - localDW->Product[low_i];
-    *rty_v_cmd = (((localDW->delta_m1 * localDW->pp_coefs[low_i] +
-                    localDW->pp_coefs[low_i + 3]) * localDW->delta_m1 +
-                   localDW->pp_coefs[low_i + 6]) * localDW->delta_m1 +
-                  localDW->pp_coefs[low_i + 9]) + rtu_v_target_ip_buff[0];
+    localDW->delta_m1 = (((localDW->delta_m1 * localDW->pp_coefs[low_i] +
+                           localDW->pp_coefs[low_i + 3]) * localDW->delta_m1 +
+                          localDW->pp_coefs[low_i + 6]) * localDW->delta_m1 +
+                         localDW->pp_coefs[low_i + 9]) + rtu_v_target_ip_buff[0];
 
+    /* Gain: '<S1>/Gain' */
     /*  方法二：手动从系数计算 */
     /* '<S3>:1:23' breaks = pp.breaks; */
     /* '<S3>:1:24' coefs = pp.coefs; */
@@ -215,13 +216,34 @@ void csv_planning(const real32_T rtu_v_target_ip_buff[4], const real32_T
     /* '<S3>:1:29' t = x0 - breaks(1); */
     /*  一阶导数 */
     /* '<S3>:1:31' dy0 = 3*c(1)*t^2 + 2*c(2)*t + c(3); */
-    *rty_acc_cmd = (3.0F * localDW->pp_coefs[0] * (localDW->x0_sum *
-                     localDW->x0_sum) + 2.0F * localDW->pp_coefs[3] *
-                    localDW->x0_sum) + slopes_idx_0;
-
-    /* Update for DiscreteIntegrator: '<S4>/Discrete-Time Integrator' */
     /*  二阶导数 */
     /* '<S3>:1:33' d2y0 = 6*c(1)*t + 2*c(2); */
+    localDW->delta_n = 2.0F * *rtu_ip_dt;
+
+    /* Switch: '<S1>/Switch' incorporates:
+     *  Constant: '<S1>/Constant1'
+     *  Constant: '<S1>/Constant2'
+     *  DiscreteIntegrator: '<S4>/Discrete-Time Integrator'
+     *  MATLAB Function: '<S1>/MATLAB Function'
+     *  RelationalOperator: '<S1>/Relational Operator'
+     *  Switch: '<S1>/Switch1'
+     */
+    if (localDW->x0_sum < localDW->delta_n)
+    {
+        *rty_v_cmd = localDW->delta_m1;
+        *rty_acc_cmd = (3.0F * localDW->pp_coefs[0] * (localDW->x0_sum *
+                         localDW->x0_sum) + 2.0F * localDW->pp_coefs[3] *
+                        localDW->x0_sum) + slopes_idx_0;
+    }
+    else
+    {
+        *rty_v_cmd = 0.0F;
+        *rty_acc_cmd = 0.0F;
+    }
+
+    /* End of Switch: '<S1>/Switch' */
+
+    /* Update for DiscreteIntegrator: '<S4>/Discrete-Time Integrator' */
     localDW->x0_sum += *rtu_dt_p;
 }
 

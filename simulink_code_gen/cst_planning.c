@@ -201,12 +201,12 @@ void cst_planning(const real32_T rtu_iq_target_ip_buff[4], const real32_T
     }
 
     localDW->delta_m1 = localDW->x0_sum - localDW->Product[low_i];
-    *rty_v_cmd = (((localDW->delta_m1 * localDW->pp_coefs[low_i] +
-                    localDW->pp_coefs[low_i + 3]) * localDW->delta_m1 +
-                   localDW->pp_coefs[low_i + 6]) * localDW->delta_m1 +
-                  localDW->pp_coefs[low_i + 9]) + rtu_iq_target_ip_buff[0];
+    localDW->delta_0 = (((localDW->delta_m1 * localDW->pp_coefs[low_i] +
+                          localDW->pp_coefs[low_i + 3]) * localDW->delta_m1 +
+                         localDW->pp_coefs[low_i + 6]) * localDW->delta_m1 +
+                        localDW->pp_coefs[low_i + 9]) + rtu_iq_target_ip_buff[0];
 
-    /* Update for DiscreteIntegrator: '<S4>/Discrete-Time Integrator' */
+    /* Gain: '<S1>/Gain' */
     /*  方法二：手动从系数计算 */
     /* '<S3>:1:23' breaks = pp.breaks; */
     /* '<S3>:1:24' coefs = pp.coefs; */
@@ -218,6 +218,25 @@ void cst_planning(const real32_T rtu_iq_target_ip_buff[4], const real32_T
     /* '<S3>:1:31' dy0 = 3*c(1)*t^2 + 2*c(2)*t + c(3); */
     /*  二阶导数 */
     /* '<S3>:1:33' d2y0 = 6*c(1)*t + 2*c(2); */
+    localDW->delta_m1 = 2.0F * *rtu_ip_dt;
+
+    /* Switch: '<S1>/Switch1' incorporates:
+     *  Constant: '<S1>/Constant2'
+     *  DiscreteIntegrator: '<S4>/Discrete-Time Integrator'
+     *  RelationalOperator: '<S1>/Relational Operator'
+     */
+    if (localDW->x0_sum < localDW->delta_m1)
+    {
+        *rty_v_cmd = localDW->delta_0;
+    }
+    else
+    {
+        *rty_v_cmd = 0.0F;
+    }
+
+    /* End of Switch: '<S1>/Switch1' */
+
+    /* Update for DiscreteIntegrator: '<S4>/Discrete-Time Integrator' */
     localDW->x0_sum += *rtu_dt_p;
 }
 

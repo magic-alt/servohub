@@ -239,41 +239,8 @@ void csp_planning(const int64_T rtu_pos_target_ip_buff[4], const real32_T
     }
 
     delta_m1 = localDW->x0_sum - localDW->Product[low_i];
-    delta_idx_0 = roundf(((delta_m1 * localDW->pp_coefs[low_i] +
-                           localDW->pp_coefs[low_i + 3]) * delta_m1 +
-                          localDW->pp_coefs[low_i + 6]) * delta_m1 +
-                         localDW->pp_coefs[low_i + 9]);
-    if (delta_idx_0 < 9.22337204E+18F)
-    {
-        if (delta_idx_0 >= -9.22337204E+18F)
-        {
-            localDW->qY_m = (int64_T)delta_idx_0;
-        }
-        else
-        {
-            localDW->qY_m = MIN_int64_T;
-        }
-    }
-    else
-    {
-        localDW->qY_m = MAX_int64_T;
-    }
 
-    if ((localDW->qY_m < 0LL) && (rtu_pos_target_ip_buff[0] < MIN_int64_T
-            - localDW->qY_m))
-    {
-        *rty_pos_cmd = MIN_int64_T;
-    }
-    else if ((localDW->qY_m > 0LL) && (rtu_pos_target_ip_buff[0] > MAX_int64_T -
-              localDW->qY_m))
-    {
-        *rty_pos_cmd = MAX_int64_T;
-    }
-    else
-    {
-        *rty_pos_cmd = localDW->qY_m + rtu_pos_target_ip_buff[0];
-    }
-
+    /* Gain: '<S1>/Gain' */
     /*  方法二：手动从系数计算 */
     /* '<S3>:1:22' breaks = pp.breaks; */
     /* '<S3>:1:23' coefs = pp.coefs; */
@@ -283,14 +250,71 @@ void csp_planning(const int64_T rtu_pos_target_ip_buff[4], const real32_T
     /* '<S3>:1:28' t = x0 - breaks(1); */
     /*  一阶导数 */
     /* '<S3>:1:30' dy0 = 3*c(1)*t^2 + 2*c(2)*t + c(3); */
-    *rty_v_cmd = (3.0F * localDW->pp_coefs[0] * (localDW->x0_sum *
-                   localDW->x0_sum) + 2.0F * localDW->pp_coefs[3] *
-                  localDW->x0_sum) + slopes_idx_0;
-
     /*  二阶导数 */
     /* '<S3>:1:32' d2y0 = 6*c(1)*t + 2*c(2); */
-    *rty_acc_cmd = 6.0F * localDW->pp_coefs[0] * localDW->x0_sum + 2.0F *
-        localDW->pp_coefs[3];
+    delta_n = 2.0F * *rtu_ip_dt;
+
+    /* Switch: '<S1>/Switch1' incorporates:
+     *  Constant: '<S1>/Constant1'
+     *  Constant: '<S1>/Constant2'
+     *  DiscreteIntegrator: '<S4>/Discrete-Time Integrator'
+     *  MATLAB Function: '<S1>/MATLAB Function'
+     *  RelationalOperator: '<S1>/Relational Operator'
+     *  Switch: '<S1>/Switch2'
+     *  Switch: '<S1>/Switch3'
+     */
+    if (localDW->x0_sum < delta_n)
+    {
+        *rty_acc_cmd = 6.0F * localDW->pp_coefs[0] * localDW->x0_sum + 2.0F *
+            localDW->pp_coefs[3];
+        *rty_v_cmd = (3.0F * localDW->pp_coefs[0] * (localDW->x0_sum *
+                       localDW->x0_sum) + 2.0F * localDW->pp_coefs[3] *
+                      localDW->x0_sum) + slopes_idx_0;
+
+        /* MATLAB Function: '<S1>/MATLAB Function' */
+        slopes_idx_0 = roundf(((delta_m1 * localDW->pp_coefs[low_i] +
+                                localDW->pp_coefs[low_i + 3]) * delta_m1 +
+                               localDW->pp_coefs[low_i + 6]) * delta_m1 +
+                              localDW->pp_coefs[low_i + 9]);
+        if (slopes_idx_0 < 9.22337204E+18F)
+        {
+            if (slopes_idx_0 >= -9.22337204E+18F)
+            {
+                localDW->qY_m = (int64_T)slopes_idx_0;
+            }
+            else
+            {
+                localDW->qY_m = MIN_int64_T;
+            }
+        }
+        else
+        {
+            localDW->qY_m = MAX_int64_T;
+        }
+
+        if ((localDW->qY_m < 0LL) && (rtu_pos_target_ip_buff[0] < MIN_int64_T
+                - localDW->qY_m))
+        {
+            *rty_pos_cmd = MIN_int64_T;
+        }
+        else if ((localDW->qY_m > 0LL) && (rtu_pos_target_ip_buff[0] >
+                  MAX_int64_T - localDW->qY_m))
+        {
+            *rty_pos_cmd = MAX_int64_T;
+        }
+        else
+        {
+            *rty_pos_cmd = localDW->qY_m + rtu_pos_target_ip_buff[0];
+        }
+    }
+    else
+    {
+        *rty_acc_cmd = 0.0F;
+        *rty_v_cmd = 0.0F;
+        *rty_pos_cmd = rtu_pos_target_ip_buff[3];
+    }
+
+    /* End of Switch: '<S1>/Switch1' */
 
     /* Update for DiscreteIntegrator: '<S4>/Discrete-Time Integrator' */
     localDW->x0_sum += *rtu_dt_p;
