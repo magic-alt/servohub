@@ -37,6 +37,9 @@ extern "C"
 #define GEAR_RATIO_NUM                  (8u)                            // 减速比分子
 #define GEAR_RATIO_DEN                  (1u)                            // 减速比分母
 #define GEAR_RATIO                      (8.0f)                          // 减速比
+#define GEAR_BACKLASH_LOAD              (0.03f)                         // 负载端齿轮间隙，负载端间隙 单位：°  eg: 0.03°，表示齿轮间隙会产生±0.03度的误差  
+// 电机端齿轮间隙参数  单位：电机端脉冲数 = GEAR_BACKLASH_LOAD * GEAR_RATIO / 360.0f * PMSM_MOTOR_ENC_LINE_P_N
+#define GEAR_BACKLASH_MOTOR_PULSE       (GEAR_BACKLASH_LOAD * GEAR_RATIO / 360.0f * PMSM_MOTOR_ENC_LINE_P_N) 
 
 // --------------------------
 // 电机保护参数
