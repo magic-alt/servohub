@@ -77,6 +77,13 @@ typedef struct
 
 typedef struct
 {
+    UNS8 Interpolation_time_period;
+    UNS8 Interpolation_time_period_Ip_time_units; //插值模式时间单位
+    INTEGER8 Interpolation_time_period_Ip_time_index; //插值模式时间指数
+}Interpolated_position_mode;
+
+typedef struct
+{
     INTEGER32 Velocity_demand_value; //负载端速度指令值
     INTEGER32 Velocity_actual_value; //负载端速度当前值
     UNS16 Velocity_window; //速度到达检测窗口
@@ -99,6 +106,21 @@ typedef struct
     UNS32 DC_link_circuit_voltage; //母线电压当前值
     UNS32 Torque_slope; //力矩上升斜率
 }Profile_torque_mode;
+
+typedef struct
+{
+    INTEGER32 Position_offset; //目标位置偏置值
+    INTEGER32 Velocity_offset; //目标速度偏置值
+    INTEGER16 Torque_offset; //目标转矩偏置值
+}CSP_CSV_CST;
+
+typedef struct
+{
+    UNS32 Digital_inputs; //数字IO输入值
+    UNS8 Digital_outputs;
+    UNS32 Digital_outputs_Physical_outputs; //数字IO输出值
+    UNS32 Digital_outputs_Bit_mask; //数字IO输出掩码开关
+}Optional_application;
 
 UNS32 set_Controlword(UNS16 val);
 UNS16 get_Controlword(void);
@@ -211,6 +233,15 @@ UNS16 get_Position_window_time(void);
 UNS32 set_Following_error_actual_value(INTEGER32 val);
 INTEGER32 get_Following_error_actual_value(void);
 
+UNS32 set_Interpolation_time_period(UNS8 val);
+UNS8 get_Interpolation_time_period(void);
+
+UNS32 set_Interpolation_time_period_Ip_time_units(UNS8 val);
+UNS8 get_Interpolation_time_period_Ip_time_units(void);
+
+UNS32 set_Interpolation_time_period_Ip_time_index(INTEGER8 val);
+INTEGER8 get_Interpolation_time_period_Ip_time_index(void);
+
 UNS32 set_Velocity_demand_value(INTEGER32 val);
 INTEGER32 get_Velocity_demand_value(void);
 
@@ -261,4 +292,25 @@ UNS32 get_DC_link_circuit_voltage(void);
 
 UNS32 set_Torque_slope(UNS32 val);
 UNS32 get_Torque_slope(void);
+
+UNS32 set_Position_offset(INTEGER32 val);
+INTEGER32 get_Position_offset(void);
+
+UNS32 set_Velocity_offset(INTEGER32 val);
+INTEGER32 get_Velocity_offset(void);
+
+UNS32 set_Torque_offset(INTEGER16 val);
+INTEGER16 get_Torque_offset(void);
+
+UNS32 set_Digital_inputs(UNS32 val);
+UNS32 get_Digital_inputs(void);
+
+UNS32 set_Digital_outputs(UNS8 val);
+UNS8 get_Digital_outputs(void);
+
+UNS32 set_Digital_outputs_Physical_outputs(UNS32 val);
+UNS32 get_Digital_outputs_Physical_outputs(void);
+
+UNS32 set_Digital_outputs_Bit_mask(UNS32 val);
+UNS32 get_Digital_outputs_Bit_mask(void);
 

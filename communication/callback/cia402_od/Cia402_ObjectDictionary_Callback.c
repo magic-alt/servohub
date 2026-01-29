@@ -821,6 +821,87 @@ UNS32 OD_0x60F4_Following_error_actual_value_Read_Callback(UNS8 subindex, void *
     /* USER CODE END 0x60F4 0x00 READ 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
+UNS32 OD_0x60C2_Interpolation_time_period_Write_Callback(UNS8 subindex, void *value)
+{
+    UNS32 abort_code = ABORT_CODE_SUCCESSFUL;
+    if ((get_Statusword() & STATUS_WORD_ENABLE_MASK) == STATUS_WORD_ENABLE_MASK)
+    {
+        return ABORT_CODE_DRIVE_STATE_DENIED;
+    }
+    switch(subindex)
+    {
+        case 0x00:
+    /* USER CODE BEGIN 0x60C2 0x00 WRITE 0 */
+    
+    /* USER CODE END 0x60C2 0x00 WRITE 0 */
+            abort_code = ABORT_CODE_CANNOT_WRITE_RO_OBJECT;
+    /* USER CODE BEGIN 0x60C2 0x00 WRITE 1 */
+    
+    /* USER CODE END 0x60C2 0x00 WRITE 1 */
+            break;
+        case 0x01:
+    /* USER CODE BEGIN 0x60C2 0x01 WRITE 0 */
+    
+    /* USER CODE END 0x60C2 0x01 WRITE 0 */
+            abort_code = set_Interpolation_time_period_Ip_time_units(*(UNS8*)value);
+    /* USER CODE BEGIN 0x60C2 0x01 WRITE 1 */
+    
+    /* USER CODE END 0x60C2 0x01 WRITE 1 */
+            break;
+        case 0x02:
+    /* USER CODE BEGIN 0x60C2 0x02 WRITE 0 */
+    
+    /* USER CODE END 0x60C2 0x02 WRITE 0 */
+            abort_code = set_Interpolation_time_period_Ip_time_index(*(INTEGER8*)value);
+    /* USER CODE BEGIN 0x60C2 0x02 WRITE 1 */
+    
+    /* USER CODE END 0x60C2 0x02 WRITE 1 */
+            break;
+        default:
+            abort_code = ABORT_CODE_SUB_INDEX_NOT_EXIST;
+            break;
+    }
+    return abort_code;
+}
+UNS32 OD_0x60C2_Interpolation_time_period_Read_Callback(UNS8 subindex, void *value)
+{
+    UNS32 abort_code = ABORT_CODE_SUCCESSFUL;
+    switch(subindex)
+    {
+        case 0x00:
+    /* USER CODE BEGIN 0x60C2 0x00 READ 0 */
+    
+    /* USER CODE END 0x60C2 0x00 READ 0 */
+            *(UNS8*)value = 0x2;
+            abort_code = ABORT_CODE_SUCCESSFUL;
+    /* USER CODE BEGIN 0x60C2 0x00 READ 1 */
+    
+    /* USER CODE END 0x60C2 0x00 READ 1 */
+            break;
+        case 0x01:
+    /* USER CODE BEGIN 0x60C2 0x01 READ 0 */
+    
+    /* USER CODE END 0x60C2 0x01 READ 0 */
+            *(UNS8*)value = get_Interpolation_time_period_Ip_time_units();
+    /* USER CODE BEGIN 0x60C2 0x01 READ 1 */
+    
+    /* USER CODE END 0x60C2 0x01 READ 1 */
+            break;
+        case 0x02:
+    /* USER CODE BEGIN 0x60C2 0x02 READ 0 */
+    
+    /* USER CODE END 0x60C2 0x02 READ 0 */
+            *(INTEGER8*)value = get_Interpolation_time_period_Ip_time_index();
+    /* USER CODE BEGIN 0x60C2 0x02 READ 1 */
+    
+    /* USER CODE END 0x60C2 0x02 READ 1 */
+            break;
+        default:
+            abort_code = ABORT_CODE_SUB_INDEX_NOT_EXIST;
+            break;
+    }
+    return abort_code;
+}
 UNS32 OD_0x606B_Velocity_demand_value_Read_Callback(UNS8 subindex, void *value)
 {
     /* USER CODE BEGIN 0x606B 0x00 READ 0 */
@@ -1139,4 +1220,165 @@ UNS32 OD_0x6087_Torque_slope_Read_Callback(UNS8 subindex, void *value)
     
     /* USER CODE END 0x6087 0x00 READ 1 */
     return ABORT_CODE_SUCCESSFUL;
+}
+UNS32 OD_0x60B0_Position_offset_Write_Callback(UNS8 subindex, void *value)
+{
+    UNS32 abort_code = ABORT_CODE_SUCCESSFUL;
+    /* USER CODE BEGIN 0x60B0 0x00 WRITE 0 */
+
+    /* USER CODE END 0x60B0 0x00 WRITE 0 */
+    abort_code = set_Position_offset(*(INTEGER32*)value);
+    /* USER CODE BEGIN 0x60B0 0x00 WRITE 1 */
+
+    /* USER CODE END 0x60B0 0x00 WRITE 1 */
+    return abort_code;
+}
+UNS32 OD_0x60B0_Position_offset_Read_Callback(UNS8 subindex, void *value)
+{
+    /* USER CODE BEGIN 0x60B0 0x00 READ 0 */
+    
+    /* USER CODE END 0x60B0 0x00 READ 0 */
+    *(INTEGER32*)value = get_Position_offset();
+    /* USER CODE BEGIN 0x60B0 0x00 READ 1 */
+    
+    /* USER CODE END 0x60B0 0x00 READ 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS32 OD_0x60B1_Velocity_offset_Write_Callback(UNS8 subindex, void *value)
+{
+    UNS32 abort_code = ABORT_CODE_SUCCESSFUL;
+    /* USER CODE BEGIN 0x60B1 0x00 WRITE 0 */
+
+    /* USER CODE END 0x60B1 0x00 WRITE 0 */
+    abort_code = set_Velocity_offset(*(INTEGER32*)value);
+    /* USER CODE BEGIN 0x60B1 0x00 WRITE 1 */
+
+    /* USER CODE END 0x60B1 0x00 WRITE 1 */
+    return abort_code;
+}
+UNS32 OD_0x60B1_Velocity_offset_Read_Callback(UNS8 subindex, void *value)
+{
+    /* USER CODE BEGIN 0x60B1 0x00 READ 0 */
+    
+    /* USER CODE END 0x60B1 0x00 READ 0 */
+    *(INTEGER32*)value = get_Velocity_offset();
+    /* USER CODE BEGIN 0x60B1 0x00 READ 1 */
+    
+    /* USER CODE END 0x60B1 0x00 READ 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS32 OD_0x60B2_Torque_offset_Write_Callback(UNS8 subindex, void *value)
+{
+    UNS32 abort_code = ABORT_CODE_SUCCESSFUL;
+    /* USER CODE BEGIN 0x60B2 0x00 WRITE 0 */
+
+    /* USER CODE END 0x60B2 0x00 WRITE 0 */
+    abort_code = set_Torque_offset(*(INTEGER16*)value);
+    /* USER CODE BEGIN 0x60B2 0x00 WRITE 1 */
+
+    /* USER CODE END 0x60B2 0x00 WRITE 1 */
+    return abort_code;
+}
+UNS32 OD_0x60B2_Torque_offset_Read_Callback(UNS8 subindex, void *value)
+{
+    /* USER CODE BEGIN 0x60B2 0x00 READ 0 */
+    
+    /* USER CODE END 0x60B2 0x00 READ 0 */
+    *(INTEGER16*)value = get_Torque_offset();
+    /* USER CODE BEGIN 0x60B2 0x00 READ 1 */
+    
+    /* USER CODE END 0x60B2 0x00 READ 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS32 OD_0x60FD_Digital_inputs_Read_Callback(UNS8 subindex, void *value)
+{
+    /* USER CODE BEGIN 0x60FD 0x00 READ 0 */
+    
+    /* USER CODE END 0x60FD 0x00 READ 0 */
+    *(UNS32*)value = get_Digital_inputs();
+    /* USER CODE BEGIN 0x60FD 0x00 READ 1 */
+    
+    /* USER CODE END 0x60FD 0x00 READ 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS32 OD_0x60FE_Digital_outputs_Write_Callback(UNS8 subindex, void *value)
+{
+    UNS32 abort_code = ABORT_CODE_SUCCESSFUL;
+    if ((get_Statusword() & STATUS_WORD_ENABLE_MASK) == STATUS_WORD_ENABLE_MASK)
+    {
+        return ABORT_CODE_DRIVE_STATE_DENIED;
+    }
+    switch(subindex)
+    {
+        case 0x00:
+    /* USER CODE BEGIN 0x60FE 0x00 WRITE 0 */
+    
+    /* USER CODE END 0x60FE 0x00 WRITE 0 */
+            abort_code = ABORT_CODE_CANNOT_WRITE_RO_OBJECT;
+    /* USER CODE BEGIN 0x60FE 0x00 WRITE 1 */
+    
+    /* USER CODE END 0x60FE 0x00 WRITE 1 */
+            break;
+        case 0x01:
+    /* USER CODE BEGIN 0x60FE 0x01 WRITE 0 */
+    
+    /* USER CODE END 0x60FE 0x01 WRITE 0 */
+            abort_code = set_Digital_outputs_Physical_outputs(*(UNS32*)value);
+    /* USER CODE BEGIN 0x60FE 0x01 WRITE 1 */
+    
+    /* USER CODE END 0x60FE 0x01 WRITE 1 */
+            break;
+        case 0x02:
+    /* USER CODE BEGIN 0x60FE 0x02 WRITE 0 */
+    
+    /* USER CODE END 0x60FE 0x02 WRITE 0 */
+            abort_code = set_Digital_outputs_Bit_mask(*(UNS32*)value);
+    /* USER CODE BEGIN 0x60FE 0x02 WRITE 1 */
+    
+    /* USER CODE END 0x60FE 0x02 WRITE 1 */
+            break;
+        default:
+            abort_code = ABORT_CODE_SUB_INDEX_NOT_EXIST;
+            break;
+    }
+    return abort_code;
+}
+UNS32 OD_0x60FE_Digital_outputs_Read_Callback(UNS8 subindex, void *value)
+{
+    UNS32 abort_code = ABORT_CODE_SUCCESSFUL;
+    switch(subindex)
+    {
+        case 0x00:
+    /* USER CODE BEGIN 0x60FE 0x00 READ 0 */
+    
+    /* USER CODE END 0x60FE 0x00 READ 0 */
+            *(UNS8*)value = 0x2;
+            abort_code = ABORT_CODE_SUCCESSFUL;
+    /* USER CODE BEGIN 0x60FE 0x00 READ 1 */
+    
+    /* USER CODE END 0x60FE 0x00 READ 1 */
+            break;
+        case 0x01:
+    /* USER CODE BEGIN 0x60FE 0x01 READ 0 */
+    
+    /* USER CODE END 0x60FE 0x01 READ 0 */
+            *(UNS32*)value = get_Digital_outputs_Physical_outputs();
+    /* USER CODE BEGIN 0x60FE 0x01 READ 1 */
+    
+    /* USER CODE END 0x60FE 0x01 READ 1 */
+            break;
+        case 0x02:
+    /* USER CODE BEGIN 0x60FE 0x02 READ 0 */
+    
+    /* USER CODE END 0x60FE 0x02 READ 0 */
+            *(UNS32*)value = get_Digital_outputs_Bit_mask();
+    /* USER CODE BEGIN 0x60FE 0x02 READ 1 */
+    
+    /* USER CODE END 0x60FE 0x02 READ 1 */
+            break;
+        default:
+            abort_code = ABORT_CODE_SUB_INDEX_NOT_EXIST;
+            break;
+    }
+    return abort_code;
 }

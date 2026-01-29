@@ -36,6 +36,9 @@ Following_error_time_out,0x6066,0x00,Val,UNS16,0x14,RW,位置跟随误差阈值�
 Position_window,0x6067,0x00,Val,UNS32,0x64,RW,位置到达检测窗口,Position_control_function,YES,Enable,立即,0,4294967295,uu,RxPDO,1,Position_window
 Position_window_time,0x6068,0x00,Val,UNS16,0x64,RW,位置到达检测窗口时间,Position_control_function,YES,-,立即,0,65535,ms,RxPDO,1,Position_window_time
 Following_error_actual_value,0x60F4,0x00,Val,INTEGER32,0x0,RO,负载端位置误差值,Position_control_function,NO,-,只读,-2147483648,2147483647,uu,TxPDO,1,Following_error_actual_value
+Interpolation_time_period,0x60C2,0x00,Struct,UNS8,0x2,RO,,Interpolated_position_mode,NO,-,只读,-,-,-,-,1,
+Interpolation_time_period_Ip_time_units,0x60C2,0x01,Struct,UNS8,0x1,RW,插值模式时间单位,Interpolated_position_mode,YES,-,使能,0,255,-,-,1,Interp_time_value
+Interpolation_time_period_Ip_time_index,0x60C2,0x02,Struct,INTEGER8,0xFD,RW,插值模式时间指数,Interpolated_position_mode,YES,-,使能,-128,63,-,-,1,Interp_time_index
 Velocity_demand_value,0x606B,0x00,Val,INTEGER32,0x0,RO,负载端速度指令值,Profile_velocity_mode,NO,-,只读,-2147483648,2147483647,uu/s,TxPDO,1,Velocity_demand_value
 Velocity_actual_value,0x606C,0x00,Val,INTEGER32,0x0,RO,负载端速度当前值,Profile_velocity_mode,NO,-,只读,-2147483648,2147483647,uu/s,TxPDO,1,Velocity_actual_value
 Velocity_window,0x606D,0x00,Val,UNS16,0x64,RW,速度到达检测窗口,Profile_velocity_mode,YES,Enable,立即,0,65535,uu/s,TxPDO,1,Velocity_window
@@ -53,3 +56,10 @@ Torque_actual_value,0x6077,0x00,Val,INTEGER16,0x0,RO,力矩当前值,Profile_tor
 Current_actual_value,0x6078,0x00,Val,INTEGER16,0x0,RO,电流当前值,Profile_torque_mode,NO,-,只读,-32768,32767,0.1 %,TxPDO,1,Current_actual_value
 DC_link_circuit_voltage,0x6079,0x00,Val,UNS32,0x0,RO,母线电压当前值,Profile_torque_mode,NO,-,只读,0,4294967295,0.001 V,TxPDO,1,DC_link_circuit_voltage
 Torque_slope,0x6087,0x00,Val,UNS32,0x3E8,RW,力矩上升斜率,Profile_torque_mode,YES,Enable,立即,0,4294967295,0.1 %/s,RxPDO,1,Torque_slope
+Position_offset,0x60B0,0x00,Val,INTEGER32,0x0,RW,目标位置偏置值,CSP_CSV_CST,NO,Enable,立即,-2147483648,2147483647,uu,RxPDO,1,position_offset_p
+Velocity_offset,0x60B1,0x00,Val,INTEGER32,0x0,RW,目标速度偏置值,CSP_CSV_CST,NO,Enable,立即,-2147483648,2147483647,uu/s,RxPDO,1,speed_offset_p_s
+Torque_offset,0x60B2,0x00,Val,INTEGER16,0x0,RW,目标转矩偏置值,CSP_CSV_CST,NO,Enable,立即,-32768,32767,0.1 %,RxPDO,1,iq_offset_A
+Digital_inputs,0x60FD,0x00,Val,UNS32,0x0,RO,数字IO输入值,Optional_application,NO,-,只读,0,4294967295,-,TxPDO,1,Digital_io_inputs_status
+Digital_outputs,0x60FE,0x00,Struct,UNS8,0x2,RO,,Optional_application,NO,-,只读,-,-,-,-,1,
+Digital_outputs_Physical_outputs,0x60FE,0x01,Struct,UNS32,0x0,RW,数字IO输出值,Optional_application,YES,-,立即,0,4294967295,-,RxPDO,1,Digital_io_outputs_phys
+Digital_outputs_Bit_mask,0x60FE,0x02,Struct,UNS32,0x0,RW,数字IO输出掩码开关,Optional_application,YES,-,立即,0,4294967295,-,RxPDO,1,Digital_io_outputs_mask

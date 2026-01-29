@@ -27,8 +27,11 @@ Factor_group kFactor_group;
 Profile_position_mode kProfile_position_mode;
 Homing_mode kHoming_mode;
 Position_control_function kPosition_control_function;
+Interpolated_position_mode kInterpolated_position_mode;
 Profile_velocity_mode kProfile_velocity_mode;
 Profile_torque_mode kProfile_torque_mode;
+CSP_CSV_CST kCSP_CSV_CST;
+Optional_application kOptional_application;
 
 UNS32 set_Controlword(UNS16 val){
     /* USER CODE BEGIN set_Controlword 0 */
@@ -671,6 +674,48 @@ INTEGER32 get_Following_error_actual_value(void){
     return kPosition_control_function.Following_error_actual_value;
 }
 
+UNS32 set_Interpolation_time_period(UNS8 val){
+    /* USER CODE BEGIN set_Interpolation_time_period 0 */
+    /* USER CODE END set_Interpolation_time_period 0 */
+    kInterpolated_position_mode.Interpolation_time_period = val;
+    /* USER CODE BEGIN set_Interpolation_time_period 1 */
+    /* USER CODE END set_Interpolation_time_period 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS8 get_Interpolation_time_period(void){
+    /* USER CODE BEGIN get_Interpolation_time_period */
+    /* USER CODE END get_Interpolation_time_period */
+    return kInterpolated_position_mode.Interpolation_time_period;
+}
+
+UNS32 set_Interpolation_time_period_Ip_time_units(UNS8 val){
+    /* USER CODE BEGIN set_Interpolation_time_period_Ip_time_units 0 */
+    /* USER CODE END set_Interpolation_time_period_Ip_time_units 0 */
+    kInterpolated_position_mode.Interpolation_time_period_Ip_time_units = val;
+    /* USER CODE BEGIN set_Interpolation_time_period_Ip_time_units 1 */
+    /* USER CODE END set_Interpolation_time_period_Ip_time_units 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS8 get_Interpolation_time_period_Ip_time_units(void){
+    /* USER CODE BEGIN get_Interpolation_time_period_Ip_time_units */
+    /* USER CODE END get_Interpolation_time_period_Ip_time_units */
+    return kInterpolated_position_mode.Interpolation_time_period_Ip_time_units;
+}
+
+UNS32 set_Interpolation_time_period_Ip_time_index(INTEGER8 val){
+    /* USER CODE BEGIN set_Interpolation_time_period_Ip_time_index 0 */
+    /* USER CODE END set_Interpolation_time_period_Ip_time_index 0 */
+    kInterpolated_position_mode.Interpolation_time_period_Ip_time_index = val;
+    /* USER CODE BEGIN set_Interpolation_time_period_Ip_time_index 1 */
+    /* USER CODE END set_Interpolation_time_period_Ip_time_index 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+INTEGER8 get_Interpolation_time_period_Ip_time_index(void){
+    /* USER CODE BEGIN get_Interpolation_time_period_Ip_time_index */
+    /* USER CODE END get_Interpolation_time_period_Ip_time_index */
+    return kInterpolated_position_mode.Interpolation_time_period_Ip_time_index;
+}
+
 UNS32 set_Velocity_demand_value(INTEGER32 val){
     /* USER CODE BEGIN set_Velocity_demand_value 0 */
     /* USER CODE END set_Velocity_demand_value 0 */
@@ -948,5 +993,103 @@ UNS32 get_Torque_slope(void){
     kProfile_torque_mode.Torque_slope = get_app_Torque_slope() * 1000 / (get_app_Motor_rated_current() * MATH_ARMS2APEAK);
     /* USER CODE END get_Torque_slope */
     return kProfile_torque_mode.Torque_slope;
+}
+
+UNS32 set_Position_offset(INTEGER32 val){
+    /* USER CODE BEGIN set_Position_offset 0 */
+    /* USER CODE END set_Position_offset 0 */
+    kCSP_CSV_CST.Position_offset = val;
+    /* USER CODE BEGIN set_Position_offset 1 */
+    /* USER CODE END set_Position_offset 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+INTEGER32 get_Position_offset(void){
+    /* USER CODE BEGIN get_Position_offset */
+    /* USER CODE END get_Position_offset */
+    return kCSP_CSV_CST.Position_offset;
+}
+
+UNS32 set_Velocity_offset(INTEGER32 val){
+    /* USER CODE BEGIN set_Velocity_offset 0 */
+    /* USER CODE END set_Velocity_offset 0 */
+    kCSP_CSV_CST.Velocity_offset = val;
+    /* USER CODE BEGIN set_Velocity_offset 1 */
+    /* USER CODE END set_Velocity_offset 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+INTEGER32 get_Velocity_offset(void){
+    /* USER CODE BEGIN get_Velocity_offset */
+    /* USER CODE END get_Velocity_offset */
+    return kCSP_CSV_CST.Velocity_offset;
+}
+
+UNS32 set_Torque_offset(INTEGER16 val){
+    /* USER CODE BEGIN set_Torque_offset 0 */
+    /* USER CODE END set_Torque_offset 0 */
+    kCSP_CSV_CST.Torque_offset = val;
+    /* USER CODE BEGIN set_Torque_offset 1 */
+    /* USER CODE END set_Torque_offset 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+INTEGER16 get_Torque_offset(void){
+    /* USER CODE BEGIN get_Torque_offset */
+    /* USER CODE END get_Torque_offset */
+    return kCSP_CSV_CST.Torque_offset;
+}
+
+UNS32 set_Digital_inputs(UNS32 val){
+    /* USER CODE BEGIN set_Digital_inputs 0 */
+    /* USER CODE END set_Digital_inputs 0 */
+    kOptional_application.Digital_inputs = val;
+    /* USER CODE BEGIN set_Digital_inputs 1 */
+    /* USER CODE END set_Digital_inputs 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS32 get_Digital_inputs(void){
+    /* USER CODE BEGIN get_Digital_inputs */
+    /* USER CODE END get_Digital_inputs */
+    return kOptional_application.Digital_inputs;
+}
+
+UNS32 set_Digital_outputs(UNS8 val){
+    /* USER CODE BEGIN set_Digital_outputs 0 */
+    /* USER CODE END set_Digital_outputs 0 */
+    kOptional_application.Digital_outputs = val;
+    /* USER CODE BEGIN set_Digital_outputs 1 */
+    /* USER CODE END set_Digital_outputs 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS8 get_Digital_outputs(void){
+    /* USER CODE BEGIN get_Digital_outputs */
+    /* USER CODE END get_Digital_outputs */
+    return kOptional_application.Digital_outputs;
+}
+
+UNS32 set_Digital_outputs_Physical_outputs(UNS32 val){
+    /* USER CODE BEGIN set_Digital_outputs_Physical_outputs 0 */
+    /* USER CODE END set_Digital_outputs_Physical_outputs 0 */
+    kOptional_application.Digital_outputs_Physical_outputs = val;
+    /* USER CODE BEGIN set_Digital_outputs_Physical_outputs 1 */
+    /* USER CODE END set_Digital_outputs_Physical_outputs 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS32 get_Digital_outputs_Physical_outputs(void){
+    /* USER CODE BEGIN get_Digital_outputs_Physical_outputs */
+    /* USER CODE END get_Digital_outputs_Physical_outputs */
+    return kOptional_application.Digital_outputs_Physical_outputs;
+}
+
+UNS32 set_Digital_outputs_Bit_mask(UNS32 val){
+    /* USER CODE BEGIN set_Digital_outputs_Bit_mask 0 */
+    /* USER CODE END set_Digital_outputs_Bit_mask 0 */
+    kOptional_application.Digital_outputs_Bit_mask = val;
+    /* USER CODE BEGIN set_Digital_outputs_Bit_mask 1 */
+    /* USER CODE END set_Digital_outputs_Bit_mask 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS32 get_Digital_outputs_Bit_mask(void){
+    /* USER CODE BEGIN get_Digital_outputs_Bit_mask */
+    /* USER CODE END get_Digital_outputs_Bit_mask */
+    return kOptional_application.Digital_outputs_Bit_mask;
 }
 

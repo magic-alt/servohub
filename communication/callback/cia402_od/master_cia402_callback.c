@@ -27,6 +27,7 @@ UNS32 master_cia402_write_callback(uint16_t index, uint8_t subindex, void *data)
         case 0x6066: return OD_0x6066_Following_error_time_out_Write_Callback(subindex, data); break;
         case 0x6067: return OD_0x6067_Position_window_Write_Callback(subindex, data); break;
         case 0x6068: return OD_0x6068_Position_window_time_Write_Callback(subindex, data); break;
+        case 0x60C2: return OD_0x60C2_Interpolation_time_period_Write_Callback(subindex, data); break;
         case 0x606D: return OD_0x606D_Velocity_window_Write_Callback(subindex, data); break;
         case 0x606E: return OD_0x606E_Velocity_window_time_Write_Callback(subindex, data); break;
         case 0x606F: return OD_0x606F_Velocity_threshold_Write_Callback(subindex, data); break;
@@ -38,6 +39,10 @@ UNS32 master_cia402_write_callback(uint16_t index, uint8_t subindex, void *data)
         case 0x6075: return OD_0x6075_Motor_rated_current_Write_Callback(subindex, data); break;
         case 0x6076: return OD_0x6076_Motor_rated_torque_Write_Callback(subindex, data); break;
         case 0x6087: return OD_0x6087_Torque_slope_Write_Callback(subindex, data); break;
+        case 0x60B0: return OD_0x60B0_Position_offset_Write_Callback(subindex, data); break;
+        case 0x60B1: return OD_0x60B1_Velocity_offset_Write_Callback(subindex, data); break;
+        case 0x60B2: return OD_0x60B2_Torque_offset_Write_Callback(subindex, data); break;
+        case 0x60FE: return OD_0x60FE_Digital_outputs_Write_Callback(subindex, data); break;
         default: return ABORT_CODE_CANNOT_WRITE_RO_OBJECT; break;
     }
 }
@@ -73,6 +78,7 @@ UNS32 master_cia402_read_callback(uint16_t index, uint8_t subindex, void *data){
         case 0x6067: return OD_0x6067_Position_window_Read_Callback(subindex, data); break;
         case 0x6068: return OD_0x6068_Position_window_time_Read_Callback(subindex, data); break;
         case 0x60F4: return OD_0x60F4_Following_error_actual_value_Read_Callback(subindex, data); break;
+        case 0x60C2: return OD_0x60C2_Interpolation_time_period_Read_Callback(subindex, data); break;
         case 0x606B: return OD_0x606B_Velocity_demand_value_Read_Callback(subindex, data); break;
         case 0x606C: return OD_0x606C_Velocity_actual_value_Read_Callback(subindex, data); break;
         case 0x606D: return OD_0x606D_Velocity_window_Read_Callback(subindex, data); break;
@@ -90,6 +96,11 @@ UNS32 master_cia402_read_callback(uint16_t index, uint8_t subindex, void *data){
         case 0x6078: return OD_0x6078_Current_actual_value_Read_Callback(subindex, data); break;
         case 0x6079: return OD_0x6079_DC_link_circuit_voltage_Read_Callback(subindex, data); break;
         case 0x6087: return OD_0x6087_Torque_slope_Read_Callback(subindex, data); break;
+        case 0x60B0: return OD_0x60B0_Position_offset_Read_Callback(subindex, data); break;
+        case 0x60B1: return OD_0x60B1_Velocity_offset_Read_Callback(subindex, data); break;
+        case 0x60B2: return OD_0x60B2_Torque_offset_Read_Callback(subindex, data); break;
+        case 0x60FD: return OD_0x60FD_Digital_inputs_Read_Callback(subindex, data); break;
+        case 0x60FE: return OD_0x60FE_Digital_outputs_Read_Callback(subindex, data); break;
         default: return ABORT_CODE_CANNOT_READ_WO_OBJECT; break;
     }
 }
