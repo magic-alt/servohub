@@ -12,7 +12,7 @@ extern "C"
 // 电机及负载参数
 // --------------------------
 // 电机参数
-#define PMSM_J                          (5.00e-06f)                     // 电机转动惯量（kg*m^2）
+#define PMSM_J                          (5.00e-05f)                     // 电机转动惯量（kg*m^2）
 #define PMSM_Lp2p                       (2.30e-04f)                     // 相间电感（H）
 #define PMSM_Rp2p                       (4.40e-01f)                     // 相间电阻（Ω）
 #define PMSM_RATED_CURRENT              (10.0f)                         // 电机额定电流（A）
@@ -62,19 +62,19 @@ extern "C"
 // 电机控制参数
 // --------------------------
 // 电流环参数
-#define CURRENT_CTL_CONFIG_KP_LD                    (1.86e-01f)         // d轴电流环比例增益
-#define CURRENT_CTL_CONFIG_KI_LD                    (3.96e+03f)         // d轴电流环积分增益
-#define CURRENT_CTL_CONFIG_KP_LQ                    (1.86e-01f)         // q轴电流环比例增益
-#define CURRENT_CTL_CONFIG_KI_LQ                    (3.96e+03f)         // q轴电流环积分增益
+#define CURRENT_CTL_CONFIG_KP_LD                    (3.83e-1f)          // d轴电流环比例增益
+#define CURRENT_CTL_CONFIG_KI_LD                    (1.91e+03f)         // d轴电流环积分增益
+#define CURRENT_CTL_CONFIG_KP_LQ                    (3.83e-1f)          // q轴电流环比例增益
+#define CURRENT_CTL_CONFIG_KI_LQ                    (1.91e+03f)         // q轴电流环积分增益
 #define CURRENT_CTL_CONFIG_PWM_DUTY_CYCLE_MAX       (0.9f)              // 最大占空比
 #define CURRENT_CTL_CONFIG_ELEC_ANGLE_COMPENSATION  (2.0f)              // 电角度补偿系数
 #define CURRENT_CTL_CONFIG_PHASE_DIR                (1)                 // 电机相序 1:abc -1:cba
 
 // 位置速度环参数
-#define POS_SPEED_CTL_CONFIG_KP_P                   (3.28e+02f)         // 位置环比例增益
-#define POS_SPEED_CTL_CONFIG_KI_S                   (6.24e+01f)         // 速度环积分增益
-#define POS_SPEED_CTL_CONFIG_KP_S                   (2.92e+00f)         // 速度环比例增益
-#define POS_SPEED_CTL_CONFIG_J_KT                   (9.97e-04f)         // 惯性系数
+#define POS_SPEED_CTL_CONFIG_KP_P                   (1.47e+02f)         // 位置环比例增益
+#define POS_SPEED_CTL_CONFIG_KI_S                   (1.47e+02f)         // 速度环积分增益
+#define POS_SPEED_CTL_CONFIG_KP_S                   (1.25e-01f)         // 速度环比例增益
+#define POS_SPEED_CTL_CONFIG_J_KT                   (1.06e-04f)         // 惯性系数
 #define POS_SPEED_CTL_CONFIG_AFF                    (0.0f)              // 加速度前馈增益
 #define POS_SPEED_CTL_CONFIG_VFF                    (1.0f)              // 速度前馈增益
 
