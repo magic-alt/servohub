@@ -60,9 +60,17 @@ extern UNS32 Position_encoder_resolution_Motor_revolutions;		/* Mapped at index 
 extern UNS32 Gear_ratio_Motor_revolutions;		/* Mapped at index 0x6091, subindex 0x01 */
 extern UNS32 Gear_ratio_Shaft_revolutions;		/* Mapped at index 0x6091, subindex 0x02 */
 extern INTEGER8 Homing_method;		/* Mapped at index 0x6098, subindex 0x00*/
+extern INTEGER32 Position_offset;		/* Mapped at index 0x60B0, subindex 0x00*/
+extern INTEGER32 Velocity_offset;		/* Mapped at index 0x60B1, subindex 0x00*/
+extern INTEGER16 Torque_offset;		/* Mapped at index 0x60B2, subindex 0x00*/
+extern UNS8 Interpolation_time_period_Interpolation_time_period_Ip_time_units;		/* Mapped at index 0x60C2, subindex 0x01 */
+extern INTEGER8 Interpolation_time_period_Interpolation_time_period_Ip_time_index;		/* Mapped at index 0x60C2, subindex 0x02 */
 extern UNS32 Max_acceleration;		/* Mapped at index 0x60C5, subindex 0x00*/
 extern UNS32 Max_deceleration;		/* Mapped at index 0x60C6, subindex 0x00*/
 extern INTEGER32 Following_error_actual_value;		/* Mapped at index 0x60F4, subindex 0x00*/
+extern UNS32 Digital_inputs;		/* Mapped at index 0x60FD, subindex 0x00*/
+extern UNS32 Digital_outputs_Digital_outputs_Physical_outputs;		/* Mapped at index 0x60FE, subindex 0x01 */
+extern UNS32 Digital_outputs_Digital_outputs_Bit_mask;		/* Mapped at index 0x60FE, subindex 0x02 */
 extern INTEGER32 Target_velocity;		/* Mapped at index 0x60FF, subindex 0x00*/
 
 #endif // SLAVEOD_H

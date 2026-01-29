@@ -4,11 +4,11 @@ FileVersion=1
 FileRevision=1
 EDSVersion=4.0
 Description=
-CreationTime=03:05PM
-CreationDate=01-16-2026
+CreationTime=03:33PM
+CreationDate=01-29-2026
 CreatedBy=CANFestival
-ModificationTime=03:05PM
-ModificationDate=01-16-2026
+ModificationTime=03:33PM
+ModificationDate=01-29-2026
 ModifiedBy=CANFestival
 
 [DeviceInfo]
@@ -115,7 +115,7 @@ DefaultValue=0
 PDOMapping=0
 
 [OptionalObjects]
-SupportedObjects=67
+SupportedObjects=73
 1=0x1008
 2=0x1016
 3=0x1017
@@ -179,10 +179,16 @@ SupportedObjects=67
 61=0x608F
 62=0x6091
 63=0x6098
-64=0x60C5
-65=0x60C6
-66=0x60F4
-67=0x60FF
+64=0x60B0
+65=0x60B1
+66=0x60B2
+67=0x60C2
+68=0x60C5
+69=0x60C6
+70=0x60F4
+71=0x60FD
+72=0x60FE
+73=0x60FF
 
 [1008]
 ParameterName=Manufacturer Device Name
@@ -1290,6 +1296,9 @@ AccessType=rw
 DefaultValue=0
 PDOMapping=0
 
+
+[ManufacturerObjects]
+SupportedObjects=0
 [603F]
 ParameterName=ErrorCode
 ObjectType=0x7
@@ -1718,6 +1727,51 @@ AccessType=rw
 DefaultValue=0
 PDOMapping=1
 
+[60B0]
+ParameterName=Position offset
+ObjectType=0x7
+DataType=0x0004
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[60B1]
+ParameterName=Velocity offset
+ObjectType=0x7
+DataType=0x0004
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[60B2]
+ParameterName=Torque offset
+ObjectType=0x7
+DataType=0x0003
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[60C2]
+ParameterName=Interpolation time period
+ObjectType=0x9
+SubNumber=2
+
+[60C2Sub1]
+ParameterName=Interpolation time period Ip time units
+ObjectType=0x7
+DataType=0x0005
+AccessType=rw
+DefaultValue=1
+PDOMapping=0
+
+[60C2Sub2]
+ParameterName=Interpolation time period Ip time index
+ObjectType=0x7
+DataType=0x0002
+AccessType=rw
+DefaultValue=253
+PDOMapping=0
+
 [60C5]
 ParameterName=Max acceleration
 ObjectType=0x7
@@ -1742,6 +1796,35 @@ AccessType=ro
 DefaultValue=0
 PDOMapping=1
 
+[60FD]
+ParameterName=Digital inputs
+ObjectType=0x7
+DataType=0x0007
+AccessType=ro
+DefaultValue=0
+PDOMapping=1
+
+[60FE]
+ParameterName=Digital outputs
+ObjectType=0x9
+SubNumber=2
+
+[60FESub1]
+ParameterName=Digital outputs Physical outputs
+ObjectType=0x7
+DataType=0x0007
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[60FESub2]
+ParameterName=Digital outputs Bit mask
+ObjectType=0x7
+DataType=0x0007
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
 [60FF]
 ParameterName=Target velocity
 ObjectType=0x7
@@ -1749,6 +1832,3 @@ DataType=0x0004
 AccessType=rw
 DefaultValue=0
 PDOMapping=1
-
-[ManufacturerObjects]
-SupportedObjects=0

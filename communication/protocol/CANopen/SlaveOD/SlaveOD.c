@@ -62,9 +62,17 @@ UNS32 Position_encoder_resolution_Motor_revolutions = 0x0;		/* Mapped at index 0
 UNS32 Gear_ratio_Motor_revolutions = 0x0;		/* Mapped at index 0x6091, subindex 0x01 */
 UNS32 Gear_ratio_Shaft_revolutions = 0x0;		/* Mapped at index 0x6091, subindex 0x02 */
 INTEGER8 Homing_method = 0x0;		/* Mapped at index 0x6098, subindex 0x00 */
+INTEGER32 Position_offset = 0x0;		/* Mapped at index 0x60B0, subindex 0x00 */
+INTEGER32 Velocity_offset = 0x0;		/* Mapped at index 0x60B1, subindex 0x00 */
+INTEGER16 Torque_offset = 0x0;		/* Mapped at index 0x60B2, subindex 0x00 */
+UNS8 Interpolation_time_period_Interpolation_time_period_Ip_time_units = 0x1;		/* Mapped at index 0x60C2, subindex 0x01 */
+INTEGER8 Interpolation_time_period_Interpolation_time_period_Ip_time_index = 0xFD;		/* Mapped at index 0x60C2, subindex 0x02 */
 UNS32 Max_acceleration = 0x0;		/* Mapped at index 0x60C5, subindex 0x00 */
 UNS32 Max_deceleration = 0x0;		/* Mapped at index 0x60C6, subindex 0x00 */
 INTEGER32 Following_error_actual_value = 0x0;		/* Mapped at index 0x60F4, subindex 0x00 */
+UNS32 Digital_inputs = 0x0;		/* Mapped at index 0x60FD, subindex 0x00 */
+UNS32 Digital_outputs_Digital_outputs_Physical_outputs = 0x0;		/* Mapped at index 0x60FE, subindex 0x01 */
+UNS32 Digital_outputs_Digital_outputs_Bit_mask = 0x0;		/* Mapped at index 0x60FE, subindex 0x02 */
 INTEGER32 Target_velocity = 0x0;		/* Mapped at index 0x60FF, subindex 0x00 */
 
 /**************************************************************************/
@@ -826,6 +834,33 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                        { RW, int8, sizeof (INTEGER8), (void*)&Homing_method, NULL }
                      };
 
+/* index 0x60B0 :   Mapped variable Position offset */
+                    subindex SlaveOD_Index60B0[] = 
+                     {
+                       { RW, int32, sizeof (INTEGER32), (void*)&Position_offset, NULL }
+                     };
+
+/* index 0x60B1 :   Mapped variable Velocity offset */
+                    subindex SlaveOD_Index60B1[] = 
+                     {
+                       { RW, int32, sizeof (INTEGER32), (void*)&Velocity_offset, NULL }
+                     };
+
+/* index 0x60B2 :   Mapped variable Torque offset */
+                    subindex SlaveOD_Index60B2[] = 
+                     {
+                       { RW, int16, sizeof (INTEGER16), (void*)&Torque_offset, NULL }
+                     };
+
+/* index 0x60C2 :   Mapped variable Interpolation time period */
+                    UNS8 SlaveOD_highestSubIndex_obj60C2 = 2; /* number of subindex - 1*/
+                    subindex SlaveOD_Index60C2[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&SlaveOD_highestSubIndex_obj60C2, NULL },
+                       { RW, uint8, sizeof (UNS8), (void*)&Interpolation_time_period_Interpolation_time_period_Ip_time_units, NULL },
+                       { RW, int8, sizeof (INTEGER8), (void*)&Interpolation_time_period_Interpolation_time_period_Ip_time_index, NULL }
+                     };
+
 /* index 0x60C5 :   Mapped variable Max acceleration */
                     subindex SlaveOD_Index60C5[] = 
                      {
@@ -842,6 +877,21 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                     subindex SlaveOD_Index60F4[] = 
                      {
                        { RO, int32, sizeof (INTEGER32), (void*)&Following_error_actual_value, NULL }
+                     };
+
+/* index 0x60FD :   Mapped variable Digital inputs */
+                    subindex SlaveOD_Index60FD[] = 
+                     {
+                       { RO, uint32, sizeof (UNS32), (void*)&Digital_inputs, NULL }
+                     };
+
+/* index 0x60FE :   Mapped variable Digital outputs */
+                    UNS8 SlaveOD_highestSubIndex_obj60FE = 2; /* number of subindex - 1*/
+                    subindex SlaveOD_Index60FE[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&SlaveOD_highestSubIndex_obj60FE, NULL },
+                       { RW, uint32, sizeof (UNS32), (void*)&Digital_outputs_Digital_outputs_Physical_outputs, NULL },
+                       { RW, uint32, sizeof (UNS32), (void*)&Digital_outputs_Digital_outputs_Bit_mask, NULL }
                      };
 
 /* index 0x60FF :   Mapped variable Target velocity */
@@ -922,9 +972,15 @@ const indextable SlaveOD_objdict[] =
   { (subindex*)SlaveOD_Index608F,sizeof(SlaveOD_Index608F)/sizeof(SlaveOD_Index608F[0]), 0x608F},
   { (subindex*)SlaveOD_Index6091,sizeof(SlaveOD_Index6091)/sizeof(SlaveOD_Index6091[0]), 0x6091},
   { (subindex*)SlaveOD_Index6098,sizeof(SlaveOD_Index6098)/sizeof(SlaveOD_Index6098[0]), 0x6098},
+  { (subindex*)SlaveOD_Index60B0,sizeof(SlaveOD_Index60B0)/sizeof(SlaveOD_Index60B0[0]), 0x60B0},
+  { (subindex*)SlaveOD_Index60B1,sizeof(SlaveOD_Index60B1)/sizeof(SlaveOD_Index60B1[0]), 0x60B1},
+  { (subindex*)SlaveOD_Index60B2,sizeof(SlaveOD_Index60B2)/sizeof(SlaveOD_Index60B2[0]), 0x60B2},
+  { (subindex*)SlaveOD_Index60C2,sizeof(SlaveOD_Index60C2)/sizeof(SlaveOD_Index60C2[0]), 0x60C2},
   { (subindex*)SlaveOD_Index60C5,sizeof(SlaveOD_Index60C5)/sizeof(SlaveOD_Index60C5[0]), 0x60C5},
   { (subindex*)SlaveOD_Index60C6,sizeof(SlaveOD_Index60C6)/sizeof(SlaveOD_Index60C6[0]), 0x60C6},
   { (subindex*)SlaveOD_Index60F4,sizeof(SlaveOD_Index60F4)/sizeof(SlaveOD_Index60F4[0]), 0x60F4},
+  { (subindex*)SlaveOD_Index60FD,sizeof(SlaveOD_Index60FD)/sizeof(SlaveOD_Index60FD[0]), 0x60FD},
+  { (subindex*)SlaveOD_Index60FE,sizeof(SlaveOD_Index60FE)/sizeof(SlaveOD_Index60FE[0]), 0x60FE},
   { (subindex*)SlaveOD_Index60FF,sizeof(SlaveOD_Index60FF)/sizeof(SlaveOD_Index60FF[0]), 0x60FF},
 };
 
@@ -1002,10 +1058,16 @@ const indextable * SlaveOD_scanIndexOD (CO_Data *d, UNS16 wIndex, UNS32 * errorC
 		case 0x608F: i = 63;break;
 		case 0x6091: i = 64;break;
 		case 0x6098: i = 65;break;
-		case 0x60C5: i = 66;break;
-		case 0x60C6: i = 67;break;
-		case 0x60F4: i = 68;break;
-		case 0x60FF: i = 69;break;
+		case 0x60B0: i = 66;break;
+		case 0x60B1: i = 67;break;
+		case 0x60B2: i = 68;break;
+		case 0x60C2: i = 69;break;
+		case 0x60C5: i = 70;break;
+		case 0x60C6: i = 71;break;
+		case 0x60F4: i = 72;break;
+		case 0x60FD: i = 73;break;
+		case 0x60FE: i = 74;break;
+		case 0x60FF: i = 75;break;
 		default:
 			*errorCode = OD_NO_SUCH_OBJECT;
 			return NULL;
