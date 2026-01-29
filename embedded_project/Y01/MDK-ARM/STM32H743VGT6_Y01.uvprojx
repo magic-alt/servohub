@@ -619,6 +619,21 @@
               <FilePath>..\..\..\app\Identify\app_id_tq_fc_mode.c</FilePath>
             </File>
             <File>
+              <FileName>app_cyclic_sync_position_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_position_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_torque_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_torque_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_velocity_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_velocity_mode.c</FilePath>
+            </File>
+            <File>
               <FileName>app_homing_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_homing_mode.c</FilePath>
@@ -1801,6 +1816,21 @@
               <FileName>app_id_tq_fc_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\Identify\app_id_tq_fc_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_position_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_position_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_torque_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_torque_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_velocity_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_velocity_mode.c</FilePath>
             </File>
             <File>
               <FileName>app_homing_mode.c</FileName>
@@ -3125,6 +3155,21 @@
               <FilePath>..\..\..\app\Identify\app_id_tq_fc_mode.c</FilePath>
             </File>
             <File>
+              <FileName>app_cyclic_sync_position_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_position_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_torque_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_torque_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_velocity_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_velocity_mode.c</FilePath>
+            </File>
+            <File>
               <FileName>app_homing_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_homing_mode.c</FilePath>
@@ -4445,6 +4490,21 @@
               <FileName>app_id_tq_fc_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\Identify\app_id_tq_fc_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_position_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_position_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_torque_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_torque_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_velocity_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_velocity_mode.c</FilePath>
             </File>
             <File>
               <FileName>app_homing_mode.c</FileName>
@@ -5769,6 +5829,21 @@
               <FilePath>..\..\..\app\Identify\app_id_tq_fc_mode.c</FilePath>
             </File>
             <File>
+              <FileName>app_cyclic_sync_position_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_position_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_torque_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_torque_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_velocity_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_velocity_mode.c</FilePath>
+            </File>
+            <File>
               <FileName>app_homing_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\app_homing_mode.c</FilePath>
@@ -7089,6 +7164,21 @@
               <FileName>app_id_tq_fc_mode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\Identify\app_id_tq_fc_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_position_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_position_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_torque_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_torque_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cyclic_sync_velocity_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app_cyclic_sync_velocity_mode.c</FilePath>
             </File>
             <File>
               <FileName>app_homing_mode.c</FileName>

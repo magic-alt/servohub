@@ -57,4 +57,28 @@ typedef struct
     float kd_spd_NM_rad_s; // 速度环比例系数(rad/s)/NM
 } MIT_TRAJECTORY_DATA;
 
+typedef struct
+{
+    bool is_update_tar;         // 是否更新目标值
+    int64_t pos_tar_buff_p[4];  // 插值位置用户目标值数组p
+    float ip_dt_s;              // 插值周期时间s
+    float period_s;             // 位置规划器运行周期s
+} CSP_TRAJECTORY_DATA;
+
+typedef struct
+{
+    bool is_update_tar;         // 是否更新目标值
+    float speed_tar_buff_p_s[4];// 插值速度用户目标值数组p/s
+    float ip_dt_s;              // 插值周期时间s
+    float period_s;             // 速度规划器运行周期s
+} CSV_TRAJECTORY_DATA;
+
+typedef struct
+{
+    bool is_update_tar;         // 是否更新目标值
+    float torque_tar_buff_A[4]; // 插值力矩用户目标值数组A
+    float ip_dt_s;              // 插值周期时间s
+    float period_s;             // 力矩规划器运行周期s
+} CST_TRAJECTORY_DATA;
+
 #endif // APP_DATA_TYPE_DEFINE_H

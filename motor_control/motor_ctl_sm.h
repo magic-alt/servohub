@@ -48,6 +48,9 @@ extern "C"
 #define MOTOR_CTL_SM_MODE_REFERENCE_SIGNAL (5)               // 5：参考信号
 #define MOTOR_CTL_SM_MODE_MIT (6)                            // 6：MIT模式
 #define MOTOR_CTL_SM_MODE_HOMING (7)                         // 7：回零模式
+#define MOTOR_CTL_SM_MODE_CSP (8)                            // 8：同步位置模式
+#define MOTOR_CTL_SM_MODE_CSV (9)                            // 9：同步速度模式
+#define MOTOR_CTL_SM_MODE_CST (10)                           // 10：同步时间模式
 #define MOTOR_CTL_SM_MODE_VOLTAGE (127)                      // 127：电压直接控制模式
 #pragma endregion
 

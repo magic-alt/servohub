@@ -179,6 +179,8 @@ void AppParamInit(void)
     kAppMotionParam.MIT_max_current = PMSM_PEAK_CURRENT;              // 电机峰值电流
     kAppMotionParam.MIT_kp = 0.01f;                                   // MIT位置刚度
     kAppMotionParam.MIT_kd = 0.01f;                                   // MIT速度阻尼系数
+    kAppMotionParam.Interp_time_value = 1;                            // 插值时间基数
+    kAppMotionParam.Interp_time_index = -3;                           // 插值时间指数
 
     // 初始化限制参数
     kAppRestrictParam.Position_range_limit_Minimal_position_limit = 0x8000000000000000;     // 位置溢出最小值
@@ -744,7 +746,6 @@ uint8_t get_app_Halt_running_cmd(void)
 uint32_t set_app_Statusword(uint32_t val)
 {
     /* USER CODE BEGIN set_app_Statusword 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Statusword 0 */
     kAppStatusInfo.Statusword = val;
 
@@ -763,7 +764,6 @@ uint32_t get_app_Statusword(void)
 uint32_t set_app_Error_word(uint32_t val)
 {
     /* USER CODE BEGIN set_app_Error_word 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Error_word 0 */
     kAppStatusInfo.Error_word = val;
 
@@ -782,7 +782,6 @@ uint32_t get_app_Error_word(void)
 uint32_t set_app_DC_link_circuit_voltage(float val)
 {
     /* USER CODE BEGIN set_app_DC_link_circuit_voltage 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_DC_link_circuit_voltage 0 */
     kAppStatusInfo.DC_link_circuit_voltage = val;
 
@@ -814,7 +813,6 @@ float get_app_Drive_accumulated_heat(void)
 uint32_t set_app_Drive_temperature(float val)
 {
     /* USER CODE BEGIN set_app_Drive_temperature 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Drive_temperature 0 */
     kAppStatusInfo.Drive_temperature = val;
 
@@ -831,7 +829,6 @@ float get_app_Drive_temperature(void)
 uint32_t set_app_Alarm_word(uint32_t val)
 {
     /* USER CODE BEGIN set_app_Alarm_word 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Alarm_word 0 */
     kAppStatusInfo.Alarm_word = val;
 
@@ -850,7 +847,6 @@ uint32_t get_app_Alarm_word(void)
 uint32_t set_app_Modes_of_operation_display(int8_t val)
 {
     /* USER CODE BEGIN set_app_Modes_of_operation_display 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Modes_of_operation_display 0 */
     kAppStatusInfo.Modes_of_operation_display = val;
 
@@ -867,7 +863,6 @@ int8_t get_app_Modes_of_operation_display(void)
 uint32_t set_app_Version(uint32_t val)
 {
     /* USER CODE BEGIN set_app_Version 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Version 0 */
     kAppStatusInfo.Version = val;
 
@@ -884,7 +879,6 @@ uint32_t get_app_Version(void)
 uint32_t set_app_Motor_temperature(float val)
 {
     /* USER CODE BEGIN set_app_Motor_temperature 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Motor_temperature 0 */
     kAppStatusInfo.Motor_temperature = val;
 
@@ -900,7 +894,6 @@ float get_app_Motor_temperature(void)
 uint32_t set_app_Motor_power(float val)
 {
     /* USER CODE BEGIN set_app_Motor_power 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Motor_power 0 */
     kAppStatusInfo.Motor_power = val;
 
@@ -918,7 +911,6 @@ float get_app_Motor_power(void)
 uint32_t set_app_Mcu_temperature(float val)
 {
     /* USER CODE BEGIN set_app_Mcu_temperature 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Mcu_temperature 0 */
     kAppStatusInfo.Mcu_temperature = val;
 
@@ -934,7 +926,6 @@ float get_app_Mcu_temperature(void)
 uint32_t set_app_Digital_io_inputs_status(uint32_t val)
 {
     /* USER CODE BEGIN set_app_Digital_io_inputs_status 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Digital_io_inputs_status 0 */
     kAppStatusInfo.Digital_io_inputs_status = val;
 
@@ -953,7 +944,6 @@ uint32_t get_app_Digital_io_inputs_status(void)
 uint32_t set_app_Brake_state(uint8_t val)
 {
     /* USER CODE BEGIN set_app_Brake_state 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Brake_state 0 */
     kAppStatusInfo.Brake_state = val;
 
@@ -1001,6 +991,18 @@ uint32_t set_app_Modes_of_operation(int8_t val)
     case MOTOR_CTL_SM_MODE_HOMING: // 回零模式实际使用速度模式
         axis->motor_ctl_sm_config.mode = MOTOR_CTL_SM_MODE_SPEED;
         callback_registry.set_app_callback(APP_HM_MODE);
+        break;
+    case MOTOR_CTL_SM_MODE_CSP:
+        axis->motor_ctl_sm_config.mode = MOTOR_CTL_SM_MODE_POSITION;
+        callback_registry.set_app_callback(APP_CSP_MODE);
+        break;
+    case MOTOR_CTL_SM_MODE_CSV:
+        axis->motor_ctl_sm_config.mode = MOTOR_CTL_SM_MODE_SPEED;
+        callback_registry.set_app_callback(APP_CSV_MODE);
+        break;
+    case MOTOR_CTL_SM_MODE_CST:
+        axis->motor_ctl_sm_config.mode = MOTOR_CTL_SM_MODE_TORQUE;
+        callback_registry.set_app_callback(APP_CST_MODE);
         break;
     case MOTOR_CTL_SM_MODE_DIRECTION_IDENTIFICATION:
         axis->motor_ctl_sm_config.mode = MOTOR_CTL_SM_MODE_DIRECTION_IDENTIFICATION;
@@ -1148,7 +1150,6 @@ uint8_t get_app_Motor_encoder_options(void)
 uint32_t set_app_Load_pps_2_rpm(float val)
 {
     /* USER CODE BEGIN set_app_Load_pps_2_rpm 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Load_pps_2_rpm 0 */
     kAppEncoderConfig.Load_pps_2_rpm = val;
 
@@ -1164,7 +1165,6 @@ float get_app_Load_pps_2_rpm(void)
 uint32_t set_app_Load_rpm_2_pps(float val)
 {
     /* USER CODE BEGIN set_app_Load_rpm_2_pps 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Load_rpm_2_pps 0 */
     kAppEncoderConfig.Load_rpm_2_pps = val;
 
@@ -1180,7 +1180,6 @@ float get_app_Load_rpm_2_pps(void)
 uint32_t set_app_Motor_pps_2_rpm(float val)
 {
     /* USER CODE BEGIN set_app_Motor_pps_2_rpm 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Motor_pps_2_rpm 0 */
     kAppEncoderConfig.Motor_pps_2_rpm = val;
 
@@ -1196,7 +1195,6 @@ float get_app_Motor_pps_2_rpm(void)
 uint32_t set_app_Motor_rpm_2_pps(float val)
 {
     /* USER CODE BEGIN set_app_Motor_rpm_2_pps 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Motor_rpm_2_pps 0 */
     kAppEncoderConfig.Motor_rpm_2_pps = val;
 
@@ -1212,7 +1210,6 @@ float get_app_Motor_rpm_2_pps(void)
 uint32_t set_app_P_load_2_motor(float val)
 {
     /* USER CODE BEGIN set_app_P_load_2_motor 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_P_load_2_motor 0 */
     kAppEncoderConfig.P_load_2_motor = val;
 
@@ -1228,7 +1225,6 @@ float get_app_P_load_2_motor(void)
 uint32_t set_app_P_motor_2_load(float val)
 {
     /* USER CODE BEGIN set_app_P_motor_2_load 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_P_motor_2_load 0 */
     kAppEncoderConfig.P_motor_2_load = val;
 
@@ -1687,6 +1683,10 @@ uint32_t set_app_Target_position(int64_t val)
     /* USER CODE END set_app_Target_position 0 */
     kAppMotionParam.Target_position = val;
     /* USER CODE BEGIN set_app_Target_position 1 */
+    if (get_app_Modes_of_operation_display() == MOTOR_CTL_SM_MODE_CSP)
+    {
+        set_app_Target_update_state(true);
+    }
     /* USER CODE END set_app_Target_position 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -1854,6 +1854,10 @@ uint32_t set_app_Target_velocity(float val)
     /* USER CODE END set_app_Target_velocity 0 */
     kAppMotionParam.Target_velocity = val;
     /* USER CODE BEGIN set_app_Target_velocity 1 */
+    if (get_app_Modes_of_operation_display() == MOTOR_CTL_SM_MODE_CSV)
+    {
+        set_app_Target_update_state(true);
+    }
     /* USER CODE END set_app_Target_velocity 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -1875,6 +1879,10 @@ uint32_t set_app_Target_torque(float val)
     /* USER CODE END set_app_Target_torque 0 */
     kAppMotionParam.Target_torque = val;
     /* USER CODE BEGIN set_app_Target_torque 1 */
+    if (get_app_Modes_of_operation_display() == MOTOR_CTL_SM_MODE_CST)
+    {
+        set_app_Target_update_state(true);
+    }
     /* USER CODE END set_app_Target_torque 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -2039,9 +2047,14 @@ float get_app_MIT_kd(void)
 uint32_t set_app_Interp_time_value(uint8_t val)
 {
     /* USER CODE BEGIN set_app_Interp_time_value 0 */
+    const float factors[] = {1e-5f, 1e-4f, 1e-3f, 1e-2f, 1e-1f, \
+                             1.0f,1e+1f, 1e+2f, 1e+3f, 1e+4f, 1e+5f};
     /* USER CODE END set_app_Interp_time_value 0 */
     kAppMotionParam.Interp_time_value = val;
     /* USER CODE BEGIN set_app_Interp_time_value 1 */
+    uint8_t index = get_app_Interp_time_index() + 5;
+    float ip_period = factors[index] * val;
+    set_app_Interp_period(ip_period);
     /* USER CODE END set_app_Interp_time_value 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -2060,9 +2073,14 @@ uint32_t set_app_Interp_time_index(int8_t val)
         return APP_PARAM_OUT_OF_RANGE;
 
     /* USER CODE BEGIN set_app_Interp_time_index 0 */
+    const float factors[] = {1e-5f, 1e-4f, 1e-3f, 1e-2f, 1e-1f, \
+                             1.0f,1e+1f, 1e+2f, 1e+3f, 1e+4f, 1e+5f};
     /* USER CODE END set_app_Interp_time_index 0 */
     kAppMotionParam.Interp_time_index = val;
     /* USER CODE BEGIN set_app_Interp_time_index 1 */
+    uint8_t index = val + 5;
+    float ip_period = factors[index] * get_app_Interp_time_value();
+    set_app_Interp_period(ip_period);
     /* USER CODE END set_app_Interp_time_index 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -2237,7 +2255,6 @@ uint32_t set_app_Max_current(float val)
     if (val < 0.0)
         return APP_PARAM_OUT_OF_RANGE;
     /* USER CODE BEGIN set_app_Max_current 0 */
-
     /* USER CODE END set_app_Max_current 0 */
     kAppRestrictParam.Max_current = val;
     /* USER CODE BEGIN set_app_Max_current 1 */
@@ -2277,7 +2294,6 @@ uint8_t get_app_Position_limit_enable(void)
 uint32_t set_app_Position_demand_value(int64_t val)
 {
     /* USER CODE BEGIN set_app_Position_demand_value 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Position_demand_value 0 */
     kAppMotionInfo.Position_demand_value = val;
 
@@ -2295,7 +2311,6 @@ int64_t get_app_Position_demand_value(void)
 uint32_t set_app_Position_actual_value_inc(int64_t val)
 {
     /* USER CODE BEGIN set_app_Position_actual_value_inc 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Position_actual_value_inc 0 */
     kAppMotionInfo.Position_actual_value_inc = val;
 
@@ -2312,7 +2327,6 @@ int64_t get_app_Position_actual_value_inc(void)
 uint32_t set_app_Position_actual_value(int64_t val)
 {
     /* USER CODE BEGIN set_app_Position_actual_value 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Position_actual_value 0 */
     kAppMotionInfo.Position_actual_value = val;
 
@@ -2329,7 +2343,6 @@ int64_t get_app_Position_actual_value(void)
 uint32_t set_app_Following_error_actual_value(int64_t val)
 {
     /* USER CODE BEGIN set_app_Following_error_actual_value 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Following_error_actual_value 0 */
     kAppMotionInfo.Following_error_actual_value = val;
 
@@ -2346,7 +2359,6 @@ int64_t get_app_Following_error_actual_value(void)
 uint32_t set_app_Velocity_demand_value(float val)
 {
     /* USER CODE BEGIN set_app_Velocity_demand_value 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Velocity_demand_value 0 */
     kAppMotionInfo.Velocity_demand_value = val;
 
@@ -2364,7 +2376,6 @@ float get_app_Velocity_demand_value(void)
 uint32_t set_app_Velocity_actual_value(float val)
 {
     /* USER CODE BEGIN set_app_Velocity_actual_value 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Velocity_actual_value 0 */
     kAppMotionInfo.Velocity_actual_value = val;
 
@@ -2381,7 +2392,6 @@ float get_app_Velocity_actual_value(void)
 uint32_t set_app_Torque_demand_value(float val)
 {
     /* USER CODE BEGIN set_app_Torque_demand_value 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Torque_demand_value 0 */
     kAppMotionInfo.Torque_demand_value = val;
 
@@ -2398,7 +2408,6 @@ float get_app_Torque_demand_value(void)
 uint32_t set_app_Torque_actual_value(float val)
 {
     /* USER CODE BEGIN set_app_Torque_actual_value 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Torque_actual_value 0 */
     kAppMotionInfo.Torque_actual_value = val;
 
@@ -2416,7 +2425,6 @@ float get_app_Torque_actual_value(void)
 uint32_t set_app_Current_actual_value(float val)
 {
     /* USER CODE BEGIN set_app_Current_actual_value 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_Current_actual_value 0 */
     kAppMotionInfo.Current_actual_value = val;
 
@@ -2433,7 +2441,6 @@ float get_app_Current_actual_value(void)
 uint32_t set_app_D_current_actual_value(float val)
 {
     /* USER CODE BEGIN set_app_D_current_actual_value 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_D_current_actual_value 0 */
     kAppMotionInfo.D_current_actual_value = val;
 
@@ -2580,7 +2587,6 @@ float get_app_Motor_velocity_actual_value(void)
 uint32_t set_app_U_adc_mid_val(uint16_t val)
 {
     /* USER CODE BEGIN set_app_U_adc_mid_val 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_U_adc_mid_val 0 */
     kAppMotionInfo.U_adc_mid_val = val;
 
@@ -2599,7 +2605,6 @@ uint16_t get_app_U_adc_mid_val(void)
 uint32_t set_app_V_adc_mid_val(uint16_t val)
 {
     /* USER CODE BEGIN set_app_V_adc_mid_val 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_V_adc_mid_val 0 */
     kAppMotionInfo.V_adc_mid_val = val;
 
@@ -2618,7 +2623,6 @@ uint16_t get_app_V_adc_mid_val(void)
 uint32_t set_app_W_adc_mid_val(uint16_t val)
 {
     /* USER CODE BEGIN set_app_W_adc_mid_val 0 */
-    // RO VAR CANNOT BE SET
     /* USER CODE END set_app_W_adc_mid_val 0 */
     kAppMotionInfo.W_adc_mid_val = val;
 
@@ -2637,7 +2641,6 @@ uint16_t get_app_W_adc_mid_val(void)
 uint32_t set_app_Current_loop_time(float val)
 {
     /* USER CODE BEGIN set_app_Current_loop_time 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Current_loop_time 0 */
     kAppMotionInfo.Current_loop_time = val;
 
@@ -2654,7 +2657,6 @@ float get_app_Current_loop_time(void)
 uint32_t set_app_Position_loop_time(float val)
 {
     /* USER CODE BEGIN set_app_Position_loop_time 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Position_loop_time 0 */
     kAppMotionInfo.Position_loop_time = val;
 
@@ -2672,7 +2674,6 @@ float get_app_Position_loop_time(void)
 uint32_t set_app_Current_loop_cycle(float val)
 {
     /* USER CODE BEGIN set_app_Current_loop_cycle 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Current_loop_cycle 0 */
     kAppMotionInfo.Current_loop_cycle = val;
 
@@ -2689,7 +2690,6 @@ float get_app_Current_loop_cycle(void)
 uint32_t set_app_Position_loop_cycle(float val)
 {
     /* USER CODE BEGIN set_app_Position_loop_cycle 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Position_loop_cycle 0 */
     kAppMotionInfo.Position_loop_cycle = val;
 
@@ -3118,7 +3118,6 @@ float get_app_Torque_constant(void)
 uint32_t set_app_Reduction_ratio(float val)
 {
     /* USER CODE BEGIN set_app_Reduction_ratio 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Reduction_ratio 0 */
     kAppMotorConfig.Reduction_ratio = val;
 
@@ -3134,7 +3133,6 @@ float get_app_Reduction_ratio(void)
 uint32_t set_app_Reduction_ratio_inv(float val)
 {
     /* USER CODE BEGIN set_app_Reduction_ratio_inv 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Reduction_ratio_inv 0 */
     kAppMotorConfig.Reduction_ratio_inv = val;
 
@@ -3788,7 +3786,6 @@ uint16_t get_app_Calibration_status(void)
 uint32_t set_app_User_module_code(uint64_t val)
 {
     /* USER CODE BEGIN set_app_User_module_code 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_User_module_code 0 */
     kCustomInfo.User_module_code = val;
 
@@ -3820,7 +3817,6 @@ uint8_t get_app_Sys_init_flag(void)
 uint32_t set_app_Error_records_list(uint32_t index, uint32_t val)
 {
     /* USER CODE BEGIN set_app_Error_records_list 0 */
-    //RO VAR CANNOT BE SET
     /* USER CODE END set_app_Error_records_list 0 */
     kHistoricalInfo.Error_records_list[index] = val;
 

@@ -60,6 +60,6 @@ Position_offset,0x60B0,0x00,Val,INTEGER32,0x0,RW,目标位置偏置值,CSP_CSV_C
 Velocity_offset,0x60B1,0x00,Val,INTEGER32,0x0,RW,目标速度偏置值,CSP_CSV_CST,NO,Enable,立即,-2147483648,2147483647,uu/s,RxPDO,1,speed_offset_p_s
 Torque_offset,0x60B2,0x00,Val,INTEGER16,0x0,RW,目标转矩偏置值,CSP_CSV_CST,NO,Enable,立即,-32768,32767,0.1 %,RxPDO,1,iq_offset_A
 Digital_inputs,0x60FD,0x00,Val,UNS32,0x0,RO,数字IO输入值,Optional_application,NO,-,只读,0,4294967295,-,TxPDO,1,Digital_io_inputs_status
-Digital_outputs,0x60FE,0x00,Struct,UNS8,0x2,RO,,Optional_application,NO,-,只读,-,-,-,-,1,
-Digital_outputs_Physical_outputs,0x60FE,0x01,Struct,UNS32,0x0,RW,数字IO输出值,Optional_application,YES,-,立即,0,4294967295,-,RxPDO,1,Digital_io_outputs_phys
-Digital_outputs_Bit_mask,0x60FE,0x02,Struct,UNS32,0x0,RW,数字IO输出掩码开关,Optional_application,YES,-,立即,0,4294967295,-,RxPDO,1,Digital_io_outputs_mask
+Digital_outputs,0x60FE,0x00,Struct,UNS8,0x2,RO,,Optional_application,NO,Enable,只读,-,-,-,-,1,
+Digital_outputs_Physical_outputs,0x60FE,0x01,Struct,UNS32,0x0,RW,数字IO输出值,Optional_application,YES,Enable,立即,0,4294967295,-,RxPDO,1,Digital_io_outputs_phys
+Digital_outputs_Bit_mask,0x60FE,0x02,Struct,UNS32,0x0,RW,数字IO输出掩码开关,Optional_application,YES,Enable,立即,0,4294967295,-,RxPDO,1,Digital_io_outputs_mask

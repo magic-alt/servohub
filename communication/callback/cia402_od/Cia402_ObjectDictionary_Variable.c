@@ -99,7 +99,7 @@ UNS32 set_Modes_of_operation(INTEGER8 val){
     /* USER CODE END set_Modes_of_operation 0 */
     kPDS_FSA.Modes_of_operation = val;
     /* USER CODE BEGIN set_Modes_of_operation 1 */
-    //目前支持的cia402模式:PP,PV,PT,HM,MIT
+    //目前支持的cia402模式:PP,PV,PT,HM,CSP,CSV,CST,MIT
     switch(kPDS_FSA.Modes_of_operation){
         case kOd6060_PPM:
             set_app_Modes_of_operation(MOTOR_CTL_SM_MODE_POSITION);
@@ -113,6 +113,15 @@ UNS32 set_Modes_of_operation(INTEGER8 val){
         case kOd6060_HM:
             set_app_Modes_of_operation(MOTOR_CTL_SM_MODE_HOMING);
             break;
+        case kOd6060_CSP:
+            set_app_Modes_of_operation(MOTOR_CTL_SM_MODE_CSP);
+            break;
+        case kOd6060_CSV:
+            set_app_Modes_of_operation(MOTOR_CTL_SM_MODE_CSV);
+            break;
+        case kOd6060_CST:
+            set_app_Modes_of_operation(MOTOR_CTL_SM_MODE_CST);
+            break;
         case kOd6060_MIT:
             set_app_Modes_of_operation(MOTOR_CTL_SM_MODE_MIT);
             break;
@@ -124,7 +133,7 @@ UNS32 set_Modes_of_operation(INTEGER8 val){
 }
 INTEGER8 get_Modes_of_operation(void){
     /* USER CODE BEGIN get_Modes_of_operation */
-    //目前支持的cia402模式:PP,PV,PT,HM,MIT
+    //目前支持的cia402模式:PP,PV,PT,HM,CSP,CSV,CST,MIT
     switch(get_app_Modes_of_operation()){
         case MOTOR_CTL_SM_MODE_POSITION:
             kPDS_FSA.Modes_of_operation = kOd6060_PPM;
@@ -137,6 +146,15 @@ INTEGER8 get_Modes_of_operation(void){
             break;
         case MOTOR_CTL_SM_MODE_HOMING:
             kPDS_FSA.Modes_of_operation = kOd6060_HM;
+            break;
+        case MOTOR_CTL_SM_MODE_CSP:
+            kPDS_FSA.Modes_of_operation = kOd6060_CSP;
+            break;
+        case MOTOR_CTL_SM_MODE_CSV:
+            kPDS_FSA.Modes_of_operation = kOd6060_CSV;
+            break;
+        case MOTOR_CTL_SM_MODE_CST:
+            kPDS_FSA.Modes_of_operation = kOd6060_CST;
             break;
         case MOTOR_CTL_SM_MODE_MIT:
             kPDS_FSA.Modes_of_operation = kOd6060_MIT;
@@ -170,6 +188,15 @@ INTEGER8 get_Modes_of_operation_display(void){
             break;
         case MOTOR_CTL_SM_MODE_HOMING:
             kPDS_FSA.Modes_of_operation_display = kOd6060_HM;
+            break;
+        case MOTOR_CTL_SM_MODE_CSP:
+            kPDS_FSA.Modes_of_operation_display = kOd6060_CSP;
+            break;
+        case MOTOR_CTL_SM_MODE_CSV:
+            kPDS_FSA.Modes_of_operation_display = kOd6060_CSV;
+            break;
+        case MOTOR_CTL_SM_MODE_CST:
+            kPDS_FSA.Modes_of_operation_display = kOd6060_CST;
             break;
         case MOTOR_CTL_SM_MODE_MIT:
             kPDS_FSA.Modes_of_operation_display = kOd6060_MIT;
@@ -693,6 +720,7 @@ UNS32 set_Interpolation_time_period_Ip_time_units(UNS8 val){
     /* USER CODE END set_Interpolation_time_period_Ip_time_units 0 */
     kInterpolated_position_mode.Interpolation_time_period_Ip_time_units = val;
     /* USER CODE BEGIN set_Interpolation_time_period_Ip_time_units 1 */
+    set_app_Interp_time_value(val);
     /* USER CODE END set_Interpolation_time_period_Ip_time_units 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
@@ -707,6 +735,7 @@ UNS32 set_Interpolation_time_period_Ip_time_index(INTEGER8 val){
     /* USER CODE END set_Interpolation_time_period_Ip_time_index 0 */
     kInterpolated_position_mode.Interpolation_time_period_Ip_time_index = val;
     /* USER CODE BEGIN set_Interpolation_time_period_Ip_time_index 1 */
+    set_app_Interp_time_index(val);
     /* USER CODE END set_Interpolation_time_period_Ip_time_index 1 */
     return ABORT_CODE_SUCCESSFUL;
 }

@@ -147,7 +147,7 @@ typedef enum {
 } CURRENT_CALIBRATION_STATUS;
 
 // APP控制字定义(兼容控制层的控制字定义和应用层的控制字定义)
-#define APP_NUM         12   //如果需要新增应用 在此处增加枚举定义 和 增加应用数量
+#define APP_NUM         15   //如果需要新增应用 在此处增加枚举定义 和 增加应用数量
 typedef enum
 {
     APP_NULL = 0,
@@ -156,6 +156,9 @@ typedef enum
     APP_PT_MODE,
     APP_MIT_MODE,
     APP_HM_MODE,
+    APP_CSP_MODE,
+    APP_CSV_MODE,
+    APP_CST_MODE,
     APP_DIR_ID_MODE,
     APP_ELEC_ANGLE_ID_MODE,
     APP_ELEC_ID_MODE,

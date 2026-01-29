@@ -1304,10 +1304,6 @@ UNS32 OD_0x60FD_Digital_inputs_Read_Callback(UNS8 subindex, void *value)
 UNS32 OD_0x60FE_Digital_outputs_Write_Callback(UNS8 subindex, void *value)
 {
     UNS32 abort_code = ABORT_CODE_SUCCESSFUL;
-    if ((get_Statusword() & STATUS_WORD_ENABLE_MASK) == STATUS_WORD_ENABLE_MASK)
-    {
-        return ABORT_CODE_DRIVE_STATE_DENIED;
-    }
     switch(subindex)
     {
         case 0x00:
