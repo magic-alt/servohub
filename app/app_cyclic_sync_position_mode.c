@@ -49,6 +49,8 @@ AppResult CspModeRun()
 {
     kCspMode.now_Controlword = (APP_CONTROL_WORD)get_app_Controlword();
 
+    uint8_t load_enc_type = get_encoder_type(ENCODER_ID_LOAD);  //获取负载端编码器类型
+
     if (kCspMode.now_Controlword == APP_CTRL_ENABLE)
     {
         if (!get_app_Emergency_brake_requested())
@@ -75,9 +77,26 @@ AppResult CspModeRun()
                 set_app_Target_update_state(false);
 
                 kCspMode.pos_tar_last_p = get_app_Target_position();
+
                 kCspMode.pos_tar_add_p = (float)(kCspMode.pos_tar_last_p - get_app_Position_actual_value()) * \
                                          get_app_Reduction_ratio() * get_app_P_load_2_motor();
-                kCspMode.pos_tar_p = kCspMode.pos_tar_add_p + get_app_Motor_position_actual_value(); //  转化到内环目标位置
+
+                if(load_enc_type == 0x00) //负载端无编码器 目标位置进行绝对位置控制
+                {
+                    if (get_app_Reduction_ratio_num() == 1) //减速比1:1  直接以电机端编码器位置为反馈
+                    {
+                        kCspMode.pos_tar_p = kCspMode.pos_tar_last_p;  
+                    }
+                    else //减速比大于1  以负载端位置为参考进行绝对位置控制
+                    {
+                        kCspMode.pos_tar_p = PosUnitLoadToMotor(kCspMode.pos_tar_last_p);
+                    }  
+                }
+                else  //负载端有编码器 目标位置进行相对位置控制
+                {
+                    kCspMode.pos_tar_p = kCspMode.pos_tar_add_p + get_app_Motor_position_actual_value(); //  转化到内环目标位置
+                }
+
 
                 kCspMode.traj.pos_tar_buff_p[0] = kCspMode.traj.pos_tar_buff_p[1];
                 kCspMode.traj.pos_tar_buff_p[1] = kCspMode.traj.pos_tar_buff_p[2];

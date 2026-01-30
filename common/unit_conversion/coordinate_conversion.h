@@ -87,6 +87,16 @@ inline int64_t PosUnitMotorToLoad(int64_t val) // 位置坐标转换 电机端�
     return pos_load;
 }
 
+inline int64_t PosUnitLoadToMotor(int64_t val)
+{
+    int64_t pos_motor = 0;
+    int64_t pos_load = val;
+
+    conver_num_div_den(&pos_load, &pos_motor, E_GEAR_RATIO);
+
+    return pos_motor;
+}
+
 #pragma endregion
 #ifdef __cplusplus
 }

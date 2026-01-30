@@ -41,6 +41,8 @@ AppResult PpModeRun()
 {
     kPpMode.now_Controlword = (APP_CONTROL_WORD)get_app_Controlword();
 
+    uint8_t load_enc_type = get_encoder_type(ENCODER_ID_LOAD);  //获取负载端编码器类型
+
     if (kPpMode.now_Controlword == APP_CTRL_ENABLE)
     {
         if (!get_app_Emergency_brake_requested())
@@ -102,7 +104,21 @@ AppResult PpModeRun()
                                            get_app_Reduction_ratio();
             }
 #else
-            kPpMode.traj.pos_tar_p = kPpMode.pos_tar_p_add + get_app_Motor_position_actual_value(); //  转化到内环目标位置
+            if(load_enc_type == 0x00) //负载端无编码器 目标位置进行绝对位置控制
+            {
+                if (get_app_Reduction_ratio_num() == 1) //减速比1:1  直接以电机端编码器位置为反馈
+                {
+                    kPpMode.traj.pos_tar_p = kPpMode.position_target_last;  
+                }
+                else //减速比大于1  以负载端位置为参考进行绝对位置控制
+                {
+                    kPpMode.traj.pos_tar_p = PosUnitLoadToMotor(kPpMode.position_target_last);;
+                }  
+            }
+            else  //负载端有编码器 目标位置进行相对位置控制
+            {
+                kPpMode.traj.pos_tar_p = kPpMode.pos_tar_p_add + get_app_Motor_position_actual_value(); //  转化到内环目标位置
+            }
 
             kPpMode.traj.profile_acc = get_app_Profile_acceleration() * get_app_Motor_rpm_2_pps() *
                                        get_app_Reduction_ratio();
