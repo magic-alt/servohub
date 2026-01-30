@@ -222,6 +222,31 @@ int64_t bsp_get_encoder_turns(ENCODER_ID const enc_id)
     return 0;
 }
 
+/**
+ * @brief 获取编码器类型
+ * @param[in] enc_id 编码器端ID： ENCODER_ID_MOTOR、ENCODER_ID_LOAD
+ * @return uint8_t 编码器类型
+ *  #define ENCODER_TYPE_NONE               0x00 // 无编码器
+    #define ENCODER_TYPE_INC_AB_ABZ         0x01 // 增量式通用AB/ABZ编码器，注：由于Y01硬件单接口，只可配置电机端/负载端任选一端
+    #define ENCODER_TYPE_ABS_RS485_TAMAGAWA 0x02 // 绝对式通用RS485多摩川编码器
+    #define ENCODER_TYPE_ABS_SPI_MT68XX     0x03 // 绝对式SPI MT68XX 编码器
+    #define ENCODER_TYPE_ABS_SPI_KTM59XX    0x04 // 绝对式SPI KTM59xx 编码器
+    #define ENCODER_TYPE_ABS_BISSC_SMC40S   0x05 // 绝对式SPI BISS-C SMC40S 编码器
+ */
+uint8_t bsp_get_encoder_type(ENCODER_ID const enc_id)
+{
+    if (enc_id == ENCODER_ID_MOTOR)  //虚拟电机默认是 ABZ编码器
+    {
+        return 0x01;  
+    }
+    else if (enc_id == ENCODER_ID_LOAD)  //虚拟电机无负载端编码器
+    {
+        return 0x00;  
+    }
+    return 0x00;
+}
+
+
 #pragma endregion
 
 #pragma region 通讯相关
