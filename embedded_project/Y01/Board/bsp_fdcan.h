@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 
+#define CAN_DATA_LEN_MAX            (8u)
 #define FDCAN_DATA_LEN_MAX          (64u)
 
 typedef enum {
@@ -25,7 +26,8 @@ typedef struct {
     FDCAN_HandleTypeDef *handle;        // FDCAN句柄指针
     FDCAN_FilterTypeDef sFilterConfig;  // 过滤器配置
     FDCAN_RxHeaderTypeDef rx_header;    // 接收帧头
-    FDCAN_TxHeaderTypeDef tx_header;    // 发送帧头
+    FDCAN_TxHeaderTypeDef tx_can;       // 发送CAN帧头
+    FDCAN_TxHeaderTypeDef tx_fdcan;     // 发送FDCAN帧头
     FDCAN_BaudrateTypeDef baudrate;     // 波特率
     uint32_t id;                        // CAN通信ID
     uint32_t mg_counts;                 // 接收消息计数器
@@ -34,15 +36,20 @@ typedef struct {
 } FDCAN_DeviceTypeDef;
 
 
-FDCAN_DeviceTypeDef* fdcan_get_bsp_fdcan(void);
-void fdcan_init(void);
-HAL_StatusTypeDef fdcan_send_message(FDCAN_DeviceTypeDef* bsp_fdcan, uint32_t id, \
-                                    uint8_t rtr, uint8_t* data, uint8_t len);
-void fdcan_set_id(uint32_t can_id);
-uint32_t fdcan_get_id(void);
-void fdcan_set_baudrate(uint32_t baudrate);
-uint32_t fdcan_get_baudrate(void);
-uint32_t fdcan_get_mg_counts(void);
+FDCAN_DeviceTypeDef* bsp_fdcan_get_fdcan_handle(void);
+void bsp_fdcan_init(void);
+void bsp_fdcan_set_id(uint32_t can_id);
+uint32_t bsp_fdcan_get_id(void);
+void bsp_fdcan_set_baudrate(uint32_t baudrate);
+uint32_t bsp_fdcan_get_baudrate(void);
+uint32_t bsp_fdcan_get_mg_counts(void);
+
+HAL_StatusTypeDef bsp_can_send_message(FDCAN_DeviceTypeDef* bsp_fdcan, uint32_t id, \
+                                       bool is_ide, bool is_rtr, uint8_t* data, uint8_t len);
+HAL_StatusTypeDef bsp_fdcan_send_message(FDCAN_DeviceTypeDef* bsp_fdcan, uint32_t std_id,\
+                                         bool is_ide, bool is_brs, uint8_t *data, uint8_t len);
+uint8_t bsp_fdcan_dlc_to_bytes(uint32_t dlc);
+uint32_t bsp_fdcan_bytes_to_dlc(uint8_t bytes_len);
 
 #ifdef __cplusplus
 }

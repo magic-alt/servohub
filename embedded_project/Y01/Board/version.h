@@ -25,17 +25,20 @@ extern "C"
 #if MINOR_VERSION == V_CAN_CIA402
 #define USE_CAN
 #define USE_CIA402
+#define USE_CAN_PASSTHROUGH
 #endif
 
 #if MINOR_VERSION == V_CAN_ENCOS
 #define USE_CAN
 #define USE_ENCOS
+#define USE_CAN_PASSTHROUGH
 #endif
 
 #if MINOR_VERSION == V_CANOPEN_CIA402
 #define USE_CAN
 #define USE_CANOPEN
 #define USE_CIA402
+#define USE_CAN_PASSTHROUGH
 #endif
 
 #if MINOR_VERSION == V_ECAT_CIA402
@@ -46,6 +49,7 @@ extern "C"
 #if MINOR_VERSION == V_CANFD_CUSTOM
 #define USE_CAN
 #define USE_CUSTOM
+#define USE_CAN_PASSTHROUGH
 #endif
 
 

@@ -25,6 +25,10 @@ static inline void fdcan_custom_handle(FDCAN_DeviceTypeDef* bsp_fdcan);
 static inline void fdcan_cia402_handle(FDCAN_DeviceTypeDef* bsp_fdcan);
 #endif
 
+#if defined (USE_CAN_PASSTHROUGH)
+static inline void fdcan_passthrough_handle(FDCAN_DeviceTypeDef* bsp_fdcan);
+#endif // USE_CAN_PASSTHROUGH
+
 typedef struct
 {
     FDCAN_DeviceTypeDef* p_fdcan;
@@ -52,8 +56,8 @@ static FDCAN_AppTypeDef drv_can_app =
 
 void fdcan_app_init(void)
 {
-    //fdcan_init(); // 已在更新波特率时初始化，此处不需要再初始化
-    drv_can_app.p_fdcan = fdcan_get_bsp_fdcan();
+    //bsp_fdcan_init(); // 已在更新波特率时初始化，此处不需要再初始化
+    drv_can_app.p_fdcan = bsp_fdcan_get_fdcan_handle();
 #ifdef USE_CANOPEN
     fdcan_canopen_init(drv_can_app.p_fdcan);
 #endif
@@ -69,7 +73,8 @@ void fdcan_app_fifo0_handle(FDCAN_HandleTypeDef* hfdcan)
     }
 
     // Get message from RX FIFO
-    if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &drv_can_app.p_fdcan->rx_header, drv_can_app.p_fdcan->rx_data) != HAL_OK)
+    if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &drv_can_app.p_fdcan->rx_header, \
+                               drv_can_app.p_fdcan->rx_data) != HAL_OK)
     {
         //Error_Handler();
         return;
@@ -87,7 +92,23 @@ void fdcan_app_fifo0_handle(FDCAN_HandleTypeDef* hfdcan)
 
 void fdcan_app_fifo1_handle(FDCAN_HandleTypeDef* hfdcan)
 {
-    return; // TODO：FIFO1处理
+    // Check if FDCAN handle is valid
+    if (drv_can_app.p_fdcan == NULL || drv_can_app.p_fdcan->handle != hfdcan)
+    {
+        sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
+        return;
+    }
+
+    // Get message from RX FIFO
+    if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO1, &drv_can_app.p_fdcan->rx_header, \
+                               drv_can_app.p_fdcan->rx_data) != HAL_OK)
+    {
+        //Error_Handler();
+        return;
+    }
+    #if defined (USE_CAN_PASSTHROUGH)
+        fdcan_passthrough_handle(drv_can_app.p_fdcan);
+    #endif // USE_CAN_PASSTHROUGH
 }
 
 #ifdef USE_CANOPEN
@@ -164,8 +185,8 @@ uint8_t canSend(CAN_PORT notused, Message *message)
         return 0; // failed
     }
 
-    if (HAL_OK != fdcan_send_message(drv_can_app.p_fdcan, \
-        message->cob_id, message->rtr, message->data, message->len))
+    if (HAL_OK != bsp_can_send_message(drv_can_app.p_fdcan, message->cob_id, false, \
+                                       (bool)message->rtr, message->data, message->len))
     {
         // 若发送失败，缓存消息，可在定时器中断中尝试重新发送（按需求实现）
         if (((drv_can_app.canopen.msg_pending_tail + 1) % CANOPEN_MSG_QUEUE_SIZE) != \
@@ -299,7 +320,7 @@ static inline void fdcan_cia402_handle(FDCAN_DeviceTypeDef* bsp_fdcan)
     bsp_fdcan->tx_data[7] = (obj_data >> 24) & 0xFF;
 
     // Send response
-    HAL_FDCAN_AddMessageToTxFifoQ(bsp_fdcan->handle, &bsp_fdcan->tx_header, bsp_fdcan->tx_data);
+    HAL_FDCAN_AddMessageToTxFifoQ(bsp_fdcan->handle, &bsp_fdcan->tx_can, bsp_fdcan->tx_data);
 }
 #endif // USE_CIA402
 
@@ -313,9 +334,164 @@ static inline void fdcan_cia402_handle(FDCAN_DeviceTypeDef* bsp_fdcan)
 static inline void fdcan_custom_handle(FDCAN_DeviceTypeDef* bsp_fdcan)
 {
     // Custom protocol handling logic：
-    bsp_fdcan->tx_header.DataLength = bsp_fdcan->rx_header.DataLength;
-    HAL_FDCAN_AddMessageToTxFifoQ(bsp_fdcan->handle, &bsp_fdcan->tx_header, bsp_fdcan->rx_data);
+    bool is_ide = bsp_fdcan->rx_header.IdType == FDCAN_EXTENDED_ID;
+    if (bsp_fdcan->rx_header.FDFormat == FDCAN_CLASSIC_CAN)
+    {
+        bsp_can_send_message(drv_can_app.p_fdcan, bsp_fdcan->id, is_ide, \
+                             false, bsp_fdcan->rx_data, bsp_fdcan->rx_header.DataLength);
+    }
+    else
+    {
+        bool is_brs = bsp_fdcan->rx_header.BitRateSwitch == FDCAN_BRS_ON;
+        bsp_fdcan_send_message(drv_can_app.p_fdcan, bsp_fdcan->id, is_ide, \
+                               is_brs, bsp_fdcan->rx_data, bsp_fdcan->rx_header.DataLength);
+    }
 }
 #endif // USE_CUSTOM
+
+#ifdef USE_CAN_PASSTHROUGH
+static inline void fdcan_passthrough_handle(FDCAN_DeviceTypeDef* bsp_fdcan)
+{
+    // Custom protocol handling logic：
+    uint16_t len;
+
+    /* DLC → 实际字节长度 */
+    len = bsp_fdcan_dlc_to_bytes(bsp_fdcan->rx_header.DataLength);
+
+    /* 根据 BRS 区分消息类型 */
+    if (bsp_fdcan->rx_header.BitRateSwitch == FDCAN_BRS_OFF)
+    {
+        MavlinkRecvCallback(&kAxis, &kAxisDw, bsp_fdcan->rx_data, len);
+    }
+}
+
+/**
+ * @brief  构造 29-bit CAN FD 扩展帧 ID（按协议位定义）
+ * @param  version     2 bit
+ * @param  flag_end    1 bit
+ * @param  cnt_tx      3 bit
+ * @param  seq         5 bit
+ * @param  flag        2 bit
+ * @param  compid      8 bit
+ * @param  sysid       5 bit
+ * @param  priority    3 bit（越小优先级越高）
+ * @return 29-bit CAN 扩展 ID（uint32_t）
+ */
+uint32_t fdcan_app_ide_make(uint8_t version,
+                            uint8_t flag_end,
+                            uint8_t cnt_tx,
+                            uint8_t seq,
+                            uint8_t flag,
+                            uint8_t compid,
+                            uint8_t sysid,
+                            uint8_t priority)
+{
+    return
+        (((uint32_t)(version  & 0x3))  << CANID_VERSION_SHIFT)  |
+
+        (((uint32_t)(flag_end & 0x1))  << CANID_FLAG_END_SHIFT) |
+
+        (((uint32_t)(cnt_tx   & 0x7))  << CANID_CNT_TX_SHIFT)   |
+
+        (((uint32_t)(seq      & 0x1F)) << CANID_SEQ_SHIFT)      |
+
+        (((uint32_t)(flag     & 0x3))  << CANID_FLAG_SHIFT)     |
+
+        (((uint32_t)(compid   & 0xFF)) << CANID_COMPID_SHIFT)   |
+
+        (((uint32_t)(sysid    & 0x1F)) << CANID_SYSID_SHIFT)    |
+
+        (((uint32_t)(priority & 0x7))  << CANID_PRIORITY_SHIFT);
+}
+
+// -----------------------------------------------------------
+// API 1: 发送函数 (自动分包)
+// -----------------------------------------------------------
+/**
+ * @brief  将 MAVLink buffer 分包并通过 CAN FD 发送
+ * @param  hfdcan: FDCAN 句柄
+ * @param  pData:  MAVLink 完整数据包指针 (包含 Header, Payload, CRC)
+ * @param  len:    数据总长度
+ * @param  sysId:  本机 System ID
+ * @param  compId: 本机 Component ID
+ * @param  priority: 优先级 (越小越高, 默认传 2)
+ * @return 0:成功, 1:失败
+ */
+// 内部静态变量，用于维护发送序列号 (0-31)
+static uint8_t g_tx_transfer_seq = 0;
+uint8_t fdcan_app_mav_send_packet(FDCAN_HandleTypeDef *hfdcan, uint8_t *pData, uint16_t len,
+                                  uint8_t sysId, uint8_t compId, uint8_t priority,uint8_t ch)
+{
+    FDCAN_TxHeaderTypeDef TxHeader;
+    uint32_t can_id_base = 0;
+    uint16_t sent_len = 0;
+    uint8_t cnt_of_tx = 0;
+    uint8_t chunk_size = 0;
+    uint8_t flag_end = 0;
+
+    // 1. 构建 ID 的静态部分 (不会随分包变化的部分)
+    can_id_base |= ((uint32_t)priority & 0x07) << CAN_POS_PRIORITY;
+    can_id_base |= ((uint32_t)sysId    & 0x1F) << CAN_POS_SYSID;
+    can_id_base |= ((uint32_t)compId   & 0xFF) << CAN_POS_COMPID;
+    can_id_base |= ((uint32_t)MAVCAN_BROADCAST_NONE & 0x03) << CAN_POS_FLAG_CAST;
+    can_id_base |= ((uint32_t)MAVCAN_VERSION      & 0x03) << CAN_POS_VERSION;
+
+    // 2. 配置通用发送头参数
+    TxHeader.IdType = FDCAN_EXTENDED_ID;
+    TxHeader.TxFrameType = FDCAN_DATA_FRAME;
+    TxHeader.ErrorStateIndicator = FDCAN_ESI_ACTIVE;
+
+    if (ch == CAFD_DEBUG)
+        TxHeader.BitRateSwitch = FDCAN_BRS_OFF; // 不开启加速
+    else
+        TxHeader.BitRateSwitch = FDCAN_BRS_ON; // 开启加速
+
+    TxHeader.FDFormat = FDCAN_FD_CAN;
+    TxHeader.TxEventFifoControl = FDCAN_NO_TX_EVENTS;
+    TxHeader.MessageMarker = 0;
+
+    // 3. 循环发送分包
+    while (sent_len < len)
+    {
+        // 计算本包大小
+        if ((len - sent_len) > 64) {
+            chunk_size = 64;
+            flag_end = 1; // 还有后续
+        } else {
+            chunk_size = (uint8_t)(len - sent_len);
+            flag_end = 0; // 最后一包
+        }
+
+        // 组合动态 ID 部分
+        TxHeader.Identifier = can_id_base;
+        TxHeader.Identifier |= ((uint32_t)g_tx_transfer_seq & 0x1F) << CAN_POS_TRANS_SEQ;
+        TxHeader.Identifier |= ((uint32_t)cnt_of_tx         & 0x07) << CAN_POS_CNT_OF_TX;
+        TxHeader.Identifier |= ((uint32_t)flag_end          & 0x01) << CAN_POS_FLAG_END;
+
+        // 设置长度
+        TxHeader.DataLength = bsp_fdcan_bytes_to_dlc(chunk_size);
+
+        // 等待 FIFO 空闲 (简单的忙等待，实际项目可加超时)
+        //while (HAL_FDCAN_GetTxFifoFreeLevel(hfdcan) == 0) {}
+
+        // 发送
+        if (HAL_FDCAN_AddMessageToTxFifoQ(hfdcan, &TxHeader, &pData[sent_len]) != HAL_OK) {
+            return 1; // 发送失败
+        }
+
+        sent_len += chunk_size;
+        cnt_of_tx++;
+
+        // 3bit计数器溢出保护 (MAVLink包通常不会超过 8*64=512字节)
+        if (cnt_of_tx > 7) break;
+    }
+
+    // 4. 整包发送完毕，序列号自增 (0-31循环)
+    g_tx_transfer_seq = (g_tx_transfer_seq + 1) & 0x1F;
+
+    return 0; // 成功
+}
+
+#endif // USE_CAN_PASSTHROUGH
 
 #endif // USE_CAN

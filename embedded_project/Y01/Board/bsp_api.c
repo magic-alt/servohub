@@ -423,7 +423,7 @@ uint8_t bsp_get_encoder_type(ENCODER_ID enc_id)
 void bsp_set_can_id(uint32_t can_id)
 {
 #ifdef USE_CAN
-    fdcan_set_id(can_id);
+    bsp_fdcan_set_id(can_id);
 #endif
 }
 /**
@@ -434,7 +434,7 @@ void bsp_set_can_id(uint32_t can_id)
 uint32_t bsp_get_can_id(void)
 {
 #ifdef USE_CAN
-    return fdcan_get_id();
+    return bsp_fdcan_get_id();
 #else
     return 0;
 #endif
@@ -448,7 +448,7 @@ uint32_t bsp_get_can_id(void)
 void bsp_set_can_baudrate(uint32_t baudrate)
 {
 #ifdef USE_CAN
-    fdcan_set_baudrate(baudrate);
+    bsp_fdcan_set_baudrate(baudrate);
 #endif
 }
 /**
@@ -459,7 +459,7 @@ void bsp_set_can_baudrate(uint32_t baudrate)
 uint32_t bsp_get_can_baudrate(void)
 {
 #ifdef USE_CAN
-    return fdcan_get_baudrate();
+    return bsp_fdcan_get_baudrate();
 #else
     return 0;
 #endif
@@ -472,7 +472,7 @@ uint32_t bsp_get_can_baudrate(void)
 uint32_t bsp_get_can_mg_counts(void)
 {
 #ifdef USE_CAN
-    return fdcan_get_mg_counts();
+    return bsp_fdcan_get_mg_counts();
 #else
     return 0;
 #endif

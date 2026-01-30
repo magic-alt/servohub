@@ -15,6 +15,57 @@ void fdcan_app_fifo1_handle(FDCAN_HandleTypeDef* hfdcan);
 void CANopen_DispatchFromISR(void);
 #endif // USE_CANOPEN
 
+#ifdef USE_CAN_PASSTHROUGH
+
+#define CAFD_RECV_BUFF_SIZE 300
+#define CAFD_SEND_BUFF_SIZE 300
+
+#define CAFD_MESSAGE 1
+#define CAFD_DEBUG   2
+
+/* ========= 位移定义 ========= */
+#define CANID_VERSION_SHIFT        0
+#define CANID_FLAG_END_SHIFT       2
+#define CANID_CNT_TX_SHIFT         3
+#define CANID_SEQ_SHIFT            6
+#define CANID_FLAG_SHIFT           11
+#define CANID_COMPID_SHIFT         13
+#define CANID_SYSID_SHIFT          21
+#define CANID_PRIORITY_SHIFT       26
+
+
+/* ========= 位掩码 ========= */
+#define CANID_VERSION_MASK   (0x3  << CANID_VERSION_SHIFT)
+#define CANID_FLAG_END_MASK  (0x1  << CANID_FLAG_END_SHIFT)
+#define CANID_CNT_TX_MASK    (0x7  << CANID_CNT_TX_SHIFT)
+#define CANID_SEQ_MASK       (0x1F << CANID_SEQ_SHIFT)
+#define CANID_FLAG_MASK      (0x3  << CANID_FLAG_SHIFT)
+#define CANID_COMPID_MASK    (0xFF << CANID_COMPID_SHIFT)
+#define CANID_SYSID_MASK     (0x1F << CANID_SYSID_SHIFT)
+#define CANID_PRIORITY_MASK  (0x7  << CANID_PRIORITY_SHIFT)
+// ==========================================
+// MAVCAN 协议位定义 (29Bit Extended ID)
+// ==========================================
+#define CAN_POS_PRIORITY      26 // [28:26] 3bit
+#define CAN_POS_SYSID         21 // [25:21] 5bit
+#define CAN_POS_COMPID        13 // [20:13] 8bit
+#define CAN_POS_FLAG_CAST     11 // [12:11] 2bit
+#define CAN_POS_TRANS_SEQ     6  // [10:6]  5bit
+#define CAN_POS_CNT_OF_TX     3  // [5:3]   3bit
+#define CAN_POS_FLAG_END      2  // [2]     1bit
+#define CAN_POS_VERSION       0  // [1:0]   2bit
+
+// 默认配置
+#define MAVCAN_VERSION        0
+#define MAVCAN_BROADCAST_NONE 0
+
+uint32_t fdcan_app_ide_make(uint8_t version, uint8_t flag_end, uint8_t cnt_tx, uint8_t seq, \
+                            uint8_t flag, uint8_t compid, uint8_t sysid, uint8_t priority);
+uint8_t fdcan_app_mav_send_packet(FDCAN_HandleTypeDef *hfdcan, uint8_t *pData, uint16_t len, \
+                              uint8_t sysId, uint8_t compId, uint8_t priority,uint8_t ch);
+
+#endif // USE_CAN_PASSTHROUGH
+
 #endif // USE_CAN
 #ifdef __cplusplus
 }
