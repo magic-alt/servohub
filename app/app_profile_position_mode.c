@@ -41,7 +41,7 @@ AppResult PpModeRun()
 {
     kPpMode.now_Controlword = (APP_CONTROL_WORD)get_app_Controlword();
 
-    uint8_t load_enc_type = get_encoder_type(ENCODER_ID_LOAD);  //获取负载端编码器类型
+    uint8_t load_enc_type = bsp_get_encoder_type(ENCODER_ID_LOAD);  //获取负载端编码器类型
 
     if (kPpMode.now_Controlword == APP_CTRL_ENABLE)
     {

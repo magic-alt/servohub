@@ -218,6 +218,7 @@ void EncoderDataProcess(void);
 uint32_t get_encoder_cnt(ENCODER_ID const enc_id);
 int64_t get_encoder_turns(ENCODER_ID const enc_id);
 bool get_encoder_status(ENCODER_ID const enc_id);
+uint8_t get_encoder_type(ENCODER_ID enc_id);
 void set_encoder_options(ENCODER_ID enc_id, uint8_t const options);
 void set_encoder_a_resolution(ENCODER_ID const enc_id, uint32_t const single_res, \
                               uint32_t const multi_res, uint32_t const single_less_factor);
