@@ -77,7 +77,7 @@ inline int32_t ForceCoordInternalToUser(int64_t val);  // 力坐标转换 内部
 
 #pragma region //其他数据转换
 
-inline int64_t PosUnitMotorToLoad(int64_t val) // 位置坐标转换 电机端转负载端
+static inline int64_t PosUnitMotorToLoad(int64_t val) // 位置坐标转换 电机端转负载端
 {
     int64_t pos_motor = val;
     int64_t pos_load = 0;
@@ -87,7 +87,7 @@ inline int64_t PosUnitMotorToLoad(int64_t val) // 位置坐标转换 电机端�
     return pos_load;
 }
 
-inline int64_t PosUnitLoadToMotor(int64_t val)
+static inline int64_t PosUnitLoadToMotor(int64_t val)
 {
     int64_t pos_motor = 0;
     int64_t pos_load = val;
