@@ -2322,15 +2322,19 @@ int64_t get_app_Position_actual_value_inc(void)
     
     if (bsp_get_encoder_type(ENCODER_ID_LOAD) == 0x00)  //负载端无编码器，内部位置反馈都以电机端编码器为参考
     {
-        kAppMotionInfo.Position_actual_value_inc = axis->motor_pos_sensor_output.enc_sum_p;
+        if (kAppMotorConfig.Reduction_ratio_num == 1) //减速比1:1  直接以电机端编码器位置为反馈
+        {
+             kAppMotionInfo.Position_actual_value_inc = axis->motor_pos_sensor_output.enc_sum_p;
+        }
+        else  //减速比不为1:1  将电机端编码器位置经过减速比换算到负载端脉冲数
+        {
+            kAppMotionInfo.Position_actual_value_inc = PosUnitMotorToLoad(axis->motor_pos_sensor_output.enc_sum_p);
+        }
     }
     else  //负载端有编码器则以负载端编码器为参考
     {
         kAppMotionInfo.Position_actual_value_inc = axis->load_pos_sensor_output.enc_sum_p;
     }
-    
-    
-
 
     /* USER CODE END get_app_Position_actual_value_inc */
     return kAppMotionInfo.Position_actual_value_inc;
@@ -2347,7 +2351,7 @@ uint32_t set_app_Position_actual_value(int64_t val)
 int64_t get_app_Position_actual_value(void)
 {
     /* USER CODE BEGIN get_app_Position_actual_value */
-    kAppMotionInfo.Position_actual_value = get_app_Position_actual_value_inc() - kAppBaseConfig.Home_position_offset_value;
+    kAppMotionInfo.Position_actual_value = kAppMotionInfo.Position_actual_value_inc - kAppBaseConfig.Home_position_offset_value;
     /* USER CODE END get_app_Position_actual_value */
     return kAppMotionInfo.Position_actual_value;
 }
@@ -3070,6 +3074,7 @@ uint32_t set_app_Reduction_ratio_num(uint32_t val)
     /* USER CODE END set_app_Reduction_ratio_num 0 */
     kAppMotorConfig.Reduction_ratio_num = val;
     /* USER CODE BEGIN set_app_Reduction_ratio_num 1 */
+    SetGearNumerator(kAppMotorConfig.Reduction_ratio_num);  //设置64bit快速除法分子
     kAppMotorConfig.Reduction_ratio = (float)kAppMotorConfig.Reduction_ratio_num / (float)kAppMotorConfig.Reduction_ratio_den;
     kAppMotorConfig.Reduction_ratio_inv = 1.0f / kAppMotorConfig.Reduction_ratio;
     /* USER CODE END set_app_Reduction_ratio_num 1 */
@@ -3088,6 +3093,7 @@ uint32_t set_app_Reduction_ratio_den(uint32_t val)
     /* USER CODE END set_app_Reduction_ratio_den 0 */
     kAppMotorConfig.Reduction_ratio_den = val;
     /* USER CODE BEGIN set_app_Reduction_ratio_den 1 */
+    SetGearDenominator(kAppMotorConfig.Reduction_ratio_den);   //设置64bit快速除法分母 
     kAppMotorConfig.Reduction_ratio = (float)kAppMotorConfig.Reduction_ratio_num / (float)kAppMotorConfig.Reduction_ratio_den;
     kAppMotorConfig.Reduction_ratio_inv = 1.0f / kAppMotorConfig.Reduction_ratio;
     /* USER CODE END set_app_Reduction_ratio_den 1 */
@@ -3652,7 +3658,7 @@ uint32_t set_app_Sys_cmd(uint8_t val)
         // 设置当前位置为系统零点
         // 负载端累计的绝对位置
         // 设置当前目标位置为0
-        kAppBaseConfig.Home_position_offset_value = get_app_Position_actual_value_inc();
+        kAppBaseConfig.Home_position_offset_value = kAppMotionInfo.Position_actual_value_inc;
         set_app_Target_position(0);
 
         break;

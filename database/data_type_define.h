@@ -9,7 +9,6 @@
 #include <string.h>
 
 #include "yuanhub_math.h"
-#include "coordinate_conversion.h"
 #include "motor_ctl_sm.h"
 #include "servo_system_cfg.h"
 
