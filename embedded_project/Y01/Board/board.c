@@ -260,11 +260,11 @@ void PWM_TIM_BREAK_IRQ_HANDLE(TIM_HandleTypeDef *htim)
  */
 void mavlink_send_data(uint8_t *pdata, uint32_t len)
 {
-#ifndef USE_CAN_PASSTHROUGH
+#ifndef USE_CAN_MAVLINK_HOST
     HAL_UART_Transmit_DMA(&HOST_UART_HANDLE, pdata, len);
 #else
     fdcan_app_mav_send_packet(&CAN_FDCAN_HANDLE, pdata, len, get_app_Sys_id(), \
-                              get_app_Comp_id(), 1, CAFD_MESSAGE);
+                              get_app_Comp_id(), 1, CANFD_MESSAGE);
 #endif
 }
 /**
@@ -284,9 +284,9 @@ void HOST_UART_IRQ_TASK(void)
 
         // 调用Mavlink数据接收回调函数，处理接收到的数据
         // 参数为接收缓冲区和实际接收到的数据长度
-    #ifndef USE_CAN_PASSTHROUGH
+    #ifndef USE_CAN_MAVLINK_HOST
         MavlinkRecvCallback(&kAxis, &kAxisDw, mavlink_rx_buff, MAVLINK_RECV_BUFF_SIZE - __HAL_DMA_GET_COUNTER(HOST_UART_HANDLE.hdmarx));
-    #endif /* USE_CAN_PASSTHROUGH */
+    #endif /* USE_CAN_MAVLINK_HOST */
         // 重新启动DMA接收，准备接收下一批数据
         HAL_UART_Receive_DMA(&HOST_UART_HANDLE, mavlink_rx_buff, MAVLINK_RECV_BUFF_SIZE);
     }

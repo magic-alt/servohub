@@ -16,7 +16,7 @@ extern "C"
 // 版本定义
 #define MAJOR_VERSION           (0x02)              // 主版本号
 #ifndef MINOR_VERSION           // 若工程编译选项或其他位置未定义次版本号，在此定义
-#define MINOR_VERSION           (V_CANOPEN_CIA402)      // 次版本号
+#define MINOR_VERSION           (V_CAN_CIA402)      // 次版本号
 #endif // MINOR_VERSION
 #define REVISION_VERSION        (0x02)              // 修订号
 #define BUILD_VERSION           (0x02)              // 构建号
@@ -25,33 +25,37 @@ extern "C"
 #if MINOR_VERSION == V_CAN_CIA402
 #define USE_CAN
 #define USE_CIA402
-#define USE_CAN_PASSTHROUGH
-#endif
+//#define USE_CAN_PASSTHROUGH
+#endif /* V_CAN_CIA402 */
 
 #if MINOR_VERSION == V_CAN_ENCOS
 #define USE_CAN
 #define USE_ENCOS
-#define USE_CAN_PASSTHROUGH
-#endif
+//#define USE_CAN_PASSTHROUGH
+#endif /* V_CAN_ENCOS */
 
 #if MINOR_VERSION == V_CANOPEN_CIA402
 #define USE_CAN
 #define USE_CANOPEN
 #define USE_CIA402
-#define USE_CAN_PASSTHROUGH
-#endif
+//#define USE_CAN_PASSTHROUGH
+#endif /* V_CANOPEN_CIA402 */
 
 #if MINOR_VERSION == V_ECAT_CIA402
 #define USE_ECAT
 #define USE_CIA402
-#endif
+#endif /* V_ECAT_CIA402 */
 
 #if MINOR_VERSION == V_CANFD_CUSTOM
 #define USE_CAN
 #define USE_CUSTOM
-#define USE_CAN_PASSTHROUGH
-#endif
+//#define USE_CAN_PASSTHROUGH
+#endif /* V_CANFD_CUSTOM */
 
+// 定义基于CAN透传开启MAVLink上位机调试功能
+#ifdef USE_CAN_PASSTHROUGH
+#define USE_CAN_MAVLINK_HOST
+#endif /* USE_CAN_PASSTHROUGH */
 
 #ifdef __cplusplus
 }

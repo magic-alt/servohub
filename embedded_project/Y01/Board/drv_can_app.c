@@ -361,7 +361,9 @@ static inline void fdcan_passthrough_handle(FDCAN_DeviceTypeDef* bsp_fdcan)
     /* 根据 BRS 区分消息类型 */
     if (bsp_fdcan->rx_header.BitRateSwitch == FDCAN_BRS_OFF)
     {
+    #ifdef USE_CAN_MAVLINK_HOST
         MavlinkRecvCallback(&kAxis, &kAxisDw, bsp_fdcan->rx_data, len);
+    #endif /* USE_CAN_MAVLINK_HOST */
     }
 }
 
@@ -441,7 +443,7 @@ uint8_t fdcan_app_mav_send_packet(FDCAN_HandleTypeDef *hfdcan, uint8_t *pData, u
     TxHeader.TxFrameType = FDCAN_DATA_FRAME;
     TxHeader.ErrorStateIndicator = FDCAN_ESI_ACTIVE;
 
-    if (ch == CAFD_DEBUG)
+    if (ch == CANFD_DEBUG)
         TxHeader.BitRateSwitch = FDCAN_BRS_OFF; // 不开启加速
     else
         TxHeader.BitRateSwitch = FDCAN_BRS_ON; // 开启加速

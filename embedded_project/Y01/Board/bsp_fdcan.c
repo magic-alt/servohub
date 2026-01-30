@@ -17,38 +17,66 @@ FDCAN_DeviceTypeDef* bsp_fdcan_get_fdcan_handle(void)
 }
 
 /**
- * @brief 初始化FDCAN
- * @details 1. 配置接收滤波器
- *          2. 配置全局滤波规则（拒绝不匹配帧和远程帧）
- *          3. 启动FDCAN模块并激活接收中断
+ * @brief 初始化CAN/FDCAN
+ * @details 1. 配置FDCAN初始化参数
+ *          2. 配置全局滤波规则
+ *          3. 配置接收滤波器
+ *          4. 启动FDCAN模块并激活接收中断
  */
-void bsp_fdcan_init(void)
+HAL_StatusTypeDef bsp_fdcan_init(void)
 {
+    HAL_StatusTypeDef ret = HAL_OK;
+
+    // 配置FDCAN句柄初始化参数（基于80MHz时钟）
+    bsp_fdcan.handle->Instance = CAN_FDCAN_NUMBER;
+    bsp_fdcan.handle->Init.FrameFormat = FDCAN_FRAME_FD_NO_BRS;         // 无速率切换的FD格式
+    bsp_fdcan.handle->Init.Mode = FDCAN_MODE_NORMAL;                    // 正常工作模式
+    bsp_fdcan.handle->Init.AutoRetransmission = ENABLE;                 // 启用自动重传
+    bsp_fdcan.handle->Init.TransmitPause = ENABLE;                      // 启用发送暂停
+    bsp_fdcan.handle->Init.ProtocolException = DISABLE;                 // 禁用协议异常处理
+    bsp_fdcan.handle->Init.MessageRAMOffset = 0;                        // 消息RAM偏移量为0
+    bsp_fdcan.handle->Init.StdFiltersNbr = 1;                           // 标准滤波器数量
+    bsp_fdcan.handle->Init.ExtFiltersNbr = 3;                           // 扩展滤波器数量
+    bsp_fdcan.handle->Init.TxFifoQueueMode = FDCAN_TX_FIFO_OPERATION;   // TX FIFO模式
+
+    // 初始化FDCAN外设
+    ret = HAL_FDCAN_Init(bsp_fdcan.handle);
+    if (ret != HAL_OK) return ret;
+
+    // 配置全局滤波：拒绝所有不匹配的标准/扩展帧和远程帧
+    ret = HAL_FDCAN_ConfigGlobalFilter(bsp_fdcan.handle, \
+                                       FDCAN_REJECT, FDCAN_REJECT, \
+                                       FDCAN_FILTER_REMOTE, FDCAN_FILTER_REMOTE);
+    if (ret != HAL_OK) return ret;
+
+// 配置FIFO0滤波器
 #ifdef USE_CANOPEN
     // CANopen协议，节点号最大为127
-    if (bsp_fdcan.id > 0x7F)
+    if (bsp_fdcan.id > CANOPEN_ID_MAX)
     {
-        sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
-        return;
+        ret = HAL_ERROR;
+        return ret;
     }
-    bsp_fdcan.sFilterConfig.FilterID1 = bsp_fdcan.id;               // 基准ID：高4位任意（设为0），低7位为目标节点号
-    bsp_fdcan.sFilterConfig.FilterID2 = 0x07F;                      // 掩码：高4位0（不关心功能码），低7位1（严格匹配节点号）
+    bsp_fdcan.sFilterConfig.FilterID1 = bsp_fdcan.id;       // 基准ID：高4位任意（设为0），低7位为目标节点号
+    bsp_fdcan.sFilterConfig.FilterID2 = CANOPEN_ID_MAX;     // 掩码：高4位0（不关心功能码），低7位1（严格匹配节点号）
+    bsp_fdcan.sFilterConfig.IdType = FDCAN_STANDARD_ID;                 // 使用标准ID
+    bsp_fdcan.sFilterConfig.FilterIndex = CANID_STD_FILTER_FUNC_SLAVE;  // 滤波器索引
+    bsp_fdcan.sFilterConfig.FilterType = FDCAN_FILTER_MASK;             // 掩码过滤模式
 #else //其他CAN协议
-    bsp_fdcan.sFilterConfig.FilterID1 = 0x000;                      // 过滤ID（掩码模式下为基准ID）
-    bsp_fdcan.sFilterConfig.FilterID2 = 0x000;                      // 掩码为0，不过滤任何ID
+    bsp_fdcan.sFilterConfig.FilterID1 = 0x000;              // 过滤ID（掩码模式下为基准ID）
+    bsp_fdcan.sFilterConfig.FilterID2 = 0x000;              // 掩码为0，不过滤任何ID
+    bsp_fdcan.sFilterConfig.IdType = FDCAN_STANDARD_ID;                 // 使用标准ID
+    bsp_fdcan.sFilterConfig.FilterIndex = 0;                            // 滤波器索引
+    bsp_fdcan.sFilterConfig.FilterType = FDCAN_FILTER_MASK;             // 掩码过滤模式
 #endif /* USE_CANOPEN */
-    // 配置接收滤波器：标准ID，掩码模式，接收所有ID
-    bsp_fdcan.sFilterConfig.IdType = FDCAN_STANDARD_ID;             // 使用标准ID
-    bsp_fdcan.sFilterConfig.FilterIndex = 0;                        // 滤波器索引
-    bsp_fdcan.sFilterConfig.FilterType = FDCAN_FILTER_MASK;         // 掩码过滤模式
-    bsp_fdcan.sFilterConfig.FilterConfig = FDCAN_FILTER_TO_RXFIFO0; // 过滤后的数据送入FIFO0
-    if (HAL_FDCAN_ConfigFilter(bsp_fdcan.handle, &bsp_fdcan.sFilterConfig) != HAL_OK)
-    {
-        sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
-    }
-
+    bsp_fdcan.sFilterConfig.FilterConfig = FDCAN_FILTER_TO_RXFIFO0;     // 过滤后的数据送入FIFO0
+    ret = HAL_FDCAN_ConfigFilter(bsp_fdcan.handle, &bsp_fdcan.sFilterConfig);
+    if (ret != HAL_OK) return ret;
+    // 激活FIFO0新消息中断
+    ret = HAL_FDCAN_ActivateNotification(bsp_fdcan.handle, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
+    if (ret != HAL_OK) return ret;
+// 配置FIFO1滤波器
 #ifdef USE_CAN_PASSTHROUGH
-    // 配置透传接收滤波器FIFO1
     bsp_fdcan.sFilterConfig.IdType = FDCAN_EXTENDED_ID;             // 使用扩展ID
     bsp_fdcan.sFilterConfig.FilterType = FDCAN_FILTER_MASK;         // 掩码过滤模式
     bsp_fdcan.sFilterConfig.FilterConfig = FDCAN_FILTER_TO_RXFIFO1; // 过滤后的数据送入FIFO1
@@ -56,64 +84,44 @@ void bsp_fdcan_init(void)
      * flag = 2 (10b) 2bit
      * 只匹配 flag 字段
      */
-    bsp_fdcan.sFilterConfig.FilterIndex = 0;                        // 滤波器索引
-    bsp_fdcan.sFilterConfig.FilterID1   = (2U << CANID_FLAG_SHIFT);
+    bsp_fdcan.sFilterConfig.FilterIndex = CANID_EXT_FILTER_FUNC_GLOBAL;
+    bsp_fdcan.sFilterConfig.FilterID1   = (CANID_FLAG_GLOBAL << CANID_FLAG_SHIFT);
     bsp_fdcan.sFilterConfig.FilterID2   = CANID_FLAG_MASK;
-    if (HAL_FDCAN_ConfigFilter(bsp_fdcan.handle, &bsp_fdcan.sFilterConfig) != HAL_OK)
-    {
-        sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
-    }
+    ret = HAL_FDCAN_ConfigFilter(bsp_fdcan.handle, &bsp_fdcan.sFilterConfig);
+    if (ret != HAL_OK) return ret;
 
     /* ================= Filter 1：系统内广播 =================
      * flag = 1 (01b) 2bit
      * 匹配 flag + sysid
      */
-    bsp_fdcan.sFilterConfig.FilterIndex = 1;
-    bsp_fdcan.sFilterConfig.FilterID1   = (1U << CANID_FLAG_SHIFT) | ((uint32_t)get_app_Sys_id() << CANID_SYSID_SHIFT);
+    bsp_fdcan.sFilterConfig.FilterIndex = CANID_EXT_FILTER_FUNC_SYSTEM;
+    bsp_fdcan.sFilterConfig.FilterID1   = (CANID_FLAG_SYSTEM << CANID_FLAG_SHIFT) | \
+                                          ((uint32_t)get_app_Sys_id() << CANID_SYSID_SHIFT);
     bsp_fdcan.sFilterConfig.FilterID2   = CANID_FLAG_MASK | CANID_SYSID_MASK;
-    if (HAL_FDCAN_ConfigFilter(bsp_fdcan.handle, &bsp_fdcan.sFilterConfig) != HAL_OK)
-    {
-        sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
-    }
+    ret = HAL_FDCAN_ConfigFilter(bsp_fdcan.handle, &bsp_fdcan.sFilterConfig);
+    if (ret != HAL_OK) return ret;
 
     /* ================= Filter 2：单设备通信 =================
      * compid = 0xFF (1111 1111b) 8bit
      * sysid  = 0x1F    (1 1111b) 5bit
      * 匹配 compid + sysid
      */
-    bsp_fdcan.sFilterConfig.FilterIndex = 2;
-    bsp_fdcan.sFilterConfig.FilterID1   = ((uint32_t)get_app_Comp_id() << CANID_COMPID_SHIFT) | ((uint32_t)get_app_Sys_id() << CANID_SYSID_SHIFT);
+    bsp_fdcan.sFilterConfig.FilterIndex = CANID_EXT_FILTER_FUNC_SLAVE;
+    bsp_fdcan.sFilterConfig.FilterID1   = ((uint32_t)get_app_Comp_id() << CANID_COMPID_SHIFT) | \
+                                          ((uint32_t)get_app_Sys_id() << CANID_SYSID_SHIFT);
     bsp_fdcan.sFilterConfig.FilterID2   = CANID_COMPID_MASK | CANID_SYSID_MASK;
-    if (HAL_FDCAN_ConfigFilter(bsp_fdcan.handle, &bsp_fdcan.sFilterConfig) != HAL_OK)
-    {
-        sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
-    }
-#endif /* USE_CAN_PASSTHROUGH */
+    ret = HAL_FDCAN_ConfigFilter(bsp_fdcan.handle, &bsp_fdcan.sFilterConfig);
+    if (ret != HAL_OK) return ret;
 
-    // 配置全局滤波：拒绝所有不匹配的标准/扩展帧和远程帧
-    if (HAL_FDCAN_ConfigGlobalFilter(bsp_fdcan.handle, \
-                                    FDCAN_REJECT, FDCAN_REJECT, \
-                                    FDCAN_FILTER_REMOTE, FDCAN_FILTER_REMOTE) != HAL_OK)
-    {
-        sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
-    }
-    // 激活FIFO0新消息中断
-    if (HAL_FDCAN_ActivateNotification(bsp_fdcan.handle, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0) != HAL_OK)
-    {
-        sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
-    }
-#ifdef USE_CAN_PASSTHROUGH
     // 激活FIFO1新消息中断
-    if (HAL_FDCAN_ActivateNotification(bsp_fdcan.handle, FDCAN_IT_RX_FIFO1_NEW_MESSAGE, 0) != HAL_OK)
-    {
-        sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
-    }
+    ret = HAL_FDCAN_ActivateNotification(bsp_fdcan.handle, FDCAN_IT_RX_FIFO1_NEW_MESSAGE, 0);
+    if (ret != HAL_OK) return ret;
 #endif /* USE_CAN_PASSTHROUGH */
     // 启动FDCAN模块
-    if (HAL_FDCAN_Start(bsp_fdcan.handle) != HAL_OK)
-    {
-        sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
-    }
+    ret = HAL_FDCAN_Start(bsp_fdcan.handle);
+    if (ret != HAL_OK) return ret;
+
+    return ret;
 }
 
 /**
@@ -200,28 +208,13 @@ void bsp_fdcan_set_baudrate(uint32_t baudrate)
             return;
     }
 
-    // 配置FDCAN句柄参数（基于80MHz时钟）
-    bsp_fdcan.handle->Instance = CAN_FDCAN_NUMBER;
-    bsp_fdcan.handle->Init.FrameFormat = FDCAN_FRAME_FD_NO_BRS;  // 无速率切换的FD格式
-    bsp_fdcan.handle->Init.Mode = FDCAN_MODE_NORMAL;             // 正常工作模式
-    bsp_fdcan.handle->Init.AutoRetransmission = ENABLE;          // 启用自动重传
-    bsp_fdcan.handle->Init.TransmitPause = ENABLE;               // 启用发送暂停
-    bsp_fdcan.handle->Init.ProtocolException = DISABLE;          // 禁用协议异常处理
-    bsp_fdcan.handle->Init.StdFiltersNbr = 1;                    // 1个标准滤波器
-    bsp_fdcan.handle->Init.ExtFiltersNbr = 3;                    // 3个扩展滤波器
-    bsp_fdcan.handle->Init.TxFifoQueueMode = FDCAN_TX_FIFO_OPERATION; // TX FIFO模式
-
-    // 初始化FDCAN，失败则恢复默认波特率
-    if (HAL_FDCAN_Init(bsp_fdcan.handle) != HAL_OK)
+    if (bsp_fdcan_init() != HAL_OK) // 初始化FDCAN模块，配置参数
     {
         sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
         return;
     }
 
     bsp_fdcan.baudrate = baudrate;
-
-    // 通过设置波特率，初始化
-    bsp_fdcan_init();
 }
 
 /**

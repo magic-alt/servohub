@@ -12,16 +12,28 @@ void fdcan_app_fifo0_handle(FDCAN_HandleTypeDef* hfdcan);
 void fdcan_app_fifo1_handle(FDCAN_HandleTypeDef* hfdcan);
 
 #ifdef USE_CANOPEN
+#define CANOPEN_ID_MAX      (0x7F)
+#define CANID_STD_FILTER_FUNC_SLAVE 0
 void CANopen_DispatchFromISR(void);
 #endif // USE_CANOPEN
 
 #ifdef USE_CAN_PASSTHROUGH
 
-#define CAFD_RECV_BUFF_SIZE 300
-#define CAFD_SEND_BUFF_SIZE 300
+#define CANFD_RECV_BUFF_SIZE 300
+#define CANFD_SEND_BUFF_SIZE 300
 
-#define CAFD_MESSAGE 1
-#define CAFD_DEBUG   2
+#define CANFD_MESSAGE 1
+#define CANFD_DEBUG   2
+
+/* ========= 滤波器ID 相关定义 ========= */
+// 滤波器ID Flag定义
+#define CANID_FLAG_GLOBAL           2U
+#define CANID_FLAG_SYSTEM           1U
+
+// 滤波器ID 索引定义
+#define CANID_EXT_FILTER_FUNC_GLOBAL 0U
+#define CANID_EXT_FILTER_FUNC_SYSTEM 1U
+#define CANID_EXT_FILTER_FUNC_SLAVE  2U
 
 /* ========= 位移定义 ========= */
 #define CANID_VERSION_SHIFT        0

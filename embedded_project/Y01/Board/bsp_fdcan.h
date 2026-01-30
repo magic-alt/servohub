@@ -37,7 +37,7 @@ typedef struct {
 
 
 FDCAN_DeviceTypeDef* bsp_fdcan_get_fdcan_handle(void);
-void bsp_fdcan_init(void);
+HAL_StatusTypeDef bsp_fdcan_init(void);
 void bsp_fdcan_set_id(uint32_t can_id);
 uint32_t bsp_fdcan_get_id(void);
 void bsp_fdcan_set_baudrate(uint32_t baudrate);
