@@ -70,7 +70,8 @@ bool bsp_get_encoder_state(ENCODER_ID const enc_id);
 uint32_t bsp_get_encoder_cnt(ENCODER_ID const enc_id);
 /* 获取编码器多圈值 */
 int64_t bsp_get_encoder_turns(ENCODER_ID const enc_id);
-
+/* 获取编码器类型 */
+uint8_t bsp_get_encoder_type(ENCODER_ID enc_id);
 #pragma endregion
 
 #pragma region 通讯相关

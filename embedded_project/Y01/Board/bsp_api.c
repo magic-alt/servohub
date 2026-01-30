@@ -396,6 +396,21 @@ int64_t bsp_get_encoder_turns(ENCODER_ID const enc_id)
 #endif
 }
 
+/**
+ * @brief 获取编码器类型
+ * @param[in] enc_id 编码器ID
+ * @retval type 编码器类型  eg：0x00 ENCODER_TYPE_NONE、ENCODER_TYPE_INC_AB_ABZ...
+ */
+uint8_t bsp_get_encoder_type(ENCODER_ID enc_id)
+{
+#ifdef VIRTUAL_MOTOR_MODEL
+    return ENCODER_TYPE_INC_AB_ABZ;
+#else
+    return get_encoder_type(enc_id);
+#endif
+}
+
+
 #pragma endregion
 
 #pragma region 通讯相关

@@ -2319,7 +2319,19 @@ uint32_t set_app_Position_actual_value_inc(int64_t val)
 int64_t get_app_Position_actual_value_inc(void)
 {
     /* USER CODE BEGIN get_app_Position_actual_value_inc */
-    kAppMotionInfo.Position_actual_value_inc = axis->load_pos_sensor_output.enc_sum_p;
+    
+    if (bsp_get_encoder_type(ENCODER_ID_LOAD) == 0x00)  //负载端无编码器，内部位置反馈都以电机端编码器为参考
+    {
+        kAppMotionInfo.Position_actual_value_inc = axis->motor_pos_sensor_output.enc_sum_p;
+    }
+    else  //负载端有编码器则以负载端编码器为参考
+    {
+        kAppMotionInfo.Position_actual_value_inc = axis->load_pos_sensor_output.enc_sum_p;
+    }
+    
+    
+
+
     /* USER CODE END get_app_Position_actual_value_inc */
     return kAppMotionInfo.Position_actual_value_inc;
 }
@@ -2335,7 +2347,7 @@ uint32_t set_app_Position_actual_value(int64_t val)
 int64_t get_app_Position_actual_value(void)
 {
     /* USER CODE BEGIN get_app_Position_actual_value */
-    kAppMotionInfo.Position_actual_value = axis->load_pos_sensor_output.enc_sum_p - kAppBaseConfig.Home_position_offset_value;
+    kAppMotionInfo.Position_actual_value = get_app_Position_actual_value_inc() - kAppBaseConfig.Home_position_offset_value;
     /* USER CODE END get_app_Position_actual_value */
     return kAppMotionInfo.Position_actual_value;
 }
@@ -3640,7 +3652,7 @@ uint32_t set_app_Sys_cmd(uint8_t val)
         // 设置当前位置为系统零点
         // 负载端累计的绝对位置
         // 设置当前目标位置为0
-        kAppBaseConfig.Home_position_offset_value = axis->load_pos_sensor_output.enc_sum_p;
+        kAppBaseConfig.Home_position_offset_value = get_app_Position_actual_value_inc();
         set_app_Target_position(0);
 
         break;

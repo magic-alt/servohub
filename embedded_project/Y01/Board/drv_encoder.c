@@ -250,25 +250,25 @@ void EncoderDataProcess(void)
             encoder_data[enc_id].b_multi_raw = i64_calc_temp;
         }
     }
-    // 统一更新编码器数据, 需根据实际编码器1、2接口读取的编码器数据更新电机端、负载端编码器数据
-    // encoder_data[ENCODER_ID_MOTOR].single_cnt = encoder_data[ENCODER_ID_1].a_single_raw;
-    // encoder_data[ENCODER_ID_MOTOR].multi_turns = encoder_data[ENCODER_ID_1].a_multi_raw;
-    // encoder_data[ENCODER_ID_LOAD].single_cnt = encoder_data[ENCODER_ID_2].a_single_raw;
-    // encoder_data[ENCODER_ID_LOAD].multi_turns = encoder_data[ENCODER_ID_2].a_multi_raw;
 
-    // 电机端/负载端编码器是否存在，不存在则使用另外一端编码器的值，都不存在按如下方式处理不影响
-    // 电机端数据源：优先使用编码器1，如果编码器1不存在则使用编码器2
-    const ENCODER_ID motor_encoder_source = (encoder_data[ENCODER_ID_1].type != ENCODER_TYPE_NONE) ?
-                                            ENCODER_ID_1 : ENCODER_ID_2;
-    // 负载端数据源：优先使用编码器2，如果编码器2不存在则使用编码器1
-    const ENCODER_ID load_encoder_source = (encoder_data[ENCODER_ID_2].type != ENCODER_TYPE_NONE) ?
-                                            ENCODER_ID_2 : ENCODER_ID_1;
-    // 设置电机端编码器数据
-    encoder_data[ENCODER_ID_MOTOR].single_cnt = encoder_data[motor_encoder_source].a_single_raw;
-    encoder_data[ENCODER_ID_MOTOR].multi_turns = encoder_data[motor_encoder_source].a_multi_raw;
-    // 设置负载端编码器数据
-    encoder_data[ENCODER_ID_LOAD].single_cnt = encoder_data[load_encoder_source].a_single_raw;
-    encoder_data[ENCODER_ID_LOAD].multi_turns = encoder_data[load_encoder_source].a_multi_raw;
+    if(encoder_data[ENCODER_ID_2].type == ENCODER_TYPE_NONE)  //只有电机端编码器 
+    {
+        // 设置电机端编码器数据
+        encoder_data[ENCODER_ID_MOTOR].single_cnt = encoder_data[ENCODER_ID_1].a_single_raw;
+        encoder_data[ENCODER_ID_MOTOR].multi_turns = encoder_data[ENCODER_ID_1].a_multi_raw;
+        // 设置负载端编码器数据
+        encoder_data[ENCODER_ID_LOAD].single_cnt = 0;
+        encoder_data[ENCODER_ID_LOAD].multi_turns = 0;
+    }
+    else if (encoder_data[ENCODER_ID_2].type != ENCODER_TYPE_NONE) //双编码器 电机端+负载端编码器
+    {
+        // 设置电机端编码器数据
+        encoder_data[ENCODER_ID_MOTOR].single_cnt = encoder_data[ENCODER_ID_1].a_single_raw;
+        encoder_data[ENCODER_ID_MOTOR].multi_turns = encoder_data[ENCODER_ID_1].a_multi_raw;
+        // 设置负载端编码器数据
+        encoder_data[ENCODER_ID_LOAD].single_cnt = encoder_data[ENCODER_ID_2].a_single_raw;
+        encoder_data[ENCODER_ID_LOAD].multi_turns = encoder_data[ENCODER_ID_2].a_multi_raw;
+    }
 }
 
 /**
@@ -324,6 +324,16 @@ bool get_encoder_status(ENCODER_ID const enc_id)
     #endif
     }
     return false;
+}
+
+/**
+ * @brief 获取编码器类型
+ * @param[in] enc_id 编码器ID
+ * @retval type 编码器类型  eg：ENCODER_TYPE_NONE、ENCODER_TYPE_INC_AB_ABZ...
+ */
+uint8_t get_encoder_type(ENCODER_ID enc_id)
+{
+    return encoder_data[enc_id].type;
 }
 
 /**
