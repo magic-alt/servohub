@@ -21,6 +21,9 @@ void SetAccDenominator(uint32_t val);          // 设置加速度单位分母
 void SetForceNumerator(uint32_t val);          // 设置力单位分子
 void SetForceDenominator(uint32_t val);        // 设置力单位分母
 
+void SetGearNumerator(uint32_t val);           // 设置齿轮比分子
+void SetGearDenominator(uint32_t val);         // 设置齿轮比母子
+
 #pragma endregion
 
 #pragma region //极性设置
@@ -72,6 +75,19 @@ inline int32_t ForceCoordInternalToUser(int64_t val);  // 力坐标转换 内部
 
 #pragma endregion
 
+#pragma region //其他数据转换
+
+inline int64_t PosUnitMotorToLoad(int64_t val) // 位置坐标转换 电机端转负载端
+{
+    int64_t pos_motor = val;
+    int64_t pos_load = 0;
+
+    conver_den_div_num(&pos_motor, &pos_load, E_GEAR_RATIO);
+
+    return pos_load;
+}
+
+#pragma endregion
 #ifdef __cplusplus
 }
 #endif

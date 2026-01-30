@@ -3,6 +3,8 @@
 
 /* #include "yuanhub_math.h" */
 
+#include "coordinate_conversion.h"
+
 //根据不同硬件平台选择对应库函数
 #if defined(ARM_MATH_CM7) || defined(ARM_MATH_CM4) || defined(ARM_MATH_CM3)
 #include "arm_math.h"

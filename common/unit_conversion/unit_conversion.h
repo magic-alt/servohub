@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdint.h>
 
-#define UNIT_CONVERSION_NUM 5
+#define UNIT_CONVERSION_NUM 6
 typedef enum
 {
     E_POSITION_UNIT = 0,
@@ -15,6 +15,9 @@ typedef enum
     E_ACCELERATION_UNIT,
     E_TORQUE_UNIT,
     E_FORCE_UNIT,
+
+    E_GEAR_RATIO,
+
     E_UNIT_CONVERSION_MAX = 0xFF
 
 } UNIT_CONVERSION_TYPE;

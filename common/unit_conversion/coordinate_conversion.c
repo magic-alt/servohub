@@ -53,6 +53,18 @@ void SetForceDenominator(uint32_t val)
     set_denominator(val, E_FORCE_UNIT);
 }
 
+// 设置齿轮比分子
+void SetGearNumerator(uint32_t val)
+{
+    set_numerator(val, E_GEAR_RATIO);
+}
+
+// 设置齿轮比分母
+void SetGearDenominator(uint32_t val)
+{
+    set_denominator(val, E_GEAR_RATIO);
+}
+
 #pragma endregion
 
 
