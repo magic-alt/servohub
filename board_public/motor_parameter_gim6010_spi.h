@@ -13,13 +13,13 @@ extern "C"
 // --------------------------
 // 电机参数
 #define PMSM_J                          (5.00e-05f)                     // 电机转动惯量（kg*m^2）
-#define PMSM_Lp2p                       (2.30e-04f)                     // 相间电感（H）
-#define PMSM_Rp2p                       (4.40e-01f)                     // 相间电阻（Ω）
-#define PMSM_RATED_CURRENT              (10.0f)                         // 电机额定电流（A）
-#define PMSM_PEAK_CURRENT               (23.0f)                         // 电机峰值电流（A）
+#define PMSM_Lp2p                       (0.82e-03f)                     // 相间电感（H）
+#define PMSM_Rp2p                       (1.45f)                         // 相间电阻（Ω）
+#define PMSM_RATED_CURRENT              (3.8f)                          // 电机额定电流（A）
+#define PMSM_PEAK_CURRENT               (19.5f)                         // 电机峰值电流（A）
 #define PMSM_PN                         (14.0f)                         // 极对数（N）
-#define PMSM_SPEED_MAX_RPM              (3300.0f)                       // 电机最大转速（RPM）
-#define PMSM_TORQUE_CONSTANT_MNM_A      (470.00f)                       // 电机转矩常数（mN*M/A）
+#define PMSM_SPEED_MAX_RPM              (2500.0f)                       // 电机最大转速（RPM）
+#define PMSM_TORQUE_CONSTANT_MNM_A      (1200.00f)                      // 电机转矩常数（mN*M/A）
 // 编码器类型通过宏定义指定
 #define ENCODER1_TYPE_OPTION            (ENCODER_TYPE_ABS_SPI_MT68XX)   // 电机端编码器类型
 #define ENCODER2_TYPE_OPTION            (ENCODER_TYPE_ABS_SPI_MT68XX)   // 负载端编码器类型
@@ -62,10 +62,10 @@ extern "C"
 // 电机控制参数
 // --------------------------
 // 电流环参数
-#define CURRENT_CTL_CONFIG_KP_LD                    (3.83e-1f)          // d轴电流环比例增益
-#define CURRENT_CTL_CONFIG_KI_LD                    (1.91e+03f)         // d轴电流环积分增益
-#define CURRENT_CTL_CONFIG_KP_LQ                    (3.83e-1f)          // q轴电流环比例增益
-#define CURRENT_CTL_CONFIG_KI_LQ                    (1.91e+03f)         // q轴电流环积分增益
+#define CURRENT_CTL_CONFIG_KP_LD                    (1.37e+00f)         // d轴电流环比例增益
+#define CURRENT_CTL_CONFIG_KI_LD                    (1.77e+03f)         // d轴电流环积分增益
+#define CURRENT_CTL_CONFIG_KP_LQ                    (1.37e+00f)         // q轴电流环比例增益
+#define CURRENT_CTL_CONFIG_KI_LQ                    (1.77e+03f)         // q轴电流环积分增益
 #define CURRENT_CTL_CONFIG_PWM_DUTY_CYCLE_MAX       (0.9f)              // 最大占空比
 #define CURRENT_CTL_CONFIG_ELEC_ANGLE_COMPENSATION  (2.0f)              // 电角度补偿系数
 #define CURRENT_CTL_CONFIG_PHASE_DIR                (1)                 // 电机相序 1:abc -1:cba
@@ -73,8 +73,8 @@ extern "C"
 // 位置速度环参数
 #define POS_SPEED_CTL_CONFIG_KP_P                   (1.47e+02f)         // 位置环比例增益
 #define POS_SPEED_CTL_CONFIG_KI_S                   (1.47e+02f)         // 速度环积分增益
-#define POS_SPEED_CTL_CONFIG_KP_S                   (1.25e-01f)         // 速度环比例增益
-#define POS_SPEED_CTL_CONFIG_J_KT                   (1.06e-04f)         // 惯性系数
+#define POS_SPEED_CTL_CONFIG_KP_S                   (1.97e-01f)         // 速度环比例增益
+#define POS_SPEED_CTL_CONFIG_J_KT                   (1.67e-04f)         // 惯性系数
 #define POS_SPEED_CTL_CONFIG_AFF                    (0.0f)              // 加速度前馈增益
 #define POS_SPEED_CTL_CONFIG_VFF                    (1.0f)              // 速度前馈增益
 
@@ -83,7 +83,7 @@ extern "C"
 #define POS_SPEED_CTL_CONFIG_DOB_WN_HZ              (4.00e+02f)         // 负载扰动观测器角频率（Hz）
 
 // 速度观测器带宽
-#define SPEED_OBS_PLL_WN_HZ                         (9.60e+02f)         // 速度观测器带宽（Hz）
+#define SPEED_OBS_PLL_WN_HZ                         (1200.0f)         // 速度观测器带宽（Hz）
 
 // --------------------------
 // 其他参数补充定义
