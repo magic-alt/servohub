@@ -21,7 +21,7 @@ LR_IROM1 0x08000000 0x00080000  {    ; load region size_region
   ;RW_IRAM4 0x38000000 0x00010000  {  ; RAM D3 - AHB SRAM Domain4 (64KB)
   ; *(.RAM_D3)
   ;}
-  RW_IRAM5 0x00000000 0x00010000  {  ; RW data - ITCMRAM (64KB)
+  RW_IRAM5 0x00000080 0x00010000  {  ; RW data - ITCMRAM (64KB - 0x80)
     ; /* Board Group */
     board.o (+RO)
     bsp_api.o (+RO)
@@ -64,7 +64,7 @@ LR_IROM1 0x08000000 0x00080000  {    ; load region size_region
 
     ; /* App Group */
     app_scheduler.o (+RO)
-    ;app_status_check.o (+RO)         ;To be restructured
+    app_status_check.o (+RO)         ;To be restructured
     app_trajectory.o (+RO)
     app_motion_precondition.o (+RO)
     app_cyclic_sync_position_mode.o (+RO)
