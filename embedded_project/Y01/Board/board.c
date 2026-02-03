@@ -32,24 +32,19 @@ __attribute__((section(".RAM_D1"))) BspData kBspData =
     .uvw_target_voltage[0] = 0.0f,
     .uvw_target_voltage[1] = 0.0f,
     .uvw_target_voltage[2] = 0.0f,
+    .motor_cnt = 0,
+    .load_cnt = 0,
+    .motor_turns = 0,
+    .load_turns = 0,
     .pwm_en_state = 0,
     .pwm_ready_state = 0,
     .pwm_state_cnt = 0,
-    .brake_pwm_timer_psc = 0,
-    .brake_pwm_timer_arr = 0,
-    .brake_pwm_duty_ccr_tar = 0,
-    .brake_pwm_duty_ccr_action = 0,
-    .brake_pwm_duty_ccr_hold = 0,
 };
 
 static void PositionLoopInit(void);
 
 void BspInit(void)
 {
-    // 初始化抱闸定时器，输出抱闸信号为合闸状态
-    __HAL_TIM_SET_COMPARE(&BRAKE_PWM_TIM_HANDLE, BRAKE_PWM_TIM_CHANNEL, BRAKE_PWM_DUTY_CCR_ENGAGED);
-    HAL_TIM_PWM_Start(&BRAKE_PWM_TIM_HANDLE, BRAKE_PWM_TIM_CHANNEL);
-
     // 触发规则通道队列DMA采样
     HAL_ADC_Start_DMA(&DC_BUS_VOLTAGE_HANDLE, (uint32_t *)kBspData.adc1_raw_buffer, ADC1_REGULAR_RANK_NUMBER);
     // 等待母线电压稳定
@@ -194,11 +189,8 @@ void POSITION_LOOP_IRQ_TASK(void)
     EncoderDataProcess();
 
     bsp_pwm_ready_state_updata(); // 更新PWM输出准备状态
-#endif // VIRTUAL_MOTOR_MODEL
-    if (sys_get_hardware_self_test_status() == true)
-    {
-        PosSpeedLoopCtrl();
-    }
+#endif
+    PosSpeedLoopCtrl();
     bsp_set_timer_record_stop(SYS_TIMER_RECORD_POSITION_LOOP_TIME_INDEX);
 }
 
@@ -209,11 +201,17 @@ void ECAT_EXTI_IRQ_TASK(uint16_t GPIO_Pin)
     {
         PDI_Isr();
     }
-    else if (GPIO_Pin == ECAT_SYNC0_EXTI_LINE)
+    else if (GPIO_Pin == ECAT_SYNC0_EXTI_LINE) // DC同步中断
     {
+        set_app_Target_update_state(true);
+        bsp_set_timer_record_stop(6);
+        bsp_set_timer_record_start(6);
         DISABLE_ESC_INT();
         Sync0_Isr();
         ENABLE_ESC_INT();
+
+        kAppDebugParam.Debug_float[0] = bsp_get_timer_duration_records_us(6);
+        kAppDebugParam.Debug_uint32[1]++;
     }
     else if (GPIO_Pin == ECAT_SYNC1_EXTI_LINE)
     {
@@ -270,7 +268,7 @@ void mavlink_send_data(uint8_t *pdata, uint32_t len)
 #ifndef USE_CAN_MAVLINK_HOST
     HAL_UART_Transmit_DMA(&HOST_UART_HANDLE, pdata, len);
 #else
-    fdcan_app_mav_send_packet(&CAN_FDCAN_HANDLE, pdata, len, get_app_Sys_id(), \
+    fdcan_app_mav_send_packet(&CAN_FDCAN_HANDLE, pdata, len, get_app_Sys_id(),
                               get_app_Comp_id(), 1, CANFD_MESSAGE);
 #endif
 }
@@ -291,9 +289,9 @@ void HOST_UART_IRQ_TASK(void)
 
         // 调用Mavlink数据接收回调函数，处理接收到的数据
         // 参数为接收缓冲区和实际接收到的数据长度
-    #ifndef USE_CAN_MAVLINK_HOST
+#ifndef USE_CAN_MAVLINK_HOST
         MavlinkRecvCallback(&kAxis, &kAxisDw, mavlink_rx_buff, MAVLINK_RECV_BUFF_SIZE - __HAL_DMA_GET_COUNTER(HOST_UART_HANDLE.hdmarx));
-    #endif /* USE_CAN_MAVLINK_HOST */
+#endif /* USE_CAN_MAVLINK_HOST */
         // 重新启动DMA接收，准备接收下一批数据
         HAL_UART_Receive_DMA(&HOST_UART_HANDLE, mavlink_rx_buff, MAVLINK_RECV_BUFF_SIZE);
     }

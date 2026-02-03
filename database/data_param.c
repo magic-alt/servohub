@@ -1780,10 +1780,10 @@ uint32_t set_app_Target_position(int64_t val)
     /* USER CODE END set_app_Target_position 0 */
     kAppMotionParam.Target_position = val;
     /* USER CODE BEGIN set_app_Target_position 1 */
-    if (get_app_Modes_of_operation_display() == MOTOR_CTL_SM_MODE_CSP)
-    {
-        set_app_Target_update_state(true);
-    }
+    // if (get_app_Modes_of_operation_display() == MOTOR_CTL_SM_MODE_CSP)
+    // {
+    //     set_app_Target_update_state(true);
+    // }
     /* USER CODE END set_app_Target_position 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -1951,10 +1951,10 @@ uint32_t set_app_Target_velocity(float val)
     /* USER CODE END set_app_Target_velocity 0 */
     kAppMotionParam.Target_velocity = val;
     /* USER CODE BEGIN set_app_Target_velocity 1 */
-    if (get_app_Modes_of_operation_display() == MOTOR_CTL_SM_MODE_CSV)
-    {
-        set_app_Target_update_state(true);
-    }
+    // if (get_app_Modes_of_operation_display() == MOTOR_CTL_SM_MODE_CSV)
+    // {
+    //     set_app_Target_update_state(true);
+    // }
     /* USER CODE END set_app_Target_velocity 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -1976,10 +1976,10 @@ uint32_t set_app_Target_torque(float val)
     /* USER CODE END set_app_Target_torque 0 */
     kAppMotionParam.Target_torque = val;
     /* USER CODE BEGIN set_app_Target_torque 1 */
-    if (get_app_Modes_of_operation_display() == MOTOR_CTL_SM_MODE_CST)
-    {
-        set_app_Target_update_state(true);
-    }
+    // if (get_app_Modes_of_operation_display() == MOTOR_CTL_SM_MODE_CST)
+    // {
+    //     set_app_Target_update_state(true);
+    // }
     /* USER CODE END set_app_Target_torque 1 */
     return APP_PARAM_SUCCESS;
 }
