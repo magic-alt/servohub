@@ -36,18 +36,27 @@
 * SubIndex 0<br>
 * SubIndex 1<br>
 * SubIndex 2<br>
+* SubIndex 3<br>
+* SubIndex 4<br>
+* SubIndex 5<br>
 */
 OBJCONST TSDOINFOENTRYDESC    OBJMEM asEntryDesc0x1600[] = {
 { DEFTYPE_UNSIGNED8 , 0x8 , ACCESS_READWRITE },
 { DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READWRITE }, /* Subindex1 */
-{ DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READWRITE }}; /* Subindex2 */
+{ DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READWRITE }, /* Subindex2 */
+{ DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READWRITE }, /* Subindex3 */
+{ DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READWRITE }, /* Subindex4 */
+{ DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READWRITE }}; /* Subindex5 */
 
 /**
 * \brief Object/Entry names
 */
 OBJCONST UCHAR OBJMEM aName0x1600[] = "Obj0x1600\000"
 "SubIndex 001\000"
-"SubIndex 002\000\377";
+"SubIndex 002\000"
+"SubIndex 003\000"
+"SubIndex 004\000"
+"SubIndex 005\000\377";
 #endif //#ifdef _OBJD_
 
 #ifndef _ECAT_APP_OBJECTS_H_
@@ -58,6 +67,9 @@ typedef struct OBJ_STRUCT_PACKED_START {
 UINT16 u16SubIndex0;
 UINT32 SI1; /* Subindex1 -  */
 UINT32 SI2; /* Subindex2 -  */
+UINT32 SI3; /* Subindex3 -  */
+UINT32 SI4; /* Subindex4 -  */
+UINT32 SI5; /* Subindex5 -  */
 } OBJ_STRUCT_PACKED_END
 TOBJ1600;
 #endif //#ifndef _ECAT_APP_OBJECTS_H_
@@ -67,7 +79,7 @@ TOBJ1600;
 */
 PROTO TOBJ1600 Obj0x1600
 #if defined(_ECAT_APP_) && (_ECAT_APP_ == 1)
-={2,0x60850010,0x605A0020}
+={5,0x607A0020,0x60FF0020,0x60400010,0x60600008,0x00000008}
 #endif
 ;
 /** @}*/
@@ -2107,7 +2119,7 @@ PROTO UINT8 EtherCAT_Write_0x60FF_Callback(UINT16 index, UINT8 subindex, UINT32 
 #ifdef _OBJD_
 TOBJECT    OBJMEM ApplicationObjDic[] = {
 /* Object 0x1600 */
-{NULL , NULL ,  0x1600 , {DEFTYPE_PDOMAPPING , 2 | (OBJCODE_REC << 8)} , asEntryDesc0x1600 , aName0x1600 , &Obj0x1600 , NULL , NULL , 0x0000 },
+{NULL , NULL ,  0x1600 , {DEFTYPE_PDOMAPPING , 5 | (OBJCODE_REC << 8)} , asEntryDesc0x1600 , aName0x1600 , &Obj0x1600 , NULL , NULL , 0x0000 },
 /* Object 0x1601 */
 {NULL , NULL ,  0x1601 , {DEFTYPE_PDOMAPPING , 2 | (OBJCODE_REC << 8)} , asEntryDesc0x1601 , aName0x1601 , &Obj0x1601 , NULL , NULL , 0x0000 },
 /* Object 0x1602 */
