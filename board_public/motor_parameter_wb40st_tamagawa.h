@@ -29,7 +29,7 @@ extern "C"
 #define PMSM_MOTOR_ENC_MULTI_LINE_P_N   (0u)                            // 电机端编码器多圈分辨率（P/R）
 #define PMSM_MOTOR_ENC_DIR              (0u)                            // 电机端编码器方向（0：不变，1：反向）
 // 负载端编码器参数
-#define PMSM_LOAD_ENC_LINE_ORG          (131072u)                       // 负载端编码器原始分辨率（P/R）
+#define PMSM_LOAD_ENC_LINE_ORG          (0u)                            // 负载端编码器原始分辨率（P/R）
 #define PMSM_LOAD_ENC_LINE_P_N          (PMSM_LOAD_ENC_LINE_ORG / 1u)   // 负载端编码器实际分辨率（P/R）
 #define PMSM_LOAD_ENC_MULTI_LINE_P_N    (0u)                            // 负载端编码器多圈分辨率（P/R）
 #define PMSM_LOAD_ENC_DIR               (0u)                            // 负载端编码器方向（0：不变，1：反向）
@@ -96,6 +96,27 @@ extern "C"
 #define ENC_CALI_SPEED_SW_1             (40.0f)                         // 达到40RPM打开编码器校准模式（RPM）
 #define ENC_CALI_CHECK_CNT              (6u)                            // 编码器状态查询周期（s）
 #define ENC_CALI_TIMEOUT                (600u)                          // 启动app120s后编码器校准模式超时（s）
+
+// 编码器其它参数定义
+// SF字段（MSB）固定位定义回读值（共8位，bit0为dd0最低位，bit7为ca1最高位）（文档6.3.2）
+// SF字段（MSB）第bit0-bit3位：信息位，固定为b0000，无额外信息。
+// SF字段 编码器错误位（Encoder Error，bit4 ea0、bit5 ea1）宏定义（文档6.3.2）
+#define TAMAGAWA_SF_ENC_ERR_COUNTING        0x10  // 计数错误（bit4 ea0=1）
+#define TAMAGAWA_SF_ENC_ERR_HARDWARE        0x20  // 硬件错误（bit5 ea1=1，过热、多圈错误、电池错误、电池警告）
+#define TAMAGAWA_SF_ENC_ERR_ALL             (TAMAGAWA_SF_ENC_ERR_COUNTING | TAMAGAWA_SF_ENC_ERR_HARDWARE)  // 所有编码器错误位
+// SF字段 通信告警位（Communication Alarm，bit6 ca0、bit7 ca1）宏定义（文档6.3.2）
+#define TAMAGAWA_SF_COM_ERR_PARITY          0x40  // 奇偶校验错误（bit6 ca0=1）
+#define TAMAGAWA_SF_COM_ERR_DELIMITER       0x80  // 分隔符错误（bit7 ca1=1）
+#define TAMAGAWA_SF_COM_ERR_ALL             (TAMAGAWA_SF_COM_ERR_PARITY | TAMAGAWA_SF_COM_ERR_DELIMITER)  // 所有通信告警位
+// SF字段 编码器错误汇总
+#define TAMAGAWA_SF_ERR_ALL                 (TAMAGAWA_SF_ENC_ERR_ALL | TAMAGAWA_SF_COM_ERR_ALL)  // 所有编码器错误位
+// 检查SF字段是否存在编码器错误（ea0/ea1/ca0/ca1）
+#define IS_TAMAGAWA_SF_ERR(sf)              ((sf) & TAMAGAWA_SF_ERR_ALL)
+// 检查SF字段具体错误
+#define IS_TAMAGAWA_SF_ENC_ERR_COUNTING(sf)     ((sf) & TAMAGAWA_SF_ENC_ERR_COUNTING)
+#define IS_TAMAGAWA_SF_ENC_ERR_HARDWARE(sf)     ((sf) & TAMAGAWA_SF_ENC_ERR_HARDWARE)
+#define IS_TAMAGAWA_SF_COM_ERR_PARITY(sf)       ((sf) & TAMAGAWA_SF_COM_ERR_PARITY)
+#define IS_TAMAGAWA_SF_COM_ERR_DELIMITER(sf)    ((sf) & TAMAGAWA_SF_COM_ERR_DELIMITER)
 
 #ifdef __cplusplus
 }

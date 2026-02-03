@@ -169,37 +169,6 @@ struct EncoderDataInfo_t
     void (*process)(EncoderDataInfo_t *enc_data); // 编码器数据处理函数指针
 };
 
-// 多摩川编码器数据参数定义
-// SF字段固定位定义（共10位，bit0为最低位，bit9为最高位）
-#define SF_START_BIT          0x001  // 第0位：起始位，固定为1（文档6.3.2）
-#define SF_INFORMATION        0x000  // 第1-4位：信息位，固定为0000（文档6.3.2）
-#define SF_DELIMITER          0x200  // 第9位：分隔符，固定为1（文档6.3.2）
-#define SF_TOTAL_BITS         10     // SF字段总位数
-#define SF_ENCODER_ERR_MASK   0x030  // 第5-6位：编码器错误掩码（ea0=bit5，ea1=bit6）
-#define SF_COMM_ALARM_MASK    0x0C0  // 第7-8位：通信告警掩码（ca0=bit7，ca1=bit8）
-// 编码器错误（Encoder Error，ea0/ea1）宏定义（文档6.3.2）
-#define SF_ERR_NONE           0x000  // 无编码器错误（ea0=0，ea1=0）
-#define SF_ERR_COUNTING       0x020  // 计数错误（CE，ea0=1，bit5=1）
-#define SF_ERR_MT_BAT         0x010  // 多圈/电池错误（ME+BE+BA的或逻辑，ea1=1，bit6=1）
-#define SF_ERR_ALL_ENCODER    (SF_ERR_COUNTING | SF_ERR_MT_BAT)  // 所有编码器错误
-// 通信告警（Communication Alarm，ca0/ca1）宏定义（文档6.3.2）
-#define SF_ALARM_NONE         0x000  // 无通信错误（ca0=0，ca1=0）
-#define SF_ALARM_PARITY       0x080  // 请求帧校验错误（ca0=1，bit7=1）
-#define SF_ALARM_DELIMITER    0x040  // 请求帧分隔符错误（ca1=1，bit8=1）
-#define SF_ALARM_ALL_COMM     (SF_ALARM_PARITY | SF_ALARM_DELIMITER)  // 所有通信告警
-// 检查是否存在编码器错误（ea0/ea1）
-#define SF_HAS_ENCODER_ERR(sf_data) ((sf_data) & SF_ERR_ALL_ENCODER)
-// 检查是否存在计数错误（CE）
-#define SF_HAS_COUNTING_ERR(sf_data) ((sf_data) & SF_ERR_COUNTING)
-// 检查是否存在多圈/电池错误（ME/BE/BA）
-#define SF_HAS_MT_BAT_ERR(sf_data)   ((sf_data) & SF_ERR_MT_BAT)
-// 检查是否存在通信错误（ca0/ca1）
-#define SF_HAS_COMM_ALARM(sf_data)  ((sf_data) & SF_ALARM_ALL_COMM)
-// 检查是否存在通信校验错误
-#define SF_HAS_PARITY_ALARM(sf_data) ((sf_data) & SF_ALARM_PARITY)
-// 检查是否存在通信分隔符错误
-#define SF_HAS_DELIM_ALARM(sf_data)  ((sf_data) & SF_ALARM_DELIMITER)
-
 // 编码器ID (固定值)
 #define ENCODER_CONNECTED_ID        (0xCE)  // 当未读取编码器ID时，位置解析成功后强制设为0xCE（Connected Encoder）
 // 编码器校验值最终异或值

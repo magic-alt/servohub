@@ -522,6 +522,16 @@ static void TAMAGAWA_Encoder_Init(EncoderDataInfo_t* enc_data)
     }
     enc_data->frame_len = TAMAGAWA_FRAME_LEN_ID_0;
     enc_data->cf = TAMAGAWA_CF_ID_0;
+
+    // 为兼容各厂家设计差异，防止数据帧错位等异常情况，启动过程多次重置UART DMA传输
+    if (enc_data->err_cnt)
+    {
+        enc_data->err_cnt = 0;
+        HAL_UART_DMAStop(enc_data->uart_handle);
+        __HAL_UART_DISABLE(enc_data->uart_handle);
+        __HAL_UART_ENABLE(enc_data->uart_handle);
+        HAL_UART_DMAResume(enc_data->uart_handle);
+    }
 }
 /**
  * @brief TAMAGAWA编码器数据读取
@@ -558,24 +568,21 @@ static void TAMAGAWA_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
     }
 
     // 读取状态字段和校验和
-    enc_data->sf = enc_data->data_raw[1];
     enc_data->check_val = enc_data->data_raw[enc_data->frame_len - 1];
-
     // 检查数据帧是否有效，是否存在异常
-    if (SF_HAS_ENCODER_ERR(enc_data->sf))
-    {
-        sys_set_bsp_error_state((BSP_ERROR_CODE)enc_data->id, ERROR_SET);
-        return;
-    }
     if (enc_data->check_val != check_cnt_val ||\
-        enc_data->cf != enc_data->data_raw[0] ||\
-        SF_HAS_COMM_ALARM(enc_data->sf))
+        enc_data->cf != enc_data->data_raw[0])
     {
         enc_data->err_cnt ++;
         if (enc_data->err_cnt >= ENCODER_COMM_ERROR_MAX)
         {
             enc_data->err_cnt = ENCODER_COMM_ERROR_MAX;
             sys_set_bsp_error_state((BSP_ERROR_CODE)enc_data->id, ERROR_SET);
+            //停止并重启UART DMA传输
+            HAL_UART_DMAStop(enc_data->uart_handle);
+            __HAL_UART_DISABLE(enc_data->uart_handle);
+            __HAL_UART_ENABLE(enc_data->uart_handle);
+            HAL_UART_DMAResume(enc_data->uart_handle);
         }
         return;
     }
@@ -584,9 +591,17 @@ static void TAMAGAWA_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
         enc_data->err_cnt --;
     }
 
-    // 数据无异常，进一步按协议解析数据
     //sys_set_bsp_error_state((BSP_ERROR_CODE)enc_id, ERROR_CLEAR); // 自动清除编码器错误状态
 
+    // 可根据实际情况是否关闭检查SF寄存器
+    enc_data->sf = enc_data->data_raw[1];
+    if (IS_TAMAGAWA_SF_ERR(enc_data->sf))
+    {
+        // 可进一步检查具体错误类型，做一些特殊处理，现仅设置编码器错误状态
+        sys_set_bsp_error_state((BSP_ERROR_CODE)enc_data->id, ERROR_SET);
+    }
+
+    // 数据无异常，进一步按协议解析数据
     enc_data->a_single_raw = enc_data->data_raw[2] + \
                             (enc_data->data_raw[3] << 8) + \
                             (enc_data->data_raw[4] << 16);
