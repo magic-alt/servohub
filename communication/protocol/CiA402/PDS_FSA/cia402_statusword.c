@@ -57,6 +57,16 @@ static bool check_homing_attained_state(void) {
     return kCheckStatusVal.bits.homing_attained;
 }
 
+static bool check_drive_follow_command_value_state(void) {
+
+    // 非使能或暂停状态下，置false
+    if (get_CurrentState() != kOperationEnable || \
+        CIA402_READ_BIT(get_Controlword(), kOd6040_Halt) == kOd6040_Halt)
+    {
+        return false;
+    }
+    return true;
+}
 
 // 定义状态表,kOd6060_ANY表示任何模式下均检测
 static const StateTableEntry state_table[] = {
@@ -67,6 +77,9 @@ static const StateTableEntry state_table[] = {
     {kOd6060_PVM, kOd6041_TargetReached, check_velocity_target_reached_state},
     {kOd6060_PVM, kOd6041_SpeedRunning, check_velocity_zero_state},
     {kOd6060_CSP, kOd6041_FollowingError, check_position_following_error_state},
+    {kOd6060_CSP, kOd6041_DriveFollowCommandValue, check_drive_follow_command_value_state},
+    {kOd6060_CSV, kOd6041_DriveFollowCommandValue, check_drive_follow_command_value_state},
+    {kOd6060_CST, kOd6041_DriveFollowCommandValue, check_drive_follow_command_value_state},
     {kOd6060_HM, kOd6041_HomingAttained, check_homing_attained_state}
 };
 

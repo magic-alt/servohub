@@ -31,6 +31,7 @@ typedef enum
     kOd6041_HomingAttained = 4096,       //bit12
     kOd6041_HomingError = 8192,
     kOd6041_IpModeActive = 4096,
+    kOd6041_DriveFollowCommandValue = 4096, //bit12 CSP、CSV、CST
 
     ///系统辨识掩码 kOd6041_IDENT_ERROR
     kOd6041_IdentStateMark = 49152,
