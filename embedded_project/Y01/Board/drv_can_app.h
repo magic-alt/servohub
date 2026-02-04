@@ -13,7 +13,8 @@ void fdcan_app_fifo1_handle(FDCAN_HandleTypeDef* hfdcan);
 
 #ifdef USE_CANOPEN
 #define CANOPEN_ID_MAX      (0x7F)
-#define CANID_STD_FILTER_FUNC_SLAVE 0
+#define CANID_STD_FILTER_FUNC_GLOBAL 0
+#define CANID_STD_FILTER_FUNC_SLAVE 1
 void CANopen_DispatchFromISR(void);
 #endif // USE_CANOPEN
 

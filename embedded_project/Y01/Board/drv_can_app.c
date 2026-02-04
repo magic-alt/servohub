@@ -227,6 +227,12 @@ static inline void fdcan_canopen_hendle(FDCAN_DeviceTypeDef* bsp_fdcan)
     // Dispatch message to object dictionary
     canDispatch(&SlaveOD_Data, &rx_message);
 
+    // 判断是否为同步消息，若节点状态为Operational，认为是同步启动更新目标状态值
+    if (rx_message.cob_id == 0x080 && SlaveOD_Data.nodeState == Operational)
+    {
+        set_app_Target_update_state(true);
+    }
+
     // Re-enable RX FIFO0 notification
     HAL_FDCAN_ActivateNotification(bsp_fdcan->handle, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
 }
