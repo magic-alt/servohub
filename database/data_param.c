@@ -86,40 +86,18 @@ void AppParamInit(void)
     kAppEncoderConfig.Motor_encoder_options = 0;                                                // 电机端编码器选项
     kAppEncoderConfig.Motor_encoder_options |= (PMSM_MOTOR_ENC_DIR << 0);                       // 电机端编码器选项Bit0-编码器A方向
 
-    if (PMSM_LOAD_ENC_LINE_P_N == 0u && PMSM_MOTOR_ENC_LINE_P_N != 0u)                          // 负载端速度P/s转换RPM系数
-    {
-        kAppEncoderConfig.Load_pps_2_rpm = 60.0f / (float)PMSM_MOTOR_ENC_LINE_P_N;
-    }
-    else if (PMSM_LOAD_ENC_LINE_P_N != 0u)
-    {
-        kAppEncoderConfig.Load_pps_2_rpm = 60.0f / (float)PMSM_LOAD_ENC_LINE_P_N;
-    }
+    kAppEncoderConfig.Load_pps_2_rpm = (PMSM_LOAD_ENC_LINE_P_N != 0u) ?                         // 负载端速度P/s转换RPM系数
+                                       (60.0f / (float)PMSM_LOAD_ENC_LINE_P_N) :
+                                       (60.0f / (float)PMSM_MOTOR_ENC_LINE_P_N);
     kAppEncoderConfig.Load_rpm_2_pps = (float)PMSM_LOAD_ENC_LINE_P_N / 60.0f;                   // 负载端速度RPM转换P/s系数
-    if (PMSM_MOTOR_ENC_LINE_P_N == 0u && PMSM_LOAD_ENC_LINE_P_N != 0u)                          // 电机端速度P/s转换RPM系数
-    {
-        kAppEncoderConfig.Motor_pps_2_rpm = 60.0f / (float)PMSM_LOAD_ENC_LINE_P_N;
-    }
-    else if (PMSM_MOTOR_ENC_LINE_P_N != 0u)
-    {
-        kAppEncoderConfig.Motor_pps_2_rpm = 60.0f / (float)PMSM_MOTOR_ENC_LINE_P_N;
-    }
+    kAppEncoderConfig.Motor_pps_2_rpm = 60.0f / (float)PMSM_MOTOR_ENC_LINE_P_N;                 // 电机端速度P/s转换RPM系数
     kAppEncoderConfig.Motor_rpm_2_pps = (float)PMSM_MOTOR_ENC_LINE_P_N / 60.0f;                 // 电机端速度RPM转换P/s系数
-    if (PMSM_LOAD_ENC_LINE_P_N != 0u)                                                           // 负载端到电机端P转换系数
-    {
-        kAppEncoderConfig.P_load_2_motor = (float)PMSM_MOTOR_ENC_LINE_P_N / (float)PMSM_LOAD_ENC_LINE_P_N;
-    }
-    else
-    {
-        kAppEncoderConfig.P_load_2_motor = 1.0f;
-    }
-    if (PMSM_MOTOR_ENC_LINE_P_N != 0u)                                                          // 电机端到负载端P转换系数
-    {
-        kAppEncoderConfig.P_motor_2_load = (float)PMSM_LOAD_ENC_LINE_P_N / (float)PMSM_MOTOR_ENC_LINE_P_N;
-    }
-    else
-    {
-        kAppEncoderConfig.P_motor_2_load = 1.0f;
-    }
+    kAppEncoderConfig.P_load_2_motor = (PMSM_LOAD_ENC_LINE_P_N != 0u) ?                         // 负载端到电机端P转换系数
+                                       ((float)PMSM_MOTOR_ENC_LINE_P_N /
+                                       (float)PMSM_LOAD_ENC_LINE_P_N) : 1.0f;
+    kAppEncoderConfig.P_motor_2_load = (float)PMSM_LOAD_ENC_LINE_P_N /                          // 电机端到负载端P转换系数
+                                       (float)PMSM_MOTOR_ENC_LINE_P_N;
+
     kAppEncoderConfig.Load_control_resolution = PMSM_LOAD_ENC_LINE_P_N;                         // 负载端位置指令分辨率
     kAppEncoderConfig.Motor_control_resolution = PMSM_MOTOR_ENC_LINE_P_N;                       // 电机端位置指令分辨率
     kAppEncoderConfig.Load_encoder_options = 0;                                                 // 负载端编码器选项
@@ -1056,9 +1034,10 @@ uint32_t set_app_Load_encoder_resolution(uint32_t val)
     /* USER CODE END set_app_Load_encoder_resolution 0 */
     kAppEncoderConfig.Load_encoder_resolution = val;
     /* USER CODE BEGIN set_app_Load_encoder_resolution 1 */
+    uint32_t factor_temp = get_app_Load_control_resolution();
+    factor_temp = (factor_temp == 0 ? 1 : (val / factor_temp));
     bsp_set_encoder_config(ENCODER_ID_LOAD, 0, get_app_Load_encoder_options(), \
-                           val, val / get_app_Load_control_resolution(), \
-                           PMSM_LOAD_ENC_MULTI_LINE_P_N, 0, 1, 0);
+                           val, factor_temp, PMSM_LOAD_ENC_MULTI_LINE_P_N, 0, 1, 0);
     /* USER CODE END set_app_Load_encoder_resolution 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -1076,12 +1055,17 @@ uint32_t set_app_Motor_encoder_resolution(uint32_t val)
     {
         return APP_PARAM_WRITE_STATE_ERROR;
     }
+    if (val == 0)
+    {
+        return APP_PARAM_OUT_OF_RANGE;
+    }
     /* USER CODE END set_app_Motor_encoder_resolution 0 */
     kAppEncoderConfig.Motor_encoder_resolution = val;
     /* USER CODE BEGIN set_app_Motor_encoder_resolution 1 */
+    uint32_t factor_temp = get_app_Motor_control_resolution();
+    factor_temp = (factor_temp == 0 ? 1 : (val / factor_temp));
     bsp_set_encoder_config(ENCODER_ID_MOTOR, 0, get_app_Motor_encoder_options(), \
-                           val, val / get_app_Motor_control_resolution(), \
-                           PMSM_MOTOR_ENC_MULTI_LINE_P_N, 0, 1, 0);
+                           val, factor_temp, PMSM_MOTOR_ENC_MULTI_LINE_P_N, 0, 1, 0);
     /* USER CODE END set_app_Motor_encoder_resolution 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -1136,10 +1120,10 @@ uint32_t set_app_Motor_encoder_options(uint8_t val)
     /* USER CODE END set_app_Motor_encoder_options 0 */
     kAppEncoderConfig.Motor_encoder_options = val;
     /* USER CODE BEGIN set_app_Motor_encoder_options 1 */
-    bsp_set_encoder_config(ENCODER_ID_MOTOR, 0, val, \
-                           get_app_Motor_encoder_resolution(), \
-                           get_app_Motor_encoder_resolution() / get_app_Motor_control_resolution(), \
-                           PMSM_MOTOR_ENC_MULTI_LINE_P_N, 0, 1, 0);
+    uint32_t factor_temp = get_app_Motor_control_resolution();
+    factor_temp = (factor_temp == 0 ? 1 : (get_app_Motor_encoder_resolution() / factor_temp));
+    bsp_set_encoder_config(ENCODER_ID_MOTOR, 0, val, get_app_Motor_encoder_resolution(), \
+                           factor_temp, PMSM_MOTOR_ENC_MULTI_LINE_P_N, 0, 1, 0);
     MotorCtlParamSetUpdata(axis);
     /* USER CODE END set_app_Motor_encoder_options 1 */
     return APP_PARAM_SUCCESS;
@@ -1258,6 +1242,7 @@ uint32_t set_app_Load_control_resolution(uint32_t val)
     kAppEncoderConfig.Load_control_resolution = val;
     /* USER CODE BEGIN set_app_Load_control_resolution 1 */
     // 单位转化因子计算
+    uint32_t factor_temp = 1;
     if (val > 0)
     {
         kAppEncoderConfig.Load_pps_2_rpm = 60.0f / (float)val;
@@ -1265,9 +1250,11 @@ uint32_t set_app_Load_control_resolution(uint32_t val)
 
         kAppEncoderConfig.P_load_2_motor = (float)get_app_Motor_control_resolution() / (float)val;
         kAppEncoderConfig.P_motor_2_load = (float)val / (float)get_app_Motor_control_resolution();
+
+        factor_temp = load_encoder_resolution / val;
     }
     bsp_set_encoder_config(ENCODER_ID_LOAD, 0, get_app_Load_encoder_options(), \
-                           load_encoder_resolution, load_encoder_resolution / val, \
+                           load_encoder_resolution, factor_temp, \
                            PMSM_LOAD_ENC_MULTI_LINE_P_N, 0, 1, 0);
     // 关联控制层设置
     axis->load_pos_sensor_config.enc_line_p_n = val;
@@ -1291,8 +1278,8 @@ uint32_t set_app_Motor_control_resolution(uint32_t val)
         return APP_PARAM_WRITE_STATE_ERROR;
     }
     uint32_t motor_encoder_resolution = get_app_Motor_encoder_resolution();
-    if (val > motor_encoder_resolution || \
-       (val != 0 && motor_encoder_resolution % val != 0))
+    if (val == 0 || val > motor_encoder_resolution || \
+        (motor_encoder_resolution % val != 0))
     {
         return APP_PARAM_OUT_OF_RANGE;
     }
@@ -1300,6 +1287,7 @@ uint32_t set_app_Motor_control_resolution(uint32_t val)
     kAppEncoderConfig.Motor_control_resolution = val;
     /* USER CODE BEGIN set_app_Motor_control_resolution 1 */
     // 单位转化因子计算
+    uint32_t factor_temp = 1;
     if (val > 0)
     {
         kAppEncoderConfig.Motor_pps_2_rpm = 60.0f / (float)val;
@@ -1307,9 +1295,11 @@ uint32_t set_app_Motor_control_resolution(uint32_t val)
 
         kAppEncoderConfig.P_load_2_motor = (float)val / (float)get_app_Load_control_resolution();
         kAppEncoderConfig.P_motor_2_load = (float)get_app_Load_control_resolution() / (float)val;
+
+        factor_temp = motor_encoder_resolution / val;
     }
     bsp_set_encoder_config(ENCODER_ID_MOTOR, 0, get_app_Motor_encoder_options(), \
-                           motor_encoder_resolution, motor_encoder_resolution / val, \
+                           motor_encoder_resolution, factor_temp, \
                            PMSM_MOTOR_ENC_MULTI_LINE_P_N, 0, 1, 0);
     // 关联控制层设置
     axis->pmsm_config.enc_line_p_n = val;
@@ -1337,10 +1327,10 @@ uint32_t set_app_Load_encoder_options(uint8_t val)
     /* USER CODE END set_app_Load_encoder_options 0 */
     kAppEncoderConfig.Load_encoder_options = val;
     /* USER CODE BEGIN set_app_Load_encoder_options 1 */
-    bsp_set_encoder_config(ENCODER_ID_LOAD, 0, val, \
-                           get_app_Load_encoder_resolution(), \
-                           get_app_Load_encoder_resolution() / get_app_Load_control_resolution(), \
-                           PMSM_LOAD_ENC_MULTI_LINE_P_N, 0, 1, 0);
+    uint32_t factor_temp = get_app_Load_control_resolution();
+    factor_temp = (factor_temp == 0 ? 1 : (get_app_Load_encoder_resolution() / factor_temp));
+    bsp_set_encoder_config(ENCODER_ID_LOAD, 0, val, get_app_Load_encoder_resolution(), \
+                           factor_temp, PMSM_LOAD_ENC_MULTI_LINE_P_N, 0, 1, 0);
     MotorCtlParamSetUpdata(axis);
     /* USER CODE END set_app_Load_encoder_options 1 */
     return APP_PARAM_SUCCESS;

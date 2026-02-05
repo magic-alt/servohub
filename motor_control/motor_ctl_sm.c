@@ -275,12 +275,13 @@ void MotorCtlParamSetUpdata(Axis *const axis)
    axis->current_ctl_config.dt_s = axis->pmsm_config.tc_s;
 
    // 编码器分辨率
-   axis->pos_speed_ctl_config.enc_line_inv_p_n = 1.0f / axis->pmsm_config.enc_line_p_n;
-   axis->speed_obs_pll_config.enc_line_inv_p_n = 1.0f / axis->pmsm_config.enc_line_p_n;
-   axis->motor_pos_sensor_config.enc_line_p_n = axis->pmsm_config.enc_line_p_n;
-   axis->pole_pairs_id_config.enc_line_p_n = axis->pmsm_config.enc_line_p_n;
-   axis->tq_fc_id_config.enc_line_p_n = axis->pmsm_config.enc_line_p_n;
-   axis->mit_ctl_config.enc_line_inv_p_n = 1.0f / axis->pmsm_config.enc_line_p_n; // 编码器分辨率倒数
+   uint32_t enc_line_p_n = (axis->pmsm_config.enc_line_p_n == 0 ? 1 : axis->pmsm_config.enc_line_p_n);
+   axis->pos_speed_ctl_config.enc_line_inv_p_n = 1.0f / enc_line_p_n;
+   axis->speed_obs_pll_config.enc_line_inv_p_n = 1.0f / enc_line_p_n;
+   axis->motor_pos_sensor_config.enc_line_p_n = enc_line_p_n;
+   axis->pole_pairs_id_config.enc_line_p_n = enc_line_p_n;
+   axis->tq_fc_id_config.enc_line_p_n = enc_line_p_n;
+   axis->mit_ctl_config.enc_line_inv_p_n = 1.0f / enc_line_p_n; // 编码器分辨率倒数
 
    // 陷波滤波器参数关联更新
    notch_filter_config_set(&axis->notch_filter_config, &axis->pos_speed_ctl_config.tp_s,
@@ -552,7 +553,7 @@ static inline void TqFcComStep(Axis *const axis, AxisDw *const axis_dw)
 #pragma region 模式运行函数
 // 转矩脉动辨识
 static void TqFcIdStep(Axis *const axis, AxisDw *const axis_dw)
-{ 
+{
    uint32_T index = 0;
    float fc_hz = 100.0f;                       // 100Hz截止频率
    float lpf_k = 0.38f;                        // 低通滤波系数

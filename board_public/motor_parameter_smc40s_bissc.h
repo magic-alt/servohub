@@ -25,11 +25,14 @@ extern "C"
 #define ENCODER2_TYPE_OPTION            (ENCODER_TYPE_NONE)             // 负载端编码器类型
 // 电机端编码器参数
 #define PMSM_MOTOR_ENC_LINE_ORG         (524288u)                       // 电机端编码器原始分辨率（P/R）
+#if PMSM_MOTOR_ENC_LINE_ORG == 0
+#error "PMSM_MOTOR_ENC_LINE_ORG must be greater than 0"
+#endif /*PMSM_MOTOR_ENC_LINE_ORG == 0*/
 #define PMSM_MOTOR_ENC_LINE_P_N         (PMSM_MOTOR_ENC_LINE_ORG / 1u)  // 电机端编码器控制分辨率（P/R）
 #define PMSM_MOTOR_ENC_MULTI_LINE_P_N   (0u)                            // 电机端编码器多圈分辨率（P/R）
 #define PMSM_MOTOR_ENC_DIR              (0u)                            // 电机端编码器方向（0：不变，1：反向）
 // 负载端编码器参数
-#define PMSM_LOAD_ENC_LINE_ORG          (524288u)                       // 负载端编码器原始分辨率（P/R）
+#define PMSM_LOAD_ENC_LINE_ORG          (0u)                            // 负载端编码器原始分辨率（P/R）
 #define PMSM_LOAD_ENC_LINE_P_N          (PMSM_LOAD_ENC_LINE_ORG / 1u)   // 负载端编码器实际分辨率（P/R）
 #define PMSM_LOAD_ENC_MULTI_LINE_P_N    (0u)                            // 负载端编码器多圈分辨率（P/R）
 #define PMSM_LOAD_ENC_DIR               (0u)                            // 负载端编码器方向（0：不变，1：反向）
@@ -37,6 +40,9 @@ extern "C"
 #define GEAR_RATIO_NUM                  (1u)                            // 减速比分子
 #define GEAR_RATIO_DEN                  (1u)                            // 减速比分母
 #define GEAR_RATIO                      (1.0f)                          // 减速比
+// #define GEAR_BACKLASH_LOAD              (0.03f)                         // 负载端齿轮间隙，负载端间隙 单位：°  eg: 0.03°，表示齿轮间隙会产生±0.03度的误差
+// // 电机端齿轮间隙参数  单位：电机端脉冲数 = GEAR_BACKLASH_LOAD * GEAR_RATIO / 360.0f * PMSM_MOTOR_ENC_LINE_P_N
+// #define GEAR_BACKLASH_MOTOR_PULSE       (GEAR_BACKLASH_LOAD * GEAR_RATIO / 360.0f * PMSM_MOTOR_ENC_LINE_P_N)
 
 // --------------------------
 // 电机保护参数
