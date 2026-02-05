@@ -45,11 +45,11 @@ void csp_planning(const int64_T rtu_pos_target_ip_buff[4], const real32_T
     real32_T delta_idx_0;
     real32_T delta_idx_1;
     real32_T delta_idx_2;
-    real32_T delta_m1;
-    real32_T delta_n;
     real32_T delta_n1;
     real32_T h;
     real32_T h_idx_1;
+    real32_T rtb_DataTypeConversion_idx_1;
+    real32_T rtb_DataTypeConversion_idx_2;
     real32_T slopes_idx_0;
     real32_T slopes_idx_2;
     real32_T w1;
@@ -57,6 +57,34 @@ void csp_planning(const int64_T rtu_pos_target_ip_buff[4], const real32_T
 
     /* Product: '<S1>/Product' incorporates:
      *  Constant: '<S1>/Constant'
+     */
+    localDW->Product[0] = 0.0F;
+
+    /* DataTypeConversion: '<S1>/Data Type Conversion' incorporates:
+     *  Sum: '<S1>/Add'
+     */
+    rtb_DataTypeConversion_idx_1 = (real32_T)(rtu_pos_target_ip_buff[1] -
+        rtu_pos_target_ip_buff[0]);
+
+    /* Product: '<S1>/Product' */
+    localDW->Product[1] = *rtu_ip_dt;
+
+    /* DataTypeConversion: '<S1>/Data Type Conversion' incorporates:
+     *  Sum: '<S1>/Add'
+     */
+    rtb_DataTypeConversion_idx_2 = (real32_T)(rtu_pos_target_ip_buff[2] -
+        rtu_pos_target_ip_buff[0]);
+
+    /* Product: '<S1>/Product' incorporates:
+     *  Constant: '<S1>/Constant'
+     */
+    localDW->Product[2] = *rtu_ip_dt * 2.0F;
+    localDW->Product[3] = *rtu_ip_dt * 3.0F;
+
+    /* MATLAB Function: '<S1>/MATLAB Function' incorporates:
+     *  DataTypeConversion: '<S1>/Data Type Conversion'
+     *  DiscreteIntegrator: '<S4>/Discrete-Time Integrator'
+     *  Sum: '<S1>/Add'
      */
     /*  可选插值方法pchip、 makima 、spline一阶导数和二阶导数 */
     /*  输入: */
@@ -67,159 +95,98 @@ void csp_planning(const int64_T rtu_pos_target_ip_buff[4], const real32_T
     /*    dy0 - 一阶导数 */
     /*    d2y0 - 二阶导数 */
     /* MATLAB Function 'Subsystem1/MATLAB Function': '<S3>:1' */
-    /*  提取分段插值起点, 插值计算都减去起点 */
-    /* '<S3>:1:13' y_init = y(1); */
-    /* '<S3>:1:14' yy = single(y - y_init); */
-    localDW->Product[0] = 0.0F;
-    localDW->Product[1] = *rtu_ip_dt;
-
-    /* MATLAB Function: '<S1>/MATLAB Function' */
-    if ((rtu_pos_target_ip_buff[1] >= 0LL) && (rtu_pos_target_ip_buff[0] <
-            rtu_pos_target_ip_buff[1] - MAX_int64_T))
-    {
-        localDW->qY_m = MAX_int64_T;
-    }
-    else if ((rtu_pos_target_ip_buff[1] < 0LL) && (rtu_pos_target_ip_buff[0] >
-              rtu_pos_target_ip_buff[1] - MIN_int64_T))
-    {
-        localDW->qY_m = MIN_int64_T;
-    }
-    else
-    {
-        localDW->qY_m = rtu_pos_target_ip_buff[1] - rtu_pos_target_ip_buff[0];
-    }
-
-    /* Product: '<S1>/Product' incorporates:
-     *  Constant: '<S1>/Constant'
-     */
-    localDW->Product[2] = *rtu_ip_dt * 2.0F;
-
-    /* MATLAB Function: '<S1>/MATLAB Function' */
-    if ((rtu_pos_target_ip_buff[2] >= 0LL) && (rtu_pos_target_ip_buff[0] <
-            rtu_pos_target_ip_buff[2] - MAX_int64_T))
-    {
-        localDW->qY = MAX_int64_T;
-    }
-    else if ((rtu_pos_target_ip_buff[2] < 0LL) && (rtu_pos_target_ip_buff[0] >
-              rtu_pos_target_ip_buff[2] - MIN_int64_T))
-    {
-        localDW->qY = MIN_int64_T;
-    }
-    else
-    {
-        localDW->qY = rtu_pos_target_ip_buff[2] - rtu_pos_target_ip_buff[0];
-    }
-
-    /* Product: '<S1>/Product' incorporates:
-     *  Constant: '<S1>/Constant'
-     */
-    localDW->Product[3] = *rtu_ip_dt * 3.0F;
-
-    /* MATLAB Function: '<S1>/MATLAB Function' incorporates:
-     *  DiscreteIntegrator: '<S4>/Discrete-Time Integrator'
-     */
-    /* 转化为浮点数进行插值 */
-    /* '<S3>:1:15' pp = makima(x, yy); */
-    delta_idx_0 = (real32_T)localDW->qY_m / localDW->Product[1];
+    /* '<S3>:1:12' pp = makima(x, y); */
+    delta_idx_0 = rtb_DataTypeConversion_idx_1 / localDW->Product[1];
     h = localDW->Product[2] - localDW->Product[1];
     h_idx_1 = h;
-    delta_idx_1 = ((real32_T)localDW->qY - (real32_T)localDW->qY_m) / h;
+    delta_idx_1 = (rtb_DataTypeConversion_idx_2 - rtb_DataTypeConversion_idx_1) /
+        h;
     h = localDW->Product[3] - localDW->Product[2];
-    if ((rtu_pos_target_ip_buff[3] >= 0LL) && (rtu_pos_target_ip_buff[0] <
-            rtu_pos_target_ip_buff[3] - MAX_int64_T))
-    {
-        localDW->i = MAX_int64_T;
-    }
-    else if ((rtu_pos_target_ip_buff[3] < 0LL) && (rtu_pos_target_ip_buff[0] >
-              rtu_pos_target_ip_buff[3] - MIN_int64_T))
-    {
-        localDW->i = MIN_int64_T;
-    }
-    else
-    {
-        localDW->i = rtu_pos_target_ip_buff[3] - rtu_pos_target_ip_buff[0];
-    }
-
-    delta_idx_2 = ((real32_T)localDW->i - (real32_T)localDW->qY) / h;
+    delta_idx_2 = ((real32_T)(rtu_pos_target_ip_buff[3] -
+                    rtu_pos_target_ip_buff[0]) - rtb_DataTypeConversion_idx_2) /
+        h;
     localDW->delta_0 = 2.0F * delta_idx_0 - delta_idx_1;
-    delta_m1 = 2.0F * localDW->delta_0 - delta_idx_0;
-    delta_n = 2.0F * delta_idx_2 - delta_idx_1;
-    delta_n1 = 2.0F * delta_n - delta_idx_2;
-    w1 = fabsf(localDW->delta_0 + delta_m1) / 2.0F + fabsf(localDW->delta_0 -
-        delta_m1);
+    localDW->delta_m1 = 2.0F * localDW->delta_0 - delta_idx_0;
+    localDW->delta_n = 2.0F * delta_idx_2 - delta_idx_1;
+    delta_n1 = 2.0F * localDW->delta_n - delta_idx_2;
+    w1 = fabsf(localDW->delta_0 + localDW->delta_m1) / 2.0F + fabsf
+        (localDW->delta_0 - localDW->delta_m1);
     slopes_idx_2 = fabsf(delta_idx_1 + delta_idx_0) / 2.0F + fabsf(delta_idx_1 -
         delta_idx_0);
-    delta_m1 = w1 + slopes_idx_2;
-    if (delta_m1 == 0.0F)
+    localDW->delta_m1 = w1 + slopes_idx_2;
+    if (localDW->delta_m1 == 0.0F)
     {
         slopes_idx_0 = 0.0F;
     }
     else
     {
-        slopes_idx_0 = slopes_idx_2 / delta_m1 * localDW->delta_0 + w1 /
-            delta_m1 * delta_idx_0;
+        slopes_idx_0 = slopes_idx_2 / localDW->delta_m1 * localDW->delta_0 + w1 /
+            localDW->delta_m1 * delta_idx_0;
     }
 
     w1 = fabsf(delta_idx_0 + localDW->delta_0) / 2.0F + fabsf(delta_idx_0 -
         localDW->delta_0);
     localDW->delta_0 = fabsf(delta_idx_2 + delta_idx_1) / 2.0F + fabsf
         (delta_idx_2 - delta_idx_1);
-    delta_m1 = w1 + localDW->delta_0;
-    if (delta_m1 == 0.0F)
+    localDW->delta_m1 = w1 + localDW->delta_0;
+    if (localDW->delta_m1 == 0.0F)
     {
         w1 = 0.0F;
     }
     else
     {
-        w1 = localDW->delta_0 / delta_m1 * delta_idx_0 + w1 / delta_m1 *
-            delta_idx_1;
+        w1 = localDW->delta_0 / localDW->delta_m1 * delta_idx_0 + w1 /
+            localDW->delta_m1 * delta_idx_1;
     }
 
-    w2 = fabsf(delta_n + delta_idx_2) / 2.0F + fabsf(delta_n - delta_idx_2);
-    delta_m1 = slopes_idx_2 + w2;
-    if (delta_m1 == 0.0F)
+    w2 = fabsf(localDW->delta_n + delta_idx_2) / 2.0F + fabsf(localDW->delta_n -
+        delta_idx_2);
+    localDW->delta_m1 = slopes_idx_2 + w2;
+    if (localDW->delta_m1 == 0.0F)
     {
         slopes_idx_2 = 0.0F;
     }
     else
     {
-        slopes_idx_2 = w2 / delta_m1 * delta_idx_1 + slopes_idx_2 / delta_m1 *
-            delta_idx_2;
+        slopes_idx_2 = w2 / localDW->delta_m1 * delta_idx_1 + slopes_idx_2 /
+            localDW->delta_m1 * delta_idx_2;
     }
 
-    w2 = fabsf(delta_n1 + delta_n) / 2.0F + fabsf(delta_n1 - delta_n);
-    delta_m1 = localDW->delta_0 + w2;
-    if (delta_m1 == 0.0F)
+    w2 = fabsf(delta_n1 + localDW->delta_n) / 2.0F + fabsf(delta_n1 -
+        localDW->delta_n);
+    localDW->delta_m1 = localDW->delta_0 + w2;
+    if (localDW->delta_m1 == 0.0F)
     {
-        delta_n = 0.0F;
+        localDW->delta_n = 0.0F;
     }
     else
     {
-        delta_n = w2 / delta_m1 * delta_idx_2 + localDW->delta_0 / delta_m1 *
-            delta_n;
+        localDW->delta_n = w2 / localDW->delta_m1 * delta_idx_2 +
+            localDW->delta_0 / localDW->delta_m1 * localDW->delta_n;
     }
 
     localDW->delta_0 = (delta_idx_0 - slopes_idx_0) / localDW->Product[1];
-    delta_m1 = (w1 - delta_idx_0) / localDW->Product[1];
-    localDW->pp_coefs[0] = (delta_m1 - localDW->delta_0) / localDW->Product[1];
-    localDW->pp_coefs[3] = 2.0F * localDW->delta_0 - delta_m1;
+    localDW->delta_m1 = (w1 - delta_idx_0) / localDW->Product[1];
+    localDW->pp_coefs[0] = (localDW->delta_m1 - localDW->delta_0) /
+        localDW->Product[1];
+    localDW->pp_coefs[3] = 2.0F * localDW->delta_0 - localDW->delta_m1;
     localDW->pp_coefs[6] = slopes_idx_0;
     localDW->pp_coefs[9] = 0.0F;
     localDW->delta_0 = (delta_idx_1 - w1) / h_idx_1;
-    delta_m1 = (slopes_idx_2 - delta_idx_1) / h_idx_1;
-    localDW->pp_coefs[1] = (delta_m1 - localDW->delta_0) / h_idx_1;
-    localDW->pp_coefs[4] = 2.0F * localDW->delta_0 - delta_m1;
+    localDW->delta_m1 = (slopes_idx_2 - delta_idx_1) / h_idx_1;
+    localDW->pp_coefs[1] = (localDW->delta_m1 - localDW->delta_0) / h_idx_1;
+    localDW->pp_coefs[4] = 2.0F * localDW->delta_0 - localDW->delta_m1;
     localDW->pp_coefs[7] = w1;
-    localDW->pp_coefs[10] = (real32_T)localDW->qY_m;
+    localDW->pp_coefs[10] = rtb_DataTypeConversion_idx_1;
     localDW->delta_0 = (delta_idx_2 - slopes_idx_2) / h;
-    delta_m1 = (delta_n - delta_idx_2) / h;
-    localDW->pp_coefs[2] = (delta_m1 - localDW->delta_0) / h;
-    localDW->pp_coefs[5] = 2.0F * localDW->delta_0 - delta_m1;
+    localDW->delta_m1 = (localDW->delta_n - delta_idx_2) / h;
+    localDW->pp_coefs[2] = (localDW->delta_m1 - localDW->delta_0) / h;
+    localDW->pp_coefs[5] = 2.0F * localDW->delta_0 - localDW->delta_m1;
     localDW->pp_coefs[8] = slopes_idx_2;
-    localDW->pp_coefs[11] = (real32_T)localDW->qY;
+    localDW->pp_coefs[11] = rtb_DataTypeConversion_idx_2;
 
     /*  1. 计算函数值 */
-    /* '<S3>:1:19' y0 = int64(ppval(pp, x0)) + y_init; */
+    /* '<S3>:1:15' y0 = ppval(pp, x0); */
     high_i = 4;
     low_i = 0;
     low_ip1 = 2;
@@ -238,83 +205,53 @@ void csp_planning(const int64_T rtu_pos_target_ip_buff[4], const real32_T
         }
     }
 
-    delta_m1 = localDW->x0_sum - localDW->Product[low_i];
+    localDW->delta_m1 = localDW->x0_sum - localDW->Product[low_i];
 
     /* Gain: '<S1>/Gain' */
     /*  方法二：手动从系数计算 */
-    /* '<S3>:1:22' breaks = pp.breaks; */
-    /* '<S3>:1:23' coefs = pp.coefs; */
+    /* '<S3>:1:18' breaks = pp.breaks; */
+    /* '<S3>:1:19' coefs = pp.coefs; */
     /* x0必须始终在插值第一段 */
-    /* '<S3>:1:27' c = coefs(1, :); */
+    /* '<S3>:1:23' c = coefs(1, :); */
     /*  系数为 [a, b, c, d]，对应 (x-break)^3, (x-break)^2, (x-break)^1, 常数项 */
-    /* '<S3>:1:28' t = x0 - breaks(1); */
+    /* '<S3>:1:24' t = x0 - breaks(1); */
     /*  一阶导数 */
-    /* '<S3>:1:30' dy0 = 3*c(1)*t^2 + 2*c(2)*t + c(3); */
+    /* '<S3>:1:26' dy0 = 3*c(1)*t^2 + 2*c(2)*t + c(3); */
     /*  二阶导数 */
-    /* '<S3>:1:32' d2y0 = 6*c(1)*t + 2*c(2); */
-    delta_n = 2.0F * *rtu_ip_dt;
+    /* '<S3>:1:28' d2y0 = 6*c(1)*t + 2*c(2); */
+    localDW->delta_n = 2.0F * *rtu_ip_dt;
 
-    /* Switch: '<S1>/Switch1' incorporates:
+    /* Switch: '<S1>/Switch3' incorporates:
      *  Constant: '<S1>/Constant1'
      *  Constant: '<S1>/Constant2'
+     *  DataTypeConversion: '<S1>/Data Type Conversion1'
      *  DiscreteIntegrator: '<S4>/Discrete-Time Integrator'
      *  MATLAB Function: '<S1>/MATLAB Function'
      *  RelationalOperator: '<S1>/Relational Operator'
+     *  Sum: '<S1>/Add1'
+     *  Switch: '<S1>/Switch1'
      *  Switch: '<S1>/Switch2'
-     *  Switch: '<S1>/Switch3'
      */
-    if (localDW->x0_sum < delta_n)
+    if (localDW->x0_sum < localDW->delta_n)
     {
+        *rty_pos_cmd = (int64_T)floorf(((localDW->delta_m1 * localDW->
+            pp_coefs[low_i] + localDW->pp_coefs[low_i + 3]) * localDW->delta_m1
+            + localDW->pp_coefs[low_i + 6]) * localDW->delta_m1 +
+            localDW->pp_coefs[low_i + 9]) + rtu_pos_target_ip_buff[0];
         *rty_acc_cmd = 6.0F * localDW->pp_coefs[0] * localDW->x0_sum + 2.0F *
             localDW->pp_coefs[3];
         *rty_v_cmd = (3.0F * localDW->pp_coefs[0] * (localDW->x0_sum *
                        localDW->x0_sum) + 2.0F * localDW->pp_coefs[3] *
                       localDW->x0_sum) + slopes_idx_0;
-
-        /* MATLAB Function: '<S1>/MATLAB Function' */
-        slopes_idx_0 = roundf(((delta_m1 * localDW->pp_coefs[low_i] +
-                                localDW->pp_coefs[low_i + 3]) * delta_m1 +
-                               localDW->pp_coefs[low_i + 6]) * delta_m1 +
-                              localDW->pp_coefs[low_i + 9]);
-        if (slopes_idx_0 < 9.22337204E+18F)
-        {
-            if (slopes_idx_0 >= -9.22337204E+18F)
-            {
-                localDW->qY_m = (int64_T)slopes_idx_0;
-            }
-            else
-            {
-                localDW->qY_m = MIN_int64_T;
-            }
-        }
-        else
-        {
-            localDW->qY_m = MAX_int64_T;
-        }
-
-        if ((localDW->qY_m < 0LL) && (rtu_pos_target_ip_buff[0] < MIN_int64_T
-                - localDW->qY_m))
-        {
-            *rty_pos_cmd = MIN_int64_T;
-        }
-        else if ((localDW->qY_m > 0LL) && (rtu_pos_target_ip_buff[0] >
-                  MAX_int64_T - localDW->qY_m))
-        {
-            *rty_pos_cmd = MAX_int64_T;
-        }
-        else
-        {
-            *rty_pos_cmd = localDW->qY_m + rtu_pos_target_ip_buff[0];
-        }
     }
     else
     {
+        *rty_pos_cmd = rtu_pos_target_ip_buff[3];
         *rty_acc_cmd = 0.0F;
         *rty_v_cmd = 0.0F;
-        *rty_pos_cmd = rtu_pos_target_ip_buff[3];
     }
 
-    /* End of Switch: '<S1>/Switch1' */
+    /* End of Switch: '<S1>/Switch3' */
 
     /* Update for DiscreteIntegrator: '<S4>/Discrete-Time Integrator' */
     localDW->x0_sum += *rtu_dt_p;

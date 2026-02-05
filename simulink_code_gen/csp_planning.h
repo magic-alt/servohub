@@ -27,13 +27,12 @@
 /* Block signals and states (default storage) for model 'csp_planning' */
 typedef struct
 {
-    int64_T qY;
-    int64_T qY_m;
-    int64_T i;
     real32_T pp_coefs[12];
     real32_T Product[4];               /* '<S1>/Product' */
     real32_T x0_sum;                   /* '<S4>/Discrete-Time Integrator' */
     real32_T delta_0;
+    real32_T delta_m1;
+    real32_T delta_n;
 }
 csp_planning_DW_f;
 
