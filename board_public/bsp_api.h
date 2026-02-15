@@ -72,6 +72,8 @@ uint32_t bsp_get_encoder_cnt(ENCODER_ID const enc_id);
 int64_t bsp_get_encoder_turns(ENCODER_ID const enc_id);
 /* 获取编码器类型 */
 uint8_t bsp_get_encoder_type(ENCODER_ID enc_id);
+/* 获取编码器过零点状态 */
+bool bsp_get_encoder_zero_crossing_state(ENCODER_ID const enc_id);
 #pragma endregion
 
 #pragma region 通讯相关

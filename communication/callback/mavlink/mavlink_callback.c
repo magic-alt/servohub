@@ -587,6 +587,9 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 app_motion_param_t.MIT_kd = get_app_MIT_kd();
                 app_motion_param_t.Interp_time_value = get_app_Interp_time_value();
                 app_motion_param_t.Interp_time_index = get_app_Interp_time_index();
+                app_motion_param_t.Homing_speed_search_for_switch = get_app_Homing_speed_search_for_switch();
+                app_motion_param_t.Homing_speed_search_for_zero = get_app_Homing_speed_search_for_zero();
+                app_motion_param_t.Homing_acceleration = get_app_Homing_acceleration();
                 mavlink_msg_appmotionparam_encode(sys_id, comp_id, &send_msg, (mavlink_appmotionparam_t *)&app_motion_param_t);
                 break;
             case MAVLINK_MSG_ID_AppRestrictParam:
@@ -631,6 +634,9 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 app_motion_info_t.Interp_period = get_app_Interp_period();
                 app_motion_info_t.Emergency_brake_requested = get_app_Emergency_brake_requested();
                 app_motion_info_t.Target_update_state = get_app_Target_update_state();
+                app_motion_info_t.Homing_step = get_app_Homing_step();
+                app_motion_info_t.Encoder_zero_crossing_state = get_app_Encoder_zero_crossing_state();
+                app_motion_info_t.Homing_state = get_app_Homing_state();
                 mavlink_msg_appmotioninfo_encode(sys_id, comp_id, &send_msg, (mavlink_appmotioninfo_t *)&app_motion_info_t);
                 break;
             case MAVLINK_MSG_ID_AppWindowParam:
@@ -1259,6 +1265,12 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 app_motion_param_t.Interp_time_value = get_app_Interp_time_value();
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Interp_time_index(app_motion_param_t.Interp_time_index);}
                 app_motion_param_t.Interp_time_index = get_app_Interp_time_index();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Homing_speed_search_for_switch(app_motion_param_t.Homing_speed_search_for_switch);}
+                app_motion_param_t.Homing_speed_search_for_switch = get_app_Homing_speed_search_for_switch();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Homing_speed_search_for_zero(app_motion_param_t.Homing_speed_search_for_zero);}
+                app_motion_param_t.Homing_speed_search_for_zero = get_app_Homing_speed_search_for_zero();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Homing_acceleration(app_motion_param_t.Homing_acceleration);}
+                app_motion_param_t.Homing_acceleration = get_app_Homing_acceleration();
                 mavlink_msg_appmotionparam_encode(sys_id, comp_id, &send_msg, (mavlink_appmotionparam_t *)&app_motion_param_t);
                 break;
             case MAVLINK_MSG_ID_AppRestrictParam:

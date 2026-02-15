@@ -185,6 +185,9 @@ typedef struct {
     int8_t app_motion_param_Interp_time_index;
     uint8_t app_mavlink_config_Sys_id;
     uint8_t app_mavlink_config_Comp_id;
+    float app_motion_param_Homing_speed_search_for_switch;
+    float app_motion_param_Homing_speed_search_for_zero;
+    float app_motion_param_Homing_acceleration;
 }FLASH_PARAM_STRUCT;
 extern FLASH_PARAM_STRUCT kFlashStorage;
 

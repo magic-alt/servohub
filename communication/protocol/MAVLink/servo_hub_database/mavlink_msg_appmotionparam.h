@@ -22,18 +22,21 @@ typedef struct __mavlink_appmotionparam_t {
  float MIT_target_velocity; /*<  */
  float MIT_kp; /*<  */
  float MIT_kd; /*<  */
+ float Homing_speed_search_for_switch; /*<  */
+ float Homing_speed_search_for_zero; /*<  */
+ float Homing_acceleration; /*<  */
  int8_t Homing_method; /*<  */
  uint8_t Interp_time_value; /*<  */
  int8_t Interp_time_index; /*<  */
 } mavlink_appmotionparam_t;
 
-#define MAVLINK_MSG_ID_AppMotionParam_LEN 83
-#define MAVLINK_MSG_ID_AppMotionParam_MIN_LEN 83
-#define MAVLINK_MSG_ID_30059_LEN 83
-#define MAVLINK_MSG_ID_30059_MIN_LEN 83
+#define MAVLINK_MSG_ID_AppMotionParam_LEN 95
+#define MAVLINK_MSG_ID_AppMotionParam_MIN_LEN 95
+#define MAVLINK_MSG_ID_30059_LEN 95
+#define MAVLINK_MSG_ID_30059_MIN_LEN 95
 
-#define MAVLINK_MSG_ID_AppMotionParam_CRC 113
-#define MAVLINK_MSG_ID_30059_CRC 113
+#define MAVLINK_MSG_ID_AppMotionParam_CRC 221
+#define MAVLINK_MSG_ID_30059_CRC 221
 
 
 
@@ -41,7 +44,7 @@ typedef struct __mavlink_appmotionparam_t {
 #define MAVLINK_MESSAGE_INFO_AppMotionParam { \
     30059, \
     "AppMotionParam", \
-    20, \
+    23, \
     {  { "Target_position", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_appmotionparam_t, Target_position) }, \
          { "Profile_velocity", NULL, MAVLINK_TYPE_FLOAT, 0, 24, offsetof(mavlink_appmotionparam_t, Profile_velocity) }, \
          { "Profile_acceleration", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_appmotionparam_t, Profile_acceleration) }, \
@@ -49,7 +52,7 @@ typedef struct __mavlink_appmotionparam_t {
          { "Quick_stop_deceleration", NULL, MAVLINK_TYPE_FLOAT, 0, 36, offsetof(mavlink_appmotionparam_t, Quick_stop_deceleration) }, \
          { "Motion_profile_type", NULL, MAVLINK_TYPE_INT32_T, 0, 40, offsetof(mavlink_appmotionparam_t, Motion_profile_type) }, \
          { "Home_offset", NULL, MAVLINK_TYPE_INT64_T, 0, 8, offsetof(mavlink_appmotionparam_t, Home_offset) }, \
-         { "Homing_method", NULL, MAVLINK_TYPE_INT8_T, 0, 80, offsetof(mavlink_appmotionparam_t, Homing_method) }, \
+         { "Homing_method", NULL, MAVLINK_TYPE_INT8_T, 0, 92, offsetof(mavlink_appmotionparam_t, Homing_method) }, \
          { "Target_velocity", NULL, MAVLINK_TYPE_FLOAT, 0, 44, offsetof(mavlink_appmotionparam_t, Target_velocity) }, \
          { "Target_torque", NULL, MAVLINK_TYPE_FLOAT, 0, 48, offsetof(mavlink_appmotionparam_t, Target_torque) }, \
          { "Torque_slope", NULL, MAVLINK_TYPE_FLOAT, 0, 52, offsetof(mavlink_appmotionparam_t, Torque_slope) }, \
@@ -60,14 +63,17 @@ typedef struct __mavlink_appmotionparam_t {
          { "MIT_target_velocity", NULL, MAVLINK_TYPE_FLOAT, 0, 68, offsetof(mavlink_appmotionparam_t, MIT_target_velocity) }, \
          { "MIT_kp", NULL, MAVLINK_TYPE_FLOAT, 0, 72, offsetof(mavlink_appmotionparam_t, MIT_kp) }, \
          { "MIT_kd", NULL, MAVLINK_TYPE_FLOAT, 0, 76, offsetof(mavlink_appmotionparam_t, MIT_kd) }, \
-         { "Interp_time_value", NULL, MAVLINK_TYPE_UINT8_T, 0, 81, offsetof(mavlink_appmotionparam_t, Interp_time_value) }, \
-         { "Interp_time_index", NULL, MAVLINK_TYPE_INT8_T, 0, 82, offsetof(mavlink_appmotionparam_t, Interp_time_index) }, \
+         { "Interp_time_value", NULL, MAVLINK_TYPE_UINT8_T, 0, 93, offsetof(mavlink_appmotionparam_t, Interp_time_value) }, \
+         { "Interp_time_index", NULL, MAVLINK_TYPE_INT8_T, 0, 94, offsetof(mavlink_appmotionparam_t, Interp_time_index) }, \
+         { "Homing_speed_search_for_switch", NULL, MAVLINK_TYPE_FLOAT, 0, 80, offsetof(mavlink_appmotionparam_t, Homing_speed_search_for_switch) }, \
+         { "Homing_speed_search_for_zero", NULL, MAVLINK_TYPE_FLOAT, 0, 84, offsetof(mavlink_appmotionparam_t, Homing_speed_search_for_zero) }, \
+         { "Homing_acceleration", NULL, MAVLINK_TYPE_FLOAT, 0, 88, offsetof(mavlink_appmotionparam_t, Homing_acceleration) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_AppMotionParam { \
     "AppMotionParam", \
-    20, \
+    23, \
     {  { "Target_position", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_appmotionparam_t, Target_position) }, \
          { "Profile_velocity", NULL, MAVLINK_TYPE_FLOAT, 0, 24, offsetof(mavlink_appmotionparam_t, Profile_velocity) }, \
          { "Profile_acceleration", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_appmotionparam_t, Profile_acceleration) }, \
@@ -75,7 +81,7 @@ typedef struct __mavlink_appmotionparam_t {
          { "Quick_stop_deceleration", NULL, MAVLINK_TYPE_FLOAT, 0, 36, offsetof(mavlink_appmotionparam_t, Quick_stop_deceleration) }, \
          { "Motion_profile_type", NULL, MAVLINK_TYPE_INT32_T, 0, 40, offsetof(mavlink_appmotionparam_t, Motion_profile_type) }, \
          { "Home_offset", NULL, MAVLINK_TYPE_INT64_T, 0, 8, offsetof(mavlink_appmotionparam_t, Home_offset) }, \
-         { "Homing_method", NULL, MAVLINK_TYPE_INT8_T, 0, 80, offsetof(mavlink_appmotionparam_t, Homing_method) }, \
+         { "Homing_method", NULL, MAVLINK_TYPE_INT8_T, 0, 92, offsetof(mavlink_appmotionparam_t, Homing_method) }, \
          { "Target_velocity", NULL, MAVLINK_TYPE_FLOAT, 0, 44, offsetof(mavlink_appmotionparam_t, Target_velocity) }, \
          { "Target_torque", NULL, MAVLINK_TYPE_FLOAT, 0, 48, offsetof(mavlink_appmotionparam_t, Target_torque) }, \
          { "Torque_slope", NULL, MAVLINK_TYPE_FLOAT, 0, 52, offsetof(mavlink_appmotionparam_t, Torque_slope) }, \
@@ -86,8 +92,11 @@ typedef struct __mavlink_appmotionparam_t {
          { "MIT_target_velocity", NULL, MAVLINK_TYPE_FLOAT, 0, 68, offsetof(mavlink_appmotionparam_t, MIT_target_velocity) }, \
          { "MIT_kp", NULL, MAVLINK_TYPE_FLOAT, 0, 72, offsetof(mavlink_appmotionparam_t, MIT_kp) }, \
          { "MIT_kd", NULL, MAVLINK_TYPE_FLOAT, 0, 76, offsetof(mavlink_appmotionparam_t, MIT_kd) }, \
-         { "Interp_time_value", NULL, MAVLINK_TYPE_UINT8_T, 0, 81, offsetof(mavlink_appmotionparam_t, Interp_time_value) }, \
-         { "Interp_time_index", NULL, MAVLINK_TYPE_INT8_T, 0, 82, offsetof(mavlink_appmotionparam_t, Interp_time_index) }, \
+         { "Interp_time_value", NULL, MAVLINK_TYPE_UINT8_T, 0, 93, offsetof(mavlink_appmotionparam_t, Interp_time_value) }, \
+         { "Interp_time_index", NULL, MAVLINK_TYPE_INT8_T, 0, 94, offsetof(mavlink_appmotionparam_t, Interp_time_index) }, \
+         { "Homing_speed_search_for_switch", NULL, MAVLINK_TYPE_FLOAT, 0, 80, offsetof(mavlink_appmotionparam_t, Homing_speed_search_for_switch) }, \
+         { "Homing_speed_search_for_zero", NULL, MAVLINK_TYPE_FLOAT, 0, 84, offsetof(mavlink_appmotionparam_t, Homing_speed_search_for_zero) }, \
+         { "Homing_acceleration", NULL, MAVLINK_TYPE_FLOAT, 0, 88, offsetof(mavlink_appmotionparam_t, Homing_acceleration) }, \
          } \
 }
 #endif
@@ -118,10 +127,13 @@ typedef struct __mavlink_appmotionparam_t {
  * @param MIT_kd  
  * @param Interp_time_value  
  * @param Interp_time_index  
+ * @param Homing_speed_search_for_switch  
+ * @param Homing_speed_search_for_zero  
+ * @param Homing_acceleration  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_appmotionparam_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd, uint8_t Interp_time_value, int8_t Interp_time_index)
+                               int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd, uint8_t Interp_time_value, int8_t Interp_time_index, float Homing_speed_search_for_switch, float Homing_speed_search_for_zero, float Homing_acceleration)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppMotionParam_LEN];
@@ -142,9 +154,12 @@ static inline uint16_t mavlink_msg_appmotionparam_pack(uint8_t system_id, uint8_
     _mav_put_float(buf, 68, MIT_target_velocity);
     _mav_put_float(buf, 72, MIT_kp);
     _mav_put_float(buf, 76, MIT_kd);
-    _mav_put_int8_t(buf, 80, Homing_method);
-    _mav_put_uint8_t(buf, 81, Interp_time_value);
-    _mav_put_int8_t(buf, 82, Interp_time_index);
+    _mav_put_float(buf, 80, Homing_speed_search_for_switch);
+    _mav_put_float(buf, 84, Homing_speed_search_for_zero);
+    _mav_put_float(buf, 88, Homing_acceleration);
+    _mav_put_int8_t(buf, 92, Homing_method);
+    _mav_put_uint8_t(buf, 93, Interp_time_value);
+    _mav_put_int8_t(buf, 94, Interp_time_index);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppMotionParam_LEN);
 #else
@@ -166,6 +181,9 @@ static inline uint16_t mavlink_msg_appmotionparam_pack(uint8_t system_id, uint8_
     packet.MIT_target_velocity = MIT_target_velocity;
     packet.MIT_kp = MIT_kp;
     packet.MIT_kd = MIT_kd;
+    packet.Homing_speed_search_for_switch = Homing_speed_search_for_switch;
+    packet.Homing_speed_search_for_zero = Homing_speed_search_for_zero;
+    packet.Homing_acceleration = Homing_acceleration;
     packet.Homing_method = Homing_method;
     packet.Interp_time_value = Interp_time_value;
     packet.Interp_time_index = Interp_time_index;
@@ -204,10 +222,13 @@ static inline uint16_t mavlink_msg_appmotionparam_pack(uint8_t system_id, uint8_
  * @param MIT_kd  
  * @param Interp_time_value  
  * @param Interp_time_index  
+ * @param Homing_speed_search_for_switch  
+ * @param Homing_speed_search_for_zero  
+ * @param Homing_acceleration  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_appmotionparam_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd, uint8_t Interp_time_value, int8_t Interp_time_index)
+                               int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd, uint8_t Interp_time_value, int8_t Interp_time_index, float Homing_speed_search_for_switch, float Homing_speed_search_for_zero, float Homing_acceleration)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppMotionParam_LEN];
@@ -228,9 +249,12 @@ static inline uint16_t mavlink_msg_appmotionparam_pack_status(uint8_t system_id,
     _mav_put_float(buf, 68, MIT_target_velocity);
     _mav_put_float(buf, 72, MIT_kp);
     _mav_put_float(buf, 76, MIT_kd);
-    _mav_put_int8_t(buf, 80, Homing_method);
-    _mav_put_uint8_t(buf, 81, Interp_time_value);
-    _mav_put_int8_t(buf, 82, Interp_time_index);
+    _mav_put_float(buf, 80, Homing_speed_search_for_switch);
+    _mav_put_float(buf, 84, Homing_speed_search_for_zero);
+    _mav_put_float(buf, 88, Homing_acceleration);
+    _mav_put_int8_t(buf, 92, Homing_method);
+    _mav_put_uint8_t(buf, 93, Interp_time_value);
+    _mav_put_int8_t(buf, 94, Interp_time_index);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppMotionParam_LEN);
 #else
@@ -252,6 +276,9 @@ static inline uint16_t mavlink_msg_appmotionparam_pack_status(uint8_t system_id,
     packet.MIT_target_velocity = MIT_target_velocity;
     packet.MIT_kp = MIT_kp;
     packet.MIT_kd = MIT_kd;
+    packet.Homing_speed_search_for_switch = Homing_speed_search_for_switch;
+    packet.Homing_speed_search_for_zero = Homing_speed_search_for_zero;
+    packet.Homing_acceleration = Homing_acceleration;
     packet.Homing_method = Homing_method;
     packet.Interp_time_value = Interp_time_value;
     packet.Interp_time_index = Interp_time_index;
@@ -293,11 +320,14 @@ static inline uint16_t mavlink_msg_appmotionparam_pack_status(uint8_t system_id,
  * @param MIT_kd  
  * @param Interp_time_value  
  * @param Interp_time_index  
+ * @param Homing_speed_search_for_switch  
+ * @param Homing_speed_search_for_zero  
+ * @param Homing_acceleration  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_appmotionparam_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   int64_t Target_position,float Profile_velocity,float Profile_acceleration,float Profile_deceleration,float Quick_stop_deceleration,int32_t Motion_profile_type,int64_t Home_offset,int8_t Homing_method,float Target_velocity,float Target_torque,float Torque_slope,float Encoder_calibration_speed,float MIT_feedforward_torque,int64_t MIT_target_position,float MIT_max_current,float MIT_target_velocity,float MIT_kp,float MIT_kd,uint8_t Interp_time_value,int8_t Interp_time_index)
+                                   int64_t Target_position,float Profile_velocity,float Profile_acceleration,float Profile_deceleration,float Quick_stop_deceleration,int32_t Motion_profile_type,int64_t Home_offset,int8_t Homing_method,float Target_velocity,float Target_torque,float Torque_slope,float Encoder_calibration_speed,float MIT_feedforward_torque,int64_t MIT_target_position,float MIT_max_current,float MIT_target_velocity,float MIT_kp,float MIT_kd,uint8_t Interp_time_value,int8_t Interp_time_index,float Homing_speed_search_for_switch,float Homing_speed_search_for_zero,float Homing_acceleration)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppMotionParam_LEN];
@@ -318,9 +348,12 @@ static inline uint16_t mavlink_msg_appmotionparam_pack_chan(uint8_t system_id, u
     _mav_put_float(buf, 68, MIT_target_velocity);
     _mav_put_float(buf, 72, MIT_kp);
     _mav_put_float(buf, 76, MIT_kd);
-    _mav_put_int8_t(buf, 80, Homing_method);
-    _mav_put_uint8_t(buf, 81, Interp_time_value);
-    _mav_put_int8_t(buf, 82, Interp_time_index);
+    _mav_put_float(buf, 80, Homing_speed_search_for_switch);
+    _mav_put_float(buf, 84, Homing_speed_search_for_zero);
+    _mav_put_float(buf, 88, Homing_acceleration);
+    _mav_put_int8_t(buf, 92, Homing_method);
+    _mav_put_uint8_t(buf, 93, Interp_time_value);
+    _mav_put_int8_t(buf, 94, Interp_time_index);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppMotionParam_LEN);
 #else
@@ -342,6 +375,9 @@ static inline uint16_t mavlink_msg_appmotionparam_pack_chan(uint8_t system_id, u
     packet.MIT_target_velocity = MIT_target_velocity;
     packet.MIT_kp = MIT_kp;
     packet.MIT_kd = MIT_kd;
+    packet.Homing_speed_search_for_switch = Homing_speed_search_for_switch;
+    packet.Homing_speed_search_for_zero = Homing_speed_search_for_zero;
+    packet.Homing_acceleration = Homing_acceleration;
     packet.Homing_method = Homing_method;
     packet.Interp_time_value = Interp_time_value;
     packet.Interp_time_index = Interp_time_index;
@@ -363,7 +399,7 @@ static inline uint16_t mavlink_msg_appmotionparam_pack_chan(uint8_t system_id, u
  */
 static inline uint16_t mavlink_msg_appmotionparam_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_appmotionparam_t* appmotionparam)
 {
-    return mavlink_msg_appmotionparam_pack(system_id, component_id, msg, appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd, appmotionparam->Interp_time_value, appmotionparam->Interp_time_index);
+    return mavlink_msg_appmotionparam_pack(system_id, component_id, msg, appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd, appmotionparam->Interp_time_value, appmotionparam->Interp_time_index, appmotionparam->Homing_speed_search_for_switch, appmotionparam->Homing_speed_search_for_zero, appmotionparam->Homing_acceleration);
 }
 
 /**
@@ -377,7 +413,7 @@ static inline uint16_t mavlink_msg_appmotionparam_encode(uint8_t system_id, uint
  */
 static inline uint16_t mavlink_msg_appmotionparam_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_appmotionparam_t* appmotionparam)
 {
-    return mavlink_msg_appmotionparam_pack_chan(system_id, component_id, chan, msg, appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd, appmotionparam->Interp_time_value, appmotionparam->Interp_time_index);
+    return mavlink_msg_appmotionparam_pack_chan(system_id, component_id, chan, msg, appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd, appmotionparam->Interp_time_value, appmotionparam->Interp_time_index, appmotionparam->Homing_speed_search_for_switch, appmotionparam->Homing_speed_search_for_zero, appmotionparam->Homing_acceleration);
 }
 
 /**
@@ -391,7 +427,7 @@ static inline uint16_t mavlink_msg_appmotionparam_encode_chan(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_appmotionparam_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_appmotionparam_t* appmotionparam)
 {
-    return mavlink_msg_appmotionparam_pack_status(system_id, component_id, _status, msg,  appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd, appmotionparam->Interp_time_value, appmotionparam->Interp_time_index);
+    return mavlink_msg_appmotionparam_pack_status(system_id, component_id, _status, msg,  appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd, appmotionparam->Interp_time_value, appmotionparam->Interp_time_index, appmotionparam->Homing_speed_search_for_switch, appmotionparam->Homing_speed_search_for_zero, appmotionparam->Homing_acceleration);
 }
 
 /**
@@ -418,10 +454,13 @@ static inline uint16_t mavlink_msg_appmotionparam_encode_status(uint8_t system_i
  * @param MIT_kd  
  * @param Interp_time_value  
  * @param Interp_time_index  
+ * @param Homing_speed_search_for_switch  
+ * @param Homing_speed_search_for_zero  
+ * @param Homing_acceleration  
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_appmotionparam_send(mavlink_channel_t chan, int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd, uint8_t Interp_time_value, int8_t Interp_time_index)
+static inline void mavlink_msg_appmotionparam_send(mavlink_channel_t chan, int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd, uint8_t Interp_time_value, int8_t Interp_time_index, float Homing_speed_search_for_switch, float Homing_speed_search_for_zero, float Homing_acceleration)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppMotionParam_LEN];
@@ -442,9 +481,12 @@ static inline void mavlink_msg_appmotionparam_send(mavlink_channel_t chan, int64
     _mav_put_float(buf, 68, MIT_target_velocity);
     _mav_put_float(buf, 72, MIT_kp);
     _mav_put_float(buf, 76, MIT_kd);
-    _mav_put_int8_t(buf, 80, Homing_method);
-    _mav_put_uint8_t(buf, 81, Interp_time_value);
-    _mav_put_int8_t(buf, 82, Interp_time_index);
+    _mav_put_float(buf, 80, Homing_speed_search_for_switch);
+    _mav_put_float(buf, 84, Homing_speed_search_for_zero);
+    _mav_put_float(buf, 88, Homing_acceleration);
+    _mav_put_int8_t(buf, 92, Homing_method);
+    _mav_put_uint8_t(buf, 93, Interp_time_value);
+    _mav_put_int8_t(buf, 94, Interp_time_index);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppMotionParam, buf, MAVLINK_MSG_ID_AppMotionParam_MIN_LEN, MAVLINK_MSG_ID_AppMotionParam_LEN, MAVLINK_MSG_ID_AppMotionParam_CRC);
 #else
@@ -466,6 +508,9 @@ static inline void mavlink_msg_appmotionparam_send(mavlink_channel_t chan, int64
     packet.MIT_target_velocity = MIT_target_velocity;
     packet.MIT_kp = MIT_kp;
     packet.MIT_kd = MIT_kd;
+    packet.Homing_speed_search_for_switch = Homing_speed_search_for_switch;
+    packet.Homing_speed_search_for_zero = Homing_speed_search_for_zero;
+    packet.Homing_acceleration = Homing_acceleration;
     packet.Homing_method = Homing_method;
     packet.Interp_time_value = Interp_time_value;
     packet.Interp_time_index = Interp_time_index;
@@ -482,7 +527,7 @@ static inline void mavlink_msg_appmotionparam_send(mavlink_channel_t chan, int64
 static inline void mavlink_msg_appmotionparam_send_struct(mavlink_channel_t chan, const mavlink_appmotionparam_t* appmotionparam)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_appmotionparam_send(chan, appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd, appmotionparam->Interp_time_value, appmotionparam->Interp_time_index);
+    mavlink_msg_appmotionparam_send(chan, appmotionparam->Target_position, appmotionparam->Profile_velocity, appmotionparam->Profile_acceleration, appmotionparam->Profile_deceleration, appmotionparam->Quick_stop_deceleration, appmotionparam->Motion_profile_type, appmotionparam->Home_offset, appmotionparam->Homing_method, appmotionparam->Target_velocity, appmotionparam->Target_torque, appmotionparam->Torque_slope, appmotionparam->Encoder_calibration_speed, appmotionparam->MIT_feedforward_torque, appmotionparam->MIT_target_position, appmotionparam->MIT_max_current, appmotionparam->MIT_target_velocity, appmotionparam->MIT_kp, appmotionparam->MIT_kd, appmotionparam->Interp_time_value, appmotionparam->Interp_time_index, appmotionparam->Homing_speed_search_for_switch, appmotionparam->Homing_speed_search_for_zero, appmotionparam->Homing_acceleration);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppMotionParam, (const char *)appmotionparam, MAVLINK_MSG_ID_AppMotionParam_MIN_LEN, MAVLINK_MSG_ID_AppMotionParam_LEN, MAVLINK_MSG_ID_AppMotionParam_CRC);
 #endif
@@ -496,7 +541,7 @@ static inline void mavlink_msg_appmotionparam_send_struct(mavlink_channel_t chan
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_appmotionparam_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd, uint8_t Interp_time_value, int8_t Interp_time_index)
+static inline void mavlink_msg_appmotionparam_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int64_t Target_position, float Profile_velocity, float Profile_acceleration, float Profile_deceleration, float Quick_stop_deceleration, int32_t Motion_profile_type, int64_t Home_offset, int8_t Homing_method, float Target_velocity, float Target_torque, float Torque_slope, float Encoder_calibration_speed, float MIT_feedforward_torque, int64_t MIT_target_position, float MIT_max_current, float MIT_target_velocity, float MIT_kp, float MIT_kd, uint8_t Interp_time_value, int8_t Interp_time_index, float Homing_speed_search_for_switch, float Homing_speed_search_for_zero, float Homing_acceleration)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -517,9 +562,12 @@ static inline void mavlink_msg_appmotionparam_send_buf(mavlink_message_t *msgbuf
     _mav_put_float(buf, 68, MIT_target_velocity);
     _mav_put_float(buf, 72, MIT_kp);
     _mav_put_float(buf, 76, MIT_kd);
-    _mav_put_int8_t(buf, 80, Homing_method);
-    _mav_put_uint8_t(buf, 81, Interp_time_value);
-    _mav_put_int8_t(buf, 82, Interp_time_index);
+    _mav_put_float(buf, 80, Homing_speed_search_for_switch);
+    _mav_put_float(buf, 84, Homing_speed_search_for_zero);
+    _mav_put_float(buf, 88, Homing_acceleration);
+    _mav_put_int8_t(buf, 92, Homing_method);
+    _mav_put_uint8_t(buf, 93, Interp_time_value);
+    _mav_put_int8_t(buf, 94, Interp_time_index);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppMotionParam, buf, MAVLINK_MSG_ID_AppMotionParam_MIN_LEN, MAVLINK_MSG_ID_AppMotionParam_LEN, MAVLINK_MSG_ID_AppMotionParam_CRC);
 #else
@@ -541,6 +589,9 @@ static inline void mavlink_msg_appmotionparam_send_buf(mavlink_message_t *msgbuf
     packet->MIT_target_velocity = MIT_target_velocity;
     packet->MIT_kp = MIT_kp;
     packet->MIT_kd = MIT_kd;
+    packet->Homing_speed_search_for_switch = Homing_speed_search_for_switch;
+    packet->Homing_speed_search_for_zero = Homing_speed_search_for_zero;
+    packet->Homing_acceleration = Homing_acceleration;
     packet->Homing_method = Homing_method;
     packet->Interp_time_value = Interp_time_value;
     packet->Interp_time_index = Interp_time_index;
@@ -632,7 +683,7 @@ static inline int64_t mavlink_msg_appmotionparam_get_Home_offset(const mavlink_m
  */
 static inline int8_t mavlink_msg_appmotionparam_get_Homing_method(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int8_t(msg,  80);
+    return _MAV_RETURN_int8_t(msg,  92);
 }
 
 /**
@@ -742,7 +793,7 @@ static inline float mavlink_msg_appmotionparam_get_MIT_kd(const mavlink_message_
  */
 static inline uint8_t mavlink_msg_appmotionparam_get_Interp_time_value(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  81);
+    return _MAV_RETURN_uint8_t(msg,  93);
 }
 
 /**
@@ -752,7 +803,37 @@ static inline uint8_t mavlink_msg_appmotionparam_get_Interp_time_value(const mav
  */
 static inline int8_t mavlink_msg_appmotionparam_get_Interp_time_index(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int8_t(msg,  82);
+    return _MAV_RETURN_int8_t(msg,  94);
+}
+
+/**
+ * @brief Get field Homing_speed_search_for_switch from appmotionparam message
+ *
+ * @return  
+ */
+static inline float mavlink_msg_appmotionparam_get_Homing_speed_search_for_switch(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  80);
+}
+
+/**
+ * @brief Get field Homing_speed_search_for_zero from appmotionparam message
+ *
+ * @return  
+ */
+static inline float mavlink_msg_appmotionparam_get_Homing_speed_search_for_zero(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  84);
+}
+
+/**
+ * @brief Get field Homing_acceleration from appmotionparam message
+ *
+ * @return  
+ */
+static inline float mavlink_msg_appmotionparam_get_Homing_acceleration(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  88);
 }
 
 /**
@@ -781,6 +862,9 @@ static inline void mavlink_msg_appmotionparam_decode(const mavlink_message_t* ms
     appmotionparam->MIT_target_velocity = mavlink_msg_appmotionparam_get_MIT_target_velocity(msg);
     appmotionparam->MIT_kp = mavlink_msg_appmotionparam_get_MIT_kp(msg);
     appmotionparam->MIT_kd = mavlink_msg_appmotionparam_get_MIT_kd(msg);
+    appmotionparam->Homing_speed_search_for_switch = mavlink_msg_appmotionparam_get_Homing_speed_search_for_switch(msg);
+    appmotionparam->Homing_speed_search_for_zero = mavlink_msg_appmotionparam_get_Homing_speed_search_for_zero(msg);
+    appmotionparam->Homing_acceleration = mavlink_msg_appmotionparam_get_Homing_acceleration(msg);
     appmotionparam->Homing_method = mavlink_msg_appmotionparam_get_Homing_method(msg);
     appmotionparam->Interp_time_value = mavlink_msg_appmotionparam_get_Interp_time_value(msg);
     appmotionparam->Interp_time_index = mavlink_msg_appmotionparam_get_Interp_time_index(msg);

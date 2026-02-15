@@ -662,6 +662,29 @@ UNS32 OD_0x60C6_Max_deceleration_Read_Callback(UNS8 subindex, void *value)
     /* USER CODE END 0x60C6 0x00 READ 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
+UNS32 OD_0x607C_Home_offset_Write_Callback(UNS8 subindex, void *value)
+{
+    UNS32 abort_code = ABORT_CODE_SUCCESSFUL;
+    /* USER CODE BEGIN 0x607C 0x00 WRITE 0 */
+
+    /* USER CODE END 0x607C 0x00 WRITE 0 */
+    abort_code = set_Home_offset(*(INTEGER32*)value);
+    /* USER CODE BEGIN 0x607C 0x00 WRITE 1 */
+
+    /* USER CODE END 0x607C 0x00 WRITE 1 */
+    return abort_code;
+}
+UNS32 OD_0x607C_Home_offset_Read_Callback(UNS8 subindex, void *value)
+{
+    /* USER CODE BEGIN 0x607C 0x00 READ 0 */
+    
+    /* USER CODE END 0x607C 0x00 READ 0 */
+    *(INTEGER32*)value = get_Home_offset();
+    /* USER CODE BEGIN 0x607C 0x00 READ 1 */
+    
+    /* USER CODE END 0x607C 0x00 READ 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
 UNS32 OD_0x6098_Homing_method_Write_Callback(UNS8 subindex, void *value)
 {
     UNS32 abort_code = ABORT_CODE_SUCCESSFUL;
@@ -683,6 +706,110 @@ UNS32 OD_0x6098_Homing_method_Read_Callback(UNS8 subindex, void *value)
     /* USER CODE BEGIN 0x6098 0x00 READ 1 */
     
     /* USER CODE END 0x6098 0x00 READ 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS32 OD_0x6099_Homing_speeds_Write_Callback(UNS8 subindex, void *value)
+{
+    UNS32 abort_code = ABORT_CODE_SUCCESSFUL;
+    if ((get_Statusword() & STATUS_WORD_ENABLE_MASK) == STATUS_WORD_ENABLE_MASK)
+    {
+        return ABORT_CODE_DRIVE_STATE_DENIED;
+    }
+    switch(subindex)
+    {
+        case 0x00:
+    /* USER CODE BEGIN 0x6099 0x00 WRITE 0 */
+    
+    /* USER CODE END 0x6099 0x00 WRITE 0 */
+            abort_code = ABORT_CODE_CANNOT_WRITE_RO_OBJECT;
+    /* USER CODE BEGIN 0x6099 0x00 WRITE 1 */
+    
+    /* USER CODE END 0x6099 0x00 WRITE 1 */
+            break;
+        case 0x01:
+    /* USER CODE BEGIN 0x6099 0x01 WRITE 0 */
+    
+    /* USER CODE END 0x6099 0x01 WRITE 0 */
+            abort_code = set_Homing_speeds_Speed_for_switch_search(*(UNS32*)value);
+    /* USER CODE BEGIN 0x6099 0x01 WRITE 1 */
+    
+    /* USER CODE END 0x6099 0x01 WRITE 1 */
+            break;
+        case 0x02:
+    /* USER CODE BEGIN 0x6099 0x02 WRITE 0 */
+    
+    /* USER CODE END 0x6099 0x02 WRITE 0 */
+            abort_code = set_Homing_speeds_Speed_for_zero_search(*(UNS32*)value);
+    /* USER CODE BEGIN 0x6099 0x02 WRITE 1 */
+    
+    /* USER CODE END 0x6099 0x02 WRITE 1 */
+            break;
+        default:
+            abort_code = ABORT_CODE_SUB_INDEX_NOT_EXIST;
+            break;
+    }
+    return abort_code;
+}
+UNS32 OD_0x6099_Homing_speeds_Read_Callback(UNS8 subindex, void *value)
+{
+    UNS32 abort_code = ABORT_CODE_SUCCESSFUL;
+    switch(subindex)
+    {
+        case 0x00:
+    /* USER CODE BEGIN 0x6099 0x00 READ 0 */
+    
+    /* USER CODE END 0x6099 0x00 READ 0 */
+            *(UNS8*)value = 0x2;
+            abort_code = ABORT_CODE_SUCCESSFUL;
+    /* USER CODE BEGIN 0x6099 0x00 READ 1 */
+    
+    /* USER CODE END 0x6099 0x00 READ 1 */
+            break;
+        case 0x01:
+    /* USER CODE BEGIN 0x6099 0x01 READ 0 */
+    
+    /* USER CODE END 0x6099 0x01 READ 0 */
+            *(UNS32*)value = get_Homing_speeds_Speed_for_switch_search();
+    /* USER CODE BEGIN 0x6099 0x01 READ 1 */
+    
+    /* USER CODE END 0x6099 0x01 READ 1 */
+            break;
+        case 0x02:
+    /* USER CODE BEGIN 0x6099 0x02 READ 0 */
+    
+    /* USER CODE END 0x6099 0x02 READ 0 */
+            *(UNS32*)value = get_Homing_speeds_Speed_for_zero_search();
+    /* USER CODE BEGIN 0x6099 0x02 READ 1 */
+    
+    /* USER CODE END 0x6099 0x02 READ 1 */
+            break;
+        default:
+            abort_code = ABORT_CODE_SUB_INDEX_NOT_EXIST;
+            break;
+    }
+    return abort_code;
+}
+UNS32 OD_0x609A_Homing_acceleration_Write_Callback(UNS8 subindex, void *value)
+{
+    UNS32 abort_code = ABORT_CODE_SUCCESSFUL;
+    /* USER CODE BEGIN 0x609A 0x00 WRITE 0 */
+
+    /* USER CODE END 0x609A 0x00 WRITE 0 */
+    abort_code = set_Homing_acceleration(*(UNS32*)value);
+    /* USER CODE BEGIN 0x609A 0x00 WRITE 1 */
+
+    /* USER CODE END 0x609A 0x00 WRITE 1 */
+    return abort_code;
+}
+UNS32 OD_0x609A_Homing_acceleration_Read_Callback(UNS8 subindex, void *value)
+{
+    /* USER CODE BEGIN 0x609A 0x00 READ 0 */
+    
+    /* USER CODE END 0x609A 0x00 READ 0 */
+    *(UNS32*)value = get_Homing_acceleration();
+    /* USER CODE BEGIN 0x609A 0x00 READ 1 */
+    
+    /* USER CODE END 0x609A 0x00 READ 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
 UNS32 OD_0x6062_Position_demand_value_Read_Callback(UNS8 subindex, void *value)

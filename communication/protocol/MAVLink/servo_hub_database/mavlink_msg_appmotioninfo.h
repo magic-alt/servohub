@@ -33,15 +33,18 @@ typedef struct __mavlink_appmotioninfo_t {
  uint16_t W_adc_mid_val; /*<  */
  uint8_t Emergency_brake_requested; /*<  */
  uint8_t Target_update_state; /*<  */
+ int8_t Homing_step; /*<  */
+ uint8_t Encoder_zero_crossing_state; /*<  */
+ int8_t Homing_state; /*<  */
 } mavlink_appmotioninfo_t;
 
-#define MAVLINK_MSG_ID_AppMotionInfo_LEN 128
-#define MAVLINK_MSG_ID_AppMotionInfo_MIN_LEN 128
-#define MAVLINK_MSG_ID_30061_LEN 128
-#define MAVLINK_MSG_ID_30061_MIN_LEN 128
+#define MAVLINK_MSG_ID_AppMotionInfo_LEN 131
+#define MAVLINK_MSG_ID_AppMotionInfo_MIN_LEN 131
+#define MAVLINK_MSG_ID_30061_LEN 131
+#define MAVLINK_MSG_ID_30061_MIN_LEN 131
 
-#define MAVLINK_MSG_ID_AppMotionInfo_CRC 110
-#define MAVLINK_MSG_ID_30061_CRC 110
+#define MAVLINK_MSG_ID_AppMotionInfo_CRC 83
+#define MAVLINK_MSG_ID_30061_CRC 83
 
 
 
@@ -49,7 +52,7 @@ typedef struct __mavlink_appmotioninfo_t {
 #define MAVLINK_MESSAGE_INFO_AppMotionInfo { \
     30061, \
     "AppMotionInfo", \
-    28, \
+    31, \
     {  { "Position_demand_value", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_appmotioninfo_t, Position_demand_value) }, \
          { "Position_actual_value_inc", NULL, MAVLINK_TYPE_INT64_T, 0, 8, offsetof(mavlink_appmotioninfo_t, Position_actual_value_inc) }, \
          { "Position_actual_value", NULL, MAVLINK_TYPE_INT64_T, 0, 16, offsetof(mavlink_appmotioninfo_t, Position_actual_value) }, \
@@ -78,12 +81,15 @@ typedef struct __mavlink_appmotioninfo_t {
          { "Interp_period", NULL, MAVLINK_TYPE_FLOAT, 0, 116, offsetof(mavlink_appmotioninfo_t, Interp_period) }, \
          { "Emergency_brake_requested", NULL, MAVLINK_TYPE_UINT8_T, 0, 126, offsetof(mavlink_appmotioninfo_t, Emergency_brake_requested) }, \
          { "Target_update_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 127, offsetof(mavlink_appmotioninfo_t, Target_update_state) }, \
+         { "Homing_step", NULL, MAVLINK_TYPE_INT8_T, 0, 128, offsetof(mavlink_appmotioninfo_t, Homing_step) }, \
+         { "Encoder_zero_crossing_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 129, offsetof(mavlink_appmotioninfo_t, Encoder_zero_crossing_state) }, \
+         { "Homing_state", NULL, MAVLINK_TYPE_INT8_T, 0, 130, offsetof(mavlink_appmotioninfo_t, Homing_state) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_AppMotionInfo { \
     "AppMotionInfo", \
-    28, \
+    31, \
     {  { "Position_demand_value", NULL, MAVLINK_TYPE_INT64_T, 0, 0, offsetof(mavlink_appmotioninfo_t, Position_demand_value) }, \
          { "Position_actual_value_inc", NULL, MAVLINK_TYPE_INT64_T, 0, 8, offsetof(mavlink_appmotioninfo_t, Position_actual_value_inc) }, \
          { "Position_actual_value", NULL, MAVLINK_TYPE_INT64_T, 0, 16, offsetof(mavlink_appmotioninfo_t, Position_actual_value) }, \
@@ -112,6 +118,9 @@ typedef struct __mavlink_appmotioninfo_t {
          { "Interp_period", NULL, MAVLINK_TYPE_FLOAT, 0, 116, offsetof(mavlink_appmotioninfo_t, Interp_period) }, \
          { "Emergency_brake_requested", NULL, MAVLINK_TYPE_UINT8_T, 0, 126, offsetof(mavlink_appmotioninfo_t, Emergency_brake_requested) }, \
          { "Target_update_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 127, offsetof(mavlink_appmotioninfo_t, Target_update_state) }, \
+         { "Homing_step", NULL, MAVLINK_TYPE_INT8_T, 0, 128, offsetof(mavlink_appmotioninfo_t, Homing_step) }, \
+         { "Encoder_zero_crossing_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 129, offsetof(mavlink_appmotioninfo_t, Encoder_zero_crossing_state) }, \
+         { "Homing_state", NULL, MAVLINK_TYPE_INT8_T, 0, 130, offsetof(mavlink_appmotioninfo_t, Homing_state) }, \
          } \
 }
 #endif
@@ -150,10 +159,13 @@ typedef struct __mavlink_appmotioninfo_t {
  * @param Interp_period  
  * @param Emergency_brake_requested  
  * @param Target_update_state  
+ * @param Homing_step  
+ * @param Encoder_zero_crossing_state  
+ * @param Homing_state  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_appmotioninfo_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               int64_t Position_demand_value, int64_t Position_actual_value_inc, int64_t Position_actual_value, int64_t Following_error_actual_value, float Velocity_demand_value, float Velocity_actual_value, float Torque_demand_value, float Torque_actual_value, float Current_actual_value, float D_current_actual_value, float U_current_actual_value, float V_current_actual_value, float W_current_actual_value, int64_t Motor_position_demand_value, int64_t Motor_position_actual_value, int64_t Motor_following_error_actual_value, float Motor_velocity_demand_value, float Motor_velocity_actual_value, uint16_t U_adc_mid_val, uint16_t V_adc_mid_val, uint16_t W_adc_mid_val, float Current_loop_time, float Position_loop_time, float Current_loop_cycle, float Position_loop_cycle, float Interp_period, uint8_t Emergency_brake_requested, uint8_t Target_update_state)
+                               int64_t Position_demand_value, int64_t Position_actual_value_inc, int64_t Position_actual_value, int64_t Following_error_actual_value, float Velocity_demand_value, float Velocity_actual_value, float Torque_demand_value, float Torque_actual_value, float Current_actual_value, float D_current_actual_value, float U_current_actual_value, float V_current_actual_value, float W_current_actual_value, int64_t Motor_position_demand_value, int64_t Motor_position_actual_value, int64_t Motor_following_error_actual_value, float Motor_velocity_demand_value, float Motor_velocity_actual_value, uint16_t U_adc_mid_val, uint16_t V_adc_mid_val, uint16_t W_adc_mid_val, float Current_loop_time, float Position_loop_time, float Current_loop_cycle, float Position_loop_cycle, float Interp_period, uint8_t Emergency_brake_requested, uint8_t Target_update_state, int8_t Homing_step, uint8_t Encoder_zero_crossing_state, int8_t Homing_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppMotionInfo_LEN];
@@ -185,6 +197,9 @@ static inline uint16_t mavlink_msg_appmotioninfo_pack(uint8_t system_id, uint8_t
     _mav_put_uint16_t(buf, 124, W_adc_mid_val);
     _mav_put_uint8_t(buf, 126, Emergency_brake_requested);
     _mav_put_uint8_t(buf, 127, Target_update_state);
+    _mav_put_int8_t(buf, 128, Homing_step);
+    _mav_put_uint8_t(buf, 129, Encoder_zero_crossing_state);
+    _mav_put_int8_t(buf, 130, Homing_state);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppMotionInfo_LEN);
 #else
@@ -217,6 +232,9 @@ static inline uint16_t mavlink_msg_appmotioninfo_pack(uint8_t system_id, uint8_t
     packet.W_adc_mid_val = W_adc_mid_val;
     packet.Emergency_brake_requested = Emergency_brake_requested;
     packet.Target_update_state = Target_update_state;
+    packet.Homing_step = Homing_step;
+    packet.Encoder_zero_crossing_state = Encoder_zero_crossing_state;
+    packet.Homing_state = Homing_state;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_AppMotionInfo_LEN);
 #endif
@@ -260,10 +278,13 @@ static inline uint16_t mavlink_msg_appmotioninfo_pack(uint8_t system_id, uint8_t
  * @param Interp_period  
  * @param Emergency_brake_requested  
  * @param Target_update_state  
+ * @param Homing_step  
+ * @param Encoder_zero_crossing_state  
+ * @param Homing_state  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_appmotioninfo_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               int64_t Position_demand_value, int64_t Position_actual_value_inc, int64_t Position_actual_value, int64_t Following_error_actual_value, float Velocity_demand_value, float Velocity_actual_value, float Torque_demand_value, float Torque_actual_value, float Current_actual_value, float D_current_actual_value, float U_current_actual_value, float V_current_actual_value, float W_current_actual_value, int64_t Motor_position_demand_value, int64_t Motor_position_actual_value, int64_t Motor_following_error_actual_value, float Motor_velocity_demand_value, float Motor_velocity_actual_value, uint16_t U_adc_mid_val, uint16_t V_adc_mid_val, uint16_t W_adc_mid_val, float Current_loop_time, float Position_loop_time, float Current_loop_cycle, float Position_loop_cycle, float Interp_period, uint8_t Emergency_brake_requested, uint8_t Target_update_state)
+                               int64_t Position_demand_value, int64_t Position_actual_value_inc, int64_t Position_actual_value, int64_t Following_error_actual_value, float Velocity_demand_value, float Velocity_actual_value, float Torque_demand_value, float Torque_actual_value, float Current_actual_value, float D_current_actual_value, float U_current_actual_value, float V_current_actual_value, float W_current_actual_value, int64_t Motor_position_demand_value, int64_t Motor_position_actual_value, int64_t Motor_following_error_actual_value, float Motor_velocity_demand_value, float Motor_velocity_actual_value, uint16_t U_adc_mid_val, uint16_t V_adc_mid_val, uint16_t W_adc_mid_val, float Current_loop_time, float Position_loop_time, float Current_loop_cycle, float Position_loop_cycle, float Interp_period, uint8_t Emergency_brake_requested, uint8_t Target_update_state, int8_t Homing_step, uint8_t Encoder_zero_crossing_state, int8_t Homing_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppMotionInfo_LEN];
@@ -295,6 +316,9 @@ static inline uint16_t mavlink_msg_appmotioninfo_pack_status(uint8_t system_id, 
     _mav_put_uint16_t(buf, 124, W_adc_mid_val);
     _mav_put_uint8_t(buf, 126, Emergency_brake_requested);
     _mav_put_uint8_t(buf, 127, Target_update_state);
+    _mav_put_int8_t(buf, 128, Homing_step);
+    _mav_put_uint8_t(buf, 129, Encoder_zero_crossing_state);
+    _mav_put_int8_t(buf, 130, Homing_state);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppMotionInfo_LEN);
 #else
@@ -327,6 +351,9 @@ static inline uint16_t mavlink_msg_appmotioninfo_pack_status(uint8_t system_id, 
     packet.W_adc_mid_val = W_adc_mid_val;
     packet.Emergency_brake_requested = Emergency_brake_requested;
     packet.Target_update_state = Target_update_state;
+    packet.Homing_step = Homing_step;
+    packet.Encoder_zero_crossing_state = Encoder_zero_crossing_state;
+    packet.Homing_state = Homing_state;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_AppMotionInfo_LEN);
 #endif
@@ -373,11 +400,14 @@ static inline uint16_t mavlink_msg_appmotioninfo_pack_status(uint8_t system_id, 
  * @param Interp_period  
  * @param Emergency_brake_requested  
  * @param Target_update_state  
+ * @param Homing_step  
+ * @param Encoder_zero_crossing_state  
+ * @param Homing_state  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_appmotioninfo_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   int64_t Position_demand_value,int64_t Position_actual_value_inc,int64_t Position_actual_value,int64_t Following_error_actual_value,float Velocity_demand_value,float Velocity_actual_value,float Torque_demand_value,float Torque_actual_value,float Current_actual_value,float D_current_actual_value,float U_current_actual_value,float V_current_actual_value,float W_current_actual_value,int64_t Motor_position_demand_value,int64_t Motor_position_actual_value,int64_t Motor_following_error_actual_value,float Motor_velocity_demand_value,float Motor_velocity_actual_value,uint16_t U_adc_mid_val,uint16_t V_adc_mid_val,uint16_t W_adc_mid_val,float Current_loop_time,float Position_loop_time,float Current_loop_cycle,float Position_loop_cycle,float Interp_period,uint8_t Emergency_brake_requested,uint8_t Target_update_state)
+                                   int64_t Position_demand_value,int64_t Position_actual_value_inc,int64_t Position_actual_value,int64_t Following_error_actual_value,float Velocity_demand_value,float Velocity_actual_value,float Torque_demand_value,float Torque_actual_value,float Current_actual_value,float D_current_actual_value,float U_current_actual_value,float V_current_actual_value,float W_current_actual_value,int64_t Motor_position_demand_value,int64_t Motor_position_actual_value,int64_t Motor_following_error_actual_value,float Motor_velocity_demand_value,float Motor_velocity_actual_value,uint16_t U_adc_mid_val,uint16_t V_adc_mid_val,uint16_t W_adc_mid_val,float Current_loop_time,float Position_loop_time,float Current_loop_cycle,float Position_loop_cycle,float Interp_period,uint8_t Emergency_brake_requested,uint8_t Target_update_state,int8_t Homing_step,uint8_t Encoder_zero_crossing_state,int8_t Homing_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppMotionInfo_LEN];
@@ -409,6 +439,9 @@ static inline uint16_t mavlink_msg_appmotioninfo_pack_chan(uint8_t system_id, ui
     _mav_put_uint16_t(buf, 124, W_adc_mid_val);
     _mav_put_uint8_t(buf, 126, Emergency_brake_requested);
     _mav_put_uint8_t(buf, 127, Target_update_state);
+    _mav_put_int8_t(buf, 128, Homing_step);
+    _mav_put_uint8_t(buf, 129, Encoder_zero_crossing_state);
+    _mav_put_int8_t(buf, 130, Homing_state);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AppMotionInfo_LEN);
 #else
@@ -441,6 +474,9 @@ static inline uint16_t mavlink_msg_appmotioninfo_pack_chan(uint8_t system_id, ui
     packet.W_adc_mid_val = W_adc_mid_val;
     packet.Emergency_brake_requested = Emergency_brake_requested;
     packet.Target_update_state = Target_update_state;
+    packet.Homing_step = Homing_step;
+    packet.Encoder_zero_crossing_state = Encoder_zero_crossing_state;
+    packet.Homing_state = Homing_state;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_AppMotionInfo_LEN);
 #endif
@@ -459,7 +495,7 @@ static inline uint16_t mavlink_msg_appmotioninfo_pack_chan(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_appmotioninfo_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_appmotioninfo_t* appmotioninfo)
 {
-    return mavlink_msg_appmotioninfo_pack(system_id, component_id, msg, appmotioninfo->Position_demand_value, appmotioninfo->Position_actual_value_inc, appmotioninfo->Position_actual_value, appmotioninfo->Following_error_actual_value, appmotioninfo->Velocity_demand_value, appmotioninfo->Velocity_actual_value, appmotioninfo->Torque_demand_value, appmotioninfo->Torque_actual_value, appmotioninfo->Current_actual_value, appmotioninfo->D_current_actual_value, appmotioninfo->U_current_actual_value, appmotioninfo->V_current_actual_value, appmotioninfo->W_current_actual_value, appmotioninfo->Motor_position_demand_value, appmotioninfo->Motor_position_actual_value, appmotioninfo->Motor_following_error_actual_value, appmotioninfo->Motor_velocity_demand_value, appmotioninfo->Motor_velocity_actual_value, appmotioninfo->U_adc_mid_val, appmotioninfo->V_adc_mid_val, appmotioninfo->W_adc_mid_val, appmotioninfo->Current_loop_time, appmotioninfo->Position_loop_time, appmotioninfo->Current_loop_cycle, appmotioninfo->Position_loop_cycle, appmotioninfo->Interp_period, appmotioninfo->Emergency_brake_requested, appmotioninfo->Target_update_state);
+    return mavlink_msg_appmotioninfo_pack(system_id, component_id, msg, appmotioninfo->Position_demand_value, appmotioninfo->Position_actual_value_inc, appmotioninfo->Position_actual_value, appmotioninfo->Following_error_actual_value, appmotioninfo->Velocity_demand_value, appmotioninfo->Velocity_actual_value, appmotioninfo->Torque_demand_value, appmotioninfo->Torque_actual_value, appmotioninfo->Current_actual_value, appmotioninfo->D_current_actual_value, appmotioninfo->U_current_actual_value, appmotioninfo->V_current_actual_value, appmotioninfo->W_current_actual_value, appmotioninfo->Motor_position_demand_value, appmotioninfo->Motor_position_actual_value, appmotioninfo->Motor_following_error_actual_value, appmotioninfo->Motor_velocity_demand_value, appmotioninfo->Motor_velocity_actual_value, appmotioninfo->U_adc_mid_val, appmotioninfo->V_adc_mid_val, appmotioninfo->W_adc_mid_val, appmotioninfo->Current_loop_time, appmotioninfo->Position_loop_time, appmotioninfo->Current_loop_cycle, appmotioninfo->Position_loop_cycle, appmotioninfo->Interp_period, appmotioninfo->Emergency_brake_requested, appmotioninfo->Target_update_state, appmotioninfo->Homing_step, appmotioninfo->Encoder_zero_crossing_state, appmotioninfo->Homing_state);
 }
 
 /**
@@ -473,7 +509,7 @@ static inline uint16_t mavlink_msg_appmotioninfo_encode(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_appmotioninfo_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_appmotioninfo_t* appmotioninfo)
 {
-    return mavlink_msg_appmotioninfo_pack_chan(system_id, component_id, chan, msg, appmotioninfo->Position_demand_value, appmotioninfo->Position_actual_value_inc, appmotioninfo->Position_actual_value, appmotioninfo->Following_error_actual_value, appmotioninfo->Velocity_demand_value, appmotioninfo->Velocity_actual_value, appmotioninfo->Torque_demand_value, appmotioninfo->Torque_actual_value, appmotioninfo->Current_actual_value, appmotioninfo->D_current_actual_value, appmotioninfo->U_current_actual_value, appmotioninfo->V_current_actual_value, appmotioninfo->W_current_actual_value, appmotioninfo->Motor_position_demand_value, appmotioninfo->Motor_position_actual_value, appmotioninfo->Motor_following_error_actual_value, appmotioninfo->Motor_velocity_demand_value, appmotioninfo->Motor_velocity_actual_value, appmotioninfo->U_adc_mid_val, appmotioninfo->V_adc_mid_val, appmotioninfo->W_adc_mid_val, appmotioninfo->Current_loop_time, appmotioninfo->Position_loop_time, appmotioninfo->Current_loop_cycle, appmotioninfo->Position_loop_cycle, appmotioninfo->Interp_period, appmotioninfo->Emergency_brake_requested, appmotioninfo->Target_update_state);
+    return mavlink_msg_appmotioninfo_pack_chan(system_id, component_id, chan, msg, appmotioninfo->Position_demand_value, appmotioninfo->Position_actual_value_inc, appmotioninfo->Position_actual_value, appmotioninfo->Following_error_actual_value, appmotioninfo->Velocity_demand_value, appmotioninfo->Velocity_actual_value, appmotioninfo->Torque_demand_value, appmotioninfo->Torque_actual_value, appmotioninfo->Current_actual_value, appmotioninfo->D_current_actual_value, appmotioninfo->U_current_actual_value, appmotioninfo->V_current_actual_value, appmotioninfo->W_current_actual_value, appmotioninfo->Motor_position_demand_value, appmotioninfo->Motor_position_actual_value, appmotioninfo->Motor_following_error_actual_value, appmotioninfo->Motor_velocity_demand_value, appmotioninfo->Motor_velocity_actual_value, appmotioninfo->U_adc_mid_val, appmotioninfo->V_adc_mid_val, appmotioninfo->W_adc_mid_val, appmotioninfo->Current_loop_time, appmotioninfo->Position_loop_time, appmotioninfo->Current_loop_cycle, appmotioninfo->Position_loop_cycle, appmotioninfo->Interp_period, appmotioninfo->Emergency_brake_requested, appmotioninfo->Target_update_state, appmotioninfo->Homing_step, appmotioninfo->Encoder_zero_crossing_state, appmotioninfo->Homing_state);
 }
 
 /**
@@ -487,7 +523,7 @@ static inline uint16_t mavlink_msg_appmotioninfo_encode_chan(uint8_t system_id, 
  */
 static inline uint16_t mavlink_msg_appmotioninfo_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_appmotioninfo_t* appmotioninfo)
 {
-    return mavlink_msg_appmotioninfo_pack_status(system_id, component_id, _status, msg,  appmotioninfo->Position_demand_value, appmotioninfo->Position_actual_value_inc, appmotioninfo->Position_actual_value, appmotioninfo->Following_error_actual_value, appmotioninfo->Velocity_demand_value, appmotioninfo->Velocity_actual_value, appmotioninfo->Torque_demand_value, appmotioninfo->Torque_actual_value, appmotioninfo->Current_actual_value, appmotioninfo->D_current_actual_value, appmotioninfo->U_current_actual_value, appmotioninfo->V_current_actual_value, appmotioninfo->W_current_actual_value, appmotioninfo->Motor_position_demand_value, appmotioninfo->Motor_position_actual_value, appmotioninfo->Motor_following_error_actual_value, appmotioninfo->Motor_velocity_demand_value, appmotioninfo->Motor_velocity_actual_value, appmotioninfo->U_adc_mid_val, appmotioninfo->V_adc_mid_val, appmotioninfo->W_adc_mid_val, appmotioninfo->Current_loop_time, appmotioninfo->Position_loop_time, appmotioninfo->Current_loop_cycle, appmotioninfo->Position_loop_cycle, appmotioninfo->Interp_period, appmotioninfo->Emergency_brake_requested, appmotioninfo->Target_update_state);
+    return mavlink_msg_appmotioninfo_pack_status(system_id, component_id, _status, msg,  appmotioninfo->Position_demand_value, appmotioninfo->Position_actual_value_inc, appmotioninfo->Position_actual_value, appmotioninfo->Following_error_actual_value, appmotioninfo->Velocity_demand_value, appmotioninfo->Velocity_actual_value, appmotioninfo->Torque_demand_value, appmotioninfo->Torque_actual_value, appmotioninfo->Current_actual_value, appmotioninfo->D_current_actual_value, appmotioninfo->U_current_actual_value, appmotioninfo->V_current_actual_value, appmotioninfo->W_current_actual_value, appmotioninfo->Motor_position_demand_value, appmotioninfo->Motor_position_actual_value, appmotioninfo->Motor_following_error_actual_value, appmotioninfo->Motor_velocity_demand_value, appmotioninfo->Motor_velocity_actual_value, appmotioninfo->U_adc_mid_val, appmotioninfo->V_adc_mid_val, appmotioninfo->W_adc_mid_val, appmotioninfo->Current_loop_time, appmotioninfo->Position_loop_time, appmotioninfo->Current_loop_cycle, appmotioninfo->Position_loop_cycle, appmotioninfo->Interp_period, appmotioninfo->Emergency_brake_requested, appmotioninfo->Target_update_state, appmotioninfo->Homing_step, appmotioninfo->Encoder_zero_crossing_state, appmotioninfo->Homing_state);
 }
 
 /**
@@ -522,10 +558,13 @@ static inline uint16_t mavlink_msg_appmotioninfo_encode_status(uint8_t system_id
  * @param Interp_period  
  * @param Emergency_brake_requested  
  * @param Target_update_state  
+ * @param Homing_step  
+ * @param Encoder_zero_crossing_state  
+ * @param Homing_state  
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_appmotioninfo_send(mavlink_channel_t chan, int64_t Position_demand_value, int64_t Position_actual_value_inc, int64_t Position_actual_value, int64_t Following_error_actual_value, float Velocity_demand_value, float Velocity_actual_value, float Torque_demand_value, float Torque_actual_value, float Current_actual_value, float D_current_actual_value, float U_current_actual_value, float V_current_actual_value, float W_current_actual_value, int64_t Motor_position_demand_value, int64_t Motor_position_actual_value, int64_t Motor_following_error_actual_value, float Motor_velocity_demand_value, float Motor_velocity_actual_value, uint16_t U_adc_mid_val, uint16_t V_adc_mid_val, uint16_t W_adc_mid_val, float Current_loop_time, float Position_loop_time, float Current_loop_cycle, float Position_loop_cycle, float Interp_period, uint8_t Emergency_brake_requested, uint8_t Target_update_state)
+static inline void mavlink_msg_appmotioninfo_send(mavlink_channel_t chan, int64_t Position_demand_value, int64_t Position_actual_value_inc, int64_t Position_actual_value, int64_t Following_error_actual_value, float Velocity_demand_value, float Velocity_actual_value, float Torque_demand_value, float Torque_actual_value, float Current_actual_value, float D_current_actual_value, float U_current_actual_value, float V_current_actual_value, float W_current_actual_value, int64_t Motor_position_demand_value, int64_t Motor_position_actual_value, int64_t Motor_following_error_actual_value, float Motor_velocity_demand_value, float Motor_velocity_actual_value, uint16_t U_adc_mid_val, uint16_t V_adc_mid_val, uint16_t W_adc_mid_val, float Current_loop_time, float Position_loop_time, float Current_loop_cycle, float Position_loop_cycle, float Interp_period, uint8_t Emergency_brake_requested, uint8_t Target_update_state, int8_t Homing_step, uint8_t Encoder_zero_crossing_state, int8_t Homing_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AppMotionInfo_LEN];
@@ -557,6 +596,9 @@ static inline void mavlink_msg_appmotioninfo_send(mavlink_channel_t chan, int64_
     _mav_put_uint16_t(buf, 124, W_adc_mid_val);
     _mav_put_uint8_t(buf, 126, Emergency_brake_requested);
     _mav_put_uint8_t(buf, 127, Target_update_state);
+    _mav_put_int8_t(buf, 128, Homing_step);
+    _mav_put_uint8_t(buf, 129, Encoder_zero_crossing_state);
+    _mav_put_int8_t(buf, 130, Homing_state);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppMotionInfo, buf, MAVLINK_MSG_ID_AppMotionInfo_MIN_LEN, MAVLINK_MSG_ID_AppMotionInfo_LEN, MAVLINK_MSG_ID_AppMotionInfo_CRC);
 #else
@@ -589,6 +631,9 @@ static inline void mavlink_msg_appmotioninfo_send(mavlink_channel_t chan, int64_
     packet.W_adc_mid_val = W_adc_mid_val;
     packet.Emergency_brake_requested = Emergency_brake_requested;
     packet.Target_update_state = Target_update_state;
+    packet.Homing_step = Homing_step;
+    packet.Encoder_zero_crossing_state = Encoder_zero_crossing_state;
+    packet.Homing_state = Homing_state;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppMotionInfo, (const char *)&packet, MAVLINK_MSG_ID_AppMotionInfo_MIN_LEN, MAVLINK_MSG_ID_AppMotionInfo_LEN, MAVLINK_MSG_ID_AppMotionInfo_CRC);
 #endif
@@ -602,7 +647,7 @@ static inline void mavlink_msg_appmotioninfo_send(mavlink_channel_t chan, int64_
 static inline void mavlink_msg_appmotioninfo_send_struct(mavlink_channel_t chan, const mavlink_appmotioninfo_t* appmotioninfo)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_appmotioninfo_send(chan, appmotioninfo->Position_demand_value, appmotioninfo->Position_actual_value_inc, appmotioninfo->Position_actual_value, appmotioninfo->Following_error_actual_value, appmotioninfo->Velocity_demand_value, appmotioninfo->Velocity_actual_value, appmotioninfo->Torque_demand_value, appmotioninfo->Torque_actual_value, appmotioninfo->Current_actual_value, appmotioninfo->D_current_actual_value, appmotioninfo->U_current_actual_value, appmotioninfo->V_current_actual_value, appmotioninfo->W_current_actual_value, appmotioninfo->Motor_position_demand_value, appmotioninfo->Motor_position_actual_value, appmotioninfo->Motor_following_error_actual_value, appmotioninfo->Motor_velocity_demand_value, appmotioninfo->Motor_velocity_actual_value, appmotioninfo->U_adc_mid_val, appmotioninfo->V_adc_mid_val, appmotioninfo->W_adc_mid_val, appmotioninfo->Current_loop_time, appmotioninfo->Position_loop_time, appmotioninfo->Current_loop_cycle, appmotioninfo->Position_loop_cycle, appmotioninfo->Interp_period, appmotioninfo->Emergency_brake_requested, appmotioninfo->Target_update_state);
+    mavlink_msg_appmotioninfo_send(chan, appmotioninfo->Position_demand_value, appmotioninfo->Position_actual_value_inc, appmotioninfo->Position_actual_value, appmotioninfo->Following_error_actual_value, appmotioninfo->Velocity_demand_value, appmotioninfo->Velocity_actual_value, appmotioninfo->Torque_demand_value, appmotioninfo->Torque_actual_value, appmotioninfo->Current_actual_value, appmotioninfo->D_current_actual_value, appmotioninfo->U_current_actual_value, appmotioninfo->V_current_actual_value, appmotioninfo->W_current_actual_value, appmotioninfo->Motor_position_demand_value, appmotioninfo->Motor_position_actual_value, appmotioninfo->Motor_following_error_actual_value, appmotioninfo->Motor_velocity_demand_value, appmotioninfo->Motor_velocity_actual_value, appmotioninfo->U_adc_mid_val, appmotioninfo->V_adc_mid_val, appmotioninfo->W_adc_mid_val, appmotioninfo->Current_loop_time, appmotioninfo->Position_loop_time, appmotioninfo->Current_loop_cycle, appmotioninfo->Position_loop_cycle, appmotioninfo->Interp_period, appmotioninfo->Emergency_brake_requested, appmotioninfo->Target_update_state, appmotioninfo->Homing_step, appmotioninfo->Encoder_zero_crossing_state, appmotioninfo->Homing_state);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppMotionInfo, (const char *)appmotioninfo, MAVLINK_MSG_ID_AppMotionInfo_MIN_LEN, MAVLINK_MSG_ID_AppMotionInfo_LEN, MAVLINK_MSG_ID_AppMotionInfo_CRC);
 #endif
@@ -616,7 +661,7 @@ static inline void mavlink_msg_appmotioninfo_send_struct(mavlink_channel_t chan,
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_appmotioninfo_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int64_t Position_demand_value, int64_t Position_actual_value_inc, int64_t Position_actual_value, int64_t Following_error_actual_value, float Velocity_demand_value, float Velocity_actual_value, float Torque_demand_value, float Torque_actual_value, float Current_actual_value, float D_current_actual_value, float U_current_actual_value, float V_current_actual_value, float W_current_actual_value, int64_t Motor_position_demand_value, int64_t Motor_position_actual_value, int64_t Motor_following_error_actual_value, float Motor_velocity_demand_value, float Motor_velocity_actual_value, uint16_t U_adc_mid_val, uint16_t V_adc_mid_val, uint16_t W_adc_mid_val, float Current_loop_time, float Position_loop_time, float Current_loop_cycle, float Position_loop_cycle, float Interp_period, uint8_t Emergency_brake_requested, uint8_t Target_update_state)
+static inline void mavlink_msg_appmotioninfo_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int64_t Position_demand_value, int64_t Position_actual_value_inc, int64_t Position_actual_value, int64_t Following_error_actual_value, float Velocity_demand_value, float Velocity_actual_value, float Torque_demand_value, float Torque_actual_value, float Current_actual_value, float D_current_actual_value, float U_current_actual_value, float V_current_actual_value, float W_current_actual_value, int64_t Motor_position_demand_value, int64_t Motor_position_actual_value, int64_t Motor_following_error_actual_value, float Motor_velocity_demand_value, float Motor_velocity_actual_value, uint16_t U_adc_mid_val, uint16_t V_adc_mid_val, uint16_t W_adc_mid_val, float Current_loop_time, float Position_loop_time, float Current_loop_cycle, float Position_loop_cycle, float Interp_period, uint8_t Emergency_brake_requested, uint8_t Target_update_state, int8_t Homing_step, uint8_t Encoder_zero_crossing_state, int8_t Homing_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -648,6 +693,9 @@ static inline void mavlink_msg_appmotioninfo_send_buf(mavlink_message_t *msgbuf,
     _mav_put_uint16_t(buf, 124, W_adc_mid_val);
     _mav_put_uint8_t(buf, 126, Emergency_brake_requested);
     _mav_put_uint8_t(buf, 127, Target_update_state);
+    _mav_put_int8_t(buf, 128, Homing_step);
+    _mav_put_uint8_t(buf, 129, Encoder_zero_crossing_state);
+    _mav_put_int8_t(buf, 130, Homing_state);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppMotionInfo, buf, MAVLINK_MSG_ID_AppMotionInfo_MIN_LEN, MAVLINK_MSG_ID_AppMotionInfo_LEN, MAVLINK_MSG_ID_AppMotionInfo_CRC);
 #else
@@ -680,6 +728,9 @@ static inline void mavlink_msg_appmotioninfo_send_buf(mavlink_message_t *msgbuf,
     packet->W_adc_mid_val = W_adc_mid_val;
     packet->Emergency_brake_requested = Emergency_brake_requested;
     packet->Target_update_state = Target_update_state;
+    packet->Homing_step = Homing_step;
+    packet->Encoder_zero_crossing_state = Encoder_zero_crossing_state;
+    packet->Homing_state = Homing_state;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AppMotionInfo, (const char *)packet, MAVLINK_MSG_ID_AppMotionInfo_MIN_LEN, MAVLINK_MSG_ID_AppMotionInfo_LEN, MAVLINK_MSG_ID_AppMotionInfo_CRC);
 #endif
@@ -972,6 +1023,36 @@ static inline uint8_t mavlink_msg_appmotioninfo_get_Target_update_state(const ma
 }
 
 /**
+ * @brief Get field Homing_step from appmotioninfo message
+ *
+ * @return  
+ */
+static inline int8_t mavlink_msg_appmotioninfo_get_Homing_step(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int8_t(msg,  128);
+}
+
+/**
+ * @brief Get field Encoder_zero_crossing_state from appmotioninfo message
+ *
+ * @return  
+ */
+static inline uint8_t mavlink_msg_appmotioninfo_get_Encoder_zero_crossing_state(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  129);
+}
+
+/**
+ * @brief Get field Homing_state from appmotioninfo message
+ *
+ * @return  
+ */
+static inline int8_t mavlink_msg_appmotioninfo_get_Homing_state(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int8_t(msg,  130);
+}
+
+/**
  * @brief Decode a appmotioninfo message into a struct
  *
  * @param msg The message to decode
@@ -1008,6 +1089,9 @@ static inline void mavlink_msg_appmotioninfo_decode(const mavlink_message_t* msg
     appmotioninfo->W_adc_mid_val = mavlink_msg_appmotioninfo_get_W_adc_mid_val(msg);
     appmotioninfo->Emergency_brake_requested = mavlink_msg_appmotioninfo_get_Emergency_brake_requested(msg);
     appmotioninfo->Target_update_state = mavlink_msg_appmotioninfo_get_Target_update_state(msg);
+    appmotioninfo->Homing_step = mavlink_msg_appmotioninfo_get_Homing_step(msg);
+    appmotioninfo->Encoder_zero_crossing_state = mavlink_msg_appmotioninfo_get_Encoder_zero_crossing_state(msg);
+    appmotioninfo->Homing_state = mavlink_msg_appmotioninfo_get_Homing_state(msg);
 #else
         uint8_t len = msg->len < MAVLINK_MSG_ID_AppMotionInfo_LEN? msg->len : MAVLINK_MSG_ID_AppMotionInfo_LEN;
         memset(appmotioninfo, 0, MAVLINK_MSG_ID_AppMotionInfo_LEN);

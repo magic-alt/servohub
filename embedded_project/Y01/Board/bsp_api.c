@@ -410,6 +410,21 @@ uint8_t bsp_get_encoder_type(ENCODER_ID enc_id)
 #endif
 }
 
+/**
+ * @brief 获取编码器过零点状态
+ * @param[in] enc_id 编码器端ID： ENCODER_ID_MOTOR、ENCODER_ID_LOAD
+ * @retval false 编码器未过零点
+ * @retval true  编码器已过零点
+ * @note 获取后编码器过零点状态会自动被清除
+ */
+bool bsp_get_encoder_zero_crossing_state(ENCODER_ID const enc_id)
+{
+#ifdef VIRTUAL_MOTOR_MODEL
+    return false;
+#else
+    return get_encoder_zero_crossing_state(enc_id);
+#endif
+}
 
 #pragma endregion
 

@@ -53,6 +53,7 @@ void AppParamInit(void)
     kAppStatusInfo.Drive_temperature = 0.0f;         // 驱动器当前温度
     kAppStatusInfo.Motor_temperature = 0.0f;         // 电机当前温度
     kAppStatusInfo.Mcu_temperature = 0.0f;           // MCU当前温度
+    kAppStatusInfo.Digital_io_inputs_status = 0;     // 数字输入状态
 
     // 初始化运动信息
     kAppMotionInfo.Position_demand_value = 0;        // 位置指令值
@@ -159,6 +160,9 @@ void AppParamInit(void)
     kAppMotionParam.MIT_kd = 0.01f;                                   // MIT速度阻尼系数
     kAppMotionParam.Interp_time_value = 1;                            // 插值时间基数
     kAppMotionParam.Interp_time_index = -3;                           // 插值时间指数
+    kAppMotionParam.Homing_speed_search_for_switch = 10.0f;           // 回零搜索开关速度
+    kAppMotionParam.Homing_speed_search_for_zero = 1.0f;              // 回零搜索零点速度
+    kAppMotionParam.Homing_acceleration = 100.0f;                     // 回零加速度
 
     // 初始化限制参数
     kAppRestrictParam.Position_range_limit_Minimal_position_limit = 0x8000000000000000;     // 位置溢出最小值
@@ -507,6 +511,12 @@ void app_param_update(void)
     set_app_Interp_period(kAppMotionInfo.Interp_period);
     set_app_Emergency_brake_requested(kAppMotionInfo.Emergency_brake_requested);
     set_app_Target_update_state(kAppMotionInfo.Target_update_state);
+    set_app_Homing_speed_search_for_switch(kAppMotionParam.Homing_speed_search_for_switch);
+    set_app_Homing_speed_search_for_zero(kAppMotionParam.Homing_speed_search_for_zero);
+    set_app_Homing_acceleration(kAppMotionParam.Homing_acceleration);
+    set_app_Homing_step(kAppMotionInfo.Homing_step);
+    set_app_Encoder_zero_crossing_state(kAppMotionInfo.Encoder_zero_crossing_state);
+    set_app_Homing_state(kAppMotionInfo.Homing_state);
 }
 
 void app_param_sync(void)
@@ -675,6 +685,12 @@ void app_param_sync(void)
     get_app_Interp_period();
     get_app_Emergency_brake_requested();
     get_app_Target_update_state();
+    get_app_Homing_speed_search_for_switch();
+    get_app_Homing_speed_search_for_zero();
+    get_app_Homing_acceleration();
+    get_app_Homing_step();
+    get_app_Encoder_zero_crossing_state();
+    get_app_Homing_state();
 }
 
 uint32_t set_app_Controlword(uint16_t val)
@@ -2085,6 +2101,72 @@ int8_t get_app_Interp_time_index(void)
     return kAppMotionParam.Interp_time_index;
 }
 
+uint32_t set_app_Homing_speed_search_for_switch(float val)
+{
+    if (val < 0.0)
+        return APP_PARAM_OUT_OF_RANGE;
+    /* USER CODE BEGIN set_app_Homing_speed_search_for_switch 0 */
+    if (val > kAppRestrictParam.Max_profile_velocity)
+    {
+        return APP_PARAM_OUT_OF_RANGE;
+    }
+    /* USER CODE END set_app_Homing_speed_search_for_switch 0 */
+    kAppMotionParam.Homing_speed_search_for_switch = val;
+    /* USER CODE BEGIN set_app_Homing_speed_search_for_switch 1 */
+    /* USER CODE END set_app_Homing_speed_search_for_switch 1 */
+    return APP_PARAM_SUCCESS;
+}
+float get_app_Homing_speed_search_for_switch(void)
+{
+    /* USER CODE BEGIN get_app_Homing_speed_search_for_switch */
+    /* USER CODE END get_app_Homing_speed_search_for_switch */
+    return kAppMotionParam.Homing_speed_search_for_switch;
+}
+
+uint32_t set_app_Homing_speed_search_for_zero(float val)
+{
+    if (val < 0.0)
+        return APP_PARAM_OUT_OF_RANGE;
+    /* USER CODE BEGIN set_app_Homing_speed_search_for_zero 0 */
+    if (val > kAppRestrictParam.Max_profile_velocity)
+    {
+        return APP_PARAM_OUT_OF_RANGE;
+    }
+    /* USER CODE END set_app_Homing_speed_search_for_zero 0 */
+    kAppMotionParam.Homing_speed_search_for_zero = val;
+    /* USER CODE BEGIN set_app_Homing_speed_search_for_zero 1 */
+    /* USER CODE END set_app_Homing_speed_search_for_zero 1 */
+    return APP_PARAM_SUCCESS;
+}
+float get_app_Homing_speed_search_for_zero(void)
+{
+    /* USER CODE BEGIN get_app_Homing_speed_search_for_zero */
+    /* USER CODE END get_app_Homing_speed_search_for_zero */
+    return kAppMotionParam.Homing_speed_search_for_zero;
+}
+
+uint32_t set_app_Homing_acceleration(float val)
+{
+    if (val < 0.0)
+        return APP_PARAM_OUT_OF_RANGE;
+    /* USER CODE BEGIN set_app_Homing_acceleration 0 */
+    if (val > kAppRestrictParam.Max_acceleration)
+    {
+        return APP_PARAM_OUT_OF_RANGE;
+    }
+    /* USER CODE END set_app_Homing_acceleration 0 */
+    kAppMotionParam.Homing_acceleration = val;
+    /* USER CODE BEGIN set_app_Homing_acceleration 1 */
+    /* USER CODE END set_app_Homing_acceleration 1 */
+    return APP_PARAM_SUCCESS;
+}
+float get_app_Homing_acceleration(void)
+{
+    /* USER CODE BEGIN get_app_Homing_acceleration */
+    /* USER CODE END get_app_Homing_acceleration */
+    return kAppMotionParam.Homing_acceleration;
+}
+
 uint32_t set_app_Position_range_limit_Minimal_position_limit(int64_t val)
 {
     /* USER CODE BEGIN set_app_Position_range_limit_Minimal_position_limit 0 */
@@ -2313,12 +2395,11 @@ uint32_t set_app_Position_actual_value_inc(int64_t val)
 int64_t get_app_Position_actual_value_inc(void)
 {
     /* USER CODE BEGIN get_app_Position_actual_value_inc */
-    
     if (bsp_get_encoder_type(ENCODER_ID_LOAD) == 0x00)  //负载端无编码器，内部位置反馈都以电机端编码器为参考
     {
         if (kAppMotorConfig.Reduction_ratio_num == 1) //减速比1:1  直接以电机端编码器位置为反馈
         {
-             kAppMotionInfo.Position_actual_value_inc = axis->motor_pos_sensor_output.enc_sum_p;
+            kAppMotionInfo.Position_actual_value_inc = axis->motor_pos_sensor_output.enc_sum_p;
         }
         else  //减速比不为1:1  将电机端编码器位置经过减速比换算到负载端脉冲数
         {
@@ -2759,6 +2840,54 @@ uint8_t get_app_Target_update_state(void)
     /* USER CODE BEGIN get_app_Target_update_state */
     /* USER CODE END get_app_Target_update_state */
     return kAppMotionInfo.Target_update_state;
+}
+
+uint32_t set_app_Homing_step(int8_t val)
+{
+    /* USER CODE BEGIN set_app_Homing_step 0 */
+    /* USER CODE END set_app_Homing_step 0 */
+    kAppMotionInfo.Homing_step = val;
+    /* USER CODE BEGIN set_app_Homing_step 1 */
+    /* USER CODE END set_app_Homing_step 1 */
+    return APP_PARAM_SUCCESS;
+}
+int8_t get_app_Homing_step(void)
+{
+    /* USER CODE BEGIN get_app_Homing_step */
+    /* USER CODE END get_app_Homing_step */
+    return kAppMotionInfo.Homing_step;
+}
+
+uint32_t set_app_Encoder_zero_crossing_state(uint8_t val)
+{
+    /* USER CODE BEGIN set_app_Encoder_zero_crossing_state 0 */
+    /* USER CODE END set_app_Encoder_zero_crossing_state 0 */
+    kAppMotionInfo.Encoder_zero_crossing_state = val;
+    /* USER CODE BEGIN set_app_Encoder_zero_crossing_state 1 */
+    /* USER CODE END set_app_Encoder_zero_crossing_state 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint8_t get_app_Encoder_zero_crossing_state(void)
+{
+    /* USER CODE BEGIN get_app_Encoder_zero_crossing_state */
+    /* USER CODE END get_app_Encoder_zero_crossing_state */
+    return kAppMotionInfo.Encoder_zero_crossing_state;
+}
+
+uint32_t set_app_Homing_state(int8_t val)
+{
+    /* USER CODE BEGIN set_app_Homing_state 0 */
+    /* USER CODE END set_app_Homing_state 0 */
+    kAppMotionInfo.Homing_state = val;
+    /* USER CODE BEGIN set_app_Homing_state 1 */
+    /* USER CODE END set_app_Homing_state 1 */
+    return APP_PARAM_SUCCESS;
+}
+int8_t get_app_Homing_state(void)
+{
+    /* USER CODE BEGIN get_app_Homing_state */
+    /* USER CODE END get_app_Homing_state */
+    return kAppMotionInfo.Homing_state;
 }
 
 uint32_t set_app_Following_error_window(int64_t val)

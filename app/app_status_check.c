@@ -629,13 +629,14 @@ bool AppVelocityZeroStateCheck(void)
 /**
  * @brief 检测回零是否达到状态
  *
- * 目前仅支持35号回零
+ * 回零状态为成功且使能状态下有效。
  *
  * @return 如果达到回零状态返回true，否则返回false。
  */
 bool AppHomingAttainedStateCheck(void)
 {
-    if (get_app_Homing_method() == 35 && get_app_Controlword() == APP_CTRL_ENABLE)
+    if ((HOMING_STATE)get_app_Homing_state() == HOMING_STATE_SUCCEED && \
+        get_app_Controlword() == APP_CTRL_ENABLE)
     {
         kAppCheck.status.bits.homing_attained = true;
     }
@@ -747,6 +748,12 @@ void AppTargetTorqueReachedStateClear(void)
     kAppCheck.status.bits.target_torque_reached = false;
 }
 
+bool AppEncoderZeroCrossingStateCheck(void)
+{
+    kAppCheck.status.bits.encoder_zero_crossing_state = bsp_get_encoder_zero_crossing_state(ENCODER_ID_LOAD);
+    return kAppCheck.status.bits.encoder_zero_crossing_state;
+}
+
 #pragma endregion
 
 #pragma region 外部接口函数定义
@@ -837,6 +844,7 @@ void AppStatusScanFast(void)
     }
 
     AppMotorEnableStateCheck();
+    set_app_Encoder_zero_crossing_state(AppEncoderZeroCrossingStateCheck());
 }
 
 /**

@@ -120,15 +120,16 @@ typedef union
     uint32_t all;
     struct
     {
-        uint32_t target_reached : 1;          // 目标到达
-        uint32_t velocity_zero : 1;           // 零速到达
-        uint32_t homing_attained : 1;         // 回零完成
-        uint32_t position_target_reached : 1; // 位置到达
-        uint32_t velocity_target_reached : 1; // 速度到达
-        uint32_t target_torque_reached : 1;   // 力矩到达
-        uint32_t motor_enable_state : 1;      // 电机使能状态
+        uint32_t target_reached : 1;                // 目标到达
+        uint32_t velocity_zero : 1;                 // 零速到达
+        uint32_t homing_attained : 1;               // 回零完成
+        uint32_t position_target_reached : 1;       // 位置到达
+        uint32_t velocity_target_reached : 1;       // 速度到达
+        uint32_t target_torque_reached : 1;         // 力矩到达
+        uint32_t motor_enable_state : 1;            // 电机使能状态
+        uint32_t encoder_zero_crossing_state : 1;   // 编码器过零点状态
 
-        uint32_t reserved : 25;
+        uint32_t reserved : 24;
     } bits; // 位字段
 } CheckStatusVal_t;
 
@@ -167,6 +168,12 @@ typedef enum
     // ...
     APP_MAX = APP_NUM,
 } APP_NAMES;
+
+typedef enum {
+    HOMING_STATE_FAIL = -1,     // 回零失败/超时
+    HOMING_STATE_IDLE = 0,      // 回零空闲
+    HOMING_STATE_SUCCEED = 1,   // 回零成功
+} HOMING_STATE;
 
 typedef enum
 {

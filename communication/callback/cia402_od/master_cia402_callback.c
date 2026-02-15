@@ -22,7 +22,10 @@ UNS32 master_cia402_write_callback(uint16_t index, uint8_t subindex, void *data)
         case 0x6085: return OD_0x6085_Quick_stop_deceleration_Write_Callback(subindex, data); break;
         case 0x60C5: return OD_0x60C5_Max_acceleration_Write_Callback(subindex, data); break;
         case 0x60C6: return OD_0x60C6_Max_deceleration_Write_Callback(subindex, data); break;
+        case 0x607C: return OD_0x607C_Home_offset_Write_Callback(subindex, data); break;
         case 0x6098: return OD_0x6098_Homing_method_Write_Callback(subindex, data); break;
+        case 0x6099: return OD_0x6099_Homing_speeds_Write_Callback(subindex, data); break;
+        case 0x609A: return OD_0x609A_Homing_acceleration_Write_Callback(subindex, data); break;
         case 0x6065: return OD_0x6065_Following_error_window_Write_Callback(subindex, data); break;
         case 0x6066: return OD_0x6066_Following_error_time_out_Write_Callback(subindex, data); break;
         case 0x6067: return OD_0x6067_Position_window_Write_Callback(subindex, data); break;
@@ -69,7 +72,10 @@ UNS32 master_cia402_read_callback(uint16_t index, uint8_t subindex, void *data){
         case 0x6085: return OD_0x6085_Quick_stop_deceleration_Read_Callback(subindex, data); break;
         case 0x60C5: return OD_0x60C5_Max_acceleration_Read_Callback(subindex, data); break;
         case 0x60C6: return OD_0x60C6_Max_deceleration_Read_Callback(subindex, data); break;
+        case 0x607C: return OD_0x607C_Home_offset_Read_Callback(subindex, data); break;
         case 0x6098: return OD_0x6098_Homing_method_Read_Callback(subindex, data); break;
+        case 0x6099: return OD_0x6099_Homing_speeds_Read_Callback(subindex, data); break;
+        case 0x609A: return OD_0x609A_Homing_acceleration_Read_Callback(subindex, data); break;
         case 0x6062: return OD_0x6062_Position_demand_value_Read_Callback(subindex, data); break;
         case 0x6063: return OD_0x6063_Position_actual_value_inc_Read_Callback(subindex, data); break;
         case 0x6064: return OD_0x6064_Position_actual_value_Read_Callback(subindex, data); break;

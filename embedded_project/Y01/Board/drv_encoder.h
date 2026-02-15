@@ -159,8 +159,13 @@ struct EncoderDataInfo_t
     uint32_t b_single_raw;                      // 编码器B单圈绝对值原始数据
     int64_t  b_multi_raw;                       // 编码器B多圈绝对值原始数据
     // 编码器单圈值和多圈值为实际电机或负载端的位置反馈值
+    uint32_t real_single_res;                   // 编码器单圈实际分辨率
     volatile uint32_t single_cnt;               // 编码器单圈值
     volatile int64_t multi_turns;               // 编码器多圈值
+    volatile bool zero_crossing_state;          // 编码器过零点状态
+
+    volatile bool is_first_read;                // 首次读取标志
+    volatile uint32_t pos_last;                 // 上一次位置值
 
     uint32_t real_motor_turns_res;              // 实际电机端编码器多圈分辨率
 
@@ -188,6 +193,8 @@ uint32_t get_encoder_cnt(ENCODER_ID const enc_id);
 int64_t get_encoder_turns(ENCODER_ID const enc_id);
 bool get_encoder_status(ENCODER_ID const enc_id);
 uint8_t get_encoder_type(ENCODER_ID enc_id);
+bool get_encoder_zero_crossing_state(ENCODER_ID const enc_id);
+
 void set_encoder_options(ENCODER_ID enc_id, uint8_t const options);
 void set_encoder_a_resolution(ENCODER_ID const enc_id, uint32_t const single_res, \
                               uint32_t const multi_res, uint32_t const single_less_factor);

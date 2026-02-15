@@ -121,6 +121,9 @@ typedef struct
     float MIT_kd; //速度阻尼系数
     uint8_t Interp_time_value; //插值时间基数
     int8_t Interp_time_index; //插值时间指数
+    float Homing_speed_search_for_switch; //回零搜索开关速度
+    float Homing_speed_search_for_zero; //回零搜索零点速度
+    float Homing_acceleration; //回零加速度
 }AppMotionParam;
 
 typedef struct
@@ -167,6 +170,9 @@ typedef struct
     float Interp_period; //插值时间周期
     uint8_t Emergency_brake_requested; //紧急制动请求值
     uint8_t Target_update_state; //目标值更新状态
+    int8_t Homing_step; //回零步骤
+    uint8_t Encoder_zero_crossing_state; //编码器过零点状态
+    int8_t Homing_state; //回零状态
 }AppMotionInfo;
 
 typedef struct
@@ -775,6 +781,24 @@ uint8_t get_app_Emergency_brake_requested(void);
 
 uint32_t set_app_Target_update_state(uint8_t val);
 uint8_t get_app_Target_update_state(void);
+
+uint32_t set_app_Homing_speed_search_for_switch(float val);
+float get_app_Homing_speed_search_for_switch(void);
+
+uint32_t set_app_Homing_speed_search_for_zero(float val);
+float get_app_Homing_speed_search_for_zero(void);
+
+uint32_t set_app_Homing_acceleration(float val);
+float get_app_Homing_acceleration(void);
+
+uint32_t set_app_Homing_step(int8_t val);
+int8_t get_app_Homing_step(void);
+
+uint32_t set_app_Encoder_zero_crossing_state(uint8_t val);
+uint8_t get_app_Encoder_zero_crossing_state(void);
+
+uint32_t set_app_Homing_state(int8_t val);
+int8_t get_app_Homing_state(void);
 
 extern AppControlWord kAppControlWord;
 extern AppStatusInfo kAppStatusInfo;

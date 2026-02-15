@@ -27,7 +27,12 @@ Profile_deceleration,0x6084,0x00,Val,UNS32,0x1770,RW,轮廓减速度,Profile_pos
 Quick_stop_deceleration,0x6085,0x00,Val,UNS32,0xFFFFFFFF,RW,快速停止减速度,Profile_position_mode,YES,Enable,立即,0,4294967295,uu/s²,RxPDO,1,Quick_stop_deceleration
 Max_acceleration,0x60C5,0x00,Val,UNS32,0xFFFFFFFF,RW,应用加速度限制,Profile_position_mode,YES,-,立即,0,4294967295,uu/s²,RxPDO,1,Max_acceleration
 Max_deceleration,0x60C6,0x00,Val,UNS32,0xFFFFFFFF,RW,应用减速度限制,Profile_position_mode,YES,-,立即,0,4294967295,uu/s²,RxPDO,1,Max_deceleration
+Home_offset,0x607C,0x00,Val,INTEGER32,0x0,RW,回零偏移,Homing_mode,,,,,,,,1,Home_offset
 Homing_method,0x6098,0x00,Val,INTEGER8,0x0,RW,回零方法,Homing_mode,YES,-,立即,-128,127,-,RxPDO,1,Homing_method
+Homing_speeds,0x6099,0x00,Struct,UNS8,0x2,RO,,Homing_mode,,,,,,,,1,
+Homing_speeds_Speed_for_switch_search,0x6099,0x01,Struct,UNS32,0x1,RW,回零搜索开关速度,Homing_mode,,,,,,,,1,Homing_speed_search_for_switch
+Homing_speeds_Speed_for_zero_search,0x6099,0x02,Struct,UNS32,0x1,RW,回零搜索零点速度,Homing_mode,,,,,,,,1,Homing_speed_search_for_zero
+Homing_acceleration,0x609A,0x00,Val,UNS32,0x1,RW,回零加速度,Homing_mode,,,,,,,,1,Homing_acceleration
 Position_demand_value,0x6062,0x00,Val,INTEGER32,0x0,RO,负载端位置指令值,Position_control_function,NO,-,只读,-2147483648,2147483647,uu,TxPDO,1,Position_demand_value
 Position_actual_value_inc,0x6063,0x00,Val,INTEGER32,0x0,RO,负载端内部位置当前值,Position_control_function,NO,-,只读,-2147483648,2147483647,pulse,TxPDO,1,Position_actual_value_inc
 Position_actual_value,0x6064,0x00,Val,INTEGER32,0x0,RO,负载端位置当前值,Position_control_function,NO,-,只读,-2147483648,2147483647,uu,TxPDO,1,Position_actual_value_inc

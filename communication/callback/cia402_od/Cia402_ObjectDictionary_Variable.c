@@ -563,6 +563,22 @@ UNS32 get_Max_deceleration(void){
     return kProfile_position_mode.Max_deceleration;
 }
 
+UNS32 set_Home_offset(INTEGER32 val){
+    /* USER CODE BEGIN set_Home_offset 0 */
+    /* USER CODE END set_Home_offset 0 */
+    kHoming_mode.Home_offset = val;
+    /* USER CODE BEGIN set_Home_offset 1 */
+    set_app_Home_offset(val);
+    /* USER CODE END set_Home_offset 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+INTEGER32 get_Home_offset(void){
+    /* USER CODE BEGIN get_Home_offset */
+    kHoming_mode.Home_offset = get_app_Home_offset();
+    /* USER CODE END get_Home_offset */
+    return kHoming_mode.Home_offset;
+}
+
 UNS32 set_Homing_method(INTEGER8 val){
     /* USER CODE BEGIN set_Homing_method 0 */
     /* USER CODE END set_Homing_method 0 */
@@ -577,6 +593,74 @@ INTEGER8 get_Homing_method(void){
     kHoming_mode.Homing_method = get_app_Homing_method();
     /* USER CODE END get_Homing_method */
     return kHoming_mode.Homing_method;
+}
+
+UNS32 set_Homing_speeds(UNS8 val){
+    /* USER CODE BEGIN set_Homing_speeds 0 */
+    /* USER CODE END set_Homing_speeds 0 */
+    kHoming_mode.Homing_speeds = val;
+    /* USER CODE BEGIN set_Homing_speeds 1 */
+    /* USER CODE END set_Homing_speeds 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS8 get_Homing_speeds(void){
+    /* USER CODE BEGIN get_Homing_speeds */
+    /* USER CODE END get_Homing_speeds */
+    return kHoming_mode.Homing_speeds;
+}
+
+UNS32 set_Homing_speeds_Speed_for_switch_search(UNS32 val){
+    /* USER CODE BEGIN set_Homing_speeds_Speed_for_switch_search 0 */
+    /* USER CODE END set_Homing_speeds_Speed_for_switch_search 0 */
+    kHoming_mode.Homing_speeds_Speed_for_switch_search = val;
+    /* USER CODE BEGIN set_Homing_speeds_Speed_for_switch_search 1 */
+    // P/s转RPM
+    set_app_Homing_speed_search_for_switch((float)val * get_app_Load_pps_2_rpm());
+    /* USER CODE END set_Homing_speeds_Speed_for_switch_search 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS32 get_Homing_speeds_Speed_for_switch_search(void){
+    /* USER CODE BEGIN get_Homing_speeds_Speed_for_switch_search */
+    // RPM转P/s
+    kHoming_mode.Homing_speeds_Speed_for_switch_search = get_app_Homing_speed_search_for_switch() * get_app_Load_rpm_2_pps();
+    /* USER CODE END get_Homing_speeds_Speed_for_switch_search */
+    return kHoming_mode.Homing_speeds_Speed_for_switch_search;
+}
+
+UNS32 set_Homing_speeds_Speed_for_zero_search(UNS32 val){
+    /* USER CODE BEGIN set_Homing_speeds_Speed_for_zero_search 0 */
+    /* USER CODE END set_Homing_speeds_Speed_for_zero_search 0 */
+    kHoming_mode.Homing_speeds_Speed_for_zero_search = val;
+    /* USER CODE BEGIN set_Homing_speeds_Speed_for_zero_search 1 */
+    // P/s转RPM
+    set_app_Homing_speed_search_for_zero((float)val * get_app_Load_pps_2_rpm());
+    /* USER CODE END set_Homing_speeds_Speed_for_zero_search 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS32 get_Homing_speeds_Speed_for_zero_search(void){
+    /* USER CODE BEGIN get_Homing_speeds_Speed_for_zero_search */
+    // RPM转P/s
+    kHoming_mode.Homing_speeds_Speed_for_zero_search = get_app_Homing_speed_search_for_zero() * get_app_Load_rpm_2_pps();
+    /* USER CODE END get_Homing_speeds_Speed_for_zero_search */
+    return kHoming_mode.Homing_speeds_Speed_for_zero_search;
+}
+
+UNS32 set_Homing_acceleration(UNS32 val){
+    /* USER CODE BEGIN set_Homing_acceleration 0 */
+    /* USER CODE END set_Homing_acceleration 0 */
+    kHoming_mode.Homing_acceleration = val;
+    /* USER CODE BEGIN set_Homing_acceleration 1 */
+    // P/s/s转RPM/s
+    set_app_Homing_acceleration((float)val * get_app_Load_pps_2_rpm());
+    /* USER CODE END set_Homing_acceleration 1 */
+    return ABORT_CODE_SUCCESSFUL;
+}
+UNS32 get_Homing_acceleration(void){
+    /* USER CODE BEGIN get_Homing_acceleration */
+    // RPM/s/s转P/s/s
+    kHoming_mode.Homing_acceleration = get_app_Homing_acceleration() * get_app_Load_rpm_2_pps();
+    /* USER CODE END get_Homing_acceleration */
+    return kHoming_mode.Homing_acceleration;
 }
 
 UNS32 set_Position_demand_value(INTEGER32 val){

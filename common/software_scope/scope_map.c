@@ -4,7 +4,7 @@
 #include "motor_ctl_loop.h"
 
 //DATABASE_CODE_START_1
-const InterVarStruct kParamDataBase[402] = {
+const InterVarStruct kParamDataBase[408] = {
     {1, &kAxis.pmsm_config.b, kTypeFloat32},
     {2, &kAxis.pmsm_config.fc, kTypeFloat32},
     {3, &kAxis.pmsm_config.flux, kTypeFloat32},
@@ -407,5 +407,11 @@ const InterVarStruct kParamDataBase[402] = {
     {635, &kAppMotionInfo.Interp_period, kTypeFloat32},
     {636, &kAppMotionInfo.Emergency_brake_requested, kTypeUint8},
     {637, &kAppMotionInfo.Target_update_state, kTypeUint8},
+    {639, &kAppMotionParam.Homing_speed_search_for_switch, kTypeFloat32},
+    {640, &kAppMotionParam.Homing_speed_search_for_zero, kTypeFloat32},
+    {641, &kAppMotionParam.Homing_acceleration, kTypeFloat32},
+    {643, &kAppMotionInfo.Homing_step, kTypeInt8},
+    {644, &kAppMotionInfo.Encoder_zero_crossing_state, kTypeUint8},
+    {645, &kAppMotionInfo.Homing_state, kTypeInt8},
 };
 //DATABASE_CODE_STOP_1

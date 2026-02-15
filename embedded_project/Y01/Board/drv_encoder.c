@@ -4,6 +4,7 @@
 __attribute__((section(".RAM_D1"))) uint8_t encoder_tx_buff[ENCODER_NUM][ENCODER_FRAME_MAX_LEN] = { 0 };
 __attribute__((section(".RAM_D1"))) uint8_t encoder_rx_buff[ENCODER_NUM][ENCODER_FRAME_MAX_LEN] = { 0 };
 
+static inline void detect_abs_encoder_zero_crossing(EncoderDataInfo_t* const enc_data);
 static inline void Encoder_None(EncoderDataInfo_t* enc_data);
 static inline uint8_t crc8(uint8_t const *data, size_t length, uint8_t polynomial);
 #if ENCODER1_TYPE_OPTION == ENCODER_TYPE_INC_AB_ABZ || ENCODER2_TYPE_OPTION == ENCODER_TYPE_INC_AB_ABZ
@@ -65,8 +66,12 @@ EncoderDataInfo_t encoder_data[ENCODER_NUM] = {
         .b_multi_res = 0,
         .b_single_raw = 0,
         .b_multi_raw = 0,
+        .real_single_res = 0,
         .single_cnt = 0,
         .multi_turns = 0,
+        .zero_crossing_state = false,
+        .is_first_read = true,
+        .pos_last = 0,
         .real_motor_turns_res = 0,
     #if ENCODER1_TYPE_OPTION == ENCODER_TYPE_INC_AB_ABZ
         .init = ABZ_Encoder_Init,
@@ -123,8 +128,12 @@ EncoderDataInfo_t encoder_data[ENCODER_NUM] = {
         .b_multi_res = 0,
         .b_single_raw = 0,
         .b_multi_raw = 0,
+        .real_single_res = 0,
         .single_cnt = 0,
         .multi_turns = 0,
+        .zero_crossing_state = false,
+        .is_first_read = true,
+        .pos_last = 0,
         .real_motor_turns_res = 0,
     #if ENCODER2_TYPE_OPTION == ENCODER_TYPE_INC_AB_ABZ
         .init = ABZ_Encoder_Init,
@@ -251,7 +260,7 @@ void EncoderDataProcess(void)
         }
     }
 
-    if(encoder_data[ENCODER_ID_2].type == ENCODER_TYPE_NONE)  //只有电机端编码器 
+    if(encoder_data[ENCODER_ID_2].type == ENCODER_TYPE_NONE)  //只有电机端编码器
     {
         // 设置电机端编码器数据
         encoder_data[ENCODER_ID_MOTOR].single_cnt = encoder_data[ENCODER_ID_1].a_single_raw;
@@ -269,6 +278,10 @@ void EncoderDataProcess(void)
         encoder_data[ENCODER_ID_LOAD].single_cnt = encoder_data[ENCODER_ID_2].a_single_raw;
         encoder_data[ENCODER_ID_LOAD].multi_turns = encoder_data[ENCODER_ID_2].a_multi_raw;
     }
+
+    // 检测编码器过零点
+    detect_abs_encoder_zero_crossing(&encoder_data[ENCODER_ID_MOTOR]);
+    detect_abs_encoder_zero_crossing(&encoder_data[ENCODER_ID_LOAD]);
 }
 
 /**
@@ -334,6 +347,51 @@ bool get_encoder_status(ENCODER_ID const enc_id)
 uint8_t get_encoder_type(ENCODER_ID enc_id)
 {
     return encoder_data[enc_id].type;
+}
+
+/**
+ * @brief 获取编码器过零点状态
+ * @param[in] enc_id 编码器端ID：ENCODER_ID_MOTOR、ENCODER_ID_LOAD
+ * @retval false 编码器未过零点
+ * @retval true  编码器已过零点
+ * @note 获取后编码器过零点状态会自动被清除
+ */
+bool get_encoder_zero_crossing_state(ENCODER_ID const enc_id)
+{
+    ENCODER_ID real_enc_id = enc_id;
+    // 当编码器ID为负载端且类型为无编码器时，实际获取的是电机端的过零点状态
+    if (enc_id == ENCODER_ID_LOAD && get_encoder_type(enc_id) == ENCODER_TYPE_NONE)
+    {
+        real_enc_id = ENCODER_ID_MOTOR;
+    }
+    bool zero_crossing_state = encoder_data[real_enc_id].zero_crossing_state;
+    if (zero_crossing_state)
+    {
+        encoder_data[real_enc_id].zero_crossing_state = false;
+    }
+    return zero_crossing_state;
+}
+
+/**
+ * @brief 检测绝对式编码器过零状态
+ * @param[in] enc_data 编码器数据信息结构体指针
+ */
+static inline void detect_abs_encoder_zero_crossing(EncoderDataInfo_t* const enc_data)
+{
+    if (enc_data->type != ENCODER_TYPE_INC_AB_ABZ)
+    {
+        if (enc_data->is_first_read == true)
+        {
+            enc_data->is_first_read = false;
+            enc_data->pos_last = enc_data->single_cnt;
+            return;
+        }
+        // 计算位置增量
+        int32_t delta = (int32_t)enc_data->single_cnt - (int32_t)enc_data->pos_last;
+        // 使用绝对值判断是否发生环形计数器溢出，溢出则为跨圈时刻
+        enc_data->zero_crossing_state = ((MATH_ABS(delta) > (enc_data->real_single_res >> 1)) ? true : false);
+        enc_data->pos_last = enc_data->single_cnt;
+    }
 }
 
 /**
@@ -403,6 +461,7 @@ static void ABZ_Encoder_Init(EncoderDataInfo_t* enc_data)
     enc_data->abz_z_first_flag = true;
     enc_data->abz_z_first_ab_cnt = 0;
     enc_data->abz_z_last_ab_cnt = 0;
+    enc_data->real_single_res = enc_data->a_single_res / enc_data->a_single_less_factor;
 
     if (enc_data->id == ENCODER_ID_1)
     {
@@ -473,6 +532,7 @@ void ENCODER_ABZ_TIM_Z_IRQ_TASK(TIM_HandleTypeDef *htim)
 {
     if(htim == encoder_data[ENCODER_ID_1].tim_handle)
     {
+        encoder_data[ENCODER_ID_1].zero_crossing_state = true;
         encoder_data[ENCODER_ID_1].abz_z_last_ab_cnt = htim->Instance->CNT;
         if(encoder_data[ENCODER_ID_1].abz_z_first_flag == true)  //第一次进入记录CNT 的值
         {
@@ -484,6 +544,7 @@ void ENCODER_ABZ_TIM_Z_IRQ_TASK(TIM_HandleTypeDef *htim)
     }
     else if(htim == encoder_data[ENCODER_ID_2].tim_handle)
     {
+        encoder_data[ENCODER_ID_2].zero_crossing_state = true;
         encoder_data[ENCODER_ID_2].abz_z_last_ab_cnt = htim->Instance->CNT;
         if(encoder_data[ENCODER_ID_2].abz_z_first_flag == true)  //第一次进入记录CNT 的值
         {
@@ -507,6 +568,7 @@ void ENCODER_ABZ_TIM_Z_IRQ_TASK(TIM_HandleTypeDef *htim)
 static void TAMAGAWA_Encoder_Init(EncoderDataInfo_t* enc_data)
 {
     enc_data->type = ENCODER_TYPE_ABS_RS485_TAMAGAWA;
+    enc_data->real_single_res = enc_data->a_single_res / enc_data->a_single_less_factor;
     if (enc_data->id == ENCODER_ID_1)
     {
         enc_data->uart_handle = &ENCODER1_UART_HANDLE;
@@ -541,7 +603,7 @@ static void TAMAGAWA_Encoder_Init(EncoderDataInfo_t* enc_data)
 static void TAMAGAWA_Encoder_Data_Read(EncoderDataInfo_t* enc_data)
 {
     if (HAL_UART_Receive_DMA(enc_data->uart_handle, encoder_rx_buff[enc_data->id], \
-                                enc_data->frame_len) != HAL_OK)
+                             enc_data->frame_len) != HAL_OK)
     {
         // 传输启动失败，增加错误计数
         enc_data->err_cnt++;
@@ -625,6 +687,7 @@ static void TAMAGAWA_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
 static void MT68XX_Encoder_Init(EncoderDataInfo_t* enc_data)
 {
     enc_data->type = ENCODER_TYPE_ABS_SPI_MT68XX;
+    enc_data->real_single_res = enc_data->a_single_res / enc_data->a_single_less_factor;
     if (enc_data->id == ENCODER_ID_1)
     {
         enc_data->spi_handle = &ENCODER1_SPI_HANDLE;
@@ -724,6 +787,7 @@ static void MT68XX_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
 static void KTM59XX_Encoder_Init(EncoderDataInfo_t* enc_data)
 {
     enc_data->type = ENCODER_TYPE_ABS_SPI_KTM59XX;
+    enc_data->real_single_res = enc_data->a_single_res / enc_data->a_single_less_factor;
     if (enc_data->id == ENCODER_ID_1)
     {
         enc_data->spi_handle = &ENCODER1_SPI_HANDLE;
@@ -845,6 +909,7 @@ static inline bool KTM59XX_Encoder_Crc8_Check(uint64_t input, int32_t len)
 static void SMC40S_Encoder_Init(EncoderDataInfo_t* enc_data)
 {
     enc_data->type = ENCODER_TYPE_ABS_BISSC_SMC40S;
+    enc_data->real_single_res = enc_data->a_single_res / enc_data->a_single_less_factor;
     if (enc_data->id == ENCODER_ID_1)
     {
         enc_data->spi_handle = &ENCODER1_SPI_HANDLE;

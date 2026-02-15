@@ -197,6 +197,9 @@ void flash_param_update(void)
     kFlashStorage.app_motion_param_Interp_time_index = kAppMotionParam.Interp_time_index;
     kFlashStorage.app_mavlink_config_Sys_id = kAppMavlinkConfig.Sys_id;
     kFlashStorage.app_mavlink_config_Comp_id = kAppMavlinkConfig.Comp_id;
+    kFlashStorage.app_motion_param_Homing_speed_search_for_switch = kAppMotionParam.Homing_speed_search_for_switch;
+    kFlashStorage.app_motion_param_Homing_speed_search_for_zero = kAppMotionParam.Homing_speed_search_for_zero;
+    kFlashStorage.app_motion_param_Homing_acceleration = kAppMotionParam.Homing_acceleration;
 }
 
 void flash_param_init(void)
@@ -390,6 +393,9 @@ void flash_param_init(void)
     kAppMotionParam.Interp_time_index = kFlashStorage.app_motion_param_Interp_time_index;
     kAppMavlinkConfig.Sys_id = kFlashStorage.app_mavlink_config_Sys_id;
     kAppMavlinkConfig.Comp_id = kFlashStorage.app_mavlink_config_Comp_id;
+    kAppMotionParam.Homing_speed_search_for_switch = kFlashStorage.app_motion_param_Homing_speed_search_for_switch;
+    kAppMotionParam.Homing_speed_search_for_zero = kFlashStorage.app_motion_param_Homing_speed_search_for_zero;
+    kAppMotionParam.Homing_acceleration = kFlashStorage.app_motion_param_Homing_acceleration;
 }
 /* USER CODE BEGIN AREA 1 */
 static HistoricalInfo kFlashHistoricalInfo;

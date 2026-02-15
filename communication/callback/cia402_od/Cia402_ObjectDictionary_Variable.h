@@ -60,7 +60,12 @@ typedef struct
 
 typedef struct
 {
+    INTEGER32 Home_offset; //回零偏移
     INTEGER8 Homing_method; //回零方法
+    UNS8 Homing_speeds;
+    UNS32 Homing_speeds_Speed_for_switch_search; //回零搜索开关速度
+    UNS32 Homing_speeds_Speed_for_zero_search; //回零搜索零点速度
+    UNS32 Homing_acceleration; //回零加速度
 }Homing_mode;
 
 typedef struct
@@ -206,8 +211,23 @@ UNS32 get_Max_acceleration(void);
 UNS32 set_Max_deceleration(UNS32 val);
 UNS32 get_Max_deceleration(void);
 
+UNS32 set_Home_offset(INTEGER32 val);
+INTEGER32 get_Home_offset(void);
+
 UNS32 set_Homing_method(INTEGER8 val);
 INTEGER8 get_Homing_method(void);
+
+UNS32 set_Homing_speeds(UNS8 val);
+UNS8 get_Homing_speeds(void);
+
+UNS32 set_Homing_speeds_Speed_for_switch_search(UNS32 val);
+UNS32 get_Homing_speeds_Speed_for_switch_search(void);
+
+UNS32 set_Homing_speeds_Speed_for_zero_search(UNS32 val);
+UNS32 get_Homing_speeds_Speed_for_zero_search(void);
+
+UNS32 set_Homing_acceleration(UNS32 val);
+UNS32 get_Homing_acceleration(void);
 
 UNS32 set_Position_demand_value(INTEGER32 val);
 INTEGER32 get_Position_demand_value(void);
