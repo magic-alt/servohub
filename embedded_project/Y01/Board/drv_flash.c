@@ -24,7 +24,7 @@ static void unlock(fdb_db_t db)
   */
 fdb_err_t flashdb_init(void)
 {
-    fdb_kv_t kv;
+    struct fdb_kv kv;
     struct fdb_blob blob;
 
     default_kv.kvs = default_kv_table;
@@ -52,7 +52,7 @@ fdb_err_t flashdb_init(void)
     /* check if the default kv nodes are in the kvdb */
     for (uint8_t index = 0; index < default_kv.num; index++)
     {
-        if (fdb_kv_get_obj(&kvdb, default_kv.kvs[index].key, kv) == NULL)
+        if (fdb_kv_get_obj(&kvdb, default_kv.kvs[index].key, &kv) == NULL)
         {
             fdb_err_code = fdb_kv_set_blob(&kvdb, default_kv.kvs[index].key, \
             fdb_blob_make(&blob, default_kv.kvs[index].value, default_kv.kvs[index].value_len));
