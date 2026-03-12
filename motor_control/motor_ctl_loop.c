@@ -198,11 +198,11 @@ void PosSpeedLoopCtrl(void)
 #ifdef USE_CIA402
         Cia402ErrorCodeScan();
         PDS_FSA_Run();
-#endif
+#endif // USE_CIA402
         AppRun(kAxis.motor_ctl_sm_input.hw_ready_state);
 #ifdef USE_CIA402
         UpdateStatusword();
-#endif
+#endif // USE_CIA402
     }
 
     // 2. 执行位置速度环控制算法
