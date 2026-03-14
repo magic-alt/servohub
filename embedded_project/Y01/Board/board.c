@@ -32,19 +32,24 @@ __attribute__((section(".RAM_D1"))) BspData kBspData =
     .uvw_target_voltage[0] = 0.0f,
     .uvw_target_voltage[1] = 0.0f,
     .uvw_target_voltage[2] = 0.0f,
-    .motor_cnt = 0,
-    .load_cnt = 0,
-    .motor_turns = 0,
-    .load_turns = 0,
     .pwm_en_state = 0,
     .pwm_ready_state = 0,
     .pwm_state_cnt = 0,
+    .brake_pwm_timer_psc = 0,
+    .brake_pwm_timer_arr = 0,
+    .brake_pwm_duty_ccr_tar = 0,
+    .brake_pwm_duty_ccr_action = 0,
+    .brake_pwm_duty_ccr_hold = 0,
 };
 
 static void PositionLoopInit(void);
 
 void BspInit(void)
 {
+    // 初始化抱闸定时器，输出抱闸信号为合闸状态
+    __HAL_TIM_SET_COMPARE(&BRAKE_PWM_TIM_HANDLE, BRAKE_PWM_TIM_CHANNEL, BRAKE_PWM_DUTY_CCR_ENGAGED);
+    HAL_TIM_PWM_Start(&BRAKE_PWM_TIM_HANDLE, BRAKE_PWM_TIM_CHANNEL);
+
     // 触发规则通道队列DMA采样
     HAL_ADC_Start_DMA(&DC_BUS_VOLTAGE_HANDLE, (uint32_t *)kBspData.adc1_raw_buffer, ADC1_REGULAR_RANK_NUMBER);
     // 等待母线电压稳定

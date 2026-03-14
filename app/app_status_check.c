@@ -794,7 +794,7 @@ void AppStatusScanInit(void)
     sys_get_bsp_error_state(&kAppCheck.p_bsp_error);
     kAppCheck.error_record_addr = get_app_Error_records_list_addr();
     kAppCheck.dt = axis->pmsm_config.tp_s;
-    kAppCheck.dt_1ms = TASK_PERIOD_1MS;
+    kAppCheck.dt_1ms = NRT_TASK_PERIOD_S;
     kAppCheck.i_rated_squared = DRIVER_RATED_CURRENT_A * DRIVER_RATED_CURRENT_A;
     kAppCheck.i_peak_squared_threshold = 0.81f * DRIVER_PEAK_CURRENT_A * DRIVER_PEAK_CURRENT_A;
 }
@@ -925,9 +925,10 @@ void AppStatusCheck(void)
 {
     // 遍历数字输入IO状态，更新对应bit。
     uint32_t di_io_status = 0;
-    for (DIGITAL_INPUTS_IO io = DI_IO_MIN; io <= DI_IO_MAX; io++)
+    for (DIGITAL_INPUTS_IO_BIT io = DI_IO_MIN; io <= DI_IO_MAX; io++)
     {
         di_io_status |= (bsp_get_digital_input_state(io) << io);
+        // 可根据需要在以下添加IO输入状态变化，处理触发事件等功能逻辑
     }
     kAppCheck.di_io.all = di_io_status;
 }

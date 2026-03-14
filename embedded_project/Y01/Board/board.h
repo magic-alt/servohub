@@ -27,13 +27,14 @@ typedef struct
     float mcu_temp[3];
     volatile float uvw_current[3];
     volatile float uvw_target_voltage[3];
-    volatile uint32_t motor_cnt;
-    volatile uint32_t load_cnt;
-    volatile int64_t motor_turns;
-    volatile int64_t load_turns;
     bool pwm_en_state;
     bool pwm_ready_state;
     uint32_t pwm_state_cnt;
+    uint16_t brake_pwm_timer_psc;         // PWM抱闸IO输出定时器预分频值
+    uint32_t brake_pwm_timer_arr;         // PWM抱闸IO输出定时器自动重装载值
+    uint32_t brake_pwm_duty_ccr_tar;      // 抱闸PWM占空比对应CCR目标值
+    uint32_t brake_pwm_duty_ccr_action;   // 抱闸PWM占空比对应CCR动作值
+    uint32_t brake_pwm_duty_ccr_hold;     // 抱闸PWM占空比对应CCR保持值
 } BspData;
 
 
@@ -86,6 +87,12 @@ typedef struct
 #define PWM_TIM_BREAK_IRQ_HANDLE    HAL_TIMEx_BreakCallback
 
 #define BRAKE_PWM_TIM_HANDLE        (htim2)                     //PWM抱闸IO输出定时器
+#define BRAKE_PWM_TIM_CHANNEL       (TIM_CHANNEL_4)             //PWM抱闸IO输出定时器通道
+#define BRAKE_PWM_TIM_FREQ          (HAL_RCC_GetPCLK1Freq())    //PWM抱闸IO输出定时器频率（内部分频前）
+#define BRAKE_PWM_DUTY_CCR_ENGAGED  (0u)                        //抱闸PWM合闸占对应空比CCR值
+#define BRAKE_PWM_TIM_PSC_VAL       (BRAKE_PWM_TIM_HANDLE.Instance->PSC)
+#define BRAKE_PWM_TIM_ARR_VAL       (BRAKE_PWM_TIM_HANDLE.Instance->ARR)
+#define BRAKE_PWM_TIM_CCR_VAL       (BRAKE_PWM_TIM_HANDLE.Instance->CCR4)
 #define ENCODER1_ABZ_TIM_HANDLE     (htim3)                     //ABZ增量式编码器1定时器
 #define ENCODER1_ABZ_TIM_Z_CHANNEL  (TIM_CHANNEL_3)             //ABZ增量式编码器1定时器Z相捕获通道
 #define ENCODER2_ABZ_TIM_HANDLE     (htim3)                     //ABZ增量式编码器2定时器
@@ -171,6 +178,8 @@ typedef struct
 #define USER_IO6_WRITE(pin_state)   (HAL_GPIO_WritePin(USER_IO6_GPIO_Port, USER_IO6_Pin, (GPIO_PinState)pin_state))
 #define USER_IO7_READ()             (HAL_GPIO_ReadPin(USER_IO7_GPIO_Port, USER_IO7_Pin))
 #define USER_IO7_WRITE(pin_state)   (HAL_GPIO_WritePin(USER_IO7_GPIO_Port, USER_IO7_Pin, (GPIO_PinState)pin_state))
+#define BRAKE_IO_READ()             (HAL_GPIO_ReadPin(BRAKE_PWM_GPIO_Port, BRAKE_PWM_Pin))
+#define BRAKE_IO_WRITE(pin_state)   (HAL_GPIO_WritePin(BRAKE_PWM_GPIO_Port, BRAKE_PWM_Pin, (GPIO_PinState)pin_state))
 
 // 数字输入IO功能自定义分配，有效电平及读取函数
 #define DI_IO_NEGATIVE_LIMIT_SWITCH_LEVEL       (GPIO_PIN_RESET)
@@ -181,11 +190,15 @@ typedef struct
 #define DI_IO_HOME_SWITCH_READ()                USER_IO3_READ()
 #define DI_IO_INTERLOCK_LEVEL                   (GPIO_PIN_RESET)
 #define DI_IO_INTERLOCK_READ()                  USER_IO4_READ()
+#define DI_IO_USER_0_LEVEL                      (GPIO_PIN_SET)
+#define DI_IO_USER_0_READ()                     USER_IO4_READ()
 // ...
 
 // 数字输出IO功能自定义分配，有效电平及写入函数
-#define DO_IO_SET_BRAKE_LEVEL                   (GPIO_PIN_SET)
-#define DO_IO_SET_BRAKE_WRITE(pin_state)        USER_IO7_WRITE((GPIO_PinState)pin_state)
+#define DO_IO_SET_BRAKE_RELEASED_LEVEL          (GPIO_PIN_SET) // 松闸电平
+#define DO_IO_SET_BRAKE_WRITE(pin_state)        BRAKE_IO_WRITE((GPIO_PinState)pin_state)
+#define DO_IO_USER_0_LEVEL                      (GPIO_PIN_SET)
+#define DO_IO_USER_0_WRITE(pin_state)           USER_IO6_WRITE((GPIO_PinState)pin_state)
 // ...
 #pragma endregion // GPIO
 

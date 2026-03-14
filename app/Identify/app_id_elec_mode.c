@@ -20,12 +20,12 @@ AppResult IdElecModeStart()
 
 AppResult IdElecModeRun()
 {
-    if(get_app_Controlword() == APP_CTRL_ENABLE)
+    // 辨识运行条件: 1. 使能指令生效 2. 抱闸状态为松闸
+    if (get_app_Controlword() == APP_CTRL_ENABLE && get_app_Brake_state() == BRAKE_STATE_RELEASED)
     {
         if (!get_app_Emergency_brake_requested())
         {
-            if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_STATE_ENABLE && \
-                axis->elec_id_sin_output.state_now == IDENTIFICATION_MODE_STATE_FINISH)
+            if (axis->elec_id_sin_output.state_now == IDENTIFICATION_MODE_STATE_FINISH)
             {
                 // 辨识完成 会自动失能电机
                 set_app_Controlword(APP_CTRL_DISABLE);

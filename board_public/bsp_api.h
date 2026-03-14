@@ -56,7 +56,13 @@ float bsp_get_motor_temp(void);
 float bsp_get_mos_temperature(void);
 /* 读取mcu温度 */
 float bsp_get_mcu_temperature(void);
-
+/* 读取用户ADC采样值 */
+uint16_t bsp_get_user_adc1_val(void);
+/* 计算抱闸PWM定时器配置值 */
+void bsp_calc_brake_pwm_timer_param(bool is_pwm_adjust, float pwm_freq, float rated_voltage, \
+                                    float release_action_voltage, float release_hold_voltage);
+/* 设置抱闸PWM定时器配置值 */
+void bsp_set_brake_pwm_timer_config(APP_BRAKE_STATE brake_state);
 #pragma endregion
 
 #pragma region 编码器相关
@@ -105,9 +111,9 @@ FLASHDB_STATUS bsp_flashdb_key_delete(FLASHDB_KEY_INDEX const index);
 
 #pragma region 其它
 /* 获取数字输入IO状态 */
-bool bsp_get_digital_input_state(DIGITAL_INPUTS_IO const io);
+bool bsp_get_digital_input_state(DIGITAL_INPUTS_IO_BIT const io);
 /* 设置数字输出IO状态 */
-void bsp_set_digital_output_state(DIGITAL_OUTPUTS_IO const io, bool state);
+void bsp_set_digital_output_state(DIGITAL_OUTPUTS_IO_BIT const io, bool state);
 /* 系统阻塞us延时 */
 void bsp_sys_blocking_delay_us(uint32_t us);
 /* 系统阻塞ms延时 */

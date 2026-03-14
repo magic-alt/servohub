@@ -54,17 +54,23 @@ typedef enum
     DI_IO_POSITIVE_LIMIT_SWITCH = 1,
     DI_IO_HOME_SWITCH = 2,
     DI_IO_INTERLOCK = 3,
-    // ...
-    DI_IO_MAX = DI_IO_INTERLOCK,            // 可用为边界检查
-} DIGITAL_INPUTS_IO;
+    //DI_IO_RESERVED = 4~15,                // 保留位，禁止使用
+
+    DI_IO_USER_0 = 16,                      // 厂商（用户）自定义位0
+    // ...  MAX = 31
+    DI_IO_MAX = DI_IO_USER_0,               // 可用为边界检查
+} DIGITAL_INPUTS_IO_BIT;
 
 typedef enum
 {
     DO_IO_MIN = 0,                          // 可用为边界检查
     DO_IO_SET_BRAKE = DO_IO_MIN,
-    // ...
-    DO_IO_MAX = DO_IO_SET_BRAKE,            // 可用为边界检查
-} DIGITAL_OUTPUTS_IO;
+    //DO_IO_RESERVED = 1~15,                // 保留位，禁止使用
+
+    DO_IO_USER_0 = 16,                      // 厂商（用户）自定义位0
+    // ... MAX = 31
+    DO_IO_MAX = DO_IO_USER_0,               // 可用为边界检查
+} DIGITAL_OUTPUTS_IO_BIT;
 
 typedef union
 {
@@ -77,7 +83,8 @@ typedef union
         uint32_t interlock : 1;                         // 互锁开关状态
         uint32_t reserved : 12;                         // 保留位
 
-        uint32_t manufacturer_specific : 16;            // 厂商自定义位
+        uint32_t user_0 : 1;                            // 厂商（用户）自定义位0
+        uint32_t manufacturer_specific : 15;            // 厂商（用户）待定义位
     } bits; // 位字段
 } DigitalInputsIo_t; // 数字输入IO状态（OD60FD）
 
@@ -89,7 +96,8 @@ typedef union
         uint32_t set_brake : 1;                         // 设置刹车状态
         uint32_t reserved : 15;                         // 保留位
 
-        uint32_t manufacturer_specific : 16;            // 厂商自定义位
+        uint32_t user_0 : 1;                            // 厂商（用户）自定义位0
+        uint32_t manufacturer_specific : 15;            // 厂商（用户）待定义位
     } bits; // 位字段
 } DigitalOutputsIo_t; // 数字输出IO状态（OD60FE）
 
@@ -195,6 +203,23 @@ typedef enum
     EMERGENCY_BRAKE_MODE_CURRENT_LIMIT_ENABLE,   // Enable after current limit
     EMERGENCY_BRAKE_MODE_VOLTAGE_LIMIT_ENABLE,   // Enable after voltage limit
 } APP_Emergency_Brake_Mode;
+
+typedef enum
+{
+    BRAKE_CONTROL_MODE_IO_AUTO = 0,             // 内部逻辑自动控制控制IO
+    BRAKE_CONTROL_MODE_IO_MANUAL = 1,           // 外部命令手动控制控制IO
+
+    BRAKE_CONTROL_MODE_PWM_AUTO = 2,            // 内部逻辑自动控制控制PWM
+    BRAKE_CONTROL_MODE_PWM_MANUAL = 3,          // 外部命令手动控制控制PWM
+} APP_BRAKE_CONTROL_MODE;
+
+typedef enum
+{
+    BRAKE_STATE_ENGAGED = 0,                    // 抱闸完成
+    BRAKE_STATE_RELEASING = 1,                  // 松闸进行中
+    BRAKE_STATE_RELEASED = 2,                   // 松闸完成
+    BRAKE_STATE_ENGAGING = 3,                   // 抱闸进行中
+} APP_BRAKE_STATE;
 
 typedef enum
 {

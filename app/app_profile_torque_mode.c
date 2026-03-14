@@ -41,7 +41,8 @@ AppResult PtModeRun()
                 TorqueTrajectoryPlanningInit();
             }
 
-            if (get_app_Halt_running_cmd() == true)
+            // 规划力矩为0的情况：1. 暂停指令生效 2. 抱闸状态不为松闸
+            if (get_app_Halt_running_cmd() == true || get_app_Brake_state() != BRAKE_STATE_RELEASED)
             {
                 kPtMode.traj.torque_tar = 0;
             }

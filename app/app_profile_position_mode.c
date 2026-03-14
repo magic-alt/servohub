@@ -63,7 +63,8 @@ AppResult PpModeRun()
                 kPpMode.start_upedge_state = false;
             }
 
-            if (get_app_Halt_running_cmd() == true)
+            // 规划速度为0的情况：1. 暂停指令生效 2. 抱闸状态不为松闸
+            if (get_app_Halt_running_cmd() == true || get_app_Brake_state() != BRAKE_STATE_RELEASED)
             {
                 kPpMode.start_upedge_latch = false; // 暂停后重新使能
                 kPpMode.traj.profile_speed = 0;     // 如果处于暂停状态，规划速度为0
@@ -108,12 +109,12 @@ AppResult PpModeRun()
             {
                 if (get_app_Reduction_ratio_num() == 1) //减速比1:1  直接以电机端编码器位置为反馈
                 {
-                    kPpMode.traj.pos_tar_p = kPpMode.position_target_last;  
+                    kPpMode.traj.pos_tar_p = kPpMode.position_target_last;
                 }
                 else //减速比大于1  以负载端位置为参考进行绝对位置控制
                 {
                     kPpMode.traj.pos_tar_p = PosUnitLoadToMotor(kPpMode.position_target_last);;
-                }  
+                }
             }
             else  //负载端有编码器 目标位置进行相对位置控制
             {

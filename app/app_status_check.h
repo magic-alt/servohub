@@ -5,7 +5,6 @@
 
 #include "bsp_api.h"
 
-#define TASK_PERIOD_1MS         (0.001f)        // 1ms = 0.001s任务周期  一般不用修改
 #define DRIVE_OVER_PEAK_COOLING_TIME (30.0f)    // 30s 默认驱动器峰值电流过载驱动器冷却时间，一般无需修改，冷却时间内一直会报错
 #define DC_BUS_UNDER_VOLTAGE_CHECK_TIME (0.2f)  // 欠压错误持续时间阈值
 #define LED_NORMAL_STATE_PERIOD (500.0f)        // 正常状态持续时间ms

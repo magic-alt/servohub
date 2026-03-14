@@ -56,10 +56,15 @@ extern "C"
 #define MOTOR_HIGH_TEMP_WARING_THRESHOLD    (120.0f)                    // 电机过温警告阈值（℃）
 #define MOTOR_LOW_TEMP_WARING_THRESHOLD     (-20.0f)                    // 电机低温警告阈值（℃）
 // 抱闸相关参数
-#define BRAKE_ENGAGE_TIME                   (0.0f)                      // 抱闸延迟时间（s）
-#define BRAKE_RELEASE_TIME                  (0.0f)                      // 松闸延迟时间（s）
-#define DYNAMIC_BRAKE_SPEED_THRESHOLD       (100.0f)                    // 抱闸制动速度阈值（RPM）
-#define BRAKE_RELEASE_HOLD_VOLTAGE          (12.0f)                     // 松闸保持电压（V）
+#define BRAKE_RATED_VOLTAGE                 (24.0f)                     // 抱闸器额定电压（V）
+#define DYNAMIC_BRAKE_SPEED_THRESHOLD       (10.0f)                     // 抱闸制动速度阈值（RPM）
+#define BRAKE_ENGAGE_DELAY_TIME             (0.0f)                      // 抱闸延迟时间（s）
+#define BRAKE_ENGAGE_ACTION_TIME            (0.0f)                      // 抱闸动作时间（s）
+#define BRAKE_RELEASE_DELAY_TIME            (0.0f)                      // 松闸延迟时间（s）
+#define BRAKE_RELEASE_ACTION_TIME           (0.0f)                      // 松闸动作时间（s）
+#define BRAKE_RELEASE_ACTION_VOLTAGE        (BRAKE_RATED_VOLTAGE * 1.0f)// 松闸动作电压（V）
+#define BRAKE_RELEASE_HOLD_VOLTAGE          (BRAKE_RATED_VOLTAGE * 0.5f)// 松闸保持电压（V）
+#define BRAKE_RELEASE_PWM_FREQ              (10000u)                    // 松闸PWM频率（Hz）
 
 // --------------------------
 // 电机控制参数

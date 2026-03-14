@@ -1,5 +1,6 @@
 #include "system_init.h"
 
+#include "app_brake_control.h"
 #include "app_motion_precondition.h"
 #include "app_scheduler.h"
 #include "app_store_param.h"
@@ -27,6 +28,7 @@ void HalInit(void)
     AppStatusScanInit();
     AppStoreInit();
     ScopeInit();
+    AppBrakeControlInit();
     AppMotionPreConditionInit();
 }
 

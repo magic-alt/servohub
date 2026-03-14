@@ -72,7 +72,8 @@ AppResult CspModeRun()
                 kCspMode.traj.is_update_tar = true;
             }
 
-            if ((bool)get_app_Target_update_state() == true)
+            // 更新目标位置条件: 1. 目标更新状态为真 2. 抱闸状态为松闸
+            if ((bool)get_app_Target_update_state() == true && get_app_Brake_state() == BRAKE_STATE_RELEASED)
             {
                 set_app_Target_update_state(false);
 
@@ -85,12 +86,12 @@ AppResult CspModeRun()
                 {
                     if (get_app_Reduction_ratio_num() == 1) //减速比1:1  直接以电机端编码器位置为反馈
                     {
-                        kCspMode.pos_tar_p = kCspMode.pos_tar_last_p;  
+                        kCspMode.pos_tar_p = kCspMode.pos_tar_last_p;
                     }
                     else //减速比大于1  以负载端位置为参考进行绝对位置控制
                     {
                         kCspMode.pos_tar_p = PosUnitLoadToMotor(kCspMode.pos_tar_last_p);
-                    }  
+                    }
                 }
                 else  //负载端有编码器 目标位置进行相对位置控制
                 {

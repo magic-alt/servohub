@@ -54,6 +54,7 @@ void AppParamInit(void)
     kAppStatusInfo.Motor_temperature = 0.0f;         // 电机当前温度
     kAppStatusInfo.Mcu_temperature = 0.0f;           // MCU当前温度
     kAppStatusInfo.Digital_io_inputs_status = 0;     // 数字输入状态
+    kAppStatusInfo.Brake_state = BRAKE_STATE_ENGAGED;// 抱闸状态
 
     // 初始化运动信息
     kAppMotionInfo.Position_demand_value = 0;        // 位置指令值
@@ -76,10 +77,17 @@ void AppParamInit(void)
     kAppBaseConfig.Can_id = 0x15;                                                               // CAN ID
     kAppBaseConfig.Can_baudrate = 1000000;                                                      // CAN 波特率
     kAppBaseConfig.Quick_stop_option_code = 2;                                                  // 快速停机方式选择
-    kAppBaseConfig.Brake_engage_time = BRAKE_ENGAGE_TIME;                                       // 抱闸延迟时间
-    kAppBaseConfig.Brake_release_time = BRAKE_RELEASE_TIME;                                     // 松闸延迟时间
+    kAppBaseConfig.Brake_engage_time = BRAKE_ENGAGE_ACTION_TIME;                                // 抱闸动作时间
+    kAppBaseConfig.Brake_release_time = BRAKE_RELEASE_ACTION_TIME;                              // 松闸动作时间
     kAppBaseConfig.Dynamic_brake_speed_threshold = DYNAMIC_BRAKE_SPEED_THRESHOLD;               // 抱闸制动速度阈值
     kAppBaseConfig.Brake_release_hold_voltage = BRAKE_RELEASE_HOLD_VOLTAGE;                     // 松闸保持电压
+    kAppBaseConfig.Digital_io_outputs_phys = 0;                                                 // 数字输出物理状态
+    kAppBaseConfig.Digital_io_outputs_mask = 0;                                                 // 数字输出掩码
+    kAppBaseConfig.Brake_control_mode = BRAKE_CONTROL_MODE_IO_AUTO;                             // 抱闸控制模式
+    kAppBaseConfig.Brake_rated_voltage = BRAKE_RATED_VOLTAGE;                                   // 抱闸器额定电压
+    kAppBaseConfig.Brake_release_pwm_freq = BRAKE_RELEASE_PWM_FREQ;                             // 松闸PWM频率
+    kAppBaseConfig.Brake_engage_delay_time = BRAKE_ENGAGE_DELAY_TIME;                           // 抱闸延迟时间
+    kAppBaseConfig.Brake_release_delay_time = BRAKE_RELEASE_DELAY_TIME;                         // 松闸延迟时间
 
     // 初始化编码器配置
     kAppEncoderConfig.Load_encoder_resolution = PMSM_LOAD_ENC_LINE_ORG;                         // 负载端位置反馈分辨率
@@ -174,6 +182,7 @@ void AppParamInit(void)
     kAppRestrictParam.Max_acceleration = (float)(0xFFFFFFFF) * kAppEncoderConfig.Load_pps_2_rpm;   // 应用加速度限制
     kAppRestrictParam.Max_deceleration = (float)(0xFFFFFFFF) * kAppEncoderConfig.Load_pps_2_rpm;   // 应用减速度限制
     kAppRestrictParam.Max_current = kAppMotorConfig.Motor_rated_current; // 应用电流限制相对值
+    kAppRestrictParam.Position_limit_enable = 0;        // 位置限制使能
 
     // 初始化窗口参数
     kAppWindowParam.Following_error_window = 10000;     // 位置跟随误差阈值
@@ -1525,6 +1534,12 @@ uint32_t set_app_Brake_release_hold_voltage(float val)
     if (val < 0.0)
         return APP_PARAM_OUT_OF_RANGE;
     /* USER CODE BEGIN set_app_Brake_release_hold_voltage 0 */
+    if (val > kAppBaseConfig.Brake_rated_voltage)
+        return APP_PARAM_OUT_OF_RANGE;
+    if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+    {
+        return APP_PARAM_WRITE_STATE_ERROR;
+    }
     /* USER CODE END set_app_Brake_release_hold_voltage 0 */
     kAppBaseConfig.Brake_release_hold_voltage = val;
     /* USER CODE BEGIN set_app_Brake_release_hold_voltage 1 */
@@ -1544,12 +1559,31 @@ uint32_t set_app_Digital_io_outputs_phys(uint32_t val)
     /* USER CODE END set_app_Digital_io_outputs_phys 0 */
     kAppBaseConfig.Digital_io_outputs_phys = val;
     /* USER CODE BEGIN set_app_Digital_io_outputs_phys 1 */
+    uint32_t do_ctrl = get_app_Digital_io_outputs_phys() & get_app_Digital_io_outputs_mask();
+
+    // 按位设置bsp层实际DO输出有效状态
+    for (DIGITAL_OUTPUTS_IO_BIT do_num = DO_IO_MIN; do_num <= DO_IO_MAX; do_num++)
+    {
+        bsp_set_digital_output_state(do_num, (do_ctrl >> do_num) & 0x1);
+    }
     /* USER CODE END set_app_Digital_io_outputs_phys 1 */
     return APP_PARAM_SUCCESS;
 }
 uint32_t get_app_Digital_io_outputs_phys(void)
 {
     /* USER CODE BEGIN get_app_Digital_io_outputs_phys */
+    // 抱闸由内部自动控制，更新DO_IO_SET_BRAKE位状态
+    APP_BRAKE_CONTROL_MODE mode = get_app_Brake_control_mode();
+    if (mode == BRAKE_CONTROL_MODE_IO_AUTO || mode == BRAKE_CONTROL_MODE_PWM_AUTO)
+    {
+        bool brake_io_phys = (APP_BRAKE_STATE)get_app_Brake_state() == BRAKE_STATE_RELEASED ? \
+                             true : false;
+        uint32_t val = kAppBaseConfig.Digital_io_outputs_phys;
+        uint32_t brake_bit_mask = (uint32_t)1 << DO_IO_SET_BRAKE;
+        // 使用brake_io_phys的值设置DO_IO_SET_BRAKE位，其他位保持不变
+        val = (val & ~brake_bit_mask) | (brake_io_phys ? brake_bit_mask : 0);
+        kAppBaseConfig.Digital_io_outputs_phys = val;
+    }
     /* USER CODE END get_app_Digital_io_outputs_phys */
     return kAppBaseConfig.Digital_io_outputs_phys;
 }
@@ -1560,12 +1594,29 @@ uint32_t set_app_Digital_io_outputs_mask(uint32_t val)
     /* USER CODE END set_app_Digital_io_outputs_mask 0 */
     kAppBaseConfig.Digital_io_outputs_mask = val;
     /* USER CODE BEGIN set_app_Digital_io_outputs_mask 1 */
+    uint32_t do_ctrl = get_app_Digital_io_outputs_phys() & get_app_Digital_io_outputs_mask();
+
+    // 按位设置bsp层实际DO输出有效状态
+    for (DIGITAL_OUTPUTS_IO_BIT do_num = DO_IO_MIN; do_num <= DO_IO_MAX; do_num++)
+    {
+        bsp_set_digital_output_state(do_num, (do_ctrl >> do_num) & 0x1);
+    }
     /* USER CODE END set_app_Digital_io_outputs_mask 1 */
     return APP_PARAM_SUCCESS;
 }
 uint32_t get_app_Digital_io_outputs_mask(void)
 {
     /* USER CODE BEGIN get_app_Digital_io_outputs_mask */
+    // 抱闸由内部自动控制，更新DO_IO_SET_BRAKE位状态
+    APP_BRAKE_CONTROL_MODE mode = get_app_Brake_control_mode();
+    if (mode == BRAKE_CONTROL_MODE_IO_AUTO || mode == BRAKE_CONTROL_MODE_PWM_AUTO)
+    {
+        uint32_t val = kAppBaseConfig.Digital_io_outputs_mask;
+        uint32_t brake_bit_mask = (uint32_t)1 << DO_IO_SET_BRAKE;
+        // 使用brake_io_mask的值设置DO_IO_SET_BRAKE位为1，其他位保持不变
+        val = val | brake_bit_mask;
+        kAppBaseConfig.Digital_io_outputs_mask = val;
+    }
     /* USER CODE END get_app_Digital_io_outputs_mask */
     return kAppBaseConfig.Digital_io_outputs_mask;
 }
@@ -1578,6 +1629,10 @@ uint32_t set_app_Brake_control_mode(uint8_t val)
         return APP_PARAM_OUT_OF_RANGE;
 
     /* USER CODE BEGIN set_app_Brake_control_mode 0 */
+    if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+    {
+        return APP_PARAM_WRITE_STATE_ERROR;
+    }
     /* USER CODE END set_app_Brake_control_mode 0 */
     kAppBaseConfig.Brake_control_mode = val;
     /* USER CODE BEGIN set_app_Brake_control_mode 1 */
@@ -1596,6 +1651,10 @@ uint32_t set_app_Brake_rated_voltage(float val)
     if (val < 0.0)
         return APP_PARAM_OUT_OF_RANGE;
     /* USER CODE BEGIN set_app_Brake_rated_voltage 0 */
+    if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+    {
+        return APP_PARAM_WRITE_STATE_ERROR;
+    }
     /* USER CODE END set_app_Brake_rated_voltage 0 */
     kAppBaseConfig.Brake_rated_voltage = val;
     /* USER CODE BEGIN set_app_Brake_rated_voltage 1 */
@@ -1614,6 +1673,12 @@ uint32_t set_app_Brake_release_action_voltage(float val)
     if (val < 0.0)
         return APP_PARAM_OUT_OF_RANGE;
     /* USER CODE BEGIN set_app_Brake_release_action_voltage 0 */
+    if (val > kAppBaseConfig.Brake_rated_voltage)
+        return APP_PARAM_OUT_OF_RANGE;
+    if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+    {
+        return APP_PARAM_WRITE_STATE_ERROR;
+    }
     /* USER CODE END set_app_Brake_release_action_voltage 0 */
     kAppBaseConfig.Brake_release_action_voltage = val;
     /* USER CODE BEGIN set_app_Brake_release_action_voltage 1 */
@@ -1632,6 +1697,10 @@ uint32_t set_app_Brake_release_pwm_freq(uint16_t val)
     if (val < 1)
         return APP_PARAM_OUT_OF_RANGE;
     /* USER CODE BEGIN set_app_Brake_release_pwm_freq 0 */
+    if (axis->motor_ctl_sm_output.state == MOTOR_CTL_SM_MOTOR_ENABLE)
+    {
+        return APP_PARAM_WRITE_STATE_ERROR;
+    }
     /* USER CODE END set_app_Brake_release_pwm_freq 0 */
     kAppBaseConfig.Brake_release_pwm_freq = val;
     /* USER CODE BEGIN set_app_Brake_release_pwm_freq 1 */

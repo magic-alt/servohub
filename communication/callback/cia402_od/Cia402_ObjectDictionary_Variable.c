@@ -1162,6 +1162,7 @@ UNS32 set_Digital_inputs(UNS32 val){
 }
 UNS32 get_Digital_inputs(void){
     /* USER CODE BEGIN get_Digital_inputs */
+    kOptional_application.Digital_inputs = get_app_Digital_io_inputs_status();
     /* USER CODE END get_Digital_inputs */
     return kOptional_application.Digital_inputs;
 }
@@ -1185,6 +1186,7 @@ UNS32 set_Digital_outputs_Physical_outputs(UNS32 val){
     /* USER CODE END set_Digital_outputs_Physical_outputs 0 */
     kOptional_application.Digital_outputs_Physical_outputs = val;
     /* USER CODE BEGIN set_Digital_outputs_Physical_outputs 1 */
+    set_app_Digital_io_outputs_phys(val);
     /* USER CODE END set_Digital_outputs_Physical_outputs 1 */
     return ABORT_CODE_SUCCESSFUL;
 }
@@ -1199,6 +1201,7 @@ UNS32 set_Digital_outputs_Bit_mask(UNS32 val){
     /* USER CODE END set_Digital_outputs_Bit_mask 0 */
     kOptional_application.Digital_outputs_Bit_mask = val;
     /* USER CODE BEGIN set_Digital_outputs_Bit_mask 1 */
+    set_app_Digital_io_outputs_mask(val);
     /* USER CODE END set_Digital_outputs_Bit_mask 1 */
     return ABORT_CODE_SUCCESSFUL;
 }

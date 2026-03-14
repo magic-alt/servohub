@@ -62,7 +62,8 @@ AppResult CstModeRun()
                 kCstMode.traj.is_update_tar = true;
             }
 
-            if ((bool)get_app_Target_update_state() == true)
+            // 更新目标力矩条件: 1. 目标更新状态为真 2. 抱闸状态为松闸
+            if ((bool)get_app_Target_update_state() == true && get_app_Brake_state() == BRAKE_STATE_RELEASED)
             {
                 set_app_Target_update_state(false);
 

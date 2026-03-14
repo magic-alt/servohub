@@ -162,7 +162,37 @@ float bsp_get_mcu_temperature(void)
 {
     return 25.0f;
 }
-
+/**
+ * @brief 读取用户ADC采样值
+ * @return uint16_t 用户ADC采样值
+ */
+uint16_t bsp_get_user_adc1_val(void)
+{
+    return 0;
+}
+/**
+ * @brief 计算抱闸PWM定时器配置值
+ * @param[in] is_pwm_adjust 是否调整PWM频率, true:调整, false:不调整(作IO模式)
+ * @param[in] pwm_freq PWM频率，单位Hz
+ * @param[in] rated_voltage 抱闸器额定电压，单位V
+ * @param[in] release_action_voltage 松闸动作电压，单位V
+ * @param[in] release_hold_voltage 松闸保持电压，单位V
+ */
+void bsp_calc_brake_pwm_timer_param(bool is_pwm_adjust, float pwm_freq, float rated_voltage, \
+                                    float release_action_voltage, float release_hold_voltage)
+{
+    return;
+}
+/**
+ * @brief 设置抱闸PWM定时器配置值
+ * @param[in] psc 预分频器值
+ * @param[in] arr 自动重装载寄存器值
+ * @param[in] ccr 比较寄存器值
+ */
+void bsp_set_brake_pwm_timer_config(APP_BRAKE_STATE brake_state)
+{
+    return;
+}
 #pragma endregion
 
 #pragma region 编码器相关
@@ -368,7 +398,7 @@ FLASHDB_STATUS bsp_flashdb_key_delete(FLASHDB_KEY_INDEX const index)
  * @retval true  有效电平
  * @note
  */
-bool bsp_get_digital_input_state(DIGITAL_INPUTS_IO const io)
+bool bsp_get_digital_input_state(DIGITAL_INPUTS_IO_BIT const io)
 {
     return false;
 }
@@ -379,7 +409,7 @@ bool bsp_get_digital_input_state(DIGITAL_INPUTS_IO const io)
  * @return
  * @note
  */
-void bsp_set_digital_output_state(DIGITAL_OUTPUTS_IO const io, bool state)
+void bsp_set_digital_output_state(DIGITAL_OUTPUTS_IO_BIT const io, bool state)
 {
     return;
 }

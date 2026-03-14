@@ -11,6 +11,8 @@ extern "C"
 // 硬件固有参数
 #define CURRENT_FREQUENCY_HZ            (20000.0f)  // 电流环工作频率
 #define POSITION_FREQUENCY_HZ           (10000.0f)  // 位置环工作频率
+#define NRT_TASK_FREQUENCY_HZ           (1000.0f)   // 非实时任务工作频率
+#define NRT_TASK_PERIOD_S               (1.0f / NRT_TASK_FREQUENCY_HZ)  // 非实时任务周期
 
 #define UVW_CURRENT_SAMP_RES            (0.002f)    // UVW电流采样电阻值 Ω
 #define DC_BUS_CURRENT_SAMP_RES         (0.001f)    // 母线电流采样电阻值 Ω

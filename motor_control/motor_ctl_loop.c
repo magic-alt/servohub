@@ -4,6 +4,7 @@
 #include "bsp_api.h"
 
 // 关联应用层接口
+#include "app_brake_control.h"
 #include "app_motion_precondition.h"
 #include "app_scheduler.h"
 #include "app_store_param.h"
@@ -153,10 +154,13 @@ void UnrealTimeBase1ms(void)
     // 6. 状态扫描
     AppStatusScanSlow();
 
-    // 7. 更新LED状态
+    // 7. 更新抱闸控制
+    AppBrakeControlRun();
+
+    // 8. 更新LED状态
     AppLedStateUpdata1ms();
 
-    // 8. flash参数存储
+    // 9. flash参数存储
     AppStoreUpdata1ms();
 
 #ifdef MOTOR_CTL_TEST // 控制层示例测试代码

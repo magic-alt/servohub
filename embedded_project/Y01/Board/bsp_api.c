@@ -327,7 +327,79 @@ float bsp_get_mcu_temperature(void)
 
     return kBspData.mcu_temp[mcu_temp_index];
 }
+/**
+ * @brief 读取用户ADC采样值
+ * @return uint16_t 用户ADC采样值
+ */
+uint16_t bsp_get_user_adc1_val(void)
+{
+    return kBspData.adc2_raw_buffer[USER_ADC1_RANK2_INDEX];
+}
+/**
+ * @brief 计算抱闸PWM定时器配置值
+ * @param[in] is_pwm_adjust 是否调整PWM频率, true:调整, false:不调整(作IO模式)
+ * @param[in] pwm_freq PWM频率，单位Hz
+ * @param[in] rated_voltage 抱闸器额定电压，单位V
+ * @param[in] release_action_voltage 松闸动作电压，单位V
+ * @param[in] release_hold_voltage 松闸保持电压，单位V
+ */
+void bsp_calc_brake_pwm_timer_param(bool is_pwm_adjust, float pwm_freq, float rated_voltage, \
+                                    float release_action_voltage, float release_hold_voltage)
+{
+#ifdef VIRTUAL_MOTOR_MODEL
+    return;
+#else
+    float timer_freq = BRAKE_PWM_TIM_FREQ;
 
+    if (pwm_freq <= 0.0f || pwm_freq > timer_freq)
+    {
+        pwm_freq = timer_freq;
+    }
+
+    kBspData.brake_pwm_timer_psc = 0; // 为保持高分辨率，PSC默认取0，可按需调整
+    kBspData.brake_pwm_timer_arr = (uint32_t)(timer_freq / pwm_freq) - 1;
+    kBspData.brake_pwm_duty_ccr_tar = BRAKE_PWM_DUTY_CCR_ENGAGED;
+
+    if (is_pwm_adjust == true)
+    {
+        // PWM模式下，按抱闸器额定电压作为100%占空比，分别计算松闸动作和保持电压占空比对应的CCR值
+        kBspData.brake_pwm_duty_ccr_action = (uint32_t)(release_action_voltage * kBspData.brake_pwm_timer_arr / rated_voltage);
+        kBspData.brake_pwm_duty_ccr_hold = (uint32_t)(release_hold_voltage * kBspData.brake_pwm_timer_arr / rated_voltage);
+    }
+    else
+    {
+        // IO模式下，松闸动作和保持电压占空比对应的CCR值均取ARR值，即占空比为100
+        kBspData.brake_pwm_duty_ccr_action = kBspData.brake_pwm_timer_arr;
+        kBspData.brake_pwm_duty_ccr_hold = kBspData.brake_pwm_timer_arr;
+    }
+#endif
+}
+/**
+ * @brief 设置抱闸PWM定时器配置值
+ * @param[in] brake_state 抱闸状态
+ */
+void bsp_set_brake_pwm_timer_config(APP_BRAKE_STATE brake_state)
+{
+#ifdef VIRTUAL_MOTOR_MODEL
+    return;
+#else
+    BRAKE_PWM_TIM_PSC_VAL = kBspData.brake_pwm_timer_psc;
+    BRAKE_PWM_TIM_ARR_VAL = kBspData.brake_pwm_timer_arr;
+    if (brake_state == BRAKE_STATE_RELEASED)
+    {
+        kBspData.brake_pwm_duty_ccr_tar = kBspData.brake_pwm_duty_ccr_hold;
+    }
+    else if (brake_state == BRAKE_STATE_RELEASING)
+    {
+        kBspData.brake_pwm_duty_ccr_tar = kBspData.brake_pwm_duty_ccr_action;
+    }
+    else
+    {
+        kBspData.brake_pwm_duty_ccr_tar = BRAKE_PWM_DUTY_CCR_ENGAGED;
+    }
+    BRAKE_PWM_TIM_CCR_VAL = kBspData.brake_pwm_duty_ccr_tar;
+#endif
+}
 #pragma endregion
 
 #pragma region 编码器相关
@@ -558,7 +630,7 @@ FLASHDB_STATUS bsp_flashdb_key_delete(FLASHDB_KEY_INDEX const index)
  * @retval true  有效电平
  * @note
  */
-bool bsp_get_digital_input_state(DIGITAL_INPUTS_IO const io)
+bool bsp_get_digital_input_state(DIGITAL_INPUTS_IO_BIT const io)
 {
     switch (io)
     {
@@ -570,6 +642,8 @@ bool bsp_get_digital_input_state(DIGITAL_INPUTS_IO const io)
         return (DI_IO_HOME_SWITCH_READ() == DI_IO_HOME_SWITCH_LEVEL);
     case DI_IO_INTERLOCK:
         return (DI_IO_INTERLOCK_READ() == DI_IO_INTERLOCK_LEVEL);
+    case DI_IO_USER_0:
+        return (DI_IO_USER_0_READ() == DI_IO_USER_0_LEVEL);
     default:
         return false;
     };
@@ -581,12 +655,15 @@ bool bsp_get_digital_input_state(DIGITAL_INPUTS_IO const io)
  * @return
  * @note
  */
-void bsp_set_digital_output_state(DIGITAL_OUTPUTS_IO const io, bool state)
+void bsp_set_digital_output_state(DIGITAL_OUTPUTS_IO_BIT const io, bool state)
 {
     switch (io)
     {
-    case DO_IO_SET_BRAKE:
-        DO_IO_SET_BRAKE_WRITE(state ? DO_IO_SET_BRAKE_LEVEL : !DO_IO_SET_BRAKE_LEVEL);
+    // case DO_IO_SET_BRAKE:
+    //     DO_IO_SET_BRAKE_WRITE(state ? DO_IO_SET_BRAKE_RELEASED_LEVEL : !DO_IO_SET_BRAKE_RELEASED_LEVEL);
+    //     break;
+    case DO_IO_USER_0:
+        DO_IO_USER_0_WRITE(state ? DO_IO_USER_0_LEVEL : !DO_IO_USER_0_LEVEL);
         break;
     default:
         break;
