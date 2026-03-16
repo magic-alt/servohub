@@ -7,9 +7,10 @@
 #define ENCODER_TYPE_NONE               0x00 // 无编码器
 #define ENCODER_TYPE_INC_AB_ABZ         0x01 // 增量式通用AB/ABZ编码器，注：由于Y01硬件单接口，只可配置电机端/负载端任选一端
 #define ENCODER_TYPE_ABS_RS485_TAMAGAWA 0x02 // 绝对式通用RS485多摩川编码器
-#define ENCODER_TYPE_ABS_SPI_MT68XX     0x03 // 绝对式SPI MT68XX 编码器
-#define ENCODER_TYPE_ABS_SPI_KTM59XX    0x04 // 绝对式SPI KTM59xx 编码器
-#define ENCODER_TYPE_ABS_BISSC_SMC40S   0x05 // 绝对式SPI BISS-C SMC40S 编码器
+#define ENCODER_TYPE_ABS_SPI_MT68XX     0x03 // 绝对式SPI MT68XX 编码器  BTR≤10MBps，CPOL=High，CPHA==2Edge
+#define ENCODER_TYPE_ABS_SPI_KTM59XX    0x04 // 绝对式SPI KTM59xx 编码器 BTR≤10MBps，CPOL=Low，CPHA=1Edge
+#define ENCODER_TYPE_ABS_BISSC_SMC40S   0x05 // 绝对式SPI BISS-C SMC40S 编码器 BTR≤10MBps，CPOL=Low，CPHA=1Edge
+#define ENCODER_TYPE_ABS_BISSC_BRT38M   0x06 // 绝对式SPI BISS-C BRT38M 编码器 BTR≤2.5MBps，CPOL=High，CPHA=2Edge
 
 // 其他编码器类型
 // ...
@@ -41,9 +42,6 @@ typedef enum : uint8_t
 
     KTM59XX_REG_ADD_CALIB = 0xA0,       // 校准寄存器地址
     KTM59XX_REG_VAL_CALIB_OFF = 0x00,   // 校准寄存器值：关闭校准
-
-    // SMC40S BISS-C编码器 宏定义
-    SMC40S_CF_ID_0 = 0x00,          // 读取单圈数据，无需命令
 
     // MT68XX SPI编码器 宏定义（bit15~8）（协议标准值）
     MT68XX_CF_ID_RD = 0x30,         // 读寄存器 （0b0011 << 12）
@@ -85,24 +83,11 @@ typedef enum : uint8_t
     KTM59xx_FRAME_LEN_DATA_BW = KTM59xx_FRAME_LEN_ANGLE_BW + KTM59xx_FRAME_LEN_RC_BW + KTM59xx_FRAME_LEN_STATUS_BW, // KTM59xx 数据帧数据位宽
     KTM59xx_FRAME_LEN_TOTAL_BW = KTM59xx_FRAME_LEN_DATA_BW + KTM59xx_FRAME_LEN_CRC_BW, // KTM59xx 数据帧总位宽
 
-    // BISSC SMC40S BISS-C编码器 各CF_ID对应的帧长度（单位：字节）
-    SMC40S_FRAME_LEN_ID_0 = 4,           // SMC40S_CF_ID_0：读取单圈数据
-
-    SMC40S_FRAME_LEN_ACK_BW = 6,         // SMC40S 数据帧应答位宽
-    SMC40S_FRAME_LEN_START_BW = 1,       // SMC40S 数据帧起始位宽
-    SMC40S_FRAME_LEN_CDS_BW = 1,         // SMC40S 数据帧命令位宽
-    SMC40S_FRAME_LEN_DATA_BW = 19,       // SMC40S 数据帧数据位宽
-    SMC40S_FRAME_LEN_ERROR_BW = 1,       // SMC40S 数据帧错误位宽
-    SMC40S_FRAME_LEN_WARNING_BW = 1,     // SMC40S 数据帧警告位宽
-    SMC40S_FRAME_LEN_CRC_BW = 6,         // SMC40S 数据帧CRC校验位宽
-    SMC40S_FRAME_LEN_TOTAL_BW = SMC40S_FRAME_LEN_DATA_BW + SMC40S_FRAME_LEN_ERROR_BW + SMC40S_FRAME_LEN_WARNING_BW + SMC40S_FRAME_LEN_CRC_BW, // SMC40S 数据帧总位宽
-
     // MT68XX SPI编码器 各CF_ID对应的帧长度（单位：字节）
     MT68XX_FRAME_LEN_RD_ANGLE = 6,      // MT68XX_CF_ID_RD：读角度寄存器帧长度
     MT68XX_DATA_LEN_RD_ANGLE = 4,       // MT68XX_CF_ID_RD：读角度寄存器有效数据长度
 
     MT68XX_RD_ANGLE_STATUS_BW = 3,      // MT68XX_CF_ID_RD：读角度寄存器状态位宽
-
 
     // 其他编码器类型
     // ...

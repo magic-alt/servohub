@@ -6,6 +6,7 @@
 
 // 选择目标电机参数头文件
 //#include "motor_parameter_acm80_abz.h"
+//#include "motor_parameter_brt38m_bissc.h"
 //#include "motor_parameter_gim6010_spi.h"
 //#include "motor_parameter_ktm59xx_spi.h"
 //#include "motor_parameter_smc40s_bissc.h"

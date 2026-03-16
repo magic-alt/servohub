@@ -29,12 +29,13 @@ static void KTM59XX_Encoder_Data_Read(EncoderDataInfo_t* enc_data);
 static void KTM59XX_Encoder_Data_Process(EncoderDataInfo_t* enc_data);
 static inline bool KTM59XX_Encoder_Crc8_Check(uint64_t input, int32_t len);
 #endif // ENCODER_TYPE_ABS_SPI_KTM59XX
-#if ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_SMC40S || ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_SMC40S
-static void SMC40S_Encoder_Init(EncoderDataInfo_t* enc_data);
-static void SMC40S_Encoder_Data_Read(EncoderDataInfo_t* enc_data);
-static void SMC40S_Encoder_Data_Process(EncoderDataInfo_t* enc_data);
+#if ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_SMC40S || ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_SMC40S || \
+    ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_BRT38M || ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_BRT38M
+static void BISSC_Encoder_Init(EncoderDataInfo_t* enc_data);
+static void BISSC_Encoder_Data_Read(EncoderDataInfo_t* enc_data);
+static void BISSC_Encoder_Data_Process(EncoderDataInfo_t* enc_data);
 //static inline uint8_t BISSC_Crc6_Calc(uint32_t data, uint8_t bit_len, uint8_t final_xor);
-#endif // ENCODER_TYPE_ABS_BISSC_SMC40S
+#endif // ENCODER_TYPE_ABS_BISSC_XXX
 
 EncoderDataInfo_t encoder_data[ENCODER_NUM] = {
     [ENCODER_ID_1] = {
@@ -89,10 +90,11 @@ EncoderDataInfo_t encoder_data[ENCODER_NUM] = {
         .init = KTM59XX_Encoder_Init,
         .read = KTM59XX_Encoder_Data_Read,
         .process = KTM59XX_Encoder_Data_Process,
-    #elif ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_SMC40S
-        .init = SMC40S_Encoder_Init,
-        .read = SMC40S_Encoder_Data_Read,
-        .process = SMC40S_Encoder_Data_Process,
+    #elif ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_SMC40S || \
+          ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_BRT38M
+        .init = BISSC_Encoder_Init,
+        .read = BISSC_Encoder_Data_Read,
+        .process = BISSC_Encoder_Data_Process,
     #else
         .init = Encoder_None,
         .read = Encoder_None,
@@ -151,10 +153,11 @@ EncoderDataInfo_t encoder_data[ENCODER_NUM] = {
         .init = KTM59XX_Encoder_Init,
         .read = KTM59XX_Encoder_Data_Read,
         .process = KTM59XX_Encoder_Data_Process,
-    #elif ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_SMC40S
-        .init = SMC40S_Encoder_Init,
-        .read = SMC40S_Encoder_Data_Read,
-        .process = SMC40S_Encoder_Data_Process,
+    #elif ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_SMC40S || \
+          ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_BRT38M
+        .init = BISSC_Encoder_Init,
+        .read = BISSC_Encoder_Data_Read,
+        .process = BISSC_Encoder_Data_Process,
     #else
         .init = Encoder_None,
         .read = Encoder_None,
@@ -899,23 +902,24 @@ static inline bool KTM59XX_Encoder_Crc8_Check(uint64_t input, int32_t len)
 #endif // ENCODER_TYPE_ABS_SPI_KTM59XX
 #pragma endregion ENCODER_TYPE_ABS_SPI_KTM59XX
 
-#pragma region ENCODER_TYPE_ABS_BISSC_SMC40S
-#if ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_SMC40S || ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_SMC40S
+#pragma region ENCODER_TYPE_ABS_BISSC_XXX
+#if ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_SMC40S || ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_SMC40S || \
+    ENCODER1_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_BRT38M || ENCODER2_TYPE_OPTION == ENCODER_TYPE_ABS_BISSC_BRT38M
 /**
- * @brief SMC40S编码器初始化
+ * @brief BISSC编码器初始化
  * @param[in] enc_data 编码器数据信息结构体指针
  * @retval
  */
-static void SMC40S_Encoder_Init(EncoderDataInfo_t* enc_data)
+static void BISSC_Encoder_Init(EncoderDataInfo_t* enc_data)
 {
-    enc_data->type = ENCODER_TYPE_ABS_BISSC_SMC40S;
-    enc_data->real_single_res = enc_data->a_single_res / enc_data->a_single_less_factor;
     if (enc_data->id == ENCODER_ID_1)
     {
+        enc_data->type = ENCODER1_TYPE_OPTION;
         enc_data->spi_handle = &ENCODER1_SPI_HANDLE;
     }
     else if (enc_data->id == ENCODER_ID_2)
     {
+        enc_data->type = ENCODER2_TYPE_OPTION;
         enc_data->spi_handle = &ENCODER2_SPI_HANDLE;
     }
     else
@@ -923,19 +927,20 @@ static void SMC40S_Encoder_Init(EncoderDataInfo_t* enc_data)
         enc_data->type = ENCODER_TYPE_NONE;
         return;
     }
-    enc_data->frame_len = SMC40S_FRAME_LEN_ID_0;
-    enc_data->cf = SMC40S_CF_ID_0;
+    enc_data->real_single_res = enc_data->a_single_res / enc_data->a_single_less_factor;
+    enc_data->frame_len = BISSC_FRAME_LEN_ID_0;
+    enc_data->cf = BISSC_CF_ID_0;
     for (uint8_t i = 0; i < enc_data->frame_len; i++)
     {
         encoder_tx_buff[enc_data->id][i] = enc_data->cf;
     }
 }
 /**
- * @brief SMC40S编码器数据读取
+ * @brief BISSC编码器数据读取
  * @param[in] enc_data 编码器数据信息结构体指针
  * @retval
  */
-static void SMC40S_Encoder_Data_Read(EncoderDataInfo_t* enc_data)
+static void BISSC_Encoder_Data_Read(EncoderDataInfo_t* enc_data)
 {
     if (HAL_SPI_TransmitReceive_DMA(enc_data->spi_handle, encoder_tx_buff[enc_data->id], \
                                     encoder_rx_buff[enc_data->id], enc_data->frame_len) != HAL_OK)
@@ -945,11 +950,11 @@ static void SMC40S_Encoder_Data_Read(EncoderDataInfo_t* enc_data)
     }
 }
 /**
- * @brief SMC40S编码器数据处理
+ * @brief BISSC编码器数据处理
  * @param[in] enc_data 编码器数据信息结构体指针
  * @retval
  */
-static void SMC40S_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
+static void BISSC_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
 {
     uint32_t frame_data = 0;
     // uint8_t frame_crc = 0;
@@ -961,10 +966,10 @@ static void SMC40S_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
         frame_data |= enc_data->data_raw[i];
     }
 
-    // frame_crc = (~enc_data->data_raw[enc_data->frame_len - 1] ) & (((uint8_t)1 << SMC40S_FRAME_LEN_CRC_BW) - 1);
-    // frame_check_data = (frame_data >> SMC40S_FRAME_LEN_CRC_BW) & (((uint32_t)1 << (SMC40S_FRAME_LEN_TOTAL_BW - SMC40S_FRAME_LEN_CRC_BW)) - 1);
+    // frame_crc = (~enc_data->data_raw[enc_data->frame_len - 1] ) & (((uint8_t)1 << BISSC_FRAME_LEN_CRC_BW) - 1);
+    // frame_check_data = (frame_data >> BISSC_FRAME_LEN_CRC_BW) & (((uint32_t)1 << (BISSC_FRAME_LEN_TOTAL_BW - BISSC_FRAME_LEN_CRC_BW)) - 1);
 
-    // if (BISSC_Crc6_Calc(frame_check_data, (SMC40S_FRAME_LEN_TOTAL_BW - SMC40S_FRAME_LEN_CRC_BW), SMC40S_CRC6_FINAL_XOR) != frame_crc)
+    // if (BISSC_Crc6_Calc(frame_check_data, (BISSC_FRAME_LEN_TOTAL_BW - BISSC_FRAME_LEN_CRC_BW), BISSC_CRC6_FINAL_XOR) != frame_crc)
     // {
     //     // CRC校验失败，增加错误计数
     //     enc_data->err_cnt++;
@@ -975,13 +980,13 @@ static void SMC40S_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
     //     enc_data->err_cnt --;
     // }
 
-    enc_data->a_single_raw = (uint32_t)(frame_data >> (SMC40S_FRAME_LEN_TOTAL_BW - SMC40S_FRAME_LEN_DATA_BW));
+    enc_data->a_single_raw = (uint32_t)((frame_data >> (BISSC_FRAME_LEN_TOTAL_BW - BISSC_FRAME_LEN_DATA_BW)) & (enc_data->a_single_res - 1));
     enc_data->a_single_raw /= enc_data->a_single_less_factor;
     enc_data->a_multi_raw = 0;
     enc_data->b_single_raw = 0;
     enc_data->b_multi_raw = 0;
-    enc_data->sf = (frame_data >> (SMC40S_FRAME_LEN_CRC_BW + SMC40S_FRAME_LEN_WARNING_BW)) & (((uint8_t)1 << SMC40S_FRAME_LEN_ERROR_BW) - 1);
-    enc_data->almc = (frame_data >> SMC40S_FRAME_LEN_CRC_BW) & (((uint8_t)1 << SMC40S_FRAME_LEN_WARNING_BW) - 1);
+    enc_data->sf = (frame_data >> (BISSC_FRAME_LEN_CRC_BW + BISSC_FRAME_LEN_WARNING_BW)) & (((uint8_t)1 << BISSC_FRAME_LEN_ERROR_BW) - 1);
+    enc_data->almc = (frame_data >> BISSC_FRAME_LEN_CRC_BW) & (((uint8_t)1 << BISSC_FRAME_LEN_WARNING_BW) - 1);
     enc_data->enid = ENCODER_CONNECTED_ID;
 }
 /**
@@ -1006,8 +1011,8 @@ static void SMC40S_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
 //     }
 //     return crc ^ 0x3F;  // 输出反转（0x3F=6位全1）
 // }
-#endif // ENCODER_TYPE_ABS_BISSC_SMC40S
-#pragma endregion ENCODER_TYPE_ABS_BISSC_SMC40S
+#endif // ENCODER_TYPE_ABS_BISSC_XXX
+#pragma endregion ENCODER_TYPE_ABS_BISSC_XXX
 
 #pragma region 其它公共组件
 /**

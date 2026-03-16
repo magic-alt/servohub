@@ -103,7 +103,8 @@ extern "C"
 #define ENC_CALI_CHECK_CNT              (6u)                            // 编码器状态查询周期（s）
 #define ENC_CALI_TIMEOUT                (600u)                          // 启动app120s后编码器校准模式超时（s）
 
-// 编码器其它参数定义
+// 编码器其它附加参数定义
+// 电机端编码器参数
 // SF字段（MSB）固定位定义回读值（共8位，bit0为dd0最低位，bit7为ca1最高位）（文档6.3.2）
 // SF字段（MSB）第bit0-bit3位：信息位，固定为b0000，无额外信息。
 // SF字段 编码器错误位（Encoder Error，bit4 ea0、bit5 ea1）宏定义（文档6.3.2）
