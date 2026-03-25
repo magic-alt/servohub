@@ -3054,7 +3054,7 @@
             <TextAddressRange></TextAddressRange>
             <DataAddressRange></DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile>.\STM32H743VGT6_Y01.sct</ScatterFile>
+            <ScatterFile>.\STM32H743VGT6_Y01_ECAT.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
             <Misc></Misc>

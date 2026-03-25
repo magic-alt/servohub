@@ -14,6 +14,26 @@
 #include "drv_encoder.h"
 #include "drv_flash.h"
 
+typedef enum
+{
+    CS_SOURCE_IDLE     = 0,
+    CS_SOURCE_SYNC0    = 1,
+    CS_SOURCE_SYNC1    = 2,
+    CS_SOURCE_IRQ_SM   = 3,
+} CS_SOURCE;
+
+typedef struct
+{
+    bool sync0_trigger;                 // DC同步中断触发标志
+    CS_SOURCE ctrl_source;              // 同步控制源
+    uint8_t pl_period_cs_cnt;           // 位置环周期同步计数
+    uint8_t pl_period_total;            // 位置环周期总数
+    uint8_t pl_period_cnt;              // 位置环周期计数
+    uint8_t pl_period_index;            // 位置环周期索引
+    uint8_t frame_pl_period_index;      // 数据帧位置环周期索引
+    uint8_t shift_max_pl_period_index;  // 最大偏移量位置环周期索引
+    uint8_t latch_pl_period_index;      // 目标锁存更新位置环周期索引
+} BspCyclicSync; //同步周期模式控制参数
 
 typedef struct
 {
@@ -35,6 +55,8 @@ typedef struct
     uint32_t brake_pwm_duty_ccr_tar;      // 抱闸PWM占空比对应CCR目标值
     uint32_t brake_pwm_duty_ccr_action;   // 抱闸PWM占空比对应CCR动作值
     uint32_t brake_pwm_duty_ccr_hold;     // 抱闸PWM占空比对应CCR保持值
+    bool pl_start_state;
+    BspCyclicSync cs;
 } BspData;
 
 
@@ -98,6 +120,8 @@ typedef struct
 #define ENCODER2_ABZ_TIM_HANDLE     (htim3)                     //ABZ增量式编码器2定时器
 #define ENCODER2_ABZ_TIM_Z_CHANNEL  (TIM_CHANNEL_3)             //ABZ增量式编码器2定时器Z相捕获通道
 #define ENCODER_ABZ_TIM_Z_IRQ_TASK  HAL_TIM_IC_CaptureCallback  //Z相中断回调函数
+#define POSITION_LOOP_TIM_HANDLE    (htim5)                     //位置环定时器
+#define POSITION_LOOP_TIM_IRQ_TASK  TIM5_IRQHandler             //位置环定时器中断回调函数
 #define CANOPEN_TIM_HANDLE          (htim6)                     //CANopen定时器
 #define CANOPEN_TIM_ARR             (1000 - 1)                  //CANopen定时器ARR值，此宏可同步用于CubeMX配置框（No Check）
 #define ECAT_LAN9252_TIM_HANDLE     (htim7)                     //EtherCAT定时器
@@ -141,10 +165,6 @@ typedef struct
 #pragma endregion // CONNECTIVITY
 
 #pragma region // GPIO
-#define POSITION_LOOP_IRQ_TASK      EXTI0_IRQHandler   //位置环GPIO软件中断回调函数
-#define POSITION_EXTIX_IRQN         EXTI0_IRQn         //位置环GPIO软件中断号
-#define POSITION_EXTI_LINE_X        EXTI_LINE_0        //位置环GPIO软件中断线
-
 #define DRV_GATE_ENABLE()           (HAL_GPIO_WritePin(DRV_EN_GATE_GPIO_Port, DRV_EN_GATE_Pin, GPIO_PIN_SET))
 #define DRV_GATE_DISABLE()          (HAL_GPIO_WritePin(DRV_EN_GATE_GPIO_Port, DRV_EN_GATE_Pin, GPIO_PIN_RESET))
 
@@ -155,6 +175,23 @@ typedef struct
 #define ECAT_SYNC1_EXTI_LINE        (ECAT_SYNC1_Pin)
 #define ECAT_SYNC1_EXTI_IRQN        (ECAT_SYNC1_EXTI_IRQn)
 #define ECAT_EXTI_IRQ_TASK          HAL_GPIO_EXTI_Callback
+#define ECAT_EXTI_PR1_PR            EXTI_PR1_PR9
+
+#define CS_PL_PERIOD_CS_JUDGE_CNT   (50u) //同步周期判断次数，time = CS_PL_PERIOD_CS_JUDGE_CNT * DC_CYCLE_TIME
+
+#define ECAT_SYNC_NVIC_PRIORITY     (4u)               //同步任务GPIO软件中断优先级
+#define ECAT_SYNC_IRQ_TASK          EXTI0_IRQHandler   //同步任务GPIO软件中断回调函数
+#define ECAT_SYNC_EXTIX_IRQN        EXTI0_IRQn         //同步任务GPIO软件中断号
+#define ECAT_SYNC_EXTI_LINE_X       EXTI_LINE_0        //同步任务GPIO软件中断线
+#define ECAT_SYNC_SWIER1_SWIER      EXTI_SWIER1_SWIER0 //同步任务GPIO软件中断使能位
+#define ECAT_SYNC_PR1_PR            EXTI_PR1_PR0       //同步任务GPIO软件中断标志位
+
+#define ECAT_PDI_NVIC_PRIORITY      (5u)               //PDI任务GPIO软件中断优先级
+#define ECAT_PDI_IRQ_TASK           EXTI1_IRQHandler   //PDI任务GPIO软件中断回调函数
+#define ECAT_PDI_EXTIX_IRQN         EXTI1_IRQn         //PDI任务GPIO软件中断号
+#define ECAT_PDI_EXTI_LINE_X        EXTI_LINE_1        //PDI任务GPIO软件中断线
+#define ECAT_PDI_SWIER1_SWIER       EXTI_SWIER1_SWIER1 //PDI任务GPIO软件中断使能位
+#define ECAT_PDI_PR1_PR             EXTI_PR1_PR1       //PDI任务GPIO软件中断标志位
 
 
 #define LED_RED_ON()                (HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET))

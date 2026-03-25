@@ -32,19 +32,37 @@ __attribute__((section(".RAM_D1"))) BspData kBspData =
     .uvw_target_voltage[0] = 0.0f,
     .uvw_target_voltage[1] = 0.0f,
     .uvw_target_voltage[2] = 0.0f,
-    .motor_cnt = 0,
-    .load_cnt = 0,
-    .motor_turns = 0,
-    .load_turns = 0,
-    .pwm_en_state = 0,
-    .pwm_ready_state = 0,
+    .pwm_en_state = PWM_DISABLE,
+    .pwm_ready_state = false,
     .pwm_state_cnt = 0,
+    .brake_pwm_timer_psc = 0,
+    .brake_pwm_timer_arr = 0,
+    .brake_pwm_duty_ccr_tar = 0,
+    .brake_pwm_duty_ccr_action = 0,
+    .brake_pwm_duty_ccr_hold = 0,
+    .pl_start_state = false,
+    .cs = {
+        .sync0_trigger = false,
+        .ctrl_source = CS_SOURCE_IDLE,
+        .pl_period_cs_cnt = 0,
+        .pl_period_total = 0,
+        .pl_period_cnt = 0,
+        .pl_period_index = 0,
+        .frame_pl_period_index = 0,
+        .shift_max_pl_period_index = 0,
+        .latch_pl_period_index = 0,
+        },
 };
 
 static void PositionLoopInit(void);
+static void EcatTaskInit(void);
 
 void BspInit(void)
 {
+    // 初始化抱闸定时器，输出抱闸信号为合闸状态
+    __HAL_TIM_SET_COMPARE(&BRAKE_PWM_TIM_HANDLE, BRAKE_PWM_TIM_CHANNEL, BRAKE_PWM_DUTY_CCR_ENGAGED);
+    HAL_TIM_PWM_Start(&BRAKE_PWM_TIM_HANDLE, BRAKE_PWM_TIM_CHANNEL);
+
     // 触发规则通道队列DMA采样
     HAL_ADC_Start_DMA(&DC_BUS_VOLTAGE_HANDLE, (uint32_t *)kBspData.adc1_raw_buffer, ADC1_REGULAR_RANK_NUMBER);
     // 等待母线电压稳定
@@ -80,8 +98,8 @@ void BspInit(void)
     // 启动 1ms 任务
     HAL_TIM_Base_Start_IT(&NRT_TASK_TIM_HANDLE);
 
-    // 位置环软中断初始化
-    PositionLoopInit();
+    // 位置环软中断初始化，可配置运行周期
+    //PositionLoopInit();
 
     // 启动ADC注入中断
     HAL_ADCEx_InjectedStart_IT(&UVW_CURRENT_U_HANDLE);
@@ -112,33 +130,14 @@ void BspInit(void)
     __HAL_UART_ENABLE_IT(&HOST_UART_HANDLE, UART_IT_IDLE);
 
     HAL_Delay(10);
+#ifdef USE_ECAT
+    EcatTaskInit();
+#endif // USE_ECAT
 }
-
-// 位置环软件中断初始化函数
-static void PositionLoopInit(void)
-{
-    EXTI_HandleTypeDef position_loop_exit;
-    EXTI_ConfigTypeDef position_loop_exit_config;
-    position_loop_exit_config.GPIOSel = EXTI_GPIOB;
-    position_loop_exit_config.Line = POSITION_EXTI_LINE_X;
-    position_loop_exit_config.Mode = EXTI_MODE_INTERRUPT;
-    position_loop_exit_config.Trigger = EXTI_TRIGGER_RISING;
-    HAL_EXTI_SetConfigLine(&position_loop_exit, &position_loop_exit_config);
-    HAL_NVIC_SetPriority(POSITION_EXTIX_IRQN, 2, 0);
-    HAL_NVIC_EnableIRQ(POSITION_EXTIX_IRQN);
-}
-// 定义位置环软件中断句柄
-EXTI_HandleTypeDef kExtiHandle =
-{
-    .Line = POSITION_EXTI_LINE_X,
-    .PendingCallback = NULL
-};
 
 // 电流环中断任务 典型频率  20KHZ
 void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
 {
-    static volatile uint8_t position_frq_div = 0;
-
     if (hadc->Instance == UVW_CURRENT_U_HANDLE.Instance)
     {
         bsp_set_timer_record_stop(SYS_TIMER_RECORD_CURRENT_LOOP_CYCLE_INDEX); // 测量电流环周期
@@ -156,27 +155,56 @@ void CURRENT_LOOP_IRQ_TASK(ADC_HandleTypeDef *hadc)
 #endif
         bsp_set_timer_record_stop(SYS_TIMER_RECORD_CURRENT_LOOP_TIME_INDEX);
 
-        if (position_frq_div == 0) // 运行位置环  10KHZ
+        // 第一次运行完电流环后启动常规非同步周期位置环
+        if (kBspData.pl_start_state == false)
         {
-            HAL_EXTI_GenerateSWI(&kExtiHandle); // 触发位置环软件中断
-            position_frq_div = 1;               // 1:10KHZ 位置环   3:5KHZ 位置环
-        }
-        else
-        {
-            position_frq_div--;
+            kBspData.pl_start_state = true;
+
+            // 1. 重置计数器
+            POSITION_LOOP_TIM_HANDLE.Instance->CNT = 0;
+            // 2. 使能中断和计数器
+            POSITION_LOOP_TIM_HANDLE.Instance->DIER |= TIM_DIER_UIE;
+            POSITION_LOOP_TIM_HANDLE.Instance->CR1 |= TIM_CR1_CEN;
+            // 3. 生成更新事件
+            POSITION_LOOP_TIM_HANDLE.Instance->EGR |= TIM_EGR_UG;
         }
     }
 }
 
 // 位置环中断任务 典型频率  10KHZ
-void POSITION_LOOP_IRQ_TASK(void)
+void POSITION_LOOP_TIM_IRQ_TASK(void)
 {
-    HAL_EXTI_ClearPending(&kExtiHandle, 0);
+    POSITION_LOOP_TIM_HANDLE.Instance->SR &= ~TIM_SR_UIF;
 
     bsp_set_timer_record_stop(SYS_TIMER_RECORD_POSITION_LOOP_CYCLE_INDEX); // 测量位置环周期
     bsp_set_timer_record_start(SYS_TIMER_RECORD_POSITION_LOOP_CYCLE_INDEX);
 
     bsp_set_timer_record_start(SYS_TIMER_RECORD_POSITION_LOOP_TIME_INDEX); // 测量位置环运行时间
+
+    #ifdef USE_ECAT
+    kBspData.cs.pl_period_cnt++;
+    if (kBspData.cs.pl_period_total != 0)
+    {
+        kBspData.cs.pl_period_index = (kBspData.cs.pl_period_cnt - 1) % kBspData.cs.pl_period_total;
+
+        if (kBspData.cs.pl_period_cnt > kBspData.cs.pl_period_total)
+        {
+            if (kBspData.cs.ctrl_source != CS_SOURCE_IRQ_SM)
+            {
+                // 同步周期变大或丢失，重新进行位置环同步
+                kBspData.cs.ctrl_source = CS_SOURCE_IDLE;
+                kBspData.cs.pl_period_total = 0;
+                kBspData.cs.sync0_trigger = false;
+            }
+        }
+        else if (kBspData.cs.ctrl_source != CS_SOURCE_IDLE && \
+                 kBspData.cs.pl_period_index == kBspData.cs.latch_pl_period_index)
+        {
+            set_app_Target_update_state(true);
+        }
+    }
+    #endif // USE_ECAT
+
 #ifndef VIRTUAL_MOTOR_MODEL
     if (sys_get_hardware_self_test_status() == false)
     {
@@ -189,36 +217,147 @@ void POSITION_LOOP_IRQ_TASK(void)
     EncoderDataProcess();
 
     bsp_pwm_ready_state_updata(); // 更新PWM输出准备状态
-#endif
-    PosSpeedLoopCtrl();
+#endif // VIRTUAL_MOTOR_MODEL
+    if (sys_get_hardware_self_test_status() == true)
+    {
+        PosSpeedLoopCtrl();
+    }
     bsp_set_timer_record_stop(SYS_TIMER_RECORD_POSITION_LOOP_TIME_INDEX);
+}
+
+#ifdef USE_ECAT
+// 同步任务软件中断初始化函数
+static void EcatTaskInit(void)
+{
+    EXTI_HandleTypeDef sync_task_exit;
+    EXTI_ConfigTypeDef sync_task_exit_config;
+    sync_task_exit_config.GPIOSel = EXTI_GPIOB;
+    sync_task_exit_config.Line = ECAT_SYNC_EXTI_LINE_X;
+    sync_task_exit_config.Mode = EXTI_MODE_INTERRUPT;
+    sync_task_exit_config.Trigger = EXTI_TRIGGER_RISING;
+    HAL_EXTI_SetConfigLine(&sync_task_exit, &sync_task_exit_config);
+    HAL_NVIC_SetPriority(ECAT_SYNC_EXTIX_IRQN, ECAT_SYNC_NVIC_PRIORITY, 0);
+    HAL_NVIC_EnableIRQ(ECAT_SYNC_EXTIX_IRQN);
+
+    EXTI_HandleTypeDef pdi_task_exit;
+    EXTI_ConfigTypeDef pdi_task_exit_config;
+    pdi_task_exit_config.GPIOSel = EXTI_GPIOB;
+    pdi_task_exit_config.Line = ECAT_PDI_EXTI_LINE_X;
+    pdi_task_exit_config.Mode = EXTI_MODE_INTERRUPT;
+    pdi_task_exit_config.Trigger = EXTI_TRIGGER_RISING;
+    HAL_EXTI_SetConfigLine(&pdi_task_exit, &pdi_task_exit_config);
+    HAL_NVIC_SetPriority(ECAT_PDI_EXTIX_IRQN, ECAT_PDI_NVIC_PRIORITY, 0);
+    HAL_NVIC_EnableIRQ(ECAT_PDI_EXTIX_IRQN);
+}
+
+/**
+ * @brief  自适应同步周期配置对应位置环周期个数
+ * @param  cs: 同步周期模式控制参数
+ * @retval bool: 同步完成标志
+ */
+static bool bsp_adaptive_pl_period_config(BspCyclicSync *cs)
+{
+    bool sync_complete = false;
+
+    // 自适应同步周期配置对应位置环周期个数
+    if (cs->pl_period_total != cs->pl_period_cnt)
+    {
+        cs->pl_period_cs_cnt++; // 同步周期连续判断次数
+        if (cs->pl_period_cs_cnt >= CS_PL_PERIOD_CS_JUDGE_CNT)
+        {
+            cs->pl_period_cs_cnt = 0;
+            cs->pl_period_total = cs->pl_period_cnt;
+            cs->shift_max_pl_period_index = cs->pl_period_total - 1;
+            cs->frame_pl_period_index = 0;
+            sync_complete = true; // 同步完成
+        }
+    }
+    else
+    {
+        cs->pl_period_cs_cnt = 0;
+    }
+
+    // Shift Time 使用自适应配置策略，TODO：可通过添加OD1C33h:sub03h(Shift time)配置为相同，可实现多轴同步
+    if (cs->frame_pl_period_index < cs->shift_max_pl_period_index && \
+        cs->frame_pl_period_index != 0) // 靠近同步帧最小的Frame位置环周期索引数
+    {
+        cs->shift_max_pl_period_index = cs->frame_pl_period_index;
+        // 自动配置最大Shift Time
+        cs->latch_pl_period_index = cs->shift_max_pl_period_index;
+    }
+
+    // 重置位置环周期总数索引
+    cs->pl_period_cnt = 0;
+
+    return sync_complete;
 }
 
 void ECAT_EXTI_IRQ_TASK(uint16_t GPIO_Pin)
 {
-#ifdef USE_ECAT
-    if (GPIO_Pin == ECAT_IRQ_EXTI_LINE)
+    if (GPIO_Pin == ECAT_SYNC0_EXTI_LINE) // DC同步中断
     {
-        PDI_Isr();
-    }
-    else if (GPIO_Pin == ECAT_SYNC0_EXTI_LINE) // DC同步中断
-    {
-        set_app_Target_update_state(true);
-        bsp_set_timer_record_stop(6);
-        bsp_set_timer_record_start(6);
-        DISABLE_ESC_INT();
-        Sync0_Isr();
-        ENABLE_ESC_INT();
+        // 自适应同步周期配置对应位置环周期个数
+        if (bsp_adaptive_pl_period_config(&kBspData.cs))
+        {
+            kBspData.cs.ctrl_source = CS_SOURCE_SYNC0; // 完成同步，DC控制使能开启
+        }
 
-        kAppDebugParam.Debug_float[0] = bsp_get_timer_duration_records_us(6);
-        kAppDebugParam.Debug_uint32[1]++;
+        if (kBspData.cs.sync0_trigger == false)
+        {
+            kBspData.cs.sync0_trigger = true;
+            kBspData.cs.pl_period_total = 0;
+            kBspData.cs.pl_period_cs_cnt = 0;
+        }
+
+        // 1. 重置计数器
+        POSITION_LOOP_TIM_HANDLE.Instance->CNT = 0;
+        // 2. 使能中断和计数器
+        POSITION_LOOP_TIM_HANDLE.Instance->DIER |= TIM_DIER_UIE;
+        POSITION_LOOP_TIM_HANDLE.Instance->CR1 |= TIM_CR1_CEN;
+        // 3. 生成更新事件
+        POSITION_LOOP_TIM_HANDLE.Instance->EGR |= TIM_EGR_UG;
+        // 4. 触发 EXTI 线 ECAT_SYNC_EXTI_LINE_X 的软件中断
+        EXTI->SWIER1 |= ECAT_SYNC_SWIER1_SWIER;
     }
     else if (GPIO_Pin == ECAT_SYNC1_EXTI_LINE)
     {
+        // 暂不支持Sync1同步
         Sync1_Isr();
     }
-#endif
+    else if (GPIO_Pin == ECAT_IRQ_EXTI_LINE)
+    {
+        kBspData.cs.frame_pl_period_index = kBspData.cs.pl_period_index; // Frame位置环周期索引
+
+        if (kBspData.cs.sync0_trigger == false) // 只有不是DC同步中断时，才是SM同步
+        {
+            // 自适应同步周期配置对应位置环周期个数
+            if (bsp_adaptive_pl_period_config(&kBspData.cs))
+            {
+                kBspData.cs.ctrl_source = CS_SOURCE_IRQ_SM; // 完成同步，SM控制使能开启
+            }
+        }
+
+        // 触发 EXTI 线 ECAT_PDI_EXTI_LINE_X 的软件中断
+        EXTI->SWIER1 |= ECAT_PDI_SWIER1_SWIER;
+    }
 }
+
+void ECAT_SYNC_IRQ_TASK(void)
+{
+    EXTI->PR1 |= ECAT_SYNC_PR1_PR; // 清除SYNC线挂起标志
+
+    DISABLE_ESC_INT();
+    Sync0_Isr();
+    ENABLE_ESC_INT();
+}
+
+void ECAT_PDI_IRQ_TASK(void)
+{
+    EXTI->PR1 |= ECAT_PDI_PR1_PR; // 清除PDI线挂起标志
+
+    PDI_Isr();
+}
+#endif // USE_ECAT
 
 // 1ms低频任务 典型频率  1KHZ
 void NRT_CAN_ECAT_IRQ_TASK(TIM_HandleTypeDef *htim)

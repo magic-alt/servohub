@@ -241,7 +241,10 @@ typedef enum
     SYS_TIMER_RECORD_POSITION_LOOP_TIME_INDEX = 3,      // 位置环时间
     SYS_TIMER_RECORD_TIM_1MS_CYCLE_INDEX = 4,           // 1ms定时器任务周期
     SYS_TIMER_RECORD_TIM_1MS_TIME_INDEX = 5,            // 1ms定时器任务时间
-    //...
+    SYS_TIMER_RECORD_TEST_1_INDEX = 6,                  // 测试1索引
+    SYS_TIMER_RECORD_TEST_2_INDEX = 7,                  // 测试2索引
+    SYS_TIMER_RECORD_TEST_3_INDEX = 8,                  // 测试3索引
+    SYS_TIMER_RECORD_TEST_4_INDEX = 9,                  // 测试4索引
     // SYS_TIMER_RECORD_USER_MAX_INDEX = (SYS_TIMER_RECORD_MAX_INDEX - 1),
 } SYS_TIMER_RECORD_INDEX;
 
