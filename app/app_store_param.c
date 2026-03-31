@@ -399,6 +399,8 @@ void flash_param_init(void)
 }
 /* USER CODE BEGIN AREA 1 */
 static HistoricalInfo kFlashHistoricalInfo;
+static bool IsFlashWriteOrErase(FLASH_STORE_CMD store_cmd);
+static bool IsFlashWriteGuard(FLASH_STORE_CMD store_cmd);
 
 static void FlashdbDatabaseInit(void)
 {
@@ -451,6 +453,16 @@ void AppStoreUpdata1ms(void)
 
     FLASH_STORE_CMD store_cmd = get_app_Storage_cmd();
     FLASH_STORE_STATUS store_status = get_app_Storage_status();
+
+    // 窗口检查擦写频率，是否保护Flash不被频繁擦写
+    if (IsFlashWriteGuard(store_cmd))
+    {
+        // flashdb_status = FLASHDB_PROTECT_ERR;
+        set_app_Storage_status(FLASH_STORE_STATUS_PROTECT);
+        sys_set_bsp_error_state(ERROR_FLASH_STORE, ERROR_SET);
+        set_app_Storage_cmd(FLASH_STORE_CMD_NULL);
+        return;
+    }
 
     if (store_cmd != FLASH_STORE_CMD_NULL &&
         store_status != FLASH_STORE_STATUS_BUSY)
@@ -550,6 +562,69 @@ void AppStoreUpdata1ms(void)
 
         //set_time_record_stop(9);
     }
+}
+
+/**
+ * @brief 判断是否为写入或擦除操作
+ * @param store_cmd 存储命令
+ * @return true 为写入或擦除操作 false 不为写入或擦除操作
+*/
+static bool IsFlashWriteOrErase(FLASH_STORE_CMD store_cmd)
+{
+    if (store_cmd == FLASH_STORE_CMD_WRITE_PARAM || \
+        store_cmd == FLASH_STORE_CMD_WRITE_ERROR || \
+        store_cmd == FLASH_STORE_CMD_WRITE_TQ_FC || \
+        store_cmd == FLASH_STORE_CMD_ERASE_PARAM || \
+        store_cmd == FLASH_STORE_CMD_ERASE_ERROR || \
+        store_cmd == FLASH_STORE_CMD_ERASE_TQ_FC)
+    {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @brief 窗口检查擦写频率，是否超过最大允许次数，以保护Flash不被频繁擦写
+ * @param store_cmd 存储命令
+ * @return true 保护已锁定，禁止擦写 false 允许擦写
+*/
+static bool IsFlashWriteGuard(FLASH_STORE_CMD store_cmd)
+{
+    static bool is_protected_locked = false;
+    static uint16_t write_count = 0;
+    static uint16_t window_timer = 0;
+
+    if (IsFlashWriteOrErase(store_cmd))
+    {
+        // 若Flash擦写保护已锁定，重启驱动器才自动解锁
+        if (is_protected_locked)
+        {
+            return is_protected_locked;
+        }
+
+        if (write_count == 0)
+        {
+            window_timer = 0; // 窗口时间重置，开始计时
+        }
+        write_count++;
+    }
+
+    // 擦写动作触发窗口及次数检查
+    if (write_count > 0)
+    {
+        window_timer++; // 窗口时间增加1ms
+        if (window_timer >= STORE_WINDOW_TIME_SECONDS) // 窗口时间到，重置
+        {
+            window_timer = 0;
+            write_count = 0;
+        }
+        else if (write_count >= STORE_MAX_WRITES_IN_WINDOW)
+        {
+            is_protected_locked = true; // 窗口内次数超限禁止擦写，并上锁
+        }
+    }
+
+    return is_protected_locked;
 }
 
 /* USER CODE END AREA 1 */

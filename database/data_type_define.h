@@ -279,6 +279,7 @@ typedef enum {
 } FLASH_STORE_CMD;
 typedef enum
 {
+    FLASH_STORE_STATUS_PROTECT = -3,    // 存储保护状态(写入频率超过最大允许次数)
     FLASH_STORE_STATUS_WARNING = -2,    // 存储警告(当前状态不允许操作)
     FLASH_STORE_STATUS_ERROR   = -1,    // 存储失败
     FLASH_STORE_STATUS_IDLE    = 0,     // 空闲状态

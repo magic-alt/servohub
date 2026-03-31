@@ -5,6 +5,11 @@
 /* USER CODE BEGIN AREA 0 */
 #include "app_data_type_define.h"
 #include "bsp_api.h"
+
+// 存储擦写保护窗口配置
+#define STORE_WINDOW_TIME_SECONDS       60000u  // 固定窗口时长：60000ms = 60s
+#define STORE_MAX_WRITES_IN_WINDOW      20u     // 窗口内最大允许擦写次数：20次
+
 /* USER CODE END AREA 0 */
 
 typedef struct {
