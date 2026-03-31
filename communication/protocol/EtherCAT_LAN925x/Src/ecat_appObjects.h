@@ -37,16 +37,12 @@
 * SubIndex 1<br>
 * SubIndex 2<br>
 * SubIndex 3<br>
-* SubIndex 4<br>
-* SubIndex 5<br>
 */
 OBJCONST TSDOINFOENTRYDESC    OBJMEM asEntryDesc0x1600[] = {
 { DEFTYPE_UNSIGNED8 , 0x8 , ACCESS_READWRITE },
 { DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READWRITE }, /* Subindex1 */
 { DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READWRITE }, /* Subindex2 */
-{ DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READWRITE }, /* Subindex3 */
-{ DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READWRITE }, /* Subindex4 */
-{ DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READWRITE }}; /* Subindex5 */
+{ DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READWRITE }}; /* Subindex3 */
 
 /**
 * \brief Object/Entry names
@@ -54,9 +50,7 @@ OBJCONST TSDOINFOENTRYDESC    OBJMEM asEntryDesc0x1600[] = {
 OBJCONST UCHAR OBJMEM aName0x1600[] = "Obj0x1600\000"
 "SubIndex 001\000"
 "SubIndex 002\000"
-"SubIndex 003\000"
-"SubIndex 004\000"
-"SubIndex 005\000\377";
+"SubIndex 003\000\377";
 #endif //#ifdef _OBJD_
 
 #ifndef _ECAT_APP_OBJECTS_H_
@@ -68,8 +62,6 @@ UINT16 u16SubIndex0;
 UINT32 SI1; /* Subindex1 -  */
 UINT32 SI2; /* Subindex2 -  */
 UINT32 SI3; /* Subindex3 -  */
-UINT32 SI4; /* Subindex4 -  */
-UINT32 SI5; /* Subindex5 -  */
 } OBJ_STRUCT_PACKED_END
 TOBJ1600;
 #endif //#ifndef _ECAT_APP_OBJECTS_H_
@@ -79,7 +71,7 @@ TOBJ1600;
 */
 PROTO TOBJ1600 Obj0x1600
 #if defined(_ECAT_APP_) && (_ECAT_APP_ == 1)
-={5,0x607A0020,0x60FF0020,0x60400010,0x60600008,0x00000008}
+={3,0x60400010,0x60600008,0x00000008}
 #endif
 ;
 /** @}*/
@@ -132,7 +124,7 @@ TOBJ1601;
 */
 PROTO TOBJ1601 Obj0x1601
 #if defined(_ECAT_APP_) && (_ECAT_APP_ == 1)
-={2,0x60850010,0x605A0020}
+={2,0x607A0020,0x605A0020}
 #endif
 ;
 /** @}*/
@@ -185,7 +177,7 @@ TOBJ1602;
 */
 PROTO TOBJ1602 Obj0x1602
 #if defined(_ECAT_APP_) && (_ECAT_APP_ == 1)
-={2,0x60850010,0x605A0020}
+={2,0x60FF0020,0x605A0020}
 #endif
 ;
 /** @}*/
@@ -238,7 +230,7 @@ TOBJ1603;
 */
 PROTO TOBJ1603 Obj0x1603
 #if defined(_ECAT_APP_) && (_ECAT_APP_ == 1)
-={2,0x60850010,0x605A0020}
+={2,0x60710010,0x605A0020}
 #endif
 ;
 /** @}*/
@@ -1842,6 +1834,140 @@ PROTO INT8 Homing_method0x6098;
 
 
 /******************************************************************************
+*                    Object 0x60B0 : Position_offset
+******************************************************************************/
+/**
+* \addtogroup 0x60B0 0x60B0 | Position_offset
+* @{
+* \brief Object 0x60B0 (Position_offset) definition
+*/
+#ifdef _OBJD_
+/**
+* \brief Entry description
+*/
+OBJCONST TSDOINFOENTRYDESC    OBJMEM sEntryDesc0x60B0 = { DEFTYPE_INTEGER32 , 0x20 , ACCESS_READWRITE | OBJACCESS_RXPDOMAPPING };
+/**
+* \brief Object name
+*/
+OBJCONST UCHAR OBJMEM aName0x60B0[] = "Position_offset\000\377";
+#endif //#ifdef _OBJD_
+
+/**
+* \brief Object variable
+*/
+PROTO INT32 Position_offset0x60B0;
+/** @}*/
+
+
+
+/******************************************************************************
+*                    Object 0x60B1 : Velocity_offset
+******************************************************************************/
+/**
+* \addtogroup 0x60B1 0x60B1 | Velocity_offset
+* @{
+* \brief Object 0x60B1 (Velocity_offset) definition
+*/
+#ifdef _OBJD_
+/**
+* \brief Entry description
+*/
+OBJCONST TSDOINFOENTRYDESC    OBJMEM sEntryDesc0x60B1 = { DEFTYPE_INTEGER32 , 0x20 , ACCESS_READWRITE | OBJACCESS_RXPDOMAPPING };
+/**
+* \brief Object name
+*/
+OBJCONST UCHAR OBJMEM aName0x60B1[] = "Velocity_offset\000\377";
+#endif //#ifdef _OBJD_
+
+/**
+* \brief Object variable
+*/
+PROTO INT32 Velocity_offset0x60B1;
+/** @}*/
+
+
+
+/******************************************************************************
+*                    Object 0x60B2 : Torque_offset
+******************************************************************************/
+/**
+* \addtogroup 0x60B2 0x60B2 | Torque_offset
+* @{
+* \brief Object 0x60B2 (Torque_offset) definition
+*/
+#ifdef _OBJD_
+/**
+* \brief Entry description
+*/
+OBJCONST TSDOINFOENTRYDESC    OBJMEM sEntryDesc0x60B2 = { DEFTYPE_INTEGER16 , 0x10 , ACCESS_READWRITE | OBJACCESS_RXPDOMAPPING };
+/**
+* \brief Object name
+*/
+OBJCONST UCHAR OBJMEM aName0x60B2[] = "Torque_offset\000\377";
+#endif //#ifdef _OBJD_
+
+/**
+* \brief Object variable
+*/
+PROTO INT16 Torque_offset0x60B2;
+/** @}*/
+
+
+
+/******************************************************************************
+*                    Object 0x60C2 : Interpolation_time_period
+******************************************************************************/
+/**
+* \addtogroup 0x60C2 0x60C2 | Interpolation_time_period
+* @{
+* \brief Object 0x60C2 (Interpolation_time_period) definition
+*/
+#ifdef _OBJD_
+/**
+* \brief Object entry descriptions<br>
+* <br>
+* SubIndex 0<br>
+* SubIndex 1 - Interpolation_time_period_Ip_time_units<br>
+* SubIndex 2 - Interpolation_time_period_Ip_time_index<br>
+*/
+OBJCONST TSDOINFOENTRYDESC    OBJMEM asEntryDesc0x60C2[] = {
+{ DEFTYPE_UNSIGNED8 , 0x8 , ACCESS_READ },
+{ DEFTYPE_UNSIGNED8 , 0x08 , ACCESS_READWRITE | OBJACCESS_RXPDOMAPPING }, /* Subindex1 - Interpolation_time_period_Ip_time_units */
+{ DEFTYPE_INTEGER8 , 0x08 , ACCESS_READWRITE | OBJACCESS_RXPDOMAPPING }}; /* Subindex2 - Interpolation_time_period_Ip_time_index */
+
+/**
+* \brief Object/Entry names
+*/
+OBJCONST UCHAR OBJMEM aName0x60C2[] = "Interpolation_time_period\000"
+"Interpolation_time_period_Ip_time_units\000"
+"Interpolation_time_period_Ip_time_index\000\377";
+#endif //#ifdef _OBJD_
+
+#ifndef _ECAT_APP_OBJECTS_H_
+/**
+* \brief Object structure
+*/
+typedef struct OBJ_STRUCT_PACKED_START {
+UINT16 u16SubIndex0;
+UINT8 Interpolation_time_period_Ip_time_units; /* Subindex1 - Interpolation_time_period_Ip_time_units */
+INT8 Interpolation_time_period_Ip_time_index; /* Subindex2 - Interpolation_time_period_Ip_time_index */
+} OBJ_STRUCT_PACKED_END
+TOBJ60C2;
+#endif //#ifndef _ECAT_APP_OBJECTS_H_
+
+/**
+* \brief Object variable
+*/
+PROTO TOBJ60C2 Interpolation_time_period0x60C2
+#if defined(_ECAT_APP_) && (_ECAT_APP_ == 1)
+={2,0,0}
+#endif
+;
+/** @}*/
+
+
+
+/******************************************************************************
 *                    Object 0x60C5 : Max_acceleration
 ******************************************************************************/
 /**
@@ -1918,6 +2044,86 @@ OBJCONST UCHAR OBJMEM aName0x60F4[] = "Following_error_actual_value\000\377";
 * \brief Object variable
 */
 PROTO INT32 Following_error_actual_value0x60F4;
+/** @}*/
+
+
+
+/******************************************************************************
+*                    Object 0x60FD : Digital_inputs
+******************************************************************************/
+/**
+* \addtogroup 0x60FD 0x60FD | Digital_inputs
+* @{
+* \brief Object 0x60FD (Digital_inputs) definition
+*/
+#ifdef _OBJD_
+/**
+* \brief Entry description
+*/
+OBJCONST TSDOINFOENTRYDESC    OBJMEM sEntryDesc0x60FD = { DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READ | OBJACCESS_TXPDOMAPPING };
+/**
+* \brief Object name
+*/
+OBJCONST UCHAR OBJMEM aName0x60FD[] = "Digital_inputs\000\377";
+#endif //#ifdef _OBJD_
+
+/**
+* \brief Object variable
+*/
+PROTO UINT32 Digital_inputs0x60FD;
+/** @}*/
+
+
+
+/******************************************************************************
+*                    Object 0x60FE : Digital_outputs
+******************************************************************************/
+/**
+* \addtogroup 0x60FE 0x60FE | Digital_outputs
+* @{
+* \brief Object 0x60FE (Digital_outputs) definition
+*/
+#ifdef _OBJD_
+/**
+* \brief Object entry descriptions<br>
+* <br>
+* SubIndex 0<br>
+* SubIndex 1 - Digital_outputs_Physical_outputs<br>
+* SubIndex 2 - Digital_outputs_Bit_mask<br>
+*/
+OBJCONST TSDOINFOENTRYDESC    OBJMEM asEntryDesc0x60FE[] = {
+{ DEFTYPE_UNSIGNED8 , 0x8 , ACCESS_READ },
+{ DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READWRITE | OBJACCESS_RXPDOMAPPING }, /* Subindex1 - Digital_outputs_Physical_outputs */
+{ DEFTYPE_UNSIGNED32 , 0x20 , ACCESS_READWRITE | OBJACCESS_RXPDOMAPPING }}; /* Subindex2 - Digital_outputs_Bit_mask */
+
+/**
+* \brief Object/Entry names
+*/
+OBJCONST UCHAR OBJMEM aName0x60FE[] = "Digital_outputs\000"
+"Digital_outputs_Physical_outputs\000"
+"Digital_outputs_Bit_mask\000\377";
+#endif //#ifdef _OBJD_
+
+#ifndef _ECAT_APP_OBJECTS_H_
+/**
+* \brief Object structure
+*/
+typedef struct OBJ_STRUCT_PACKED_START {
+UINT16 u16SubIndex0;
+UINT32 Digital_outputs_Physical_outputs; /* Subindex1 - Digital_outputs_Physical_outputs */
+UINT32 Digital_outputs_Bit_mask; /* Subindex2 - Digital_outputs_Bit_mask */
+} OBJ_STRUCT_PACKED_END
+TOBJ60FE;
+#endif //#ifndef _ECAT_APP_OBJECTS_H_
+
+/**
+* \brief Object variable
+*/
+PROTO TOBJ60FE Digital_outputs0x60FE
+#if defined(_ECAT_APP_) && (_ECAT_APP_ == 1)
+={2,0,0}
+#endif
+;
 /** @}*/
 
 
@@ -2077,9 +2283,15 @@ PROTO UINT8 EtherCAT_Read_0x6087_Callback(UINT16 index, UINT8 subindex, UINT32 d
 PROTO UINT8 EtherCAT_Read_0x608F_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
 PROTO UINT8 EtherCAT_Read_0x6091_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
 PROTO UINT8 EtherCAT_Read_0x6098_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
+PROTO UINT8 EtherCAT_Read_0x60B0_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
+PROTO UINT8 EtherCAT_Read_0x60B1_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
+PROTO UINT8 EtherCAT_Read_0x60B2_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
+PROTO UINT8 EtherCAT_Read_0x60C2_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
 PROTO UINT8 EtherCAT_Read_0x60C5_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
 PROTO UINT8 EtherCAT_Read_0x60C6_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
 PROTO UINT8 EtherCAT_Read_0x60F4_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
+PROTO UINT8 EtherCAT_Read_0x60FD_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
+PROTO UINT8 EtherCAT_Read_0x60FE_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
 PROTO UINT8 EtherCAT_Read_0x60FF_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
 PROTO UINT8 EtherCAT_Write_0x6040_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
 PROTO UINT8 EtherCAT_Write_0x605A_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
@@ -2111,15 +2323,20 @@ PROTO UINT8 EtherCAT_Write_0x6087_Callback(UINT16 index, UINT8 subindex, UINT32 
 PROTO UINT8 EtherCAT_Write_0x608F_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
 PROTO UINT8 EtherCAT_Write_0x6091_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
 PROTO UINT8 EtherCAT_Write_0x6098_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
+PROTO UINT8 EtherCAT_Write_0x60B0_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
+PROTO UINT8 EtherCAT_Write_0x60B1_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
+PROTO UINT8 EtherCAT_Write_0x60B2_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
+PROTO UINT8 EtherCAT_Write_0x60C2_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
 PROTO UINT8 EtherCAT_Write_0x60C5_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
 PROTO UINT8 EtherCAT_Write_0x60C6_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
+PROTO UINT8 EtherCAT_Write_0x60FE_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
 PROTO UINT8 EtherCAT_Write_0x60FF_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess);
 
 
 #ifdef _OBJD_
 TOBJECT    OBJMEM ApplicationObjDic[] = {
 /* Object 0x1600 */
-{NULL , NULL ,  0x1600 , {DEFTYPE_PDOMAPPING , 5 | (OBJCODE_REC << 8)} , asEntryDesc0x1600 , aName0x1600 , &Obj0x1600 , NULL , NULL , 0x0000 },
+{NULL , NULL ,  0x1600 , {DEFTYPE_PDOMAPPING , 3 | (OBJCODE_REC << 8)} , asEntryDesc0x1600 , aName0x1600 , &Obj0x1600 , NULL , NULL , 0x0000 },
 /* Object 0x1601 */
 {NULL , NULL ,  0x1601 , {DEFTYPE_PDOMAPPING , 2 | (OBJCODE_REC << 8)} , asEntryDesc0x1601 , aName0x1601 , &Obj0x1601 , NULL , NULL , 0x0000 },
 /* Object 0x1602 */
@@ -2222,12 +2439,24 @@ TOBJECT    OBJMEM ApplicationObjDic[] = {
 {NULL , NULL ,  0x6091 , {DEFTYPE_RECORD , 2 | (OBJCODE_REC << 8)} , asEntryDesc0x6091 , aName0x6091 , &Gear_ratio0x6091 , EtherCAT_Read_0x6091_Callback , EtherCAT_Write_0x6091_Callback , 0x0000 },
 /* Object 0x6098 */
 {NULL , NULL ,  0x6098 , {DEFTYPE_INTEGER8 , 0 | (OBJCODE_VAR << 8)} , &sEntryDesc0x6098 , aName0x6098 , &Homing_method0x6098 , EtherCAT_Read_0x6098_Callback , EtherCAT_Write_0x6098_Callback , 0x0000 },
+/* Object 0x60B0 */
+{NULL , NULL ,  0x60B0 , {DEFTYPE_INTEGER32 , 0 | (OBJCODE_VAR << 8)} , &sEntryDesc0x60B0 , aName0x60B0 , &Position_offset0x60B0 , EtherCAT_Read_0x60B0_Callback , EtherCAT_Write_0x60B0_Callback , 0x0000 },
+/* Object 0x60B1 */
+{NULL , NULL ,  0x60B1 , {DEFTYPE_INTEGER32 , 0 | (OBJCODE_VAR << 8)} , &sEntryDesc0x60B1 , aName0x60B1 , &Velocity_offset0x60B1 , EtherCAT_Read_0x60B1_Callback , EtherCAT_Write_0x60B1_Callback , 0x0000 },
+/* Object 0x60B2 */
+{NULL , NULL ,  0x60B2 , {DEFTYPE_INTEGER16 , 0 | (OBJCODE_VAR << 8)} , &sEntryDesc0x60B2 , aName0x60B2 , &Torque_offset0x60B2 , EtherCAT_Read_0x60B2_Callback , EtherCAT_Write_0x60B2_Callback , 0x0000 },
+/* Object 0x60C2 */
+{NULL , NULL ,  0x60C2 , {DEFTYPE_RECORD , 2 | (OBJCODE_REC << 8)} , asEntryDesc0x60C2 , aName0x60C2 , &Interpolation_time_period0x60C2 , EtherCAT_Read_0x60C2_Callback , EtherCAT_Write_0x60C2_Callback , 0x0000 },
 /* Object 0x60C5 */
 {NULL , NULL ,  0x60C5 , {DEFTYPE_UNSIGNED32 , 0 | (OBJCODE_VAR << 8)} , &sEntryDesc0x60C5 , aName0x60C5 , &Max_acceleration0x60C5 , EtherCAT_Read_0x60C5_Callback , EtherCAT_Write_0x60C5_Callback , 0x0000 },
 /* Object 0x60C6 */
 {NULL , NULL ,  0x60C6 , {DEFTYPE_UNSIGNED32 , 0 | (OBJCODE_VAR << 8)} , &sEntryDesc0x60C6 , aName0x60C6 , &Max_deceleration0x60C6 , EtherCAT_Read_0x60C6_Callback , EtherCAT_Write_0x60C6_Callback , 0x0000 },
 /* Object 0x60F4 */
 {NULL , NULL ,  0x60F4 , {DEFTYPE_INTEGER32 , 0 | (OBJCODE_VAR << 8)} , &sEntryDesc0x60F4 , aName0x60F4 , &Following_error_actual_value0x60F4 , EtherCAT_Read_0x60F4_Callback , NULL , 0x0000 },
+/* Object 0x60FD */
+{NULL , NULL ,  0x60FD , {DEFTYPE_UNSIGNED32 , 0 | (OBJCODE_VAR << 8)} , &sEntryDesc0x60FD , aName0x60FD , &Digital_inputs0x60FD , EtherCAT_Read_0x60FD_Callback , NULL , 0x0000 },
+/* Object 0x60FE */
+{NULL , NULL ,  0x60FE , {DEFTYPE_RECORD , 2 | (OBJCODE_REC << 8)} , asEntryDesc0x60FE , aName0x60FE , &Digital_outputs0x60FE , EtherCAT_Read_0x60FE_Callback , EtherCAT_Write_0x60FE_Callback , 0x0000 },
 /* Object 0x60FF */
 {NULL , NULL ,  0x60FF , {DEFTYPE_INTEGER32 , 0 | (OBJCODE_VAR << 8)} , &sEntryDesc0x60FF , aName0x60FF , &Target_velocity0x60FF , EtherCAT_Read_0x60FF_Callback , EtherCAT_Write_0x60FF_Callback , 0x0000 },
 /* Object 0x7010 */

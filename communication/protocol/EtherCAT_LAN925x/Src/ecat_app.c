@@ -1263,6 +1263,94 @@ UINT8 EtherCAT_Read_0x6098_Callback(UINT16 index, UINT8 subindex, UINT32 dataSiz
  \return    result of the read operation (0 (success) or an abort code (ABORTIDX_.... defined in
             sdosrv.h))
  *////////////////////////////////////////////////////////////////////////////////////////
+UINT8 EtherCAT_Read_0x60B0_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
+#if _WIN32
+#pragma message ("Warning: Implement CoE read callback")
+#else
+ #warning "Implement CoE read callback"
+#endif
+ return 0;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/**
+\param     index               index of the requested object.
+\param     subindex            subindex of the requested object.
+\param     objSize             size of the requested object data, calculated with OBJ_GetObjectLength
+\param     pData               Pointer to the buffer where the data can be copied to
+\param     bCompleteAccess     Indicates if a complete read of all subindices of the
+                               object shall be done or not
+
+ \return    result of the read operation (0 (success) or an abort code (ABORTIDX_.... defined in
+            sdosrv.h))
+ *////////////////////////////////////////////////////////////////////////////////////////
+UINT8 EtherCAT_Read_0x60B1_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
+#if _WIN32
+#pragma message ("Warning: Implement CoE read callback")
+#else
+ #warning "Implement CoE read callback"
+#endif
+ return 0;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/**
+\param     index               index of the requested object.
+\param     subindex            subindex of the requested object.
+\param     objSize             size of the requested object data, calculated with OBJ_GetObjectLength
+\param     pData               Pointer to the buffer where the data can be copied to
+\param     bCompleteAccess     Indicates if a complete read of all subindices of the
+                               object shall be done or not
+
+ \return    result of the read operation (0 (success) or an abort code (ABORTIDX_.... defined in
+            sdosrv.h))
+ *////////////////////////////////////////////////////////////////////////////////////////
+UINT8 EtherCAT_Read_0x60B2_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
+#if _WIN32
+#pragma message ("Warning: Implement CoE read callback")
+#else
+ #warning "Implement CoE read callback"
+#endif
+ return 0;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/**
+\param     index               index of the requested object.
+\param     subindex            subindex of the requested object.
+\param     objSize             size of the requested object data, calculated with OBJ_GetObjectLength
+\param     pData               Pointer to the buffer where the data can be copied to
+\param     bCompleteAccess     Indicates if a complete read of all subindices of the
+                               object shall be done or not
+
+ \return    result of the read operation (0 (success) or an abort code (ABORTIDX_.... defined in
+            sdosrv.h))
+ *////////////////////////////////////////////////////////////////////////////////////////
+UINT8 EtherCAT_Read_0x60C2_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
+#if _WIN32
+#pragma message ("Warning: Implement CoE read callback")
+#else
+ #warning "Implement CoE read callback"
+#endif
+ return 0;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/**
+\param     index               index of the requested object.
+\param     subindex            subindex of the requested object.
+\param     objSize             size of the requested object data, calculated with OBJ_GetObjectLength
+\param     pData               Pointer to the buffer where the data can be copied to
+\param     bCompleteAccess     Indicates if a complete read of all subindices of the
+                               object shall be done or not
+
+ \return    result of the read operation (0 (success) or an abort code (ABORTIDX_.... defined in
+            sdosrv.h))
+ *////////////////////////////////////////////////////////////////////////////////////////
 UINT8 EtherCAT_Read_0x60C5_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
 #if _WIN32
 #pragma message ("Warning: Implement CoE read callback")
@@ -1308,6 +1396,50 @@ UINT8 EtherCAT_Read_0x60C6_Callback(UINT16 index, UINT8 subindex, UINT32 dataSiz
             sdosrv.h))
  *////////////////////////////////////////////////////////////////////////////////////////
 UINT8 EtherCAT_Read_0x60F4_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
+#if _WIN32
+#pragma message ("Warning: Implement CoE read callback")
+#else
+ #warning "Implement CoE read callback"
+#endif
+ return 0;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/**
+\param     index               index of the requested object.
+\param     subindex            subindex of the requested object.
+\param     objSize             size of the requested object data, calculated with OBJ_GetObjectLength
+\param     pData               Pointer to the buffer where the data can be copied to
+\param     bCompleteAccess     Indicates if a complete read of all subindices of the
+                               object shall be done or not
+
+ \return    result of the read operation (0 (success) or an abort code (ABORTIDX_.... defined in
+            sdosrv.h))
+ *////////////////////////////////////////////////////////////////////////////////////////
+UINT8 EtherCAT_Read_0x60FD_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
+#if _WIN32
+#pragma message ("Warning: Implement CoE read callback")
+#else
+ #warning "Implement CoE read callback"
+#endif
+ return 0;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/**
+\param     index               index of the requested object.
+\param     subindex            subindex of the requested object.
+\param     objSize             size of the requested object data, calculated with OBJ_GetObjectLength
+\param     pData               Pointer to the buffer where the data can be copied to
+\param     bCompleteAccess     Indicates if a complete read of all subindices of the
+                               object shall be done or not
+
+ \return    result of the read operation (0 (success) or an abort code (ABORTIDX_.... defined in
+            sdosrv.h))
+ *////////////////////////////////////////////////////////////////////////////////////////
+UINT8 EtherCAT_Read_0x60FE_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
 #if _WIN32
 #pragma message ("Warning: Implement CoE read callback")
 #else
@@ -2011,6 +2143,94 @@ UINT8 EtherCAT_Write_0x6098_Callback(UINT16 index, UINT8 subindex, UINT32 dataSi
  \return    result of the read operation (0 (success) or an abort code (ABORTIDX_.... defined in
             sdosrv.h))
  *////////////////////////////////////////////////////////////////////////////////////////
+UINT8 EtherCAT_Write_0x60B0_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
+#if _WIN32
+#pragma message ("Warning: Implement CoE write callback")
+#else
+ #warning "Implement CoE write callback"
+#endif
+ return 0;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/**
+\param     index               index of the requested object.
+\param     subindex            subindex of the requested object.
+\param     objSize             size of the requested object data, calculated with OBJ_GetObjectLength
+\param     pData               Pointer to the buffer where the data can be copied to
+\param     bCompleteAccess     Indicates if a complete read of all subindices of the
+                               object shall be done or not
+
+ \return    result of the read operation (0 (success) or an abort code (ABORTIDX_.... defined in
+            sdosrv.h))
+ *////////////////////////////////////////////////////////////////////////////////////////
+UINT8 EtherCAT_Write_0x60B1_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
+#if _WIN32
+#pragma message ("Warning: Implement CoE write callback")
+#else
+ #warning "Implement CoE write callback"
+#endif
+ return 0;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/**
+\param     index               index of the requested object.
+\param     subindex            subindex of the requested object.
+\param     objSize             size of the requested object data, calculated with OBJ_GetObjectLength
+\param     pData               Pointer to the buffer where the data can be copied to
+\param     bCompleteAccess     Indicates if a complete read of all subindices of the
+                               object shall be done or not
+
+ \return    result of the read operation (0 (success) or an abort code (ABORTIDX_.... defined in
+            sdosrv.h))
+ *////////////////////////////////////////////////////////////////////////////////////////
+UINT8 EtherCAT_Write_0x60B2_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
+#if _WIN32
+#pragma message ("Warning: Implement CoE write callback")
+#else
+ #warning "Implement CoE write callback"
+#endif
+ return 0;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/**
+\param     index               index of the requested object.
+\param     subindex            subindex of the requested object.
+\param     objSize             size of the requested object data, calculated with OBJ_GetObjectLength
+\param     pData               Pointer to the buffer where the data can be copied to
+\param     bCompleteAccess     Indicates if a complete read of all subindices of the
+                               object shall be done or not
+
+ \return    result of the read operation (0 (success) or an abort code (ABORTIDX_.... defined in
+            sdosrv.h))
+ *////////////////////////////////////////////////////////////////////////////////////////
+UINT8 EtherCAT_Write_0x60C2_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
+#if _WIN32
+#pragma message ("Warning: Implement CoE write callback")
+#else
+ #warning "Implement CoE write callback"
+#endif
+ return 0;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/**
+\param     index               index of the requested object.
+\param     subindex            subindex of the requested object.
+\param     objSize             size of the requested object data, calculated with OBJ_GetObjectLength
+\param     pData               Pointer to the buffer where the data can be copied to
+\param     bCompleteAccess     Indicates if a complete read of all subindices of the
+                               object shall be done or not
+
+ \return    result of the read operation (0 (success) or an abort code (ABORTIDX_.... defined in
+            sdosrv.h))
+ *////////////////////////////////////////////////////////////////////////////////////////
 UINT8 EtherCAT_Write_0x60C5_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
 #if _WIN32
 #pragma message ("Warning: Implement CoE write callback")
@@ -2034,6 +2254,28 @@ UINT8 EtherCAT_Write_0x60C5_Callback(UINT16 index, UINT8 subindex, UINT32 dataSi
             sdosrv.h))
  *////////////////////////////////////////////////////////////////////////////////////////
 UINT8 EtherCAT_Write_0x60C6_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
+#if _WIN32
+#pragma message ("Warning: Implement CoE write callback")
+#else
+ #warning "Implement CoE write callback"
+#endif
+ return 0;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/**
+\param     index               index of the requested object.
+\param     subindex            subindex of the requested object.
+\param     objSize             size of the requested object data, calculated with OBJ_GetObjectLength
+\param     pData               Pointer to the buffer where the data can be copied to
+\param     bCompleteAccess     Indicates if a complete read of all subindices of the
+                               object shall be done or not
+
+ \return    result of the read operation (0 (success) or an abort code (ABORTIDX_.... defined in
+            sdosrv.h))
+ *////////////////////////////////////////////////////////////////////////////////////////
+UINT8 EtherCAT_Write_0x60FE_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess) {
 #if _WIN32
 #pragma message ("Warning: Implement CoE write callback")
 #else

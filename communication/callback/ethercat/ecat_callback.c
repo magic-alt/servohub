@@ -211,6 +211,26 @@ UINT8 EtherCAT_Read_0x6098_Callback(UINT16 index, UINT8 subindex, UINT32 dataSiz
     return 0;
 }
 
+UINT8 EtherCAT_Read_0x60B0_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess){
+    OD_0x60B0_Position_offset_Read_Callback(subindex, pData);
+    return 0;
+}
+
+UINT8 EtherCAT_Read_0x60B1_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess){
+    OD_0x60B1_Velocity_offset_Read_Callback(subindex, pData);
+    return 0;
+}
+
+UINT8 EtherCAT_Read_0x60B2_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess){
+    OD_0x60B2_Torque_offset_Read_Callback(subindex, pData);
+    return 0;
+}
+
+UINT8 EtherCAT_Read_0x60C2_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess){
+    OD_0x60C2_Interpolation_time_period_Read_Callback(subindex, pData);
+    return 0;
+}
+
 UINT8 EtherCAT_Read_0x60C5_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess){
     OD_0x60C5_Max_acceleration_Read_Callback(subindex, pData);
     return 0;
@@ -223,6 +243,16 @@ UINT8 EtherCAT_Read_0x60C6_Callback(UINT16 index, UINT8 subindex, UINT32 dataSiz
 
 UINT8 EtherCAT_Read_0x60F4_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess){
     OD_0x60F4_Following_error_actual_value_Read_Callback(subindex, pData);
+    return 0;
+}
+
+UINT8 EtherCAT_Read_0x60FD_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess){
+    OD_0x60FD_Digital_inputs_Read_Callback(subindex, pData);
+    return 0;
+}
+
+UINT8 EtherCAT_Read_0x60FE_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess){
+    OD_0x60FE_Digital_outputs_Read_Callback(subindex, pData);
     return 0;
 }
 
@@ -471,6 +501,38 @@ UINT8 EtherCAT_Write_0x6098_Callback(UINT16 index, UINT8 subindex, UINT32 dataSi
     return 0;
 }
 
+UINT8 EtherCAT_Write_0x60B0_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess){
+    if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){
+        return 0;
+    }
+    OD_0x60B0_Position_offset_Write_Callback(subindex, pData);
+    return 0;
+}
+
+UINT8 EtherCAT_Write_0x60B1_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess){
+    if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){
+        return 0;
+    }
+    OD_0x60B1_Velocity_offset_Write_Callback(subindex, pData);
+    return 0;
+}
+
+UINT8 EtherCAT_Write_0x60B2_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess){
+    if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){
+        return 0;
+    }
+    OD_0x60B2_Torque_offset_Write_Callback(subindex, pData);
+    return 0;
+}
+
+UINT8 EtherCAT_Write_0x60C2_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess){
+    if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){
+        return 0;
+    }
+    OD_0x60C2_Interpolation_time_period_Write_Callback(subindex, pData);
+    return 0;
+}
+
 UINT8 EtherCAT_Write_0x60C5_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess){
     if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){
         return 0;
@@ -484,6 +546,14 @@ UINT8 EtherCAT_Write_0x60C6_Callback(UINT16 index, UINT8 subindex, UINT32 dataSi
         return 0;
     }
     OD_0x60C6_Max_deceleration_Write_Callback(subindex, pData);
+    return 0;
+}
+
+UINT8 EtherCAT_Write_0x60FE_Callback(UINT16 index, UINT8 subindex, UINT32 dataSize, UINT16 MBXMEM * pData, UINT8 bCompleteAccess){
+    if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){
+        return 0;
+    }
+    OD_0x60FE_Digital_outputs_Write_Callback(subindex, pData);
     return 0;
 }
 
