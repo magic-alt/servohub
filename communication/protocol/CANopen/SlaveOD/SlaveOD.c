@@ -28,6 +28,7 @@ UNS32 Following_error_window = 0x0;		/* Mapped at index 0x6065, subindex 0x00 */
 UNS16 Following_error_time_out = 0x0;		/* Mapped at index 0x6066, subindex 0x00 */
 UNS32 Position_window = 0x0;		/* Mapped at index 0x6067, subindex 0x00 */
 UNS16 Position_window_time = 0x0;		/* Mapped at index 0x6068, subindex 0x00 */
+INTEGER32 Velocity_sensor_actual_value = 0x0;		/* Mapped at index 0x6069, subindex 0x00 */
 INTEGER32 Velocity_demand_value = 0x0;		/* Mapped at index 0x606B, subindex 0x00 */
 INTEGER32 Velocity_actual_value = 0x0;		/* Mapped at index 0x606C, subindex 0x00 */
 UNS16 Velocity_window = 0x0;		/* Mapped at index 0x606D, subindex 0x00 */
@@ -56,12 +57,22 @@ UNS32 Profile_velocity = 0x0;		/* Mapped at index 0x6081, subindex 0x00 */
 UNS32 Profile_acceleration = 0x0;		/* Mapped at index 0x6083, subindex 0x00 */
 UNS32 Profile_deceleration = 0x0;		/* Mapped at index 0x6084, subindex 0x00 */
 UNS32 Quick_stop_deceleration = 0x0;		/* Mapped at index 0x6085, subindex 0x00 */
+INTEGER16 Motion_profile_type = 0x0;		/* Mapped at index 0x6086, subindex 0x00 */
 UNS32 Torque_slope = 0x0;		/* Mapped at index 0x6087, subindex 0x00 */
+INTEGER8 Position_notation_index = 0x0;		/* Mapped at index 0x6089, subindex 0x00 */
+REAL32 Position_dimention_index = 0.000000;		/* Mapped at index 0x608A, subindex 0x00 */
+INTEGER8 Velocity_notation_index = 0x0;		/* Mapped at index 0x608B, subindex 0x00 */
+REAL32 Velocity_dimention_index = 0.000000;		/* Mapped at index 0x608C, subindex 0x00 */
+INTEGER8 Acceleraion_notation_index = 0x0;		/* Mapped at index 0x608D, subindex 0x00 */
+REAL32 Acceleraion_dimention_index = 0.000000;		/* Mapped at index 0x608E, subindex 0x00 */
 UNS32 Position_encoder_resolution_Encoder_increments = 0x0;		/* Mapped at index 0x608F, subindex 0x01 */
 UNS32 Position_encoder_resolution_Motor_revolutions = 0x0;		/* Mapped at index 0x608F, subindex 0x02 */
 UNS32 Gear_ratio_Motor_revolutions = 0x0;		/* Mapped at index 0x6091, subindex 0x01 */
 UNS32 Gear_ratio_Shaft_revolutions = 0x0;		/* Mapped at index 0x6091, subindex 0x02 */
 INTEGER8 Homing_method = 0x0;		/* Mapped at index 0x6098, subindex 0x00 */
+UNS32 Homing_speeds_Speed_for_switch_search = 0x0;		/* Mapped at index 0x6099, subindex 0x01 */
+UNS32 Homing_speeds_Speed_for_zero_search = 0x0;		/* Mapped at index 0x6099, subindex 0x02 */
+UNS32 Homing_acceleration = 0x0;		/* Mapped at index 0x609A, subindex 0x00 */
 INTEGER32 Position_offset = 0x0;		/* Mapped at index 0x60B0, subindex 0x00 */
 INTEGER32 Velocity_offset = 0x0;		/* Mapped at index 0x60B1, subindex 0x00 */
 INTEGER16 Torque_offset = 0x0;		/* Mapped at index 0x60B2, subindex 0x00 */
@@ -70,10 +81,26 @@ INTEGER8 Interpolation_time_period_Interpolation_time_period_Ip_time_index = 0xF
 UNS32 Max_acceleration = 0x0;		/* Mapped at index 0x60C5, subindex 0x00 */
 UNS32 Max_deceleration = 0x0;		/* Mapped at index 0x60C6, subindex 0x00 */
 INTEGER32 Following_error_actual_value = 0x0;		/* Mapped at index 0x60F4, subindex 0x00 */
+INTEGER16 Current_control_parameter_set_Current_regulator_P_gain = 0x0;		/* Mapped at index 0x60F6, subindex 0x01 */
+INTEGER16 Current_control_parameter_set_Current_regulator_I_gain = 0x0;		/* Mapped at index 0x60F6, subindex 0x02 */
+INTEGER16 Velocity_control_parameter_set_Velocity_regulator_P_gain = 0x0;		/* Mapped at index 0x60F9, subindex 0x01 */
+INTEGER16 Velocity_control_parameter_set_Velocity_regulator_I_gain = 0x0;		/* Mapped at index 0x60F9, subindex 0x02 */
+INTEGER16 Position_control_parameter_set_Position_regulator_P_gain = 0x0;		/* Mapped at index 0x60FB, subindex 0x01 */
+INTEGER16 Position_control_parameter_set_Position_regulator_I_gain = 0x0;		/* Mapped at index 0x60FB, subindex 0x02 */
+INTEGER16 Position_control_parameter_set_Position_regulator_D_gain = 0x0;		/* Mapped at index 0x60FB, subindex 0x03 */
+UNS16 Position_control_parameter_set_Velocity_feed_forward_factor = 0x0;		/* Mapped at index 0x60FB, subindex 0x04 */
+UNS16 Position_control_parameter_set_Acceleration_feed_forward_factor = 0x0;		/* Mapped at index 0x60FB, subindex 0x05 */
 UNS32 Digital_inputs = 0x0;		/* Mapped at index 0x60FD, subindex 0x00 */
 UNS32 Digital_outputs_Digital_outputs_Physical_outputs = 0x0;		/* Mapped at index 0x60FE, subindex 0x01 */
 UNS32 Digital_outputs_Digital_outputs_Bit_mask = 0x0;		/* Mapped at index 0x60FE, subindex 0x02 */
 INTEGER32 Target_velocity = 0x0;		/* Mapped at index 0x60FF, subindex 0x00 */
+UNS16 Motor_type = 0x0;		/* Mapped at index 0x6402, subindex 0x00 */
+UNS16 Motor_data_Continous_current_limit = 0x0;		/* Mapped at index 0x6410, subindex 0x01 */
+UNS16 Motor_data_Output_current_limit = 0x0;		/* Mapped at index 0x6410, subindex 0x02 */
+UNS8 Motor_data_Pole_pair_number = 0x0;		/* Mapped at index 0x6410, subindex 0x03 */
+UNS16 Motor_data_Maximal_speed_in_current_mode = 0x0;		/* Mapped at index 0x6410, subindex 0x04 */
+UNS16 Motor_data_Thermal_time_constant_winding = 0x0;		/* Mapped at index 0x6410, subindex 0x05 */
+UNS32 Supported_drive_modes = 0x0;		/* Mapped at index 0x6502, subindex 0x00 */
 
 /**************************************************************************/
 /* Declaration of value range types                                       */
@@ -642,6 +669,12 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                        { RW, uint16, sizeof (UNS16), (void*)&Position_window_time, NULL }
                      };
 
+/* index 0x6069 :   Mapped variable Velocity sensor actual value */
+                    subindex SlaveOD_Index6069[] = 
+                     {
+                       { RO, int32, sizeof (INTEGER32), (void*)&Velocity_sensor_actual_value, NULL }
+                     };
+
 /* index 0x606B :   Mapped variable Velocity demand value */
                     subindex SlaveOD_Index606B[] = 
                      {
@@ -804,10 +837,52 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                        { RW, uint32, sizeof (UNS32), (void*)&Quick_stop_deceleration, NULL }
                      };
 
+/* index 0x6086 :   Mapped variable Motion profile type */
+                    subindex SlaveOD_Index6086[] = 
+                     {
+                       { RW, int16, sizeof (INTEGER16), (void*)&Motion_profile_type, NULL }
+                     };
+
 /* index 0x6087 :   Mapped variable Torque slope */
                     subindex SlaveOD_Index6087[] = 
                      {
                        { RW, uint32, sizeof (UNS32), (void*)&Torque_slope, NULL }
+                     };
+
+/* index 0x6089 :   Mapped variable Position notation index */
+                    subindex SlaveOD_Index6089[] = 
+                     {
+                       { RW, int8, sizeof (INTEGER8), (void*)&Position_notation_index, NULL }
+                     };
+
+/* index 0x608A :   Mapped variable Position dimention index */
+                    subindex SlaveOD_Index608A[] = 
+                     {
+                       { RW, real32, sizeof (REAL32), (void*)&Position_dimention_index, NULL }
+                     };
+
+/* index 0x608B :   Mapped variable Velocity notation index */
+                    subindex SlaveOD_Index608B[] = 
+                     {
+                       { RW, int8, sizeof (INTEGER8), (void*)&Velocity_notation_index, NULL }
+                     };
+
+/* index 0x608C :   Mapped variable Velocity dimention index */
+                    subindex SlaveOD_Index608C[] = 
+                     {
+                       { RW, real32, sizeof (REAL32), (void*)&Velocity_dimention_index, NULL }
+                     };
+
+/* index 0x608D :   Mapped variable Acceleraion notation index */
+                    subindex SlaveOD_Index608D[] = 
+                     {
+                       { RW, int8, sizeof (INTEGER8), (void*)&Acceleraion_notation_index, NULL }
+                     };
+
+/* index 0x608E :   Mapped variable Acceleraion dimention index */
+                    subindex SlaveOD_Index608E[] = 
+                     {
+                       { RW, real32, sizeof (REAL32), (void*)&Acceleraion_dimention_index, NULL }
                      };
 
 /* index 0x608F :   Mapped variable Position encoder resolution */
@@ -832,6 +907,21 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                     subindex SlaveOD_Index6098[] = 
                      {
                        { RW, int8, sizeof (INTEGER8), (void*)&Homing_method, NULL }
+                     };
+
+/* index 0x6099 :   Mapped variable Homing speeds */
+                    UNS8 SlaveOD_highestSubIndex_obj6099 = 2; /* number of subindex - 1*/
+                    subindex SlaveOD_Index6099[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&SlaveOD_highestSubIndex_obj6099, NULL },
+                       { RW, uint32, sizeof (UNS32), (void*)&Homing_speeds_Speed_for_switch_search, NULL },
+                       { RW, uint32, sizeof (UNS32), (void*)&Homing_speeds_Speed_for_zero_search, NULL }
+                     };
+
+/* index 0x609A :   Mapped variable Homing acceleration */
+                    subindex SlaveOD_Index609A[] = 
+                     {
+                       { RW, uint32, sizeof (UNS32), (void*)&Homing_acceleration, NULL }
                      };
 
 /* index 0x60B0 :   Mapped variable Position offset */
@@ -879,6 +969,36 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                        { RO, int32, sizeof (INTEGER32), (void*)&Following_error_actual_value, NULL }
                      };
 
+/* index 0x60F6 :   Mapped variable Current control parameter set */
+                    UNS8 SlaveOD_highestSubIndex_obj60F6 = 2; /* number of subindex - 1*/
+                    subindex SlaveOD_Index60F6[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&SlaveOD_highestSubIndex_obj60F6, NULL },
+                       { RW, int16, sizeof (INTEGER16), (void*)&Current_control_parameter_set_Current_regulator_P_gain, NULL },
+                       { RW, int16, sizeof (INTEGER16), (void*)&Current_control_parameter_set_Current_regulator_I_gain, NULL }
+                     };
+
+/* index 0x60F9 :   Mapped variable Velocity control parameter set */
+                    UNS8 SlaveOD_highestSubIndex_obj60F9 = 2; /* number of subindex - 1*/
+                    subindex SlaveOD_Index60F9[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&SlaveOD_highestSubIndex_obj60F9, NULL },
+                       { RW, int16, sizeof (INTEGER16), (void*)&Velocity_control_parameter_set_Velocity_regulator_P_gain, NULL },
+                       { RW, int16, sizeof (INTEGER16), (void*)&Velocity_control_parameter_set_Velocity_regulator_I_gain, NULL }
+                     };
+
+/* index 0x60FB :   Mapped variable Position control parameter set */
+                    UNS8 SlaveOD_highestSubIndex_obj60FB = 5; /* number of subindex - 1*/
+                    subindex SlaveOD_Index60FB[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&SlaveOD_highestSubIndex_obj60FB, NULL },
+                       { RW, int16, sizeof (INTEGER16), (void*)&Position_control_parameter_set_Position_regulator_P_gain, NULL },
+                       { RW, int16, sizeof (INTEGER16), (void*)&Position_control_parameter_set_Position_regulator_I_gain, NULL },
+                       { RW, int16, sizeof (INTEGER16), (void*)&Position_control_parameter_set_Position_regulator_D_gain, NULL },
+                       { RW, uint16, sizeof (UNS16), (void*)&Position_control_parameter_set_Velocity_feed_forward_factor, NULL },
+                       { RW, uint16, sizeof (UNS16), (void*)&Position_control_parameter_set_Acceleration_feed_forward_factor, NULL }
+                     };
+
 /* index 0x60FD :   Mapped variable Digital inputs */
                     subindex SlaveOD_Index60FD[] = 
                      {
@@ -898,6 +1018,30 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                     subindex SlaveOD_Index60FF[] = 
                      {
                        { RW, int32, sizeof (INTEGER32), (void*)&Target_velocity, NULL }
+                     };
+
+/* index 0x6402 :   Mapped variable Motor type */
+                    subindex SlaveOD_Index6402[] = 
+                     {
+                       { RW, uint16, sizeof (UNS16), (void*)&Motor_type, NULL }
+                     };
+
+/* index 0x6410 :   Mapped variable Motor data */
+                    UNS8 SlaveOD_highestSubIndex_obj6410 = 5; /* number of subindex - 1*/
+                    subindex SlaveOD_Index6410[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&SlaveOD_highestSubIndex_obj6410, NULL },
+                       { RW, uint16, sizeof (UNS16), (void*)&Motor_data_Continous_current_limit, NULL },
+                       { RW, uint16, sizeof (UNS16), (void*)&Motor_data_Output_current_limit, NULL },
+                       { RW, uint8, sizeof (UNS8), (void*)&Motor_data_Pole_pair_number, NULL },
+                       { RW, uint16, sizeof (UNS16), (void*)&Motor_data_Maximal_speed_in_current_mode, NULL },
+                       { RW, uint16, sizeof (UNS16), (void*)&Motor_data_Thermal_time_constant_winding, NULL }
+                     };
+
+/* index 0x6502 :   Mapped variable Supported drive modes */
+                    subindex SlaveOD_Index6502[] = 
+                     {
+                       { RO, uint32, sizeof (UNS32), (void*)&Supported_drive_modes, NULL }
                      };
 
 /**************************************************************************/
@@ -942,6 +1086,7 @@ const indextable SlaveOD_objdict[] =
   { (subindex*)SlaveOD_Index6066,sizeof(SlaveOD_Index6066)/sizeof(SlaveOD_Index6066[0]), 0x6066},
   { (subindex*)SlaveOD_Index6067,sizeof(SlaveOD_Index6067)/sizeof(SlaveOD_Index6067[0]), 0x6067},
   { (subindex*)SlaveOD_Index6068,sizeof(SlaveOD_Index6068)/sizeof(SlaveOD_Index6068[0]), 0x6068},
+  { (subindex*)SlaveOD_Index6069,sizeof(SlaveOD_Index6069)/sizeof(SlaveOD_Index6069[0]), 0x6069},
   { (subindex*)SlaveOD_Index606B,sizeof(SlaveOD_Index606B)/sizeof(SlaveOD_Index606B[0]), 0x606B},
   { (subindex*)SlaveOD_Index606C,sizeof(SlaveOD_Index606C)/sizeof(SlaveOD_Index606C[0]), 0x606C},
   { (subindex*)SlaveOD_Index606D,sizeof(SlaveOD_Index606D)/sizeof(SlaveOD_Index606D[0]), 0x606D},
@@ -968,10 +1113,19 @@ const indextable SlaveOD_objdict[] =
   { (subindex*)SlaveOD_Index6083,sizeof(SlaveOD_Index6083)/sizeof(SlaveOD_Index6083[0]), 0x6083},
   { (subindex*)SlaveOD_Index6084,sizeof(SlaveOD_Index6084)/sizeof(SlaveOD_Index6084[0]), 0x6084},
   { (subindex*)SlaveOD_Index6085,sizeof(SlaveOD_Index6085)/sizeof(SlaveOD_Index6085[0]), 0x6085},
+  { (subindex*)SlaveOD_Index6086,sizeof(SlaveOD_Index6086)/sizeof(SlaveOD_Index6086[0]), 0x6086},
   { (subindex*)SlaveOD_Index6087,sizeof(SlaveOD_Index6087)/sizeof(SlaveOD_Index6087[0]), 0x6087},
+  { (subindex*)SlaveOD_Index6089,sizeof(SlaveOD_Index6089)/sizeof(SlaveOD_Index6089[0]), 0x6089},
+  { (subindex*)SlaveOD_Index608A,sizeof(SlaveOD_Index608A)/sizeof(SlaveOD_Index608A[0]), 0x608A},
+  { (subindex*)SlaveOD_Index608B,sizeof(SlaveOD_Index608B)/sizeof(SlaveOD_Index608B[0]), 0x608B},
+  { (subindex*)SlaveOD_Index608C,sizeof(SlaveOD_Index608C)/sizeof(SlaveOD_Index608C[0]), 0x608C},
+  { (subindex*)SlaveOD_Index608D,sizeof(SlaveOD_Index608D)/sizeof(SlaveOD_Index608D[0]), 0x608D},
+  { (subindex*)SlaveOD_Index608E,sizeof(SlaveOD_Index608E)/sizeof(SlaveOD_Index608E[0]), 0x608E},
   { (subindex*)SlaveOD_Index608F,sizeof(SlaveOD_Index608F)/sizeof(SlaveOD_Index608F[0]), 0x608F},
   { (subindex*)SlaveOD_Index6091,sizeof(SlaveOD_Index6091)/sizeof(SlaveOD_Index6091[0]), 0x6091},
   { (subindex*)SlaveOD_Index6098,sizeof(SlaveOD_Index6098)/sizeof(SlaveOD_Index6098[0]), 0x6098},
+  { (subindex*)SlaveOD_Index6099,sizeof(SlaveOD_Index6099)/sizeof(SlaveOD_Index6099[0]), 0x6099},
+  { (subindex*)SlaveOD_Index609A,sizeof(SlaveOD_Index609A)/sizeof(SlaveOD_Index609A[0]), 0x609A},
   { (subindex*)SlaveOD_Index60B0,sizeof(SlaveOD_Index60B0)/sizeof(SlaveOD_Index60B0[0]), 0x60B0},
   { (subindex*)SlaveOD_Index60B1,sizeof(SlaveOD_Index60B1)/sizeof(SlaveOD_Index60B1[0]), 0x60B1},
   { (subindex*)SlaveOD_Index60B2,sizeof(SlaveOD_Index60B2)/sizeof(SlaveOD_Index60B2[0]), 0x60B2},
@@ -979,9 +1133,15 @@ const indextable SlaveOD_objdict[] =
   { (subindex*)SlaveOD_Index60C5,sizeof(SlaveOD_Index60C5)/sizeof(SlaveOD_Index60C5[0]), 0x60C5},
   { (subindex*)SlaveOD_Index60C6,sizeof(SlaveOD_Index60C6)/sizeof(SlaveOD_Index60C6[0]), 0x60C6},
   { (subindex*)SlaveOD_Index60F4,sizeof(SlaveOD_Index60F4)/sizeof(SlaveOD_Index60F4[0]), 0x60F4},
+  { (subindex*)SlaveOD_Index60F6,sizeof(SlaveOD_Index60F6)/sizeof(SlaveOD_Index60F6[0]), 0x60F6},
+  { (subindex*)SlaveOD_Index60F9,sizeof(SlaveOD_Index60F9)/sizeof(SlaveOD_Index60F9[0]), 0x60F9},
+  { (subindex*)SlaveOD_Index60FB,sizeof(SlaveOD_Index60FB)/sizeof(SlaveOD_Index60FB[0]), 0x60FB},
   { (subindex*)SlaveOD_Index60FD,sizeof(SlaveOD_Index60FD)/sizeof(SlaveOD_Index60FD[0]), 0x60FD},
   { (subindex*)SlaveOD_Index60FE,sizeof(SlaveOD_Index60FE)/sizeof(SlaveOD_Index60FE[0]), 0x60FE},
   { (subindex*)SlaveOD_Index60FF,sizeof(SlaveOD_Index60FF)/sizeof(SlaveOD_Index60FF[0]), 0x60FF},
+  { (subindex*)SlaveOD_Index6402,sizeof(SlaveOD_Index6402)/sizeof(SlaveOD_Index6402[0]), 0x6402},
+  { (subindex*)SlaveOD_Index6410,sizeof(SlaveOD_Index6410)/sizeof(SlaveOD_Index6410[0]), 0x6410},
+  { (subindex*)SlaveOD_Index6502,sizeof(SlaveOD_Index6502)/sizeof(SlaveOD_Index6502[0]), 0x6502},
 };
 
 const indextable * SlaveOD_scanIndexOD (CO_Data *d, UNS16 wIndex, UNS32 * errorCode)
@@ -1028,46 +1188,62 @@ const indextable * SlaveOD_scanIndexOD (CO_Data *d, UNS16 wIndex, UNS32 * errorC
 		case 0x6066: i = 33;break;
 		case 0x6067: i = 34;break;
 		case 0x6068: i = 35;break;
-		case 0x606B: i = 36;break;
-		case 0x606C: i = 37;break;
-		case 0x606D: i = 38;break;
-		case 0x606E: i = 39;break;
-		case 0x606F: i = 40;break;
-		case 0x6070: i = 41;break;
-		case 0x6071: i = 42;break;
-		case 0x6072: i = 43;break;
-		case 0x6073: i = 44;break;
-		case 0x6074: i = 45;break;
-		case 0x6075: i = 46;break;
-		case 0x6076: i = 47;break;
-		case 0x6077: i = 48;break;
-		case 0x6078: i = 49;break;
-		case 0x6079: i = 50;break;
-		case 0x607A: i = 51;break;
-		case 0x607B: i = 52;break;
-		case 0x607C: i = 53;break;
-		case 0x607D: i = 54;break;
-		case 0x607E: i = 55;break;
-		case 0x607F: i = 56;break;
-		case 0x6080: i = 57;break;
-		case 0x6081: i = 58;break;
-		case 0x6083: i = 59;break;
-		case 0x6084: i = 60;break;
-		case 0x6085: i = 61;break;
-		case 0x6087: i = 62;break;
-		case 0x608F: i = 63;break;
-		case 0x6091: i = 64;break;
-		case 0x6098: i = 65;break;
-		case 0x60B0: i = 66;break;
-		case 0x60B1: i = 67;break;
-		case 0x60B2: i = 68;break;
-		case 0x60C2: i = 69;break;
-		case 0x60C5: i = 70;break;
-		case 0x60C6: i = 71;break;
-		case 0x60F4: i = 72;break;
-		case 0x60FD: i = 73;break;
-		case 0x60FE: i = 74;break;
-		case 0x60FF: i = 75;break;
+		case 0x6069: i = 36;break;
+		case 0x606B: i = 37;break;
+		case 0x606C: i = 38;break;
+		case 0x606D: i = 39;break;
+		case 0x606E: i = 40;break;
+		case 0x606F: i = 41;break;
+		case 0x6070: i = 42;break;
+		case 0x6071: i = 43;break;
+		case 0x6072: i = 44;break;
+		case 0x6073: i = 45;break;
+		case 0x6074: i = 46;break;
+		case 0x6075: i = 47;break;
+		case 0x6076: i = 48;break;
+		case 0x6077: i = 49;break;
+		case 0x6078: i = 50;break;
+		case 0x6079: i = 51;break;
+		case 0x607A: i = 52;break;
+		case 0x607B: i = 53;break;
+		case 0x607C: i = 54;break;
+		case 0x607D: i = 55;break;
+		case 0x607E: i = 56;break;
+		case 0x607F: i = 57;break;
+		case 0x6080: i = 58;break;
+		case 0x6081: i = 59;break;
+		case 0x6083: i = 60;break;
+		case 0x6084: i = 61;break;
+		case 0x6085: i = 62;break;
+		case 0x6086: i = 63;break;
+		case 0x6087: i = 64;break;
+		case 0x6089: i = 65;break;
+		case 0x608A: i = 66;break;
+		case 0x608B: i = 67;break;
+		case 0x608C: i = 68;break;
+		case 0x608D: i = 69;break;
+		case 0x608E: i = 70;break;
+		case 0x608F: i = 71;break;
+		case 0x6091: i = 72;break;
+		case 0x6098: i = 73;break;
+		case 0x6099: i = 74;break;
+		case 0x609A: i = 75;break;
+		case 0x60B0: i = 76;break;
+		case 0x60B1: i = 77;break;
+		case 0x60B2: i = 78;break;
+		case 0x60C2: i = 79;break;
+		case 0x60C5: i = 80;break;
+		case 0x60C6: i = 81;break;
+		case 0x60F4: i = 82;break;
+		case 0x60F6: i = 83;break;
+		case 0x60F9: i = 84;break;
+		case 0x60FB: i = 85;break;
+		case 0x60FD: i = 86;break;
+		case 0x60FE: i = 87;break;
+		case 0x60FF: i = 88;break;
+		case 0x6402: i = 89;break;
+		case 0x6410: i = 90;break;
+		case 0x6502: i = 91;break;
 		default:
 			*errorCode = OD_NO_SUCH_OBJECT;
 			return NULL;

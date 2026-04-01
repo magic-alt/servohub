@@ -4,11 +4,11 @@ FileVersion=1
 FileRevision=1
 EDSVersion=4.0
 Description=
-CreationTime=03:33PM
-CreationDate=01-29-2026
+CreationTime=04:59PM
+CreationDate=04-01-2026
 CreatedBy=CANFestival
-ModificationTime=03:33PM
-ModificationDate=01-29-2026
+ModificationTime=04:59PM
+ModificationDate=04-01-2026
 ModifiedBy=CANFestival
 
 [DeviceInfo]
@@ -115,7 +115,7 @@ DefaultValue=0
 PDOMapping=0
 
 [OptionalObjects]
-SupportedObjects=73
+SupportedObjects=89
 1=0x1008
 2=0x1016
 3=0x1017
@@ -149,46 +149,62 @@ SupportedObjects=73
 31=0x6066
 32=0x6067
 33=0x6068
-34=0x606B
-35=0x606C
-36=0x606D
-37=0x606E
-38=0x606F
-39=0x6070
-40=0x6071
-41=0x6072
-42=0x6073
-43=0x6074
-44=0x6075
-45=0x6076
-46=0x6077
-47=0x6078
-48=0x6079
-49=0x607A
-50=0x607B
-51=0x607C
-52=0x607D
-53=0x607E
-54=0x607F
-55=0x6080
-56=0x6081
-57=0x6083
-58=0x6084
-59=0x6085
-60=0x6087
-61=0x608F
-62=0x6091
-63=0x6098
-64=0x60B0
-65=0x60B1
-66=0x60B2
-67=0x60C2
-68=0x60C5
-69=0x60C6
-70=0x60F4
-71=0x60FD
-72=0x60FE
-73=0x60FF
+34=0x6069
+35=0x606B
+36=0x606C
+37=0x606D
+38=0x606E
+39=0x606F
+40=0x6070
+41=0x6071
+42=0x6072
+43=0x6073
+44=0x6074
+45=0x6075
+46=0x6076
+47=0x6077
+48=0x6078
+49=0x6079
+50=0x607A
+51=0x607B
+52=0x607C
+53=0x607D
+54=0x607E
+55=0x607F
+56=0x6080
+57=0x6081
+58=0x6083
+59=0x6084
+60=0x6085
+61=0x6086
+62=0x6087
+63=0x6089
+64=0x608A
+65=0x608B
+66=0x608C
+67=0x608D
+68=0x608E
+69=0x608F
+70=0x6091
+71=0x6098
+72=0x6099
+73=0x609A
+74=0x60B0
+75=0x60B1
+76=0x60B2
+77=0x60C2
+78=0x60C5
+79=0x60C6
+80=0x60F4
+81=0x60F6
+82=0x60F9
+83=0x60FB
+84=0x60FD
+85=0x60FE
+86=0x60FF
+87=0x6402
+88=0x6410
+89=0x6502
 
 [1008]
 ParameterName=Manufacturer Device Name
@@ -1372,7 +1388,7 @@ DefaultValue=0
 PDOMapping=1
 
 [6065]
-ParameterName=Following error window
+ParameterName=Following error window 
 ObjectType=0x7
 DataType=0x0007
 AccessType=rw
@@ -1402,6 +1418,14 @@ DataType=0x0006
 AccessType=rw
 DefaultValue=0
 PDOMapping=0
+
+[6069]
+ParameterName=Velocity sensor actual value
+ObjectType=0x7
+DataType=0x0004
+AccessType=ro
+DefaultValue=0
+PDOMapping=1
 
 [606B]
 ParameterName=Velocity demand value
@@ -1653,6 +1677,14 @@ AccessType=rw
 DefaultValue=0
 PDOMapping=1
 
+[6086]
+ParameterName=Motion profile type
+ObjectType=0x7
+DataType=0x0003
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
 [6087]
 ParameterName=Torque slope
 ObjectType=0x7
@@ -1660,6 +1692,54 @@ DataType=0x0007
 AccessType=rw
 DefaultValue=0
 PDOMapping=1
+
+[6089]
+ParameterName=Position notation index
+ObjectType=0x7
+DataType=0x0002
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[608A]
+ParameterName=Position dimention index
+ObjectType=0x7
+DataType=0x0008
+AccessType=rw
+DefaultValue=0.0
+PDOMapping=0
+
+[608B]
+ParameterName=Velocity notation index
+ObjectType=0x7
+DataType=0x0002
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[608C]
+ParameterName=Velocity dimention index
+ObjectType=0x7
+DataType=0x0008
+AccessType=rw
+DefaultValue=0.0
+PDOMapping=0
+
+[608D]
+ParameterName=Acceleraion notation index
+ObjectType=0x7
+DataType=0x0002
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[608E]
+ParameterName=Acceleraion dimention index
+ObjectType=0x7
+DataType=0x0008
+AccessType=rw
+DefaultValue=0.0
+PDOMapping=0
 
 [608F]
 ParameterName=Position encoder resolution
@@ -1727,6 +1807,43 @@ AccessType=rw
 DefaultValue=0
 PDOMapping=1
 
+[6099]
+ParameterName=Homing speeds
+ObjectType=0x9
+SubNumber=3
+
+[6099sub0]
+ParameterName=Number of entries
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=2
+PDOMapping=0
+
+[6099sub1]
+ParameterName=Speed for switch search
+ObjectType=0x7
+DataType=0x0007
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[6099sub2]
+ParameterName=Speed for zero search
+ObjectType=0x7
+DataType=0x0007
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[609A]
+ParameterName=Homing acceleration
+ObjectType=0x7
+DataType=0x0007
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
 [60B0]
 ParameterName=Position offset
 ObjectType=0x7
@@ -1754,9 +1871,17 @@ PDOMapping=1
 [60C2]
 ParameterName=Interpolation time period
 ObjectType=0x9
-SubNumber=2
+SubNumber=3
 
-[60C2Sub1]
+[60C2sub0]
+ParameterName=Number of entries
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=2
+PDOMapping=0
+
+[60C2sub1]
 ParameterName=Interpolation time period Ip time units
 ObjectType=0x7
 DataType=0x0005
@@ -1764,7 +1889,7 @@ AccessType=rw
 DefaultValue=1
 PDOMapping=0
 
-[60C2Sub2]
+[60C2sub2]
 ParameterName=Interpolation time period Ip time index
 ObjectType=0x7
 DataType=0x0002
@@ -1796,6 +1921,117 @@ AccessType=ro
 DefaultValue=0
 PDOMapping=1
 
+[60F6]
+ParameterName=Current control parameter set
+ObjectType=0x9
+SubNumber=3
+
+[60F6sub0]
+ParameterName=Number of entries
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=2
+PDOMapping=0
+
+[60F6sub1]
+ParameterName=Current regulator P-gain
+ObjectType=0x7
+DataType=0x0003
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[60F6sub2]
+ParameterName=Current regulator I-gain
+ObjectType=0x7
+DataType=0x0003
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[60F9]
+ParameterName=Velocity control parameter set
+ObjectType=0x9
+SubNumber=3
+
+[60F9sub0]
+ParameterName=Number of entries
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=2
+PDOMapping=0
+
+[60F9sub1]
+ParameterName=Velocity regulator P-gain
+ObjectType=0x7
+DataType=0x0003
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[60F9sub2]
+ParameterName=Velocity regulator I-gain
+ObjectType=0x7
+DataType=0x0003
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[60FB]
+ParameterName=Position control parameter set
+ObjectType=0x9
+SubNumber=6
+
+[60FBsub0]
+ParameterName=Number of entries
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=5
+PDOMapping=0
+
+[60FBsub1]
+ParameterName=Position regulator P-gain
+ObjectType=0x7
+DataType=0x0003
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[60FBsub2]
+ParameterName=Position regulator I-gain
+ObjectType=0x7
+DataType=0x0003
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[60FBsub3]
+ParameterName=Position regulator D-gain
+ObjectType=0x7
+DataType=0x0003
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[60FBsub4]
+ParameterName=Velocity feed forward factor
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[60FBsub5]
+ParameterName=Acceleration feed forward factor
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
 [60FD]
 ParameterName=Digital inputs
 ObjectType=0x7
@@ -1807,9 +2043,17 @@ PDOMapping=1
 [60FE]
 ParameterName=Digital outputs
 ObjectType=0x9
-SubNumber=2
+SubNumber=3
 
-[60FESub1]
+[60FEsub0]
+ParameterName=Number of entries
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=2
+PDOMapping=0
+
+[60FEsub1]
 ParameterName=Digital outputs Physical outputs
 ObjectType=0x7
 DataType=0x0007
@@ -1817,7 +2061,7 @@ AccessType=rw
 DefaultValue=0
 PDOMapping=1
 
-[60FESub2]
+[60FEsub2]
 ParameterName=Digital outputs Bit mask
 ObjectType=0x7
 DataType=0x0007
@@ -1832,3 +2076,72 @@ DataType=0x0004
 AccessType=rw
 DefaultValue=0
 PDOMapping=1
+
+[6402]
+ParameterName=Motor type
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[6410]
+ParameterName=Motor data
+ObjectType=0x9
+SubNumber=6
+
+[6410sub0]
+ParameterName=Number of entries
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=5
+PDOMapping=0
+
+[6410sub1]
+ParameterName=Continous current limit
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[6410sub2]
+ParameterName=Output current limit
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[6410sub3]
+ParameterName=Pole pair number
+ObjectType=0x7
+DataType=0x0005
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[6410sub4]
+ParameterName=Maximal speed in current mode
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=1
+
+[6410sub5]
+ParameterName=Thermal time constant winding
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[6502]
+ParameterName=Supported drive modes
+ObjectType=0x7
+DataType=0x0007
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
