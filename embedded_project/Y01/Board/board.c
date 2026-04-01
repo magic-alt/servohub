@@ -194,9 +194,11 @@ void POSITION_LOOP_IRQ_TASK(void)
     EncoderDataProcess();
 
     bsp_pwm_ready_state_updata(); // 更新PWM输出准备状态
-#endif
-
-    PosSpeedLoopCtrl();
+#endif // VIRTUAL_MOTOR_MODEL
+    if (sys_get_hardware_self_test_status() == true)
+    {
+        PosSpeedLoopCtrl();
+    }
     bsp_set_timer_record_stop(SYS_TIMER_RECORD_POSITION_LOOP_TIME_INDEX);
 }
 

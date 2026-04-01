@@ -1257,6 +1257,8 @@ uint32_t set_app_Load_control_resolution(uint32_t val)
     {
         return APP_PARAM_WRITE_STATE_ERROR;
     }
+
+    uint32_t motor_control_resolution = get_app_Motor_control_resolution();
     uint32_t load_encoder_resolution = get_app_Load_encoder_resolution();
     if (val > load_encoder_resolution || \
        (val != 0 && load_encoder_resolution % val != 0))
@@ -1273,8 +1275,15 @@ uint32_t set_app_Load_control_resolution(uint32_t val)
         kAppEncoderConfig.Load_pps_2_rpm = 60.0f / (float)val;
         kAppEncoderConfig.Load_rpm_2_pps = (float)val / 60.0f;
 
-        kAppEncoderConfig.P_load_2_motor = (float)get_app_Motor_control_resolution() / (float)val;
-        kAppEncoderConfig.P_motor_2_load = (float)val / (float)get_app_Motor_control_resolution();
+        kAppEncoderConfig.P_load_2_motor = (float)motor_control_resolution / (float)val;
+        if (motor_control_resolution != 0)
+        {
+            kAppEncoderConfig.P_motor_2_load = (float)val / (float)motor_control_resolution;
+        }
+        else
+        {
+            kAppEncoderConfig.P_motor_2_load = 1.0f;
+        }
 
         factor_temp = load_encoder_resolution / val;
     }
@@ -1302,7 +1311,9 @@ uint32_t set_app_Motor_control_resolution(uint32_t val)
     {
         return APP_PARAM_WRITE_STATE_ERROR;
     }
+
     uint32_t motor_encoder_resolution = get_app_Motor_encoder_resolution();
+    uint32_t load_control_resolution = get_app_Load_control_resolution();
     if (val == 0 || val > motor_encoder_resolution || \
         (motor_encoder_resolution % val != 0))
     {
@@ -1318,8 +1329,15 @@ uint32_t set_app_Motor_control_resolution(uint32_t val)
         kAppEncoderConfig.Motor_pps_2_rpm = 60.0f / (float)val;
         kAppEncoderConfig.Motor_rpm_2_pps = (float)val / 60.0f;
 
-        kAppEncoderConfig.P_load_2_motor = (float)val / (float)get_app_Load_control_resolution();
-        kAppEncoderConfig.P_motor_2_load = (float)get_app_Load_control_resolution() / (float)val;
+        if (load_control_resolution != 0)
+        {
+            kAppEncoderConfig.P_load_2_motor = (float)val / (float)load_control_resolution;
+        }
+        else
+        {
+            kAppEncoderConfig.P_load_2_motor = 1.0f;
+        }
+        kAppEncoderConfig.P_motor_2_load = (float)load_control_resolution / (float)val;
 
         factor_temp = motor_encoder_resolution / val;
     }

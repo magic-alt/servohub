@@ -57,7 +57,7 @@ AppResult MitModeRun()
             else
             {
                 kMitMode.pos_tar_p_add = (float)(get_app_MIT_target_position() - get_app_Position_actual_value()) *
-                                         get_app_Reduction_ratio();
+                                         get_app_Reduction_ratio() * get_app_P_load_2_motor();
                 kMitMode.traj.pos_tar_p = kMitMode.pos_tar_p_add + get_app_Motor_position_actual_value();
 
                 kMitMode.traj.speed_tar_p_s = get_app_MIT_target_velocity() * get_app_Motor_rpm_2_pps() *

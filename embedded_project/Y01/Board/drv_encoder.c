@@ -249,17 +249,23 @@ void EncoderDataProcess(void)
         if (encoder_data[enc_id].options.bits.a_dir)
         {
             u32_calc_temp = encoder_data[enc_id].a_single_res - 1 - encoder_data[enc_id].a_single_raw;
-            i64_calc_temp = encoder_data[enc_id].real_motor_turns_res - 1 - encoder_data[enc_id].a_multi_raw;
             encoder_data[enc_id].a_single_raw = u32_calc_temp;
-            encoder_data[enc_id].a_multi_raw = i64_calc_temp;
+            if (encoder_data[enc_id].real_motor_turns_res > 0) // 有电机端多圈值，才处理多圈值
+            {
+                i64_calc_temp = encoder_data[enc_id].real_motor_turns_res - 1 - encoder_data[enc_id].a_multi_raw;
+                encoder_data[enc_id].a_multi_raw = i64_calc_temp;
+            }
         }
         // 编码器配置选项bit1，编码器B方向
         if (encoder_data[enc_id].options.bits.b_dir)
         {
             u32_calc_temp = encoder_data[enc_id].b_single_res - 1 - encoder_data[enc_id].b_single_raw;
-            i64_calc_temp = encoder_data[enc_id].b_multi_res - 1 - encoder_data[enc_id].b_multi_raw;
             encoder_data[enc_id].b_single_raw = u32_calc_temp;
-            encoder_data[enc_id].b_multi_raw = i64_calc_temp;
+            if (encoder_data[enc_id].b_multi_res > 0) // 有负载端多圈值，才处理多圈值
+            {
+                i64_calc_temp = encoder_data[enc_id].b_multi_res - 1 - encoder_data[enc_id].b_multi_raw;
+                encoder_data[enc_id].b_multi_raw = i64_calc_temp;
+            }
         }
     }
 
