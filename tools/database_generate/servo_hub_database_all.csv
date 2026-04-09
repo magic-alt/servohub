@@ -489,7 +489,8 @@ enc_line_p_n,编码器分辨率,LoadPosSensorConfig,RW,uint32,1,0,P,430,,Visible
 init_pos_p,编码器初始位置,LoadPosSensorConfig,RW,int64,1,0,P,431,,Visible,1,0,,,,,
 dir,计数方向,LoadPosSensorConfig,RW,int8,1,1,,432,,Visible,1,0,,,,,
 enc_sum_p,编码器累计脉冲值,LoadPosSensorOutput,RO,int64,1,0,P,433,,Visible,1,0,,,,,
-Storage_status,参数存储状态,SystemStatus,RW,int8,1,,,435,"-2：存储警告（当前状态不允许操作）
+Storage_status,参数存储状态,SystemStatus,RW,int8,1,,,435,"-3：存储保护状态（写入频率超过最大允许次数锁定，系统复位解除锁定）
+-2：存储警告（当前状态不允许操作）
 -1：存储错误
 0：空闲
 1：存储中

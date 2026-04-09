@@ -1007,7 +1007,7 @@ UNS32 set_Torque_demand_value(INTEGER16 val){
 }
 INTEGER16 get_Torque_demand_value(void){
     /* USER CODE BEGIN get_Torque_demand_value */
-    kProfile_torque_mode.Torque_demand_value = get_app_Torque_demand_value();
+    kProfile_torque_mode.Torque_demand_value = get_app_Torque_demand_value() * 1000 / (get_app_Motor_rated_current() * MATH_ARMS2APEAK);
     /* USER CODE END get_Torque_demand_value */
     return kProfile_torque_mode.Torque_demand_value;
 }
