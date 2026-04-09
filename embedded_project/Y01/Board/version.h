@@ -18,7 +18,7 @@ extern "C"
 #ifndef MINOR_VERSION           // 若工程编译选项或其他位置未定义次版本号，在此定义
 #define MINOR_VERSION           (V_CAN_CIA402)      // 次版本号
 #endif // MINOR_VERSION
-#define REVISION_VERSION        (0x00)              // 修订号
+#define REVISION_VERSION        (0x01)              // 修订号
 #define BUILD_VERSION           (0x00)              // 构建号
 #define VERSION_ENCODE (((MAJOR_VERSION) << 24) | ((MINOR_VERSION) << 16) | ((REVISION_VERSION) << 8) | (BUILD_VERSION))
 
