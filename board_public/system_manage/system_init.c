@@ -121,6 +121,9 @@ void HardwareSelfTestRun(void)
         // 编码器未准备好，保持硬件自检状态为false
         sys_msg.hardware_self_test_status = false;
     }
+
+    // 硬件自检也检测相关状态
+    AppStatusScanFast();
 }
 
 // 三相电流校准
