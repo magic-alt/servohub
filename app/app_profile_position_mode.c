@@ -42,6 +42,7 @@ AppResult PpModeRun()
     kPpMode.now_Controlword = (APP_CONTROL_WORD)get_app_Controlword();
 
     uint8_t load_enc_type = bsp_get_encoder_type(ENCODER_ID_LOAD);  //获取负载端编码器类型
+    int64_t home_offset = get_app_Home_position_offset_value();     //获取存储的回零内部偏移值
 
     if (kPpMode.now_Controlword == APP_CTRL_ENABLE)
     {
@@ -109,11 +110,11 @@ AppResult PpModeRun()
             {
                 if (get_app_Reduction_ratio_num() == 1) //减速比1:1  直接以电机端编码器位置为反馈
                 {
-                    kPpMode.traj.pos_tar_p = kPpMode.position_target_last;
+                    kPpMode.traj.pos_tar_p = kPpMode.position_target_last + home_offset;
                 }
                 else //减速比大于1  以负载端位置为参考进行绝对位置控制
                 {
-                    kPpMode.traj.pos_tar_p = PosUnitLoadToMotor(kPpMode.position_target_last);;
+                    kPpMode.traj.pos_tar_p = PosUnitLoadToMotor(kPpMode.position_target_last + home_offset);;
                 }
             }
             else  //负载端有编码器 目标位置进行相对位置控制
