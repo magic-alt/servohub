@@ -1532,7 +1532,14 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
             default:
                 break;
         }
-        MotorCtlParamSetUpdata(&kAxis);
+
+        if (msg.msgid == MAVLINK_MSG_ID_PosSpeedCtlConfig)  //可能 j_kt 被修改，自动更新j
+        {
+            //同步更新应用层转子惯量
+            set_app_Motor_rotor_inertia(axis->pmsm_config.kt * axis->pos_speed_ctl_config.j_kt * 1e4f);
+        }
+
+        MotorCtlParamSetUpdata(axis);
     }
 
     len = mavlink_msg_to_send_buffer(mavlink_tx_buff, &send_msg);
