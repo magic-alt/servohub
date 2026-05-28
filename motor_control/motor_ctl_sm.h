@@ -31,6 +31,7 @@ extern "C"
 #define MOTOR_CTL_SM_OVER_TEMP_ERROR (5)        // 5：高温保护错误
 #define MOTOR_CTL_SM_POS_FELLOW_ERROR (6)       // 6：位置跟随误差过大保护错误
 #define MOTOR_CTL_SM_OVER_CURRENT_MAX_ERROR (7) // 7：过流保护
+#define MOTOR_CTL_SM_NFAULT_ERROR (8)           // 8：nFault 底层相关故障错误
 #pragma endregion
 
 #pragma region motor_ctl_sm_config.mode 定义

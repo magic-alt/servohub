@@ -492,17 +492,19 @@ void AppStoreUpdata1ms(void)
                 break;
             case FLASH_STORE_CMD_ERASE_PARAM:
                 // 先恢复出厂再写入flash，成功后系统复位
-                AppParamInit();  //应用层数据库初始化
-                MotorCtrlInit();   //控制层数据库初始化
+                bsp_system_global_irq_disable(); // 禁用全局中断，防止参数初始化过程中运行任务异常
+                AppParamInit();     //应用层数据库初始化
+                MotorCtrlInit();    //控制层数据库初始化
                 flash_param_update();
 
-                flashdb_status = bsp_flashdb_key_delete(FLASHDB_KEY_INDEX_TQ_FC_TABLE);
+                bsp_flashdb_key_delete(FLASHDB_KEY_INDEX_TQ_FC_TABLE);
                 flashdb_status = bsp_flashdb_write(FLASHDB_KEY_INDEX_ALL_PARAM);
 
                 if (flashdb_status == FLASHDB_NO_ERR)
                 {
                     bsp_system_reset();
                 }
+                bsp_system_global_irq_enable(); // 恢复失败，使能全局中断，允许其他任务执行
                 break;
             // 错误记录相关
             case FLASH_STORE_CMD_READ_ERROR:

@@ -12,6 +12,25 @@ void bsp_system_reset(void)
 {
     return;
 }
+/**
+ * @brief 全局中断使能
+ * @return
+ * @note
+ */
+void bsp_system_global_irq_enable(void)
+{
+    return;
+}
+/**
+ * @brief 全局中断禁用
+ * @return
+ * @note
+ */
+void bsp_system_global_irq_disable(void)
+{
+    return;
+}
+
 #pragma endregion
 
 #pragma region 硬件状态相关
@@ -251,7 +270,6 @@ int64_t bsp_get_encoder_turns(ENCODER_ID const enc_id)
 {
     return 0;
 }
-
 /**
  * @brief 获取编码器类型
  * @param[in] enc_id 编码器端ID： ENCODER_ID_MOTOR、ENCODER_ID_LOAD
@@ -269,7 +287,6 @@ uint8_t bsp_get_encoder_type(ENCODER_ID const enc_id)
     }
     return 0x00;
 }
-
 /**
  * @brief 获取编码器过零点状态
  * @param[in] enc_id 编码器端ID： ENCODER_ID_MOTOR、ENCODER_ID_LOAD

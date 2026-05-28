@@ -11,6 +11,24 @@ void bsp_system_reset(void)
 {
     HAL_NVIC_SystemReset();
 }
+/**
+ * @brief 全局中断使能
+ * @return
+ * @note
+ */
+void bsp_system_global_irq_enable(void)
+{
+    __enable_irq();
+}
+/**
+ * @brief 全局中断禁用
+ * @return
+ * @note
+ */
+void bsp_system_global_irq_disable(void)
+{
+    __disable_irq();
+}
 
 #pragma endregion
 
@@ -467,7 +485,6 @@ int64_t bsp_get_encoder_turns(ENCODER_ID const enc_id)
     return get_encoder_turns(enc_id);
 #endif
 }
-
 /**
  * @brief 获取编码器类型
  * @param[in] enc_id 编码器ID
@@ -481,7 +498,6 @@ uint8_t bsp_get_encoder_type(ENCODER_ID enc_id)
     return get_encoder_type(enc_id);
 #endif
 }
-
 /**
  * @brief 获取编码器过零点状态
  * @param[in] enc_id 编码器端ID： ENCODER_ID_MOTOR、ENCODER_ID_LOAD

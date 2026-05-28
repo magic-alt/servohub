@@ -18,7 +18,10 @@ extern "C"
 #pragma region 系统控制相关
 /* 系统复位 */
 void bsp_system_reset(void);
-
+/* 全局中断使能 */
+void bsp_system_global_irq_enable(void);
+/* 全局中断禁用 */
+void bsp_system_global_irq_disable(void);
 #pragma endregion
 
 #pragma region 硬件状态相关

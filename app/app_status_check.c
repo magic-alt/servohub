@@ -815,7 +815,8 @@ void AppStatusScanFast(void)
     if (kAppCheck.pre_ctrl_word == APP_CTRL_DISABLE &&
         (kAppCheck.now_ctrl_word == APP_CTRL_CLEAR_ERROR))
     {
-        if (kAppCheck.p_bsp_error->bit_band.error_bus_voltage) // 母线电压错误无法被清除  只能复位
+        if (kAppCheck.p_bsp_error->bit_band.error_bus_voltage || \
+            kAppCheck.p_bsp_error->bit_band.error_nfault) // 此2错误无法被清除  只能复位
         {
             ;;;
         }
@@ -874,6 +875,14 @@ void AppStatusScanSlow(void)
         {
             kAppCheck.error.all |= (CheckTable[i].check_func() << i); // 对应bit置1
         }
+    }
+
+    // 扫描到 nFault 错误，设置到控制层
+    if (kAppCheck.p_bsp_error->bit_band.error_nfault)
+    {
+        kAppCheck.error.bits.nfault_error = true;
+        axis->motor_ctl_sm_output.state = MOTOR_CTL_SM_STATE_ERROR;
+        axis->motor_ctl_sm_output.error = MOTOR_CTL_SM_NFAULT_ERROR;
     }
 
     // 发生错误失能电机

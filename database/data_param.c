@@ -98,7 +98,9 @@ void AppParamInit(void)
     kAppEncoderConfig.Load_pps_2_rpm = (PMSM_LOAD_ENC_LINE_P_N != 0u) ?                         // 负载端速度P/s转换RPM系数
                                        (60.0f / (float)PMSM_LOAD_ENC_LINE_P_N) :
                                        (60.0f / (float)PMSM_MOTOR_ENC_LINE_P_N);
-    kAppEncoderConfig.Load_rpm_2_pps = (float)PMSM_LOAD_ENC_LINE_P_N / 60.0f;                   // 负载端速度RPM转换P/s系数
+    kAppEncoderConfig.Load_rpm_2_pps = (PMSM_LOAD_ENC_LINE_P_N != 0u) ?                         // 负载端速度RPM转换P/s系数
+                                       ((float)PMSM_LOAD_ENC_LINE_P_N / 60.0f) :
+                                       ((float)PMSM_MOTOR_ENC_LINE_P_N / 60.0f);
     kAppEncoderConfig.Motor_pps_2_rpm = 60.0f / (float)PMSM_MOTOR_ENC_LINE_P_N;                 // 电机端速度P/s转换RPM系数
     kAppEncoderConfig.Motor_rpm_2_pps = (float)PMSM_MOTOR_ENC_LINE_P_N / 60.0f;                 // 电机端速度RPM转换P/s系数
     kAppEncoderConfig.P_load_2_motor = (PMSM_LOAD_ENC_LINE_P_N != 0u) ?                         // 负载端到电机端P转换系数
