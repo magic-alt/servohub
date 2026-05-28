@@ -7,7 +7,6 @@
 
 static bool last_fault_reset_bit = false;
 static uint16_t last_controlword = 0;
-static bool controlword_bit4_upedge = false;
 Cia402State CurrentState = kStart; // Initial state
 static bool quick_stop_start_flag = false;
 static void PDS_FSA_set_statusword(Cia402State CurrentState);
@@ -15,27 +14,27 @@ static void ControlwordBit4UpedgeCheck(void);
 static bool QuickStopRun(void);
 
 //Automatic transition
-bool AutomaticTransition() {
+bool AutomaticTransition(void) {
     return true;
 }
 
 //Automatic transition after power-on or reset application
-bool Transition_0_Event() {
+bool Transition_0_Event(void) {
     return true;
 }
 
 //Drive device self-test and/or self initialisation shall be performed
-void Transition_0_Action() {
+void Transition_0_Action(void) {
     ;
 }
 
 //Communication shall be activated
-void Transition_1_Action() {
+void Transition_1_Action(void) {
     ;
 }
 
 //Shutdown command from control device or local signal
-bool Transition_2_Event() {
+bool Transition_2_Event(void) {
     if(CIA402_READ_BIT(get_Controlword(), kOd6040_ShutdownMark) == kOd6040_Shutdown){
         return true;
     }
@@ -45,12 +44,12 @@ bool Transition_2_Event() {
 }
 
 //The high-level power shall be switched off, if possible
-void Transition_2_Action() {
+void Transition_2_Action(void) {
     set_app_Controlword(APP_CTRL_DISABLE); //为了清除其它控制指令，恢复到失能状态，切入使能
 }
 
 //Switch on command received from control device or local signal
-bool Transition_3_Event() {
+bool Transition_3_Event(void) {
     if(CIA402_READ_BIT(get_Controlword(), kOd6040_StandardMark) == kOd6040_SwitchOn){
         return true;
     }
@@ -60,13 +59,13 @@ bool Transition_3_Event() {
 }
 
 //The high-level power shall be switched on, if possible
-void Transition_3_Action() {
+void Transition_3_Action(void) {
     ;
 }
 
 //detail: cia402pdf, Table 27 - Command Coding
 //NOTE Automatic transition to Enable operation state after executing SWITCHED ON state functionality
-bool Jump_3_Event() {
+bool Jump_3_Event(void) {
     if(CIA402_READ_BIT(get_Controlword(), kOd6040_StandardMark) == kOd6040_EnableOperation){
         return true;
     }
@@ -76,7 +75,7 @@ bool Jump_3_Event() {
 }
 
 //Enable operation command received from control device or local signa
-bool Transition_4_Event() {
+bool Transition_4_Event(void) {
     if(CIA402_READ_BIT(get_Controlword(), kOd6040_StandardMark) == kOd6040_EnableOperation){
         return true;
     }
@@ -86,12 +85,12 @@ bool Transition_4_Event() {
 }
 
 //The drive function shall be enabled and all internal set-points cleared
-void Transition_4_Action() {
+void Transition_4_Action(void) {
     set_app_Controlword(APP_CTRL_ENABLE); // 电机使能
 }
 
 //Disable operation command received from control device or local signal
-bool Transition_5_Event() {
+bool Transition_5_Event(void) {
     if(CIA402_READ_BIT(get_Controlword(), kOd6040_StandardMark) == kOd6040_DisableOperation){
         return true;
     }
@@ -101,12 +100,12 @@ bool Transition_5_Event() {
 }
 
 //The drive function shall be disabled
-void Transition_5_Action() {
+void Transition_5_Action(void) {
     set_app_Controlword(APP_CTRL_DISABLE); // 电机失能
 }
 
 //Shutdown command received from control device or local signal
-bool Transition_6_Event() {
+bool Transition_6_Event(void) {
     if(CIA402_READ_BIT(get_Controlword(), kOd6040_ShutdownMark) == kOd6040_Shutdown){
         return true;
     }
@@ -116,12 +115,12 @@ bool Transition_6_Event() {
 }
 
 //The high-level power shall be switched off, if possible
-void Transition_6_Action() {
+void Transition_6_Action(void) {
     set_app_Controlword(APP_CTRL_DISABLE); // 电机失能
 }
 
 //Quick stop or disable voltage command from control device or local signal
-bool Transition_7_Event() {
+bool Transition_7_Event(void) {
     if(CIA402_READ_BIT(get_Controlword(), kOd6040_DisableVoltageMark) == kOd6040_DisableVoltage){
         return true;
     }
@@ -131,7 +130,7 @@ bool Transition_7_Event() {
 }
 
 //Shutdown command from control device or local signal
-bool Transition_8_Event() {
+bool Transition_8_Event(void) {
     if (CIA402_READ_BIT(get_Controlword(), kOd6040_ShutdownMark) == kOd6040_Shutdown){
         return true;
     }
@@ -141,12 +140,12 @@ bool Transition_8_Event() {
 }
 
 //The drive function shall be disabled, and the high-level power shall be switched off, if possible
-void Transition_8_Action() {
+void Transition_8_Action(void) {
     set_app_Controlword(APP_CTRL_DISABLE); // 电机失能
 }
 
 //Disable voltage command from control device or local signal
-bool Transition_9_Event() {
+bool Transition_9_Event(void) {
     if(CIA402_READ_BIT(get_Controlword(), kOd6040_DisableVoltageMark) == kOd6040_DisableVoltage){
         return true;
     }
@@ -156,12 +155,12 @@ bool Transition_9_Event() {
 }
 
 //The drive function shall be disabled, and the high-level power shall be switched off, if possible.
-void Transition_9_Action() {
+void Transition_9_Action(void) {
     set_app_Controlword(APP_CTRL_DISABLE); // 电机失能
 }
 
 //Disable voltage or quick stop command from control device or local signal
-bool Transition_10_Event() {
+bool Transition_10_Event(void) {
     if(CIA402_READ_BIT(get_Controlword(), kOd6040_DisableVoltageMark) == kOd6040_DisableVoltage){
         return true;
     }
@@ -171,12 +170,12 @@ bool Transition_10_Event() {
 }
 
 //The high-level power shall be switched off, if possible
-void Transition_10_Action() {
+void Transition_10_Action(void) {
     ;
 }
 
 //Quick stop command from control device or local signal
-bool Transition_11_Event() {
+bool Transition_11_Event(void) {
     if (CIA402_READ_BIT(get_Controlword(), kOd6040_QuickStopMark) == kOd6040_QuickStop || \
         get_app_Emergency_brake_requested()) {
         //The quick stop function shall be started,when is completed, into kQuickStopActive state
@@ -190,7 +189,7 @@ bool Transition_11_Event() {
 }
 
 //The quick stop function shall be started
-void Transition_11_Action() {
+void Transition_11_Action(void) {
     if ((APP_Emergency_Brake_Mode)get_Quick_stop_option_code() <= EMERGENCY_BRAKE_MODE_VOLTAGE_LIMIT){
         CurrentState = kSwitchOnDisable;
     }
@@ -198,7 +197,7 @@ void Transition_11_Action() {
 
 //Automatic transition when the quick stop function is completed and quick stop option code is 1, 2, 3
 //or 4, or disable voltage command received from control device (depends on the quick stop option code)
-bool Transition_12_Event() {
+bool Transition_12_Event(void) {
     // if ((APP_Emergency_Brake_Mode)get_Quick_stop_option_code() <= EMERGENCY_BRAKE_MODE_VOLTAGE_LIMIT){
     //     return true;
     // }
@@ -211,12 +210,12 @@ bool Transition_12_Event() {
 }
 
 //The drive function shall be disabled, and the high-level power shall be switched off, if possible
-void Transition_12_Action() {
+void Transition_12_Action(void) {
     ;
 }
 
 //Fault signal (see also /CiA402-3/)
-bool Transition_13_Event() {
+bool Transition_13_Event(void) {
     if(get_Error_code() != 0){
         return true;
     }
@@ -226,17 +225,17 @@ bool Transition_13_Event() {
 }
 
 //The configured fault reaction function shall be executed
-void Transition_13_Action() {
+void Transition_13_Action(void) {
     ;
 }
 
 //The drive function shall be disabled; the highlevel power shall be switched off, if possible
-void Transition_14_Action() {
+void Transition_14_Action(void) {
     ;
 }
 
 //Fault reset command from control device or local signal
-bool Transition_15_Event() {
+bool Transition_15_Event(void) {
     if((CIA402_READ_BIT(get_Controlword(), kOd6040_FaultReset) != 0) && (last_fault_reset_bit == false)){
         set_app_Controlword(APP_CTRL_CLEAR_ERROR);  //清除应用层错误
         return true;
@@ -248,13 +247,13 @@ bool Transition_15_Event() {
 
 //A reset of the fault condition is carried out, if no fault exists currently on the drive device; 
 //after leaving the Fault state, the Fault reset bit in the get_Controlword() shall be cleared by the control device.
-void Transition_15_Action() {
+void Transition_15_Action(void) {
     //执行故障复位操作
     ;
 }
 
 //Enable operation command from control device, if the quick stop option code is 5, 6, 7, or 8
-bool Transition_16_Event() {
+bool Transition_16_Event(void) {
     if ((APP_Emergency_Brake_Mode)get_Quick_stop_option_code() > EMERGENCY_BRAKE_MODE_VOLTAGE_LIMIT &&\
         CIA402_READ_BIT(get_Controlword(), kOd6040_StandardMark) == kOd6040_EnableOperation){
         return true;
@@ -265,7 +264,7 @@ bool Transition_16_Event() {
 }
 
 //The drive function shall be enabled
-void Transition_16_Action() {
+void Transition_16_Action(void) {
     set_app_Controlword(APP_CTRL_ENABLE); // 电机使能
 }
 
@@ -306,7 +305,7 @@ void ControlwordChange_PDAS_FSA(void){
     }
 
     //遍历状态表，找到当前状态对应的转移条件和动作
-    for (int i = 0; i < CIA402_ARRAY_SIZE(stateTable); i++) {
+    for (uint8_t i = 0; i < CIA402_ARRAY_SIZE(stateTable); i++) {
         //The events shall initiate the transition. The transition shall be terminated, after the action has been performed.
         if ((stateTable[i].CurrentState == CurrentState) && (stateTable[i].event())) {
             if(stateTable[i].action != NULL){
@@ -341,7 +340,7 @@ void PDS_FSA_Run(void) {
     }
 
     //自动切换状态机(自动跳转标志为true)
-    for (int i = 0; i < CIA402_ARRAY_SIZE(stateTable); i++) {
+    for (uint8_t i = 0; i < CIA402_ARRAY_SIZE(stateTable); i++) {
         //The events shall initiate the transition. The transition shall be terminated, after the action has been performed.
         if (stateTable[i].CurrentState == CurrentState && stateTable[i].auto_transition) {
             if(stateTable[i].action != NULL){

@@ -95,7 +95,7 @@ void UpdateStatusword(void) {
     kCheckStatusVal = (CheckStatusVal_t)app_get_check_status_val();
     kCheckErrorVal = (CheckErrorCode_t)app_get_check_error_val();
 
-    for (int i = 0; i < CIA402_ARRAY_SIZE(state_table); i++, entry++) {
+    for (uint8_t i = 0; i < CIA402_ARRAY_SIZE(state_table); i++, entry++) {
         if ((entry->op_mode == get_Modes_of_operation()) || (entry->op_mode == kOd6060_ANY)) {
             if (entry->check_state()) {
                 CIA402_SET_BIT(statusword, entry->bit_mask);

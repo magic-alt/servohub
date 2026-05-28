@@ -30,7 +30,7 @@ void WaveformMapInit(int32_t *waveform_map_info) {
 void set_waveform_map(int32_t *waveform_map_info) {
     for (uint32_t i = 0; i < (sizeof(kParamDataBase) / sizeof(kParamDataBase[0])); i++) {
         for (uint8_t j = 0; j < WAVEFORM_CHANNEL_NUM; j++) {
-            if (kParamDataBase[i].index == waveform_map_info[j] >> 16) {
+            if (kParamDataBase[i].index == (uint32_t)(waveform_map_info[j] >> 16)) {
                 struct_index[j] = i;  //提取数据索引
                 array_index[j] =
                     waveform_map_info[j] & 0xFFFF;  //提取数组子索引

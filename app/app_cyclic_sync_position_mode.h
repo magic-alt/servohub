@@ -18,9 +18,9 @@ typedef struct
     int64_t pos_tar_p;                              // 位置用户目标值p
 } CspMode_t;
 
-AppResult CspModeInit();
-AppResult CspModeStart();
-AppResult CspModeRun();
-AppResult CspModeStop();
+AppResult CspModeInit(void);
+AppResult CspModeStart(void);
+AppResult CspModeRun(void);
+AppResult CspModeStop(void);
 
 #endif // APP_CYCLIC_SYNC_POSITION_MODE_H

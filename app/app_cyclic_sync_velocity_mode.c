@@ -13,12 +13,12 @@ static CsvMode_t kCsvMode =
         .ip_dt_s = 0,
         .period_s = 0,
     },
-    .check_status_val = 0,
+    .check_status_val.all = 0,
     .emergency_brake_mode = EMERGENCY_BRAKE_MODE_DISABLED,
     .velocity_target = 0,
 };
 
-AppResult CsvModeInit()
+AppResult CsvModeInit(void)
 {
     AppVelocityTargetReachedStateClear();
     set_app_Target_update_state(false); // 清除目标更新状态值
@@ -38,12 +38,12 @@ AppResult CsvModeInit()
     return APP_RET_SUCCESS;
 }
 
-AppResult CsvModeStart()
+AppResult CsvModeStart(void)
 {
     return APP_RET_SUCCESS;
 }
 
-AppResult CsvModeRun()
+AppResult CsvModeRun(void)
 {
     kCsvMode.now_Controlword = (APP_CONTROL_WORD)get_app_Controlword();
 
@@ -127,7 +127,7 @@ AppResult CsvModeRun()
     return APP_RET_RUNNING;
 }
 
-AppResult CsvModeStop()
+AppResult CsvModeStop(void)
 {
     return APP_RET_SUCCESS;
 }

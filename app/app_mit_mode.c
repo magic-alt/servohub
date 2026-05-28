@@ -13,12 +13,12 @@ static MitMode_t kMitMode =
         .pos_tar_p = 0,
         .tq_set_NM = 0,
     },
-    .check_status_val = 0,
+    .check_status_val.all = 0,
     .emergency_brake_mode = EMERGENCY_BRAKE_MODE_DISABLED,
     .pos_tar_p_add = 0,
 };
 
-AppResult MitModeInit()
+AppResult MitModeInit(void)
 {
     set_app_Controlword(APP_CTRL_DISABLE); // 上升沿使能，初始化置0
     kMitMode.pre_Controlword = APP_CTRL_DISABLE;
@@ -26,15 +26,13 @@ AppResult MitModeInit()
     return APP_RET_SUCCESS;
 }
 
-AppResult MitModeStart()
+AppResult MitModeStart(void)
 {
     return APP_RET_SUCCESS;
 }
 
-AppResult MitModeRun()
+AppResult MitModeRun(void)
 {
-    int64_t pos_tar_p_add = 0;
-
     kMitMode.now_Controlword = (APP_CONTROL_WORD)get_app_Controlword();
 
     if (kMitMode.now_Controlword == APP_CTRL_ENABLE)
@@ -106,7 +104,7 @@ AppResult MitModeRun()
     return APP_RET_RUNNING;
 }
 
-AppResult MitModeStop()
+AppResult MitModeStop(void)
 {
     return APP_RET_SUCCESS;
 }

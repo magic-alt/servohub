@@ -15,9 +15,9 @@ typedef struct
     APP_Emergency_Brake_Mode emergency_brake_mode;  // 紧急制动模式
 } CstMode_t;
 
-AppResult CstModeInit();
-AppResult CstModeStart();
-AppResult CstModeRun();
-AppResult CstModeStop();
+AppResult CstModeInit(void);
+AppResult CstModeStart(void);
+AppResult CstModeRun(void);
+AppResult CstModeStop(void);
 
 #endif // APP_CYCLIC_SYNC_TORQUE_MODE_H

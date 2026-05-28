@@ -3,9 +3,9 @@
 
 #include "app_data_type_define.h"
 
-AppResult IdElecModeInit();
-AppResult IdElecModeStart();
-AppResult IdElecModeRun();
-AppResult IdElecModeStop();
+AppResult IdElecModeInit(void);
+AppResult IdElecModeStart(void);
+AppResult IdElecModeRun(void);
+AppResult IdElecModeStop(void);
 
 #endif // APP_ID_ELEC_MODE_H

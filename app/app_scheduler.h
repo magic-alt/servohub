@@ -28,10 +28,10 @@ typedef enum
 typedef struct
 {
     APP_NAMES name;
-    AppResult (*init)();
-    AppResult (*start)();
-    AppResult (*run)();
-    AppResult (*stop)();
+    AppResult (*init)(void);
+    AppResult (*start)(void);
+    AppResult (*run)(void);
+    AppResult (*stop)(void);
     AppType type;
 } AppTable;
 

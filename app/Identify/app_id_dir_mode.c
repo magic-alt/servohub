@@ -3,19 +3,19 @@
 
 static Axis *const axis = &kAxis; // 引用电机对象实例化
 
-AppResult IdDirModeInit()
+AppResult IdDirModeInit(void)
 {
     set_app_Controlword(APP_CTRL_DISABLE); //上升沿使能，初始化置0
 
     return APP_RET_SUCCESS;
 }
 
-AppResult IdDirModeStart()
+AppResult IdDirModeStart(void)
 {
     return APP_RET_SUCCESS;
 }
 
-AppResult IdDirModeRun()
+AppResult IdDirModeRun(void)
 {
     // 辨识运行条件: 1. 使能指令生效 2. 抱闸状态为松闸
     if (get_app_Controlword() == APP_CTRL_ENABLE && get_app_Brake_state() == BRAKE_STATE_RELEASED)
@@ -40,7 +40,7 @@ AppResult IdDirModeRun()
     return APP_RET_RUNNING;
 }
 
-AppResult IdDirModeStop()
+AppResult IdDirModeStop(void)
 {
     return APP_RET_SUCCESS;
 }

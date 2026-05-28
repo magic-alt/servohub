@@ -13,11 +13,11 @@ static CstMode_t kCstMode =
         .ip_dt_s = 0,
         .period_s = 0,
     },
-    .check_status_val = 0,
+    .check_status_val.all = 0,
     .emergency_brake_mode = EMERGENCY_BRAKE_MODE_DISABLED,
 };
 
-AppResult CstModeInit()
+AppResult CstModeInit(void)
 {
     AppTargetTorqueReachedStateClear();
     set_app_Target_update_state(false); // 清除目标更新状态值
@@ -35,12 +35,12 @@ AppResult CstModeInit()
     return APP_RET_SUCCESS;
 }
 
-AppResult CstModeStart()
+AppResult CstModeStart(void)
 {
     return APP_RET_SUCCESS;
 }
 
-AppResult CstModeRun()
+AppResult CstModeRun(void)
 {
     kCstMode.now_Controlword = (APP_CONTROL_WORD)get_app_Controlword();
 
@@ -112,7 +112,7 @@ AppResult CstModeRun()
     return APP_RET_RUNNING;
 }
 
-AppResult CstModeStop()
+AppResult CstModeStop(void)
 {
     return APP_RET_SUCCESS;
 }

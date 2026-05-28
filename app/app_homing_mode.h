@@ -80,18 +80,9 @@ typedef struct
     float timer;                                    // 计时器，可用作超时保护
 } HomingMode_t;
 
-AppResult HomingModeInit();
-AppResult HomingModeStart();
-AppResult HomingModeRun();
-AppResult HomingModeStop();
-
-static void (*MethodRun)(HomingMode_t* const p_hm);         // 回零方法运行函数指针
-static AppResult SetMethodRun(HOMING_METHOD const method);  // 回零方法运行函数指针注册
-// 各回零方法运行函数实现
-static void MethodRun_0(HomingMode_t* const p_hm);
-// ...
-static void MethodRun_7(HomingMode_t* const p_hm);
-// ...
-static void MethodRun_35(HomingMode_t* const p_hm);
+AppResult HomingModeInit(void);
+AppResult HomingModeStart(void);
+AppResult HomingModeRun(void);
+AppResult HomingModeStop(void);
 
 #endif // APP_HOMING_MODE_H

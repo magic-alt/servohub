@@ -16,9 +16,9 @@ typedef struct
     float velocity_target;                          // 目标速度
 } CsvMode_t;
 
-AppResult CsvModeInit();
-AppResult CsvModeStart();
-AppResult CsvModeRun();
-AppResult CsvModeStop();
+AppResult CsvModeInit(void);
+AppResult CsvModeStart(void);
+AppResult CsvModeRun(void);
+AppResult CsvModeStop(void);
 
 #endif // APP_CYCLIC_SYNC_VELOCITY_MODE_H

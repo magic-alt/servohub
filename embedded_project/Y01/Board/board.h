@@ -193,12 +193,14 @@ typedef struct
 #define ECAT_PDI_SWIER1_SWIER       EXTI_SWIER1_SWIER1 //PDI任务GPIO软件中断使能位
 #define ECAT_PDI_PR1_PR             EXTI_PR1_PR1       //PDI任务GPIO软件中断标志位
 
+#define LED_ON_GPIO_LEVEL           (GPIO_PIN_RESET)
+#define LED_OFF_GPIO_LEVEL          (!LED_ON_GPIO_LEVEL)
 
-#define LED_RED_ON()                (HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET))
-#define LED_RED_OFF()               (HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET))
+#define LED_RED_ON()                (HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, LED_ON_GPIO_LEVEL))
+#define LED_RED_OFF()               (HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, LED_OFF_GPIO_LEVEL))
 #define LED_RED_TOGGLE()            (HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin))
-#define LED_BLUE_ON()               (HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_RESET))
-#define LED_BLUE_OFF()              (HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET))
+#define LED_BLUE_ON()               (HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, LED_ON_GPIO_LEVEL))
+#define LED_BLUE_OFF()              (HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, LED_OFF_GPIO_LEVEL))
 #define LED_BLUE_TOGGLE()           (HAL_GPIO_TogglePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin))
 
 #define USER_IO1_READ()             (HAL_GPIO_ReadPin(USER_IO1_GPIO_Port, USER_IO1_Pin))

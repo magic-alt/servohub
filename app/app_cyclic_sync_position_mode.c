@@ -13,14 +13,14 @@ static CspMode_t kCspMode =
         .ip_dt_s = 0,
         .period_s = 0,
     },
-    .check_status_val = 0,
+    .check_status_val.all = 0,
     .emergency_brake_mode = EMERGENCY_BRAKE_MODE_DISABLED,
     .pos_tar_last_p = 0,
     .pos_tar_add_p = 0,
     .pos_tar_p = 0,
 };
 
-AppResult CspModeInit()
+AppResult CspModeInit(void)
 {
     AppPositionTargetReachedStateClear(); // 清除目标到达标志
     set_app_Target_update_state(false); // 清除目标更新状态值
@@ -40,12 +40,12 @@ AppResult CspModeInit()
     return APP_RET_SUCCESS;
 }
 
-AppResult CspModeStart()
+AppResult CspModeStart(void)
 {
     return APP_RET_SUCCESS;
 }
 
-AppResult CspModeRun()
+AppResult CspModeRun(void)
 {
     kCspMode.now_Controlword = (APP_CONTROL_WORD)get_app_Controlword();
 
@@ -150,7 +150,7 @@ AppResult CspModeRun()
     return APP_RET_RUNNING;
 }
 
-AppResult CspModeStop()
+AppResult CspModeStop(void)
 {
     return APP_RET_SUCCESS;
 }

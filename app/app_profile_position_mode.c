@@ -12,7 +12,7 @@ static PpMode_t kPpMode =
         .period_s = 0,
         .pos_out_dec_p = 0,
     },
-    .check_status_val = 0,
+    .check_status_val.all = 0,
     .emergency_brake_mode = EMERGENCY_BRAKE_MODE_DISABLED,
     .start_upedge_latch = false,
     .start_upedge_state = false,
@@ -20,7 +20,7 @@ static PpMode_t kPpMode =
     .pos_tar_p_add = 0,
 };
 
-AppResult PpModeInit()
+AppResult PpModeInit(void)
 {
     AppPositionTargetReachedStateClear();  // 清除目标到达标志
     set_app_Controlword(APP_CTRL_DISABLE); // 上升沿使能，初始化置0
@@ -32,12 +32,12 @@ AppResult PpModeInit()
     return APP_RET_SUCCESS;
 }
 
-AppResult PpModeStart()
+AppResult PpModeStart(void)
 {
     return APP_RET_SUCCESS;
 }
 
-AppResult PpModeRun()
+AppResult PpModeRun(void)
 {
     kPpMode.now_Controlword = (APP_CONTROL_WORD)get_app_Controlword();
 
@@ -184,7 +184,7 @@ AppResult PpModeRun()
     return APP_RET_RUNNING;
 }
 
-AppResult PpModeStop()
+AppResult PpModeStop(void)
 {
     kPpMode.start_upedge_state = false;
     kPpMode.start_upedge_latch = false;

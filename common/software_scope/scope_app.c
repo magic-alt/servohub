@@ -10,9 +10,8 @@ static uint8_t scope_buff[SCOPE_BUF_MAX];
 /**
  * @brief 初始化示波器通道，任务中运行，根据状态进行切换
  */
-static uint8_t scope_channel_config() {
+static uint8_t scope_channel_config(void) {
     uint8_t channel_amount = 0;
-    uint16_t channel_length = 0;
     uint8_t channel_active_list[SCOPE_CHANNEL_NUM_MAX] = {0};
 
     /* 计算总共有多少通道打开 */
@@ -70,7 +69,7 @@ static uint8_t scope_channel_config() {
 /**
  * @brief 扫描所有示波器通道，数据采样，中断运行
  */
-static void scope_data_sample_run() {
+static void scope_data_sample_run(void) {
     uint32_t data_val = 0;
 
     for (uint8_t i = 0; i < SCOPE_CHANNEL_NUM_MAX; i++) {
@@ -95,8 +94,7 @@ static void scope_data_sample_run() {
  *        2.计算还需要记录的数据量
  *        3.不再提供循环计数的功能，从起始位置开始的数据不能再被覆盖
  */
-static void change_count_rule() {
-    TriggerStruct* trigger_object = &kScopeObject.trigger_object;
+static void change_count_rule(void) {
     /* 计算有效数据存储的起始位置，ps：用户需要采集的数据才是有效数据，而不是传进来的任何数据 */
     /* 因为边沿触发捕捉窗口有宽度，所以延迟了半个窗口的时间，此处需要补上 */
     /* 此处还需要加入采集延时的计算 */
@@ -127,9 +125,11 @@ static void change_count_rule() {
 /**
  * @brief 触发采样函数，中断运行
  */
-static void scope_trigger_catch() {
+static void scope_trigger_catch(void) {
     uint32_t data_val = 0;
     TriggerStruct* trigger_object = &kScopeObject.trigger_object;
+    TypeConverter conv_data = {0};
+    TypeConverter conv_threshold = {0};
 
     /* 如果边沿已经触发，则直接退出 */
     if (kTriggerSuccessFlag == kScopeObject.trigger_flag) { return; }
@@ -138,53 +138,55 @@ static void scope_trigger_catch() {
     if (trigger_object->catch_count < CATCH_WINDOW_SIZE) {
         get_database_param_val(trigger_object->data_ptr, trigger_object->data_type, &data_val);
         //根据数据类型进行数据转换
+        conv_data.u32 = data_val;
+        conv_threshold.i32 = kScopeObject.sample_trigger_threshold;
         switch(trigger_object->data_type)
         {
             case kTypeUint8:
-                trigger_object->catch_window_uint32[trigger_object->catch_count] = *(uint8_t*)(&data_val);
-                trigger_object->threshold_uint32 = *(uint8_t*)&kScopeObject.sample_trigger_threshold;
+                trigger_object->catch_window_uint32[trigger_object->catch_count] = conv_data.u8;
+                trigger_object->threshold_uint32 = conv_threshold.u8;
                 trigger_object->catch_data_type = kTypeUint32;
                 break;
             case kTypeUint16:
-                trigger_object->catch_window_uint32[trigger_object->catch_count] = *(uint16_t*)(&data_val);
-                trigger_object->threshold_uint32 = *(uint16_t*)&kScopeObject.sample_trigger_threshold;
+                trigger_object->catch_window_uint32[trigger_object->catch_count] = conv_data.u16;
+                trigger_object->threshold_uint32 = conv_threshold.u16;
                 trigger_object->catch_data_type = kTypeUint32;
                 break;
             case kTypeUint32:
-                trigger_object->catch_window_uint32[trigger_object->catch_count] = *(uint32_t*)(&data_val);
-                trigger_object->threshold_uint32 = *(uint32_t*)&kScopeObject.sample_trigger_threshold;
+                trigger_object->catch_window_uint32[trigger_object->catch_count] = conv_data.u32;
+                trigger_object->threshold_uint32 = conv_threshold.u32;
                 trigger_object->catch_data_type = kTypeUint32;
                 break;
             case kTypeUint64:
                 // todo:暂时不支持64位数据触发采集，强制转为32位数据触发采集
-                trigger_object->catch_window_uint32[trigger_object->catch_count] = *(uint32_t*)(&data_val);
-                trigger_object->threshold_uint32 = *(uint32_t*)&kScopeObject.sample_trigger_threshold;
+                trigger_object->catch_window_uint32[trigger_object->catch_count] = conv_data.u32;
+                trigger_object->threshold_uint32 = conv_threshold.u32;
                 trigger_object->catch_data_type = kTypeUint32;
                 break;
             case kTypeInt8:
-                trigger_object->catch_window_int32[trigger_object->catch_count] = *(int8_t*)(&data_val);
-                trigger_object->threshold_int32 = *(int8_t*)&kScopeObject.sample_trigger_threshold;
+                trigger_object->catch_window_int32[trigger_object->catch_count] = conv_data.i8;
+                trigger_object->threshold_int32 = conv_threshold.i8;
                 trigger_object->catch_data_type = kTypeInt32;
                 break;
             case kTypeInt16:
-                trigger_object->catch_window_int32[trigger_object->catch_count] = *(int16_t*)(&data_val);
-                trigger_object->threshold_int32 = *(int16_t*)&kScopeObject.sample_trigger_threshold;
+                trigger_object->catch_window_int32[trigger_object->catch_count] = conv_data.i16;
+                trigger_object->threshold_int32 = conv_threshold.i16;
                 trigger_object->catch_data_type = kTypeInt32;
                 break;
             case kTypeInt32:
-                trigger_object->catch_window_int32[trigger_object->catch_count] = *(int32_t*)(&data_val);
-                trigger_object->threshold_int32 = *(int32_t*)&kScopeObject.sample_trigger_threshold;
+                trigger_object->catch_window_int32[trigger_object->catch_count] = conv_data.i32;
+                trigger_object->threshold_int32 = conv_threshold.i32;
                 trigger_object->catch_data_type = kTypeInt32;
                 break;
             case kTypeInt64:
                 // todo:暂时不支持64位数据触发采集，强制转为32位数据触发采集
-                trigger_object->catch_window_int32[trigger_object->catch_count] = *(int32_t*)(&data_val);
-                trigger_object->threshold_int32 = *(int32_t*)&kScopeObject.sample_trigger_threshold;
+                trigger_object->catch_window_int32[trigger_object->catch_count] = conv_data.i32;
+                trigger_object->threshold_int32 = conv_threshold.i32;
                 trigger_object->catch_data_type = kTypeInt32;
                 break;
             case kTypeFloat32:
-                trigger_object->catch_window_float32[trigger_object->catch_count] = *(float*)(&data_val);
-                trigger_object->threshold_float32 = *(float*)&kScopeObject.sample_trigger_threshold;
+                trigger_object->catch_window_float32[trigger_object->catch_count] = conv_data.f32;
+                trigger_object->threshold_float32 = conv_threshold.f32;
                 trigger_object->catch_data_type = kTypeFloat32;
                 break;
             default:
@@ -282,7 +284,7 @@ static void scope_trigger_catch() {
 /**
  * @brief 采样完成判断
  **/
-static void sample_complete_judge() {
+static void sample_complete_judge(void) {
     /* 判断是否采集已经完成：采集完成有几种触发方式 */
     /* 检查是否是自然采集完成，自然完成的前提是捕捉到了有效数据，即有边沿触发 */
     if (kSampleComplete == kScopeObject.sample_complete_flag) { return; }
@@ -296,7 +298,7 @@ static void sample_complete_judge() {
 /**
  * @brief 采样完成处理
  */
-static void sample_complete_deal() {
+static void sample_complete_deal(void) {
     if (kSampleComplete != kScopeObject.sample_complete_flag) { return; }
 
     /* 如果采样已经完成，则打包采样通道中的数据，打包的时候和数据的宽度有关 */
@@ -319,7 +321,7 @@ static void sample_complete_deal() {
 /**
  * @brief 示波器配置
  */
-static void scope_config() {
+static void scope_config(void) {
     /* 示波器的采样点数不能为0 */
     if (0 == kScopeObject.sample_points) {
         kScopeObject.status_word = kScopeError;
@@ -342,7 +344,7 @@ static void scope_config() {
 /**
  * @brief 示波器重置
  */
-static void scope_reset() {
+static void scope_reset(void) {
     /* 初始化存储采集数据的buffer */
     memset(kScopeObject.storage_data_buffer, 0, kScopeObject.storage_data_buffer_size);
 

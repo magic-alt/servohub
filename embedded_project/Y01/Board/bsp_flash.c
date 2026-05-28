@@ -1,5 +1,19 @@
 #include "bsp_flash.h"
 
+/* Nor Flash SPI操作函数 */
+static uint8_t spi_transfer(uint8_t data);
+static void spi_transfer_bulk(uint8_t *tx_data, uint8_t *rx_data, size_t size);
+static int wait_for_ready(void);
+static int write_enable(void);
+static uint8_t read_status_register(void);
+static int chip_erase(void);
+
+/* FlashDB 标准接口接口 */
+static int init(void);
+static int read(long offset, uint8_t *buf, size_t size);
+static int write(long offset, const uint8_t *buf, size_t size);
+static int erase(long offset, size_t size);
+
 struct fal_flash_dev nor_flash0 =
 {
     .name       = FAL_USING_NOR_FLASH_DEV_NAME,

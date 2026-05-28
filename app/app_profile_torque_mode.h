@@ -15,9 +15,9 @@ typedef struct
     APP_Emergency_Brake_Mode emergency_brake_mode;  // 紧急制动模式
 } PtMode_t;
 
-AppResult PtModeInit();
-AppResult PtModeStart();
-AppResult PtModeRun();
-AppResult PtModeStop();
+AppResult PtModeInit(void);
+AppResult PtModeStart(void);
+AppResult PtModeRun(void);
+AppResult PtModeStop(void);
 
 #endif // APP_PROFILE_TORQUE_MODE_H

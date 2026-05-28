@@ -195,8 +195,8 @@ void AppParamInit(void)
     kAppWindowParam.Velocity_threshold_time = 0.02f;    // 零速检测窗口时间
 
     // 初始化Mavlink参数
-    kAppMavlinkConfig.Sys_id = 1;                       //mavlink系统id
-    kAppMavlinkConfig.Comp_id = 1;                      //mavlink组件id
+    kAppMavlinkConfig.Sys_id = 1;                       // mavlink系统id
+    kAppMavlinkConfig.Comp_id = 1;                      // mavlink组件id
 
     // 初始化系统指令
     kSystemCmd.Sys_cmd = APP_SYSTEM_CMD_NONE;           // 系统指令
@@ -210,7 +210,7 @@ void AppParamInit(void)
     kHeartBit.Sys_init_flag = 0xEA;                     // 系统初始化标志位(0xEA（Energy Active）)
 
     // 初始化历史信息
-    for (int i = 0; i < ERROR_RECORD_NUM; i++)
+    for (uint8_t i = 0; i < ERROR_RECORD_NUM; i++)
     {
         kHistoricalInfo.Error_records_list[i] = 0;
     }

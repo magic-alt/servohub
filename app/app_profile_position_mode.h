@@ -21,9 +21,9 @@ typedef struct
 
 void set_app_start_upedge_state(bool state);  //可由外部调用设置启动沿状态
 
-AppResult PpModeInit();
-AppResult PpModeStart();
-AppResult PpModeRun();
-AppResult PpModeStop();
+AppResult PpModeInit(void);
+AppResult PpModeStart(void);
+AppResult PpModeRun(void);
+AppResult PpModeStop(void);
 
 #endif // APP_PROFILE_POSITION_MODE_H

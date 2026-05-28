@@ -3,7 +3,7 @@
 
 static Axis *const axis = &kAxis; // 引用电机对象实例化
 
-AppResult IdElecAngleModeInit()
+AppResult IdElecAngleModeInit(void)
 {
     set_app_Controlword(APP_CTRL_DISABLE); //上升沿使能，初始化置0
 
@@ -12,12 +12,12 @@ AppResult IdElecAngleModeInit()
     return APP_RET_SUCCESS;
 }
 
-AppResult IdElecAngleModeStart()
+AppResult IdElecAngleModeStart(void)
 {
     return APP_RET_SUCCESS;
 }
 
-AppResult IdElecAngleModeRun()
+AppResult IdElecAngleModeRun(void)
 {
     // 辨识运行条件: 1. 使能指令生效 2. 抱闸状态为松闸
     if (get_app_Controlword() == APP_CTRL_ENABLE && get_app_Brake_state() == BRAKE_STATE_RELEASED)
@@ -42,7 +42,7 @@ AppResult IdElecAngleModeRun()
     return APP_RET_RUNNING;
 }
 
-AppResult IdElecAngleModeStop()
+AppResult IdElecAngleModeStop(void)
 {
     return APP_RET_SUCCESS;
 }

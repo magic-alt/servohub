@@ -522,7 +522,7 @@ static inline void TqFcComStep(Axis *const axis, AxisDw *const axis_dw)
       index = (float)(axis->motor_pos_sensor_input.enc_counts_now_p) /
               (float)axis->pmsm_config.enc_line_p_n * axis_dw->tq_fc_id_InstanceData.rtdw.index_max;
 
-      if (index >= 0 && index < axis_dw->tq_fc_id_InstanceData.rtdw.index_max)
+      if (index < axis_dw->tq_fc_id_InstanceData.rtdw.index_max)
       {
          axis->pos_speed_ctl_output.iq_tar_A -= axis_dw->tq_fc_id_InstanceData.rtdw.com_table[index];
       }
@@ -1083,8 +1083,6 @@ static void ReciprocalMotionStep(Axis *const axis, AxisDw *const axis_dw)
 // 参考信号模式
 static void ReferenceSignalStep(Axis *const axis, AxisDw *const axis_dw)
 {
-   uint32_T index = 0;
-
    if (axis->reference_signal_config.signal_target <= REFERENCE_SIGNAL_TARGET_SPEED) // 位置模式暂时另外生成
    {
       reference_signal(&axis->reference_signal_config,

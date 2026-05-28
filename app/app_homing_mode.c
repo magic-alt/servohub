@@ -10,7 +10,7 @@ static HomingMode_t kHmMode =
         .acc = 0,
         .period_s = 0,
     },
-    .check_status_val = 0,
+    .check_status_val.all = 0,
     .emergency_brake_mode = EMERGENCY_BRAKE_MODE_DISABLED,
     .method = HOMING_METHOD_NO_HOMING_METHOD_ASSIGNED,
     .step = HOMING_STEP_INIT,
@@ -22,7 +22,16 @@ static HomingMode_t kHmMode =
     .timer = 0,
 };
 
-AppResult HomingModeInit()
+static void (*MethodRun)(HomingMode_t* const p_hm);         // 回零方法运行函数指针
+static AppResult SetMethodRun(HOMING_METHOD const method);  // 回零方法运行函数指针注册
+// 各回零方法运行函数实现
+static void MethodRun_0(HomingMode_t* const p_hm);
+// ...
+static void MethodRun_7(HomingMode_t* const p_hm);
+// ...
+static void MethodRun_35(HomingMode_t* const p_hm);
+
+AppResult HomingModeInit(void)
 {
     AppVelocityTargetReachedStateClear();
     set_app_Controlword(APP_CTRL_DISABLE);
@@ -31,12 +40,12 @@ AppResult HomingModeInit()
     return APP_RET_SUCCESS;
 }
 
-AppResult HomingModeStart()
+AppResult HomingModeStart(void)
 {
     return APP_RET_SUCCESS;
 }
 
-AppResult HomingModeRun()
+AppResult HomingModeRun(void)
 {
     kHmMode.now_Controlword = (APP_CONTROL_WORD)get_app_Controlword();
 
@@ -161,7 +170,7 @@ AppResult HomingModeRun()
     return APP_RET_RUNNING;
 }
 
-AppResult HomingModeStop()
+AppResult HomingModeStop(void)
 {
     return APP_RET_SUCCESS;
 }

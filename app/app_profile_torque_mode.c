@@ -9,11 +9,11 @@ static PtMode_t kPtMode =
         .slope = 0,
         .period_s = 0,
     },
-    .check_status_val = 0,
+    .check_status_val.all = 0,
     .emergency_brake_mode = EMERGENCY_BRAKE_MODE_DISABLED,
 };
 
-AppResult PtModeInit()
+AppResult PtModeInit(void)
 {
     AppTargetTorqueReachedStateClear();
     set_app_Controlword(APP_CTRL_DISABLE); // 上升沿使能，初始化置0
@@ -22,12 +22,12 @@ AppResult PtModeInit()
     return APP_RET_SUCCESS;
 }
 
-AppResult PtModeStart()
+AppResult PtModeStart(void)
 {
     return APP_RET_SUCCESS;
 }
 
-AppResult PtModeRun()
+AppResult PtModeRun(void)
 {
     kPtMode.now_Controlword = (APP_CONTROL_WORD)get_app_Controlword();
 
@@ -85,7 +85,7 @@ AppResult PtModeRun()
     return APP_RET_RUNNING;
 }
 
-AppResult PtModeStop()
+AppResult PtModeStop(void)
 {
     return APP_RET_SUCCESS;
 }

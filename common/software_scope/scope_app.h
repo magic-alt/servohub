@@ -64,6 +64,17 @@ typedef enum {
     kSampleIsrOpen = 1,
 } SampleIsrSwitchFlagEnum;
 
+/* 定义类型转换联合 */
+typedef union {
+    uint32_t u32;
+    uint8_t u8;
+    uint16_t u16;
+    int8_t i8;
+    int16_t i16;
+    int32_t i32;
+    float f32;
+} TypeConverter;
+
 typedef struct {
     ChannelRecordFlagEnum recoder_flag;
     uint16_t package_count;
