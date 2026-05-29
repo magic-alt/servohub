@@ -221,15 +221,15 @@ void bsp_set_brake_pwm_timer_config(APP_BRAKE_STATE brake_state)
  * @param[in] type 编码器类型
  * @param[in] options 编码器选项
  * @param[in] a_single_res 编码器A单圈分辨率
- * @param[in] a_single_less_factor 编码器A单圈分辨率缩降倍数
+ * @param[in] a_single_res_real 编码器A单圈分辨率实际值
  * @param[in] a_multi_res 编码器A多圈分辨率
  * @param[in] b_single_res 编码器B单圈分辨率
- * @param[in] b_single_less_factor 编码器B单圈分辨率缩降倍数
+ * @param[in] b_single_res_real 编码器B单圈分辨率实际值
  * @param[in] b_multi_res 编码器B多圈分辨率
  */
 void bsp_set_encoder_config(ENCODER_ID const enc_id, uint16_t const type, uint8_t const options,
-                            uint32_t const a_single_res, uint32_t const a_single_less_factor, uint32_t const a_multi_res,
-                            uint32_t const b_single_res, uint32_t const b_single_less_factor, uint32_t const b_multi_res)
+                            uint32_t const a_single_res, uint32_t const a_single_res_real, uint32_t const a_multi_res,
+                            uint32_t const b_single_res, uint32_t const b_single_res_real, uint32_t const b_multi_res)
 {
     return;
 }

@@ -49,8 +49,8 @@ EncoderDataInfo_t encoder_data[ENCODER_NUM] = {
         .abz_z_first_ab_cnt = 0,
         .abz_z_last_ab_cnt = 0,
         .data_raw = { 0 },
-        .frame_len = ENCODER_FRAME_LEN_INIT,
-        .cf = ENCODER_CF_INIT,
+        .frame_len = 0,
+        .cf = 0,
         .sf = 0,
         .almc = 0,
         .enid = 0,
@@ -58,16 +58,17 @@ EncoderDataInfo_t encoder_data[ENCODER_NUM] = {
         .err_cnt = 0,
         .options.val = 0,
         .a_single_res = 0,
+        .a_single_res_real = 0,
         .a_single_less_factor = 1,
         .a_multi_res = 0,
         .a_single_raw = 0,
         .a_multi_raw = 0,
         .b_single_res = 0,
+        .b_single_res_real = 0,
         .b_single_less_factor = 1,
         .b_multi_res = 0,
         .b_single_raw = 0,
         .b_multi_raw = 0,
-        .real_single_res = 0,
         .single_cnt = 0,
         .multi_turns = 0,
         .zero_crossing_state = false,
@@ -112,8 +113,8 @@ EncoderDataInfo_t encoder_data[ENCODER_NUM] = {
         .abz_z_first_ab_cnt = 0,
         .abz_z_last_ab_cnt = 0,
         .data_raw = { 0 },
-        .frame_len = ENCODER_FRAME_LEN_INIT,
-        .cf = ENCODER_CF_INIT,
+        .frame_len = 0,
+        .cf = 0,
         .sf = 0,
         .almc = 0,
         .enid = 0,
@@ -121,16 +122,17 @@ EncoderDataInfo_t encoder_data[ENCODER_NUM] = {
         .err_cnt = 0,
         .options.val = 0,
         .a_single_res = 0,
+        .a_single_res_real = 0,
         .a_single_less_factor = 1,
         .a_multi_res = 0,
         .a_single_raw = 0,
         .a_multi_raw = 0,
         .b_single_res = 0,
+        .b_single_res_real = 0,
         .b_single_less_factor = 1,
         .b_multi_res = 0,
         .b_single_raw = 0,
         .b_multi_raw = 0,
-        .real_single_res = 0,
         .single_cnt = 0,
         .multi_turns = 0,
         .zero_crossing_state = false,
@@ -222,7 +224,7 @@ void EncoderDataProcess(void)
         {
             encoder_data[enc_id].a_multi_raw = encoder_data[enc_id].b_single_raw;  // 编码器A多圈值 = 编码器B单圈值
             encoder_data[enc_id].b_single_raw = 0;    // 编码器B单圈值 = 0
-            encoder_data[enc_id].real_motor_turns_res = encoder_data[enc_id].b_single_res; // 电机端多圈值分辨率 = 负载端单圈值分辨率
+            encoder_data[enc_id].real_motor_turns_res = encoder_data[enc_id].b_single_res_real; // 电机端多圈值分辨率 = 负载端单圈值分辨率
         }
         else
         {
@@ -248,9 +250,9 @@ void EncoderDataProcess(void)
         // 编码器配置选项bit0，编码器A方向
         if (encoder_data[enc_id].options.bits.a_dir)
         {
-            u32_calc_temp = encoder_data[enc_id].a_single_res - 1 - encoder_data[enc_id].a_single_raw;
+            u32_calc_temp = encoder_data[enc_id].a_single_res_real - 1 - encoder_data[enc_id].a_single_raw;
             encoder_data[enc_id].a_single_raw = u32_calc_temp;
-            if (encoder_data[enc_id].real_motor_turns_res > 0) // 有电机端多圈值，才处理多圈值
+            if (encoder_data[enc_id].real_motor_turns_res > 0) // 有多圈值，才处理多圈值
             {
                 i64_calc_temp = encoder_data[enc_id].real_motor_turns_res - 1 - encoder_data[enc_id].a_multi_raw;
                 encoder_data[enc_id].a_multi_raw = i64_calc_temp;
@@ -259,9 +261,9 @@ void EncoderDataProcess(void)
         // 编码器配置选项bit1，编码器B方向
         if (encoder_data[enc_id].options.bits.b_dir)
         {
-            u32_calc_temp = encoder_data[enc_id].b_single_res - 1 - encoder_data[enc_id].b_single_raw;
+            u32_calc_temp = encoder_data[enc_id].b_single_res_real - 1 - encoder_data[enc_id].b_single_raw;
             encoder_data[enc_id].b_single_raw = u32_calc_temp;
-            if (encoder_data[enc_id].b_multi_res > 0) // 有负载端多圈值，才处理多圈值
+            if (encoder_data[enc_id].b_multi_res > 0) // 有多圈值，才处理多圈值
             {
                 i64_calc_temp = encoder_data[enc_id].b_multi_res - 1 - encoder_data[enc_id].b_multi_raw;
                 encoder_data[enc_id].b_multi_raw = i64_calc_temp;
@@ -398,7 +400,7 @@ static inline void detect_abs_encoder_zero_crossing(EncoderDataInfo_t* const enc
         // 计算位置增量
         int32_t delta = (int32_t)enc_data->single_cnt - (int32_t)enc_data->pos_last;
         // 使用绝对值判断是否发生环形计数器溢出，溢出则为跨圈时刻
-        enc_data->zero_crossing_state = ((MATH_ABS(delta) > (enc_data->real_single_res >> 1)) ? true : false);
+        enc_data->zero_crossing_state = ((MATH_ABS(delta) > (enc_data->a_single_res_real >> 1)) ? true : false);
         enc_data->pos_last = enc_data->single_cnt;
     }
 }
@@ -418,30 +420,32 @@ void set_encoder_options(ENCODER_ID enc_id, uint8_t const options)
  * @brief 编码器A分辨率设置
  * @param[in] enc_id 编码器ID
  * @param[in] single_res 编码器单圈分辨率
- * @param[in] single_less_factor 编码器单圈分辨率缩降倍数
+ * @param[in] single_res_real 编码器单圈实际分辨率
  * @param[in] multi_res 编码器多圈分辨率
  * @retval
  */
 void set_encoder_a_resolution(ENCODER_ID const enc_id, uint32_t const single_res, \
-                              uint32_t const single_less_factor, uint32_t const multi_res)
+                              uint32_t const single_res_real, uint32_t const multi_res)
 {
     encoder_data[enc_id].a_single_res = single_res;
-    encoder_data[enc_id].a_single_less_factor = single_less_factor;
+    encoder_data[enc_id].a_single_res_real = single_res_real;
+    encoder_data[enc_id].a_single_less_factor = (single_res_real == 0U) ? 1U : (single_res / single_res_real);
     encoder_data[enc_id].a_multi_res = multi_res;
 }
 /**
  * @brief 编码器B分辨率设置
  * @param[in] enc_id 编码器ID
  * @param[in] single_res 编码器单圈分辨率
- * @param[in] single_less_factor 编码器单圈分辨率缩降倍数
+ * @param[in] single_res_real 编码器单圈实际分辨率
  * @param[in] multi_res 编码器多圈分辨率
  * @retval
  */
 void set_encoder_b_resolution(ENCODER_ID const enc_id, uint32_t const single_res, \
-                              uint32_t const single_less_factor, uint32_t const multi_res)
+                              uint32_t const single_res_real, uint32_t const multi_res)
 {
     encoder_data[enc_id].b_single_res = single_res;
-    encoder_data[enc_id].b_single_less_factor = single_less_factor;
+    encoder_data[enc_id].b_single_res_real = single_res_real;
+    encoder_data[enc_id].b_single_less_factor = (single_res_real == 0U) ? 1U : (single_res / single_res_real);
     encoder_data[enc_id].b_multi_res = multi_res;
 }
 
@@ -470,7 +474,6 @@ static void ABZ_Encoder_Init(EncoderDataInfo_t* enc_data)
     enc_data->abz_z_first_flag = true;
     enc_data->abz_z_first_ab_cnt = 0;
     enc_data->abz_z_last_ab_cnt = 0;
-    enc_data->real_single_res = enc_data->a_single_res / enc_data->a_single_less_factor;
 
     if (enc_data->id == ENCODER_ID_1)
     {
@@ -526,6 +529,7 @@ static void ABZ_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
     enc_data->a_single_raw /= enc_data->a_single_less_factor;
     enc_data->a_multi_raw = 0;
     enc_data->b_single_raw = 0;
+    enc_data->b_single_raw /= enc_data->b_single_less_factor;
     enc_data->b_multi_raw = 0;
     enc_data->sf = 0;
     enc_data->almc = 0;
@@ -577,7 +581,6 @@ void ENCODER_ABZ_TIM_Z_IRQ_TASK(TIM_HandleTypeDef *htim)
 static void TAMAGAWA_Encoder_Init(EncoderDataInfo_t* enc_data)
 {
     enc_data->type = ENCODER_TYPE_ABS_RS485_TAMAGAWA;
-    enc_data->real_single_res = enc_data->a_single_res / enc_data->a_single_less_factor;
     if (enc_data->id == ENCODER_ID_1)
     {
         enc_data->uart_handle = &ENCODER1_UART_HANDLE;
@@ -591,8 +594,8 @@ static void TAMAGAWA_Encoder_Init(EncoderDataInfo_t* enc_data)
         enc_data->type = ENCODER_TYPE_NONE;
         return;
     }
-    enc_data->frame_len = TAMAGAWA_FRAME_LEN_ID_0;
-    enc_data->cf = TAMAGAWA_CF_ID_0;
+    enc_data->frame_len = (uint8_t)TAMAGAWA_FRAME_LEN_ID_0;
+    enc_data->cf =  (uint8_t)TAMAGAWA_CF_ID_0;
 
     // 为兼容各厂家设计差异，防止数据帧错位等异常情况，启动过程多次重置UART DMA传输
     if (enc_data->err_cnt)
@@ -679,6 +682,7 @@ static void TAMAGAWA_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
     enc_data->a_single_raw /= enc_data->a_single_less_factor;
     enc_data->a_multi_raw = 0;
     enc_data->b_single_raw = 0;
+    enc_data->b_single_raw /= enc_data->b_single_less_factor;
     enc_data->b_multi_raw = 0;
     enc_data->almc = 0;
     enc_data->enid = ENCODER_CONNECTED_ID;
@@ -696,11 +700,10 @@ static void TAMAGAWA_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
 static void MT68XX_Encoder_Init(EncoderDataInfo_t* enc_data)
 {
     enc_data->type = ENCODER_TYPE_ABS_SPI_MT68XX;
-    enc_data->real_single_res = enc_data->a_single_res / enc_data->a_single_less_factor;
     if (enc_data->id == ENCODER_ID_1)
     {
         enc_data->spi_handle = &ENCODER1_SPI_HANDLE;
-        /* SPI parameter configuration*/
+        /* SPI parameter reconfiguration*/
         // enc_data->spi_handle->Init.CLKPolarity = SPI_POLARITY_HIGH;
         // enc_data->spi_handle->Init.CLKPhase = SPI_PHASE_2EDGE;
         // if (HAL_SPI_Init(enc_data->spi_handle) != HAL_OK)
@@ -711,7 +714,7 @@ static void MT68XX_Encoder_Init(EncoderDataInfo_t* enc_data)
     else if (enc_data->id == ENCODER_ID_2)
     {
         enc_data->spi_handle = &ENCODER2_SPI_HANDLE;
-        /* SPI parameter configuration*/
+        /* SPI parameter reconfiguration*/
         // enc_data->spi_handle->Init.CLKPolarity = SPI_POLARITY_HIGH;
         // enc_data->spi_handle->Init.CLKPhase = SPI_PHASE_2EDGE;
         // if (HAL_SPI_Init(enc_data->spi_handle) != HAL_OK)
@@ -724,8 +727,8 @@ static void MT68XX_Encoder_Init(EncoderDataInfo_t* enc_data)
         enc_data->type = ENCODER_TYPE_NONE;
         return;
     }
-    enc_data->frame_len = MT68XX_FRAME_LEN_RD_ANGLE;
-    enc_data->cf = MT68XX_CF_ID_RD;
+    enc_data->frame_len = (uint8_t)MT68XX_FRAME_LEN_RD_ANGLE;
+    enc_data->cf =  (uint8_t)MT68XX_CF_ID_RD;
     // 首2字节为cf+reg，其他字节均为0
     uint16_t tx_cmd = enc_data->cf << 8 | MT_REG_ANGLE_H;
     encoder_tx_buff[enc_data->id][0] = tx_cmd >> 8;
@@ -778,6 +781,7 @@ static void MT68XX_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
     enc_data->a_single_raw /= enc_data->a_single_less_factor;
     enc_data->a_multi_raw = 0;
     enc_data->b_single_raw = 0;
+    enc_data->b_single_raw /= enc_data->b_single_less_factor;
     enc_data->b_multi_raw = 0;
     enc_data->sf = (uint8_t)(encoder_data[enc_data->id].data_raw[4] & ((0x01 << MT68XX_RD_ANGLE_STATUS_BW) - 1));
     enc_data->almc = 0;
@@ -796,7 +800,6 @@ static void MT68XX_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
 static void KTM59XX_Encoder_Init(EncoderDataInfo_t* enc_data)
 {
     enc_data->type = ENCODER_TYPE_ABS_SPI_KTM59XX;
-    enc_data->real_single_res = enc_data->a_single_res / enc_data->a_single_less_factor;
     if (enc_data->id == ENCODER_ID_1)
     {
         enc_data->spi_handle = &ENCODER1_SPI_HANDLE;
@@ -810,8 +813,8 @@ static void KTM59XX_Encoder_Init(EncoderDataInfo_t* enc_data)
         enc_data->type = ENCODER_TYPE_NONE;
         return;
     }
-    enc_data->frame_len = KTM59XX_FRAME_LEN_ID_3;
-    enc_data->cf = KTM59XX_CF_ID_3;
+    enc_data->frame_len = (uint8_t)KTM59XX_FRAME_LEN_ID_3;
+    enc_data->cf =  (uint8_t)KTM59XX_CF_ID_3;
     // 首字节为cf，其他字节均为0
     encoder_tx_buff[enc_data->id][0] = enc_data->cf;
     for (uint8_t i = 1; i < enc_data->frame_len; i++)
@@ -868,6 +871,7 @@ static void KTM59XX_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
     enc_data->a_single_raw /= enc_data->a_single_less_factor;
     enc_data->a_multi_raw = 0;
     enc_data->b_single_raw = 0;
+    enc_data->b_single_raw /= enc_data->b_single_less_factor;
     enc_data->b_multi_raw = 0;
     enc_data->sf = (uint8_t)((frame_data << (KTM59xx_FRAME_LEN_RC_BW + KTM59xx_FRAME_LEN_ANGLE_BW)) >> \
                                 (KTM59xx_FRAME_LEN_RX_BW - KTM59xx_FRAME_LEN_STATUS_BW));
@@ -933,9 +937,8 @@ static void BISSC_Encoder_Init(EncoderDataInfo_t* enc_data)
         enc_data->type = ENCODER_TYPE_NONE;
         return;
     }
-    enc_data->real_single_res = enc_data->a_single_res / enc_data->a_single_less_factor;
-    enc_data->frame_len = BISSC_FRAME_LEN_ID_0;
-    enc_data->cf = BISSC_CF_ID_0;
+    enc_data->frame_len = (uint8_t)BISSC_FRAME_LEN_ID_0;
+    enc_data->cf =  (uint8_t)BISSC_CF_ID_0;
     for (uint8_t i = 0; i < enc_data->frame_len; i++)
     {
         encoder_tx_buff[enc_data->id][i] = enc_data->cf;
@@ -990,6 +993,7 @@ static void BISSC_Encoder_Data_Process(EncoderDataInfo_t* enc_data)
     enc_data->a_single_raw /= enc_data->a_single_less_factor;
     enc_data->a_multi_raw = 0;
     enc_data->b_single_raw = 0;
+    enc_data->b_single_raw /= enc_data->b_single_less_factor;
     enc_data->b_multi_raw = 0;
     enc_data->sf = (frame_data >> (BISSC_FRAME_LEN_CRC_BW + BISSC_FRAME_LEN_WARNING_BW)) & (((uint8_t)1 << BISSC_FRAME_LEN_ERROR_BW) - 1);
     enc_data->almc = (frame_data >> BISSC_FRAME_LEN_CRC_BW) & (((uint8_t)1 << BISSC_FRAME_LEN_WARNING_BW) - 1);

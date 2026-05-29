@@ -96,17 +96,63 @@ extern "C"
 // --------------------------
 // 其他参数补充定义
 // --------------------------
+// 电机、负载端编码器参数
+typedef enum
+{
+    KTM59XX_CF_INIT                     = 0x00,     // 初始化指令
+    // KTM59xx SPI编码器 CF_ID（bit31~24） 宏定义（协议标准值）
+    KTM59XX_CF_ID_1                     = 0x5B,     // 指令1：控制寄存器写入
+    KTM59XX_CF_ID_2                     = 0x62,     // 指令2：控制寄存器读取
+    KTM59XX_CF_ID_3                     = 0x23,     // 指令3：角度和内部信号读取
+
+    KTM59XX_REG_ADD_CALIB               = 0xA0,     // 校准寄存器地址
+    KTM59XX_REG_VAL_CALIB_OFF           = 0x00,     // 校准寄存器值：关闭校准
+} EncKtm59xxCf_t; // 编码器控制字段
+
+typedef enum
+{
+    KTM59XX_FRAME_LEN_INIT              = 0,        // 初始值
+    // KTM59xx编码器各CF_ID对应的帧长度（单位：字节）
+    KTM59XX_FRAME_LEN_ID_1              = 4,        // KTM59XX_CF_ID_1：控制寄存器写入
+    KTM59XX_FRAME_LEN_ID_2              = 4,        // KTM59XX_CF_ID_2：控制寄存器读取
+    KTM59XX_FRAME_LEN_ID_3              = 8,        // KTM59XX_CF_ID_3：角度和内部信号读取
+
+    KTM59xx_FRAME_LEN_TX                = 8,        // KTM59xx 数据帧发送长度
+    KTM59xx_FRAME_LEN_TX_BW             = 8 * KTM59xx_FRAME_LEN_TX,
+    KTM59xx_FRAME_LEN_RX                = 8,        // KTM59xx 数据帧接收长度
+    KTM59xx_FRAME_LEN_RX_BW             = 8 * KTM59xx_FRAME_LEN_RX,
+    KTM59xx_FRAME_LEN_ANGLE_BW          = 24,       // KTM59xx 角度数据位宽
+    KTM59xx_FRAME_LEN_RC_BW             = 0,        // KTM59xx 内部信号数据位宽
+    KTM59xx_FRAME_LEN_STATUS_BW         = 2,        // KTM59xx 状态数据位宽
+    KTM59xx_FRAME_LEN_CRC_BW            = 8,        // KTM59xx CRC校验位宽
+    KTM59xx_FRAME_LEN_DATA_BW           = (KTM59xx_FRAME_LEN_ANGLE_BW + \
+                                           KTM59xx_FRAME_LEN_RC_BW + \
+                                           KTM59xx_FRAME_LEN_STATUS_BW),    // KTM59xx 数据帧数据位宽
+    KTM59xx_FRAME_LEN_TOTAL_BW          = (KTM59xx_FRAME_LEN_DATA_BW + \
+                                           KTM59xx_FRAME_LEN_CRC_BW),       // KTM59xx 数据帧总位宽
+} EncKtm59xxFrameLen_t; // 编码器帧长度
+
+// 编码器校验值最终异或值
+#define KTM5XXX_CRC8_FINAL_XOR          (0xFF)
+
 // 编码器校准相关参数
-#define ENC_CALI_FRE                    (1000.0f)                       // 校准频率（Hz）
-#define ENC_CALI_MAX_CURRENT            (10.0f)                         // 最大校准增益，IF模式该值表示10A电流（A）
-#define ENC_CALI_TIME_PERIOD            (500u)                          // 500ms周期运行（ms）
-#define ENC_CALI_FRE_INC                (0.5f)                          // 每个周期增加0.5（Hz）
-#define ENC_CALI_SPEED_0                (10.0f)                         // 第一阶段目标转速（Hz）
-#define ENC_CALI_SPEED_1                (20.0f)                         // 第二阶段目标转速（Hz）
-#define ENC_CALI_SPEED_SW_0             (30.0f)                         // 达到30RPM打开编码器校准模式（RPM）
-#define ENC_CALI_SPEED_SW_1             (40.0f)                         // 达到40RPM打开编码器校准模式（RPM）
-#define ENC_CALI_CHECK_CNT              (6u)                            // 编码器状态查询周期（s）
-#define ENC_CALI_TIMEOUT                (600u)                          // 启动app120s后编码器校准模式超时（s）
+#define KTM59XX_CALIBRATION_NONE        0           // 编码器正常工作，不校准(默认)
+#define KTM59XX_CALIBRATION_PREV        1           // 进入校准状态(用于停止位置环编码器数据读取，为开始校准做准备)
+#define KTM59XX_CALIBRATION_START       2           // 开始校准（VF开环运行后，启动开始校准，主函数中运行校准）
+#define KTM59XX_CALIBRATION_FINISH      3           // 校准完成(校准完成后，会自动更新)
+#define KTM59XX_CALIBRATION_TIMEOUT     4           // 校准超时(检测不到成功标志)
+#define KTM59XX_CALIBRATION_SUCCESS     5           // 校准成功
+
+#define ENC_CALI_FRE                    (1000.0f)   // 校准频率（Hz）
+#define ENC_CALI_MAX_CURRENT            (10.0f)     // 最大校准增益，IF模式该值表示10A电流（A）
+#define ENC_CALI_TIME_PERIOD            (500u)      // 500ms周期运行（ms）
+#define ENC_CALI_FRE_INC                (0.5f)      // 每个周期增加0.5（Hz）
+#define ENC_CALI_SPEED_0                (10.0f)     // 第一阶段目标转速（Hz）
+#define ENC_CALI_SPEED_1                (20.0f)     // 第二阶段目标转速（Hz）
+#define ENC_CALI_SPEED_SW_0             (30.0f)     // 达到30RPM打开编码器校准模式（RPM）
+#define ENC_CALI_SPEED_SW_1             (40.0f)     // 达到40RPM打开编码器校准模式（RPM）
+#define ENC_CALI_CHECK_CNT              (6u)        // 编码器状态查询周期（s）
+#define ENC_CALI_TIMEOUT                (600u)      // 启动app120s后编码器校准模式超时（s）
 
 #ifdef __cplusplus
 }

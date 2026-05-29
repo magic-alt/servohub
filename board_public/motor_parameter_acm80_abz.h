@@ -96,18 +96,11 @@ extern "C"
 // --------------------------
 // 其他参数补充定义
 // --------------------------
-// 编码器校准相关参数
-#define ENC_CALI_FRE                    (1000.0f)                       // 校准频率（Hz）
-#define ENC_CALI_MAX_CURRENT            (10.0f)                         // 最大校准增益，IF模式该值表示10A电流（A）
-#define ENC_CALI_TIME_PERIOD            (500u)                          // 500ms周期运行（ms）
-#define ENC_CALI_FRE_INC                (0.5f)                          // 每个周期增加0.5（Hz）
-#define ENC_CALI_SPEED_0                (10.0f)                         // 第一阶段目标转速（Hz）
-#define ENC_CALI_SPEED_1                (20.0f)                         // 第二阶段目标转速（Hz）
-#define ENC_CALI_SPEED_SW_0             (30.0f)                         // 达到30RPM打开编码器校准模式（RPM）
-#define ENC_CALI_SPEED_SW_1             (40.0f)                         // 达到40RPM打开编码器校准模式（RPM）
-#define ENC_CALI_CHECK_CNT              (6u)                            // 编码器状态查询周期（s）
-#define ENC_CALI_TIMEOUT                (600u)                          // 启动app120s后编码器校准模式超时（s）
+// 电机端编码器参数
+#define ENCODER_ABZ_ERROR_RATIO         (0.05f)     // 编码器ABZ通信错误最大偏差比例（基于分辨率）
 
+// 负载端编码器参数
+// NULL
 #ifdef __cplusplus
 }
 #endif

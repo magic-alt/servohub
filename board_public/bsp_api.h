@@ -71,8 +71,8 @@ void bsp_set_brake_pwm_timer_config(APP_BRAKE_STATE brake_state);
 #pragma region 编码器相关
 /* 编码器配置 */
 void bsp_set_encoder_config(ENCODER_ID const enc_id, uint16_t const type, uint8_t const options, \
-                            uint32_t const a_single_res, uint32_t const a_single_less_factor, uint32_t const a_multi_res, \
-                            uint32_t const b_single_res, uint32_t const b_single_less_factor, uint32_t const b_multi_res);
+                            uint32_t const a_single_res, uint32_t const a_single_res_real, uint32_t const a_multi_res, \
+                            uint32_t const b_single_res, uint32_t const b_single_res_real, uint32_t const b_multi_res);
 /* 获取编码器状态 */
 bool bsp_get_encoder_state(ENCODER_ID const enc_id);
 /* 获取编码器单圈值 */

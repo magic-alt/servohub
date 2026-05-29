@@ -3,95 +3,11 @@
 
 #include "board.h"
 
-// 编码器类型/型号定义
-#define ENCODER_TYPE_NONE               0x00 // 无编码器
-#define ENCODER_TYPE_INC_AB_ABZ         0x01 // 增量式通用AB/ABZ编码器，注：由于Y01硬件单接口，只可配置电机端/负载端任选一端
-#define ENCODER_TYPE_ABS_RS485_TAMAGAWA 0x02 // 绝对式通用RS485多摩川编码器
-#define ENCODER_TYPE_ABS_SPI_MT68XX     0x03 // 绝对式SPI MT68XX 编码器  BTR≤10MBps，CPOL=High，CPHA==2Edge
-#define ENCODER_TYPE_ABS_SPI_KTM59XX    0x04 // 绝对式SPI KTM59xx 编码器 BTR≤10MBps，CPOL=Low，CPHA=1Edge
-#define ENCODER_TYPE_ABS_BISSC_SMC40S   0x05 // 绝对式SPI BISS-C SMC40S 编码器 BTR≤10MBps，CPOL=Low，CPHA=1Edge
-#define ENCODER_TYPE_ABS_BISSC_BRT38M   0x06 // 绝对式SPI BISS-C BRT38M 编码器 BTR≤2.5MBps，CPOL=High，CPHA=2Edge
-
-// 其他编码器类型
-// ...
-
 // 编码器参数定义
-#define ENCODER_FRAME_MAX_LEN   16  // 数据帧最大帧长度
-#define ENCODER_COMM_ERROR_MAX  20  // 编码器连续通信错误最大次数
-
-typedef enum : uint8_t
-{
-    ENCODER_CF_INIT  = 0x00,        // 初始值
-    // 多摩川编码器 CF_ID 宏定义（协议标准值）
-    TAMAGAWA_CF_ID_0 = 0x02,        // 读取单圈数据（ABS0 ABS1 ABS2）
-    TAMAGAWA_CF_ID_1 = 0x8A,        // 读取多圈数据（ABM0 ABM1 ABM2）
-    TAMAGAWA_CF_ID_2 = 0x92,        // 读取编码器ID（ENID）
-    TAMAGAWA_CF_ID_3 = 0x1A,        // 读取所有数据（ABS + ENID + ABM + ALMC）
-    TAMAGAWA_CF_ID_4 = 0xA2,        // 读取单圈扩展数据（ABS0-ABS3）
-    TAMAGAWA_CF_ID_5 = 0x2A,        // 读取单圈 + 多圈扩展数据（ABS0-ABS3 + ABM0-ABM1）
-    TAMAGAWA_CF_ID_7 = 0xBA,        // 复位单圈计数 + 清除错误
-    TAMAGAWA_CF_ID_8 = 0xC2,        // 复位单圈计数
-    TAMAGAWA_CF_ID_C = 0x62,        // 复位多圈计数 + 清除错误
-    TAMAGAWA_CF_ID_6 = 0x32,        // 写入EEPROM
-    TAMAGAWA_CF_ID_D = 0xEA,        // 从EEPROM读取
-
-    // KTM59xx SPI编码器 CF_ID（bit31~24） 宏定义（协议标准值）
-    KTM59XX_CF_ID_1 = 0x5B,         // 指令1：控制寄存器写入
-    KTM59XX_CF_ID_2 = 0x62,         // 指令2：控制寄存器读取
-    KTM59XX_CF_ID_3 = 0x23,         // 指令3：角度和内部信号读取
-
-    KTM59XX_REG_ADD_CALIB = 0xA0,       // 校准寄存器地址
-    KTM59XX_REG_VAL_CALIB_OFF = 0x00,   // 校准寄存器值：关闭校准
-
-    // MT68XX SPI编码器 宏定义（bit15~8）（协议标准值）
-    MT68XX_CF_ID_RD = 0x30,         // 读寄存器 （0b0011 << 12）
-    MT68XX_CF_ID_WR = 0x60,         // 写寄存器 （0b0110 << 12）
-
-    // 其他编码器类型
-    // ...
-} EncoderCf_t; // 编码器控制字段
-
-typedef enum : uint8_t
-{
-    ENCODER_FRAME_LEN_INIT  = 0,    // 初始值
-    // 多摩川编码器各CF_ID对应的帧长度（单位：字节）
-    TAMAGAWA_FRAME_LEN_ID_0 = 6,    // TAMAGAWA_CF_ID_0：读取单圈数据（ABS0 ABS1 ABS2）
-    TAMAGAWA_FRAME_LEN_ID_1 = 6,    // TAMAGAWA_CF_ID_1：读取多圈数据（ABM0 ABM1 ABM2）
-    TAMAGAWA_FRAME_LEN_ID_2 = 2,    // TAMAGAWA_CF_ID_2：读取编码器ID（ENID）
-    TAMAGAWA_FRAME_LEN_ID_3 = 11,   // TAMAGAWA_CF_ID_3：读取所有数据（ABS + ENID + ABM + ALMC）
-    TAMAGAWA_FRAME_LEN_ID_4 = 7,    // TAMAGAWA_CF_ID_4：读取单圈扩展数据（ABS0-ABS3）
-    TAMAGAWA_FRAME_LEN_ID_5 = 9,    // TAMAGAWA_CF_ID_5：读取单圈 + 多圈扩展数据（ABS0-ABS3 + ABM0-ABM1）
-    TAMAGAWA_FRAME_LEN_ID_7 = 2,    // TAMAGAWA_CF_ID_7：复位单圈计数 + 清除错误
-    TAMAGAWA_FRAME_LEN_ID_8 = 2,    // TAMAGAWA_CF_ID_8：复位单圈计数
-    TAMAGAWA_FRAME_LEN_ID_C = 2,    // TAMAGAWA_CF_ID_C：复位多圈计数 + 清除错误
-    TAMAGAWA_FRAME_LEN_ID_6 = 4,    // TAMAGAWA_CF_ID_6：写入EEPROM
-    TAMAGAWA_FRAME_LEN_ID_D = 4,    // TAMAGAWA_CF_ID_D：从EEPROM读取
-
-    // KTM59xx编码器各CF_ID对应的帧长度（单位：字节）
-    KTM59XX_FRAME_LEN_ID_1 = 4,    // KTM59XX_CF_ID_1：控制寄存器写入
-    KTM59XX_FRAME_LEN_ID_2 = 4,    // KTM59XX_CF_ID_2：控制寄存器读取
-    KTM59XX_FRAME_LEN_ID_3 = 8,    // KTM59XX_CF_ID_3：角度和内部信号读取
-
-    KTM59xx_FRAME_LEN_TX = 8,    // KTM59xx 数据帧发送长度
-    KTM59xx_FRAME_LEN_TX_BW = 8 * KTM59xx_FRAME_LEN_TX,
-    KTM59xx_FRAME_LEN_RX = 8,    // KTM59xx 数据帧接收长度
-    KTM59xx_FRAME_LEN_RX_BW = 8 * KTM59xx_FRAME_LEN_RX,
-    KTM59xx_FRAME_LEN_ANGLE_BW = 24,    // KTM59xx 角度数据位宽
-    KTM59xx_FRAME_LEN_RC_BW = 0,        // KTM59xx 内部信号数据位宽
-    KTM59xx_FRAME_LEN_STATUS_BW = 2,    // KTM59xx 状态数据位宽
-    KTM59xx_FRAME_LEN_CRC_BW = 8,       // KTM59xx CRC校验位宽
-    KTM59xx_FRAME_LEN_DATA_BW = KTM59xx_FRAME_LEN_ANGLE_BW + KTM59xx_FRAME_LEN_RC_BW + KTM59xx_FRAME_LEN_STATUS_BW, // KTM59xx 数据帧数据位宽
-    KTM59xx_FRAME_LEN_TOTAL_BW = KTM59xx_FRAME_LEN_DATA_BW + KTM59xx_FRAME_LEN_CRC_BW, // KTM59xx 数据帧总位宽
-
-    // MT68XX SPI编码器 各CF_ID对应的帧长度（单位：字节）
-    MT68XX_FRAME_LEN_RD_ANGLE = 6,      // MT68XX_CF_ID_RD：读角度寄存器帧长度
-    MT68XX_DATA_LEN_RD_ANGLE = 4,       // MT68XX_CF_ID_RD：读角度寄存器有效数据长度
-
-    MT68XX_RD_ANGLE_STATUS_BW = 3,      // MT68XX_CF_ID_RD：读角度寄存器状态位宽
-
-    // 其他编码器类型
-    // ...
-} EncoderFrameLen_t; // 编码器数据帧长度
+#define ENCODER_FRAME_MAX_LEN           16      // 数据帧最大帧长度
+#define ENCODER_COMM_ERROR_MAX          20      // 编码器连续通信错误最大次数
+// 编码器ID (固定值)
+#define ENCODER_CONNECTED_ID            (0xCE)  // 当未读取编码器ID时，位置解析成功后强制设为0xCE（Connected Encoder）
 
 typedef union
 {
@@ -122,8 +38,8 @@ struct EncoderDataInfo_t
     uint32_t abz_z_first_ab_cnt;                // ABZ编码器Z相首次计数值
     uint32_t abz_z_last_ab_cnt;                 // ABZ编码器Z相末次计数值
     uint8_t data_raw[ENCODER_FRAME_MAX_LEN];    // 编码器数据帧
-    EncoderFrameLen_t frame_len;                // 数据帧长度
-    EncoderCf_t cf;                             // 控制字段
+    uint8_t frame_len;                          // 数据帧长度
+    uint8_t cf;                                 // 控制字段
     uint8_t sf;                                 // 状态字段
     uint8_t almc;                               // 错误状态字段
     uint8_t enid;                               // 编码器ID
@@ -134,17 +50,18 @@ struct EncoderDataInfo_t
     // 一个常规编码器含一套位置反馈数据，仅使用编码器A相关参数
     // 一个特殊编码器含两套位置反馈数据，分别对应编码器A和B相关参数
     uint32_t a_single_res;                      // 编码器A单圈分辨率
+    uint32_t a_single_res_real;                 // 编码器A单圈分辨率实际值
     uint32_t a_single_less_factor;              // 编码器A单圈分辨率缩降倍数
     uint32_t a_multi_res;                       // 编码器A多圈分辨率
     uint32_t a_single_raw;                      // 编码器A单圈绝对值原始数据
     int64_t  a_multi_raw;                       // 编码器A多圈绝对值原始数据
     uint32_t b_single_res;                      // 编码器B单圈分辨率
+    uint32_t b_single_res_real;                 // 编码器B单圈分辨率实际值
     uint32_t b_single_less_factor;              // 编码器B单圈分辨率缩降倍数
     uint32_t b_multi_res;                       // 编码器B多圈分辨率
     uint32_t b_single_raw;                      // 编码器B单圈绝对值原始数据
     int64_t  b_multi_raw;                       // 编码器B多圈绝对值原始数据
     // 编码器单圈值和多圈值为实际电机或负载端的位置反馈值
-    uint32_t real_single_res;                   // 编码器单圈实际分辨率
     volatile uint32_t single_cnt;               // 编码器单圈值
     volatile int64_t multi_turns;               // 编码器多圈值
     volatile bool zero_crossing_state;          // 编码器过零点状态
@@ -159,17 +76,6 @@ struct EncoderDataInfo_t
     void (*process)(EncoderDataInfo_t *enc_data); // 编码器数据处理函数指针
 };
 
-// 编码器ID (固定值)
-#define ENCODER_CONNECTED_ID        (0xCE)  // 当未读取编码器ID时，位置解析成功后强制设为0xCE（Connected Encoder）
-// 编码器校验值最终异或值
-#define KTM5XXX_CRC8_FINAL_XOR      (0xFF)  // KTM5XXX校验值最终异或值
-#define SMC40S_CRC6_FINAL_XOR       (0x43)  // SMC40S校验值最终异或值
-// 编码器校验值多项式
-#define MT68XX_CRC8_POLY            (0x07)  // MT68XX校验值多项式
-
-// 其他参数
-#define ENCODER_ABZ_ERROR_RATIO     (0.05f) // 编码器ABZ通信错误最大偏差比例（基于分辨率）
-
 void EncoderDataInit(void);
 void EncoderDataRead(void);
 void EncoderDataProcess(void);
@@ -182,8 +88,8 @@ bool get_encoder_zero_crossing_state(ENCODER_ID const enc_id);
 
 void set_encoder_options(ENCODER_ID enc_id, uint8_t const options);
 void set_encoder_a_resolution(ENCODER_ID const enc_id, uint32_t const single_res, \
-                              uint32_t const multi_res, uint32_t const single_less_factor);
+                              uint32_t const single_res_real, uint32_t const multi_res);
 void set_encoder_b_resolution(ENCODER_ID const enc_id, uint32_t const single_res, \
-                              uint32_t const multi_res, uint32_t const single_less_factor);
+                              uint32_t const single_res_real, uint32_t const multi_res);
 
 #endif // DRV_ENCODER_H

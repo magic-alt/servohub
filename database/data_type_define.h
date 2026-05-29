@@ -12,8 +12,19 @@
 #include "motor_ctl_sm.h"
 #include "servo_system_cfg.h"
 
+// 编码器参数定义
 #define ENCODER_NUM             (2u)                    // 每轴的编码器数量（最大值）
 #define ENCODER_ID_MAX          (ENCODER_NUM - 1)       // 编码器ID最大值
+
+// 编码器类型/型号定义
+#define ENCODER_TYPE_NONE               0x00 // 无编码器
+#define ENCODER_TYPE_INC_AB_ABZ         0x01 // 增量式通用AB/ABZ编码器，注：由于硬件单接口，只可配置电机端/负载端任选一端
+#define ENCODER_TYPE_ABS_RS485_TAMAGAWA 0x02 // 绝对式通用RS485多摩川编码器
+#define ENCODER_TYPE_ABS_SPI_MT68XX     0x03 // 绝对式SPI MT68XX 编码器  BTR≤10MBps，CPOL=High，CPHA==2Edge
+#define ENCODER_TYPE_ABS_SPI_KTM59XX    0x04 // 绝对式SPI KTM59xx 编码器 BTR≤10MBps，CPOL=Low，CPHA=1Edge
+#define ENCODER_TYPE_ABS_BISSC_SMC40S   0x05 // 绝对式SPI BISS-C SMC40S 编码器 BTR≤10MBps，CPOL=Low，CPHA=1Edge
+#define ENCODER_TYPE_ABS_BISSC_BRT38M   0x06 // 绝对式SPI BISS-C BRT38M 编码器 BTR≤2.5MBps，CPOL=High，CPHA=2Edge
+
 typedef enum
 {
     ENCODER_ID_1 = 0,

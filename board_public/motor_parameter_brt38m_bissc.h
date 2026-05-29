@@ -96,20 +96,41 @@ extern "C"
 // --------------------------
 // 其他参数补充定义
 // --------------------------
-// 编码器校准相关参数
-#define ENC_CALI_FRE                    (1000.0f)                       // 校准频率（Hz）
-#define ENC_CALI_MAX_CURRENT            (10.0f)                         // 最大校准增益，IF模式该值表示10A电流（A）
-#define ENC_CALI_TIME_PERIOD            (500u)                          // 500ms周期运行（ms）
-#define ENC_CALI_FRE_INC                (0.5f)                          // 每个周期增加0.5（Hz）
-#define ENC_CALI_SPEED_0                (10.0f)                         // 第一阶段目标转速（Hz）
-#define ENC_CALI_SPEED_1                (20.0f)                         // 第二阶段目标转速（Hz）
-#define ENC_CALI_SPEED_SW_0             (30.0f)                         // 达到30RPM打开编码器校准模式（RPM）
-#define ENC_CALI_SPEED_SW_1             (40.0f)                         // 达到40RPM打开编码器校准模式（RPM）
-#define ENC_CALI_CHECK_CNT              (6u)                            // 编码器状态查询周期（s）
-#define ENC_CALI_TIMEOUT                (600u)                          // 启动app120s后编码器校准模式超时（s）
-
-// 编码器其它附加参数定义
 // 电机端编码器参数
+typedef enum
+{
+    TAMAGAWA_CF_INIT = 0x00,        // 初始值
+    // 多摩川编码器 CF_ID 宏定义（协议标准值）
+    TAMAGAWA_CF_ID_0 = 0x02,        // 读取单圈数据（ABS0 ABS1 ABS2）
+    TAMAGAWA_CF_ID_1 = 0x8A,        // 读取多圈数据（ABM0 ABM1 ABM2）
+    TAMAGAWA_CF_ID_2 = 0x92,        // 读取编码器ID（ENID）
+    TAMAGAWA_CF_ID_3 = 0x1A,        // 读取所有数据（ABS + ENID + ABM + ALMC）
+    TAMAGAWA_CF_ID_4 = 0xA2,        // 读取单圈扩展数据（ABS0-ABS3）
+    TAMAGAWA_CF_ID_5 = 0x2A,        // 读取单圈 + 多圈扩展数据（ABS0-ABS3 + ABM0-ABM1）
+    TAMAGAWA_CF_ID_7 = 0xBA,        // 复位单圈计数 + 清除错误
+    TAMAGAWA_CF_ID_8 = 0xC2,        // 复位单圈计数
+    TAMAGAWA_CF_ID_C = 0x62,        // 复位多圈计数 + 清除错误
+    TAMAGAWA_CF_ID_6 = 0x32,        // 写入EEPROM
+    TAMAGAWA_CF_ID_D = 0xEA,        // 从EEPROM读取
+} EncTamagawaCf_t; // 编码器控制字段
+
+typedef enum
+{
+    TAMAGAWA_FRAME_LEN_INIT = 0,    // 初始值
+    // 多摩川编码器各CF_ID对应的帧长度（单位：字节）
+    TAMAGAWA_FRAME_LEN_ID_0 = 6,    // TAMAGAWA_CF_ID_0：读取单圈数据（ABS0 ABS1 ABS2）
+    TAMAGAWA_FRAME_LEN_ID_1 = 6,    // TAMAGAWA_CF_ID_1：读取多圈数据（ABM0 ABM1 ABM2）
+    TAMAGAWA_FRAME_LEN_ID_2 = 2,    // TAMAGAWA_CF_ID_2：读取编码器ID（ENID）
+    TAMAGAWA_FRAME_LEN_ID_3 = 11,   // TAMAGAWA_CF_ID_3：读取所有数据（ABS + ENID + ABM + ALMC）
+    TAMAGAWA_FRAME_LEN_ID_4 = 7,    // TAMAGAWA_CF_ID_4：读取单圈扩展数据（ABS0-ABS3）
+    TAMAGAWA_FRAME_LEN_ID_5 = 9,    // TAMAGAWA_CF_ID_5：读取单圈 + 多圈扩展数据（ABS0-ABS3 + ABM0-ABM1）
+    TAMAGAWA_FRAME_LEN_ID_7 = 2,    // TAMAGAWA_CF_ID_7：复位单圈计数 + 清除错误
+    TAMAGAWA_FRAME_LEN_ID_8 = 2,    // TAMAGAWA_CF_ID_8：复位单圈计数
+    TAMAGAWA_FRAME_LEN_ID_C = 2,    // TAMAGAWA_CF_ID_C：复位多圈计数 + 清除错误
+    TAMAGAWA_FRAME_LEN_ID_6 = 4,    // TAMAGAWA_CF_ID_6：写入EEPROM
+    TAMAGAWA_FRAME_LEN_ID_D = 4,    // TAMAGAWA_CF_ID_D：从EEPROM读取
+} EncTamagawaFrameLen_t; // 编码器数据帧长度
+
 // SF字段（MSB）固定位定义回读值（共8位，bit0为dd0最低位，bit7为ca1最高位）（文档6.3.2）
 // SF字段（MSB）第bit0-bit3位：信息位，固定为b0000，无额外信息。
 // SF字段 编码器错误位（Encoder Error，bit4 ea0、bit5 ea1）宏定义（文档6.3.2）

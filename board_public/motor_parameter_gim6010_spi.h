@@ -95,40 +95,60 @@ extern "C"
 // --------------------------
 // 其他参数补充定义
 // --------------------------
-// 编码器校准相关参数
-#define ENC_CALI_FRE                    (1000.0f)                       // 校准频率（Hz）
-#define ENC_CALI_MAX_CURRENT            (10.0f)                         // 最大校准增益，IF模式该值表示10A电流（A）
-#define ENC_CALI_TIME_PERIOD            (500u)                          // 500ms周期运行（ms）
-#define ENC_CALI_FRE_INC                (0.5f)                          // 每个周期增加0.5（Hz）
-#define ENC_CALI_SPEED_0                (10.0f)                         // 第一阶段目标转速（Hz）
-#define ENC_CALI_SPEED_1                (20.0f)                         // 第二阶段目标转速（Hz）
-#define ENC_CALI_SPEED_SW_0             (30.0f)                         // 达到30RPM打开编码器校准模式（RPM）
-#define ENC_CALI_SPEED_SW_1             (40.0f)                         // 达到40RPM打开编码器校准模式（RPM）
-#define ENC_CALI_CHECK_CNT              (6u)                            // 编码器状态查询周期（s）
-#define ENC_CALI_TIMEOUT                (600u)                          // 启动app120s后编码器校准模式超时（s）
+// 电机、负载端编码器参数
+typedef enum
+{
+    MT68XX_CF_INIT                      = 0x00,     // 初始化寄存器
+    // MT68XX SPI编码器 宏定义（bit15~8）（协议标准值）
+    MT68XX_CF_ID_RD                     = 0x30,     // 读寄存器 （0b0011 << 12）
+    MT68XX_CF_ID_WR                     = 0x60,     // 写寄存器 （0b0110 << 12）
+} EncMt68xxCf_t; // 编码器控制字段
+
+typedef enum
+{
+    MT68XX_LEN_INIT                     = 0,        // 初始化寄存器
+    // MT68XX SPI编码器 各CF_ID对应的帧长度（单位：字节）
+    MT68XX_FRAME_LEN_RD_ANGLE           = 6,        // MT68XX_CF_ID_RD：读角度寄存器帧长度
+    MT68XX_DATA_LEN_RD_ANGLE            = 4,        // MT68XX_CF_ID_RD：读角度寄存器有效数据长度
+    MT68XX_RD_ANGLE_STATUS_BW           = 3,        // MT68XX_CF_ID_RD：读角度寄存器状态位宽
+} EncMt68xxFrameLen_t; // 编码器数据帧长度
 
 // 编码器其它参数定义
 typedef enum
 {
-    MT_STAS_NORMAL_BIT          = 0,        // 正常状态
-    MT_STAS_OVER_SPEED_BIT      = 1,        // 转速过快报警（超过12万转/分钟）
-    MT_STAS_MAGNETIC_WEAK_BIT   = 2,        // 外加磁场太弱报警
-    MT_STAS_UNDER_VOL_BIT       = 4,        // 芯片供电欠压报警
-    MT_STAS_CRC_CHECK_ERROR_BIT = 8,        // CRC8校验错误
+    MT_STAS_NORMAL_BIT                  = 0,        // 正常状态
+    MT_STAS_OVER_SPEED_BIT              = 1,        // 转速过快报警（超过12万转/分钟）
+    MT_STAS_MAGNETIC_WEAK_BIT           = 2,        // 外加磁场太弱报警
+    MT_STAS_UNDER_VOL_BIT               = 4,        // 芯片供电欠压报警
+    MT_STAS_CRC_CHECK_ERROR_BIT         = 8,        // CRC8校验错误
 } MT6835_STATUS_DEF;
 
 typedef enum
 {
-    MT_REG_USER         = (0x001),          // 用户自定义EEPROM寄存器
-    MT_REG_ANGLE_H      = (0x003),          // 角度数据寄存器高字节：角度值[b20:b13]
-    MT_REG_ANGLE_M      = (0x004),          // 角度数据寄存器中字节：角度值[b12:b5]
-    MT_REG_ANGLE_L      = (0x005),          // 角度数据寄存器低字节：角度值[b4:b0] + 状态值[b2:b0]
-    MT_REG_CRC8         = (0x006),          // CRC8校验码寄存器值
+    MT_REG_USER                         = (0x001),  // 用户自定义EEPROM寄存器
+    MT_REG_ANGLE_H                      = (0x003),  // 角度数据寄存器高字节：角度值[b20:b13]
+    MT_REG_ANGLE_M                      = (0x004),  // 角度数据寄存器中字节：角度值[b12:b5]
+    MT_REG_ANGLE_L                      = (0x005),  // 角度数据寄存器低字节：角度值[b4:b0] + 状态值[b2:b0]
+    MT_REG_CRC8                         = (0x006),  // CRC8校验码寄存器值
     // ...
-    MT_REG_IO_CALSPD    = (0x00E),          // IO驱动能力、自校转速寄存器：IO驱动能力[b7] + 自校转速[b6:b4] + 保留[b3:b0]
-    MT_REG_CAL_STAS     = (0x113),          // 自校准状态寄存器Bit[7,6]：00b=未校准，01b=校准中，10b=失败，11b=成功
+    MT_REG_IO_CALSPD                    = (0x00E),  // IO驱动能力、自校转速寄存器：IO驱动能力[b7] + 自校转速[b6:b4] + 保留[b3:b0]
+    MT_REG_CAL_STAS                     = (0x113),  // 自校准状态寄存器Bit[7,6]：00b=未校准，01b=校准中，10b=失败，11b=成功
 } MT6835_REG_DEF;
 
+// 编码器校验值多项式
+#define MT68XX_CRC8_POLY                (0x07)  // MT68XX校验值多项式
+
+// 编码器校准相关参数
+#define ENC_CALI_FRE                    (1000.0f)   // 校准频率（Hz）
+#define ENC_CALI_MAX_CURRENT            (10.0f)     // 最大校准增益，IF模式该值表示10A电流（A）
+#define ENC_CALI_TIME_PERIOD            (500u)      // 500ms周期运行（ms）
+#define ENC_CALI_FRE_INC                (0.5f)      // 每个周期增加0.5（Hz）
+#define ENC_CALI_SPEED_0                (10.0f)     // 第一阶段目标转速（Hz）
+#define ENC_CALI_SPEED_1                (20.0f)     // 第二阶段目标转速（Hz）
+#define ENC_CALI_SPEED_SW_0             (30.0f)     // 达到30RPM打开编码器校准模式（RPM）
+#define ENC_CALI_SPEED_SW_1             (40.0f)     // 达到40RPM打开编码器校准模式（RPM）
+#define ENC_CALI_CHECK_CNT              (6u)        // 编码器状态查询周期（s）
+#define ENC_CALI_TIMEOUT                (600u)      // 启动app120s后编码器校准模式超时（s）
 #ifdef __cplusplus
 }
 #endif
