@@ -349,7 +349,26 @@ uint32_t bsp_get_can_mg_counts(void)
 {
     return 0;
 }
-
+/**
+ * @brief 设置CAN MAVLink ID
+ * @param[in] sys_id 系统ID
+ * @param[in] comp_id 组件ID
+ * @return
+ * @note
+ */
+void bsp_set_can_mav_id(uint8_t sys_id, uint8_t comp_id)
+{
+    return;
+}
+/**
+ * @brief 获取当前 CAN MAVLink ID
+ * @return 当前 CAN MAVLink ID
+ * @note
+ */
+void bsp_get_can_mav_id(uint8_t *sys_id, uint8_t *comp_id)
+{
+    return;
+}
 #pragma endregion
 
 #pragma region 参数存储相关

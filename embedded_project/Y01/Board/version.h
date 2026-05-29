@@ -22,23 +22,27 @@ extern "C"
 #define BUILD_VERSION           (0x00)              // 构建号
 #define VERSION_ENCODE (((MAJOR_VERSION) << 24) | ((MINOR_VERSION) << 16) | ((REVISION_VERSION) << 8) | (BUILD_VERSION))
 
+// 定义功能开关控制宏
+#define FC_CTRL_ON              (1)
+#define FC_CTRL_OFF             (!(FC_CTRL_ON))
+
+// 定义基于CAN透传开启MAVLink上位机调试功能
+#define IS_USE_CAN_PASSTHROUGH  (FC_CTRL_OFF)
+
 #if MINOR_VERSION == V_CAN_CIA402
 #define USE_CAN
 #define USE_CIA402
-//#define USE_CAN_PASSTHROUGH
 #endif /* V_CAN_CIA402 */
 
 #if MINOR_VERSION == V_CAN_ENCOS
 #define USE_CAN
 #define USE_ENCOS
-//#define USE_CAN_PASSTHROUGH
 #endif /* V_CAN_ENCOS */
 
 #if MINOR_VERSION == V_CANOPEN_CIA402
 #define USE_CAN
 #define USE_CANOPEN
 #define USE_CIA402
-//#define USE_CAN_PASSTHROUGH
 #endif /* V_CANOPEN_CIA402 */
 
 #if MINOR_VERSION == V_ECAT_CIA402
@@ -49,13 +53,14 @@ extern "C"
 #if MINOR_VERSION == V_CANFD_CUSTOM
 #define USE_CAN
 #define USE_CUSTOM
-//#define USE_CAN_PASSTHROUGH
 #endif /* V_CANFD_CUSTOM */
 
-// 定义基于CAN透传开启MAVLink上位机调试功能
-#ifdef USE_CAN_PASSTHROUGH
+#if IS_USE_CAN_PASSTHROUGH == FC_CTRL_ON
+#ifndef USE_CAN
+#define USE_CAN
+#endif /* USE_CAN */
 #define USE_CAN_MAVLINK_HOST
-#endif /* USE_CAN_PASSTHROUGH */
+#endif /* IS_USE_CAN_PASSTHROUGH */
 
 #ifdef __cplusplus
 }

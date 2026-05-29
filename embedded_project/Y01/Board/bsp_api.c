@@ -525,9 +525,7 @@ bool bsp_get_encoder_zero_crossing_state(ENCODER_ID const enc_id)
  */
 void bsp_set_can_id(uint32_t can_id)
 {
-#ifdef USE_CAN
     bsp_fdcan_set_id(can_id);
-#endif
 }
 /**
  * @brief 获取当前 CAN ID
@@ -536,11 +534,7 @@ void bsp_set_can_id(uint32_t can_id)
  */
 uint32_t bsp_get_can_id(void)
 {
-#ifdef USE_CAN
     return bsp_fdcan_get_id();
-#else
-    return 0;
-#endif
 }
 /**
  * @brief 设置CAN 波特率
@@ -550,9 +544,7 @@ uint32_t bsp_get_can_id(void)
  */
 void bsp_set_can_baudrate(uint32_t baudrate)
 {
-#ifdef USE_CAN
     bsp_fdcan_set_baudrate(baudrate);
-#endif
 }
 /**
  * @brief 获取当前 CAN 波特率
@@ -561,11 +553,7 @@ void bsp_set_can_baudrate(uint32_t baudrate)
  */
 uint32_t bsp_get_can_baudrate(void)
 {
-#ifdef USE_CAN
     return bsp_fdcan_get_baudrate();
-#else
-    return 0;
-#endif
 }
 /**
  * @brief 获取当前 CAN 消息累计计数值
@@ -574,13 +562,28 @@ uint32_t bsp_get_can_baudrate(void)
  */
 uint32_t bsp_get_can_mg_counts(void)
 {
-#ifdef USE_CAN
     return bsp_fdcan_get_mg_counts();
-#else
-    return 0;
-#endif
 }
-
+/**
+ * @brief 设置CAN MAVLink ID
+ * @param[in] sys_id 系统ID
+ * @param[in] comp_id 组件ID
+ * @return
+ * @note
+ */
+void bsp_set_can_mav_id(uint8_t sys_id, uint8_t comp_id)
+{
+    bsp_fdcan_set_mav_id(sys_id, comp_id);
+}
+/**
+ * @brief 获取当前 CAN MAVLink ID
+ * @return 当前 CAN MAVLink ID
+ * @note
+ */
+void bsp_get_can_mav_id(uint8_t *sys_id, uint8_t *comp_id)
+{
+    bsp_fdcan_get_mav_id(sys_id, comp_id);
+}
 #pragma endregion
 
 #pragma region 参数存储相关

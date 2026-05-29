@@ -120,8 +120,16 @@ void BspInit(void)
     __HAL_TIM_ENABLE_IT(&PWM_TIM_HANDLE, TIM_IT_BREAK);
 
 #ifdef USE_CAN
-    // CAN相关应用初始化
-    fdcan_app_init();
+    // 初始化CAN外设
+    if (bsp_fdcan_init() != HAL_OK)
+    {
+        sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
+    }
+    else
+    {
+        // CAN相关应用初始化
+        fdcan_app_init();
+    }
 #endif // USE_CAN
 
     // 启动调试软件通讯
@@ -408,7 +416,7 @@ void mavlink_send_data(uint8_t *pdata, uint32_t len)
     HAL_UART_Transmit_DMA(&HOST_UART_HANDLE, pdata, len);
 #else
     fdcan_app_mav_send_packet(&CAN_FDCAN_HANDLE, pdata, len, get_app_Sys_id(),
-                              get_app_Comp_id(), 1, CANFD_MESSAGE);
+                              get_app_Comp_id(), CANID_PRIORITY, CANFD_MESSAGE);
 #endif
 }
 /**

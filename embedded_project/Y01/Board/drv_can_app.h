@@ -18,10 +18,17 @@ void fdcan_app_fifo1_handle(FDCAN_HandleTypeDef* hfdcan);
 void CANopen_DispatchFromISR(void);
 #endif // USE_CANOPEN
 
-#ifdef USE_CAN_PASSTHROUGH
+#if IS_USE_CAN_PASSTHROUGH == FC_CTRL_ON
+
+#define CANID_ID_CAN_MAPPING_COMP   (true) // MAVLink CAN ID 映射到 组件ID
+#define CANID_SYSID_DEFAULT         (0x1)
+#define CANID_COMPID_DEFAULT        (CAN_ID_DEFAULT)
+
 
 #define CANFD_RECV_BUFF_SIZE 300
 #define CANFD_SEND_BUFF_SIZE 300
+
+#define CANID_PRIORITY 1
 
 #define CANFD_MESSAGE 1
 #define CANFD_DEBUG   2
@@ -77,7 +84,7 @@ uint32_t fdcan_app_ide_make(uint8_t version, uint8_t flag_end, uint8_t cnt_tx, u
 uint8_t fdcan_app_mav_send_packet(FDCAN_HandleTypeDef *hfdcan, uint8_t *pData, uint16_t len, \
                               uint8_t sysId, uint8_t compId, uint8_t priority,uint8_t ch);
 
-#endif // USE_CAN_PASSTHROUGH
+#endif // IS_USE_CAN_PASSTHROUGH
 
 #endif // USE_CAN
 #ifdef __cplusplus

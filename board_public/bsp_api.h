@@ -96,7 +96,10 @@ void bsp_set_can_baudrate(uint32_t baudrate);
 uint32_t bsp_get_can_baudrate(void);
 /* 获取当前 CAN 消息累计计数值 */
 uint32_t bsp_get_can_mg_counts(void);
-
+/* 设置CAN mavlink系统ID、组件ID */
+void bsp_set_can_mav_id(uint8_t sys_id, uint8_t comp_id);
+/* 获取CAN mavlink系统ID、组件ID */
+void bsp_get_can_mav_id(uint8_t *sys_id, uint8_t *comp_id);
 #pragma endregion
 
 #pragma region 参数存储相关

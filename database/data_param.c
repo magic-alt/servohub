@@ -1455,6 +1455,7 @@ uint32_t set_app_Can_id(uint32_t val)
     kAppBaseConfig.Can_id = val;
     /* USER CODE BEGIN set_app_Can_id 1 */
     bsp_set_can_id(val);
+    get_app_Comp_id(); // 从底层更新组件ID到数据库
     /* USER CODE END set_app_Can_id 1 */
     return APP_PARAM_SUCCESS;
 }
@@ -4139,12 +4140,14 @@ uint32_t set_app_Sys_id(uint8_t val)
     /* USER CODE END set_app_Sys_id 0 */
     kAppMavlinkConfig.Sys_id = val;
     /* USER CODE BEGIN set_app_Sys_id 1 */
+    bsp_set_can_mav_id(val, get_app_Comp_id());
     /* USER CODE END set_app_Sys_id 1 */
     return APP_PARAM_SUCCESS;
 }
 uint8_t get_app_Sys_id(void)
 {
     /* USER CODE BEGIN get_app_Sys_id */
+    bsp_get_can_mav_id(&kAppMavlinkConfig.Sys_id, &kAppMavlinkConfig.Comp_id);
     /* USER CODE END get_app_Sys_id */
     return kAppMavlinkConfig.Sys_id;
 }
@@ -4155,12 +4158,14 @@ uint32_t set_app_Comp_id(uint8_t val)
     /* USER CODE END set_app_Comp_id 0 */
     kAppMavlinkConfig.Comp_id = val;
     /* USER CODE BEGIN set_app_Comp_id 1 */
+    bsp_set_can_mav_id(get_app_Sys_id(), val);
     /* USER CODE END set_app_Comp_id 1 */
     return APP_PARAM_SUCCESS;
 }
 uint8_t get_app_Comp_id(void)
 {
     /* USER CODE BEGIN get_app_Comp_id */
+    bsp_get_can_mav_id(&kAppMavlinkConfig.Sys_id, &kAppMavlinkConfig.Comp_id);
     /* USER CODE END get_app_Comp_id */
     return kAppMavlinkConfig.Comp_id;
 }

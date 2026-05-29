@@ -25,9 +25,9 @@ static inline void fdcan_custom_handle(FDCAN_DeviceTypeDef* bsp_fdcan);
 static inline void fdcan_cia402_handle(FDCAN_DeviceTypeDef* bsp_fdcan);
 #endif
 
-#if defined (USE_CAN_PASSTHROUGH)
+#if IS_USE_CAN_PASSTHROUGH == FC_CTRL_ON
 static inline void fdcan_passthrough_handle(FDCAN_DeviceTypeDef* bsp_fdcan);
-#endif // USE_CAN_PASSTHROUGH
+#endif // IS_USE_CAN_PASSTHROUGH
 
 typedef struct
 {
@@ -56,7 +56,6 @@ static FDCAN_AppTypeDef drv_can_app =
 
 void fdcan_app_init(void)
 {
-    //bsp_fdcan_init(); // 已在更新波特率时初始化，此处不需要再初始化
     drv_can_app.p_fdcan = bsp_fdcan_get_fdcan_handle();
 #ifdef USE_CANOPEN
     fdcan_canopen_init(drv_can_app.p_fdcan);
@@ -106,9 +105,9 @@ void fdcan_app_fifo1_handle(FDCAN_HandleTypeDef* hfdcan)
         //Error_Handler();
         return;
     }
-    #if defined (USE_CAN_PASSTHROUGH)
+    #if IS_USE_CAN_PASSTHROUGH == FC_CTRL_ON
         fdcan_passthrough_handle(drv_can_app.p_fdcan);
-    #endif // USE_CAN_PASSTHROUGH
+    #endif // IS_USE_CAN_PASSTHROUGH
 }
 
 #ifdef USE_CANOPEN
@@ -355,7 +354,7 @@ static inline void fdcan_custom_handle(FDCAN_DeviceTypeDef* bsp_fdcan)
 }
 #endif // USE_CUSTOM
 
-#ifdef USE_CAN_PASSTHROUGH
+#if IS_USE_CAN_PASSTHROUGH == FC_CTRL_ON
 static inline void fdcan_passthrough_handle(FDCAN_DeviceTypeDef* bsp_fdcan)
 {
     // Custom protocol handling logic：
@@ -500,6 +499,6 @@ uint8_t fdcan_app_mav_send_packet(FDCAN_HandleTypeDef *hfdcan, uint8_t *pData, u
     return 0; // 成功
 }
 
-#endif // USE_CAN_PASSTHROUGH
+#endif // IS_USE_CAN_PASSTHROUGH
 
 #endif // USE_CAN

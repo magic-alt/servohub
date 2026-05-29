@@ -2,7 +2,11 @@
 
 static FDCAN_DeviceTypeDef bsp_fdcan = {
     .handle = &CAN_FDCAN_HANDLE,        // 绑定FDCAN句柄
-    .id = 0x15,                         // 默认CAN ID
+    .id = CAN_ID_DEFAULT,               // 默认CAN ID
+#if IS_USE_CAN_PASSTHROUGH == FC_CTRL_ON
+    .mav_sys_id = CANID_SYSID_DEFAULT,  // 默认系统ID
+    .mav_comp_id = CANID_COMPID_DEFAULT,// 默认组件ID
+#endif // IS_USE_CAN_PASSTHROUGH
     .baudrate = FDCAN_BAUDRATE_1M_BPS,  // 默认波特率1Mbps
     .mg_counts = 0,                     // 初始计数0
 };
@@ -26,6 +30,39 @@ FDCAN_DeviceTypeDef* bsp_fdcan_get_fdcan_handle(void)
 HAL_StatusTypeDef bsp_fdcan_init(void)
 {
     HAL_StatusTypeDef ret = HAL_OK;
+
+    // 根据波特率配置时序参数（Nominal=仲裁段，Data=数据段，参数基于80MHz时钟）
+    switch (bsp_fdcan.baudrate)
+    {
+        // ... Other CAN Baudrates Slow
+        case FDCAN_BAUDRATE_500K_BPS:
+            // 80MHz / (10 * (1 + 13 + 2)) = 80MHz / (10*16) ≈ 500000
+            bsp_fdcan.handle->Init.NominalPrescaler = 10;
+            bsp_fdcan.handle->Init.NominalSyncJumpWidth = 2;
+            bsp_fdcan.handle->Init.NominalTimeSeg1 = 13;
+            bsp_fdcan.handle->Init.NominalTimeSeg2 = 2;
+            bsp_fdcan.handle->Init.DataPrescaler = 10;
+            bsp_fdcan.handle->Init.DataSyncJumpWidth = 2;
+            bsp_fdcan.handle->Init.DataTimeSeg1 = 13;
+            bsp_fdcan.handle->Init.DataTimeSeg2 = 2;
+            break;
+
+        case FDCAN_BAUDRATE_1M_BPS: // 1Mbps（默认）
+            // 80MHz / (4 * (1 + 14 + 5)) = 80MHz / (4*20) = 1000000
+            bsp_fdcan.handle->Init.NominalPrescaler = 4;
+            bsp_fdcan.handle->Init.NominalSyncJumpWidth = 2;
+            bsp_fdcan.handle->Init.NominalTimeSeg1 = 14;
+            bsp_fdcan.handle->Init.NominalTimeSeg2 = 5;
+            bsp_fdcan.handle->Init.DataPrescaler = 4;
+            bsp_fdcan.handle->Init.DataSyncJumpWidth = 2;
+            bsp_fdcan.handle->Init.DataTimeSeg1 = 14;
+            bsp_fdcan.handle->Init.DataTimeSeg2 = 5;
+            break;
+
+        // ... Other CAN Baudrates Fast
+        default:
+            return HAL_ERROR;
+    }
 
     // 配置FDCAN句柄初始化参数（基于80MHz时钟）
     bsp_fdcan.handle->Instance = CAN_FDCAN_NUMBER;
@@ -91,7 +128,7 @@ HAL_StatusTypeDef bsp_fdcan_init(void)
 #endif /* USE_CANOPEN */
 
 // 配置FIFO1滤波器
-#ifdef USE_CAN_PASSTHROUGH
+#if IS_USE_CAN_PASSTHROUGH == FC_CTRL_ON
     bsp_fdcan.sFilterConfig.IdType = FDCAN_EXTENDED_ID;             // 使用扩展ID
     bsp_fdcan.sFilterConfig.FilterType = FDCAN_FILTER_MASK;         // 掩码过滤模式
     bsp_fdcan.sFilterConfig.FilterConfig = FDCAN_FILTER_TO_RXFIFO1; // 过滤后的数据送入FIFO1
@@ -111,7 +148,7 @@ HAL_StatusTypeDef bsp_fdcan_init(void)
      */
     bsp_fdcan.sFilterConfig.FilterIndex = CANID_EXT_FILTER_FUNC_SYSTEM;
     bsp_fdcan.sFilterConfig.FilterID1   = (CANID_FLAG_SYSTEM << CANID_FLAG_SHIFT) | \
-                                          ((uint32_t)get_app_Sys_id() << CANID_SYSID_SHIFT);
+                                          (bsp_fdcan.mav_sys_id << CANID_SYSID_SHIFT);
     bsp_fdcan.sFilterConfig.FilterID2   = CANID_FLAG_MASK | CANID_SYSID_MASK;
     ret = HAL_FDCAN_ConfigFilter(bsp_fdcan.handle, &bsp_fdcan.sFilterConfig);
     if (ret != HAL_OK) return ret;
@@ -122,8 +159,8 @@ HAL_StatusTypeDef bsp_fdcan_init(void)
      * 匹配 compid + sysid
      */
     bsp_fdcan.sFilterConfig.FilterIndex = CANID_EXT_FILTER_FUNC_SLAVE;
-    bsp_fdcan.sFilterConfig.FilterID1   = ((uint32_t)get_app_Comp_id() << CANID_COMPID_SHIFT) | \
-                                          ((uint32_t)get_app_Sys_id() << CANID_SYSID_SHIFT);
+    bsp_fdcan.sFilterConfig.FilterID1   = (bsp_fdcan.mav_comp_id << CANID_COMPID_SHIFT) | \
+                                          (bsp_fdcan.mav_sys_id << CANID_SYSID_SHIFT);
     bsp_fdcan.sFilterConfig.FilterID2   = CANID_COMPID_MASK | CANID_SYSID_MASK;
     ret = HAL_FDCAN_ConfigFilter(bsp_fdcan.handle, &bsp_fdcan.sFilterConfig);
     if (ret != HAL_OK) return ret;
@@ -131,7 +168,7 @@ HAL_StatusTypeDef bsp_fdcan_init(void)
     // 激活FIFO1新消息中断
     ret = HAL_FDCAN_ActivateNotification(bsp_fdcan.handle, FDCAN_IT_RX_FIFO1_NEW_MESSAGE, 0);
     if (ret != HAL_OK) return ret;
-#endif /* USE_CAN_PASSTHROUGH */
+#endif /* IS_USE_CAN_PASSTHROUGH */
     // 启动FDCAN模块
     ret = HAL_FDCAN_Start(bsp_fdcan.handle);
     if (ret != HAL_OK) return ret;
@@ -142,18 +179,25 @@ HAL_StatusTypeDef bsp_fdcan_init(void)
 /**
  * @brief 设置CAN ID
  * @param id: 要设置的CAN ID
- * @note 同时更新发送帧头的ID，CANopen协议下保存重启后生效
+ * @note 同时更新发送帧头的ID，保存重启后生效
  */
 void bsp_fdcan_set_id(uint32_t id)
 {
     bsp_fdcan.id = id;
     bsp_fdcan.tx_can.Identifier = id;
     bsp_fdcan.tx_fdcan.Identifier = id;
+#if IS_USE_CAN_PASSTHROUGH == FC_CTRL_ON
+    // 默认应用使用关联CAN ID 方案
+    if (CANID_ID_CAN_MAPPING_COMP) {
+        bsp_fdcan.mav_comp_id = bsp_fdcan.id;
+    }
+#endif // IS_USE_CAN_PASSTHROUGH
 }
 
 /**
  * @brief 获取当前CAN ID
  * @return 当前CAN ID
+ * @note 
  */
 uint32_t bsp_fdcan_get_id(void)
 {
@@ -161,74 +205,49 @@ uint32_t bsp_fdcan_get_id(void)
 }
 
 /**
+ * @brief 设置mavlink相关ID
+ * @param sys_id: 要设置的mavlink系统ID
+ * @param comp_id: 要设置的mavlink组件ID
+ * @note 仅在Mavlink v2协议透传模式下生效
+ */
+void bsp_fdcan_set_mav_id(uint8_t sys_id, uint8_t comp_id)
+{
+#if IS_USE_CAN_PASSTHROUGH == FC_CTRL_ON
+    // 默认应用使用关联CAN ID 方案
+    if (CANID_ID_CAN_MAPPING_COMP) {
+        return;
+    }
+    // 用户自定义方案
+    bsp_fdcan.mav_sys_id = sys_id;
+    bsp_fdcan.mav_comp_id = comp_id;
+
+    if (bsp_fdcan_init() != HAL_OK) {
+        sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
+    }
+#endif /* IS_USE_CAN_PASSTHROUGH */
+}
+
+/**
+ * @brief 获取当前mavlink相关ID
+ * @param sys_id: 要返回的mavlink系统ID
+ * @param comp_id: 要返回的mavlink组件ID
+ * @note 仅在Mavlink v2协议透传模式下生效
+ */
+void bsp_fdcan_get_mav_id(uint8_t *sys_id, uint8_t *comp_id)
+{
+#if IS_USE_CAN_PASSTHROUGH == FC_CTRL_ON
+    *sys_id = (uint8_t)(bsp_fdcan.mav_sys_id);
+    *comp_id = (uint8_t)(bsp_fdcan.mav_comp_id);
+#endif /* IS_USE_CAN_PASSTHROUGH */
+}
+
+/**
  * @brief 设置CAN波特率
- * @param baudrate: 目标波特率（支持125000、250000、500000、1000000）
- * @note 基于80MHz时钟计算参数，无匹配波特率则设置失败报错
+ * @param baudrate: 目标波特率
+ * @note 波特率设置，保存重启后生效
  */
 void bsp_fdcan_set_baudrate(uint32_t baudrate)
 {
-    // 根据波特率配置时序参数（Nominal=仲裁段，Data=数据段，参数基于80MHz时钟）
-    switch ((FDCAN_BaudrateTypeDef)baudrate)
-    {
-        case FDCAN_BAUDRATE_125K_BPS:
-            // 80MHz / (16 * (1 + 31 + 8)) = 80MHz / (16*40) = 125000
-            bsp_fdcan.handle->Init.NominalPrescaler = 16;
-            bsp_fdcan.handle->Init.NominalSyncJumpWidth = 8;
-            bsp_fdcan.handle->Init.NominalTimeSeg1 = 31;
-            bsp_fdcan.handle->Init.NominalTimeSeg2 = 8;
-            bsp_fdcan.handle->Init.DataPrescaler = 16;
-            bsp_fdcan.handle->Init.DataSyncJumpWidth = 8;
-            bsp_fdcan.handle->Init.DataTimeSeg1 = 31;
-            bsp_fdcan.handle->Init.DataTimeSeg2 = 8;
-            break;
-
-        case FDCAN_BAUDRATE_250K_BPS:
-            // 80MHz / (8 * (1 + 31 + 8)) = 80MHz / (8*40) = 250000
-            bsp_fdcan.handle->Init.NominalPrescaler = 8;
-            bsp_fdcan.handle->Init.NominalSyncJumpWidth = 8;
-            bsp_fdcan.handle->Init.NominalTimeSeg1 = 31;
-            bsp_fdcan.handle->Init.NominalTimeSeg2 = 8;
-            bsp_fdcan.handle->Init.DataPrescaler = 8;
-            bsp_fdcan.handle->Init.DataSyncJumpWidth = 8;
-            bsp_fdcan.handle->Init.DataTimeSeg1 = 31;
-            bsp_fdcan.handle->Init.DataTimeSeg2 = 8;
-            break;
-
-        case FDCAN_BAUDRATE_500K_BPS:
-            // 80MHz / (10 * (1 + 28 + 5)) = 80MHz / (10*34) ≈ 500000
-            bsp_fdcan.handle->Init.NominalPrescaler = 10;
-            bsp_fdcan.handle->Init.NominalSyncJumpWidth = 5;
-            bsp_fdcan.handle->Init.NominalTimeSeg1 = 28;
-            bsp_fdcan.handle->Init.NominalTimeSeg2 = 5;
-            bsp_fdcan.handle->Init.DataPrescaler = 10;
-            bsp_fdcan.handle->Init.DataSyncJumpWidth = 5;
-            bsp_fdcan.handle->Init.DataTimeSeg1 = 28;
-            bsp_fdcan.handle->Init.DataTimeSeg2 = 5;
-            break;
-
-        case FDCAN_BAUDRATE_1M_BPS: // 1Mbps（默认）
-            // 80MHz / (4 * (1 + 14 + 5)) = 80MHz / (4*20) = 1000000
-            bsp_fdcan.handle->Init.NominalPrescaler = 4;
-            bsp_fdcan.handle->Init.NominalSyncJumpWidth = 2;
-            bsp_fdcan.handle->Init.NominalTimeSeg1 = 14;
-            bsp_fdcan.handle->Init.NominalTimeSeg2 = 5;
-            bsp_fdcan.handle->Init.DataPrescaler = 4;
-            bsp_fdcan.handle->Init.DataSyncJumpWidth = 2;
-            bsp_fdcan.handle->Init.DataTimeSeg1 = 14;
-            bsp_fdcan.handle->Init.DataTimeSeg2 = 5;
-            break;
-
-        default:
-            sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
-            return;
-    }
-
-    if (bsp_fdcan_init() != HAL_OK) // 初始化FDCAN模块，配置参数
-    {
-        sys_set_bsp_error_state(ERROR_COMMS_INIT, ERROR_SET);
-        return;
-    }
-
     bsp_fdcan.baudrate = baudrate;
 }
 
