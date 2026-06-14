@@ -52,7 +52,10 @@ octave-workspace
 /embedded_project/Y01/MDK-ARM/DebugConfig
 /embedded_project/Y01/MDK-ARM/RTE
 /embedded_project/Y01/MDK-ARM/STM32H743VGT6_Y01
-/embedded_project/YuanHub_A01/MDK-ARM/STM32G474RET6
+
+/embedded_project/Y01/BootLoader/MDK-ARM/DebugConfig
+/embedded_project/Y01/BootLoader/MDK-ARM/RTE
+/embedded_project/Y01/BootLoader/MDK-ARM/BootLoader
 
 # Sil Build Output
 /out
