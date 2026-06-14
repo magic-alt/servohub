@@ -1,41 +1,30 @@
 #ifndef BSP_FLASH_H
 #define BSP_FLASH_H
 
-#include <fal.h>
-#include "board.h"
+#include "data_type_define.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#ifndef FAL_USING_NOR_FLASH_DEV_NAME
-#define FAL_USING_NOR_FLASH_DEV_NAME    "norflash0"
-#endif
+/* STM32H743VGT6 Flash 配置 */
+// #define BSP_FLASH_TOTAL_SIZE            (FLASH_SIZE)
+#define BSP_FLASH_TOTAL_SIZE            (1 * 1024 * 1024)
+// #define BSP_FLASH_BANK_SIZE             (FLASH_BANK_SIZE)
+#define BSP_FLASH_BANK_SIZE             (BSP_FLASH_TOTAL_SIZE >> 1)
+#define BSP_FLASH_SECTOR_SIZE           (FLASH_SECTOR_SIZE)
 
-/* Nor Flash GD25Q64ESIG 命令定义 */
-#define GD25Q64_CMD_WRITE_ENABLE        0x06
-#define GD25Q64_CMD_WRITE_DISABLE       0x04
-#define GD25Q64_CMD_READ_STATUS_REG1    0x05
-#define GD25Q64_CMD_READ_STATUS_REG2    0x35
-#define GD25Q64_CMD_WRITE_STATUS_REG    0x01
-#define GD25Q64_CMD_PAGE_PROGRAM        0x02
-#define GD25Q64_CMD_QUAD_PAGE_PROGRAM   0x32
-#define GD25Q64_CMD_READ_DATA           0x03
-#define GD25Q64_CMD_FAST_READ           0x0B
-#define GD25Q64_CMD_SECTOR_ERASE        0x20
-#define GD25Q64_CMD_BLOCK_ERASE_32K     0x52
-#define GD25Q64_CMD_BLOCK_ERASE_64K     0xD8
-#define GD25Q64_CMD_CHIP_ERASE          0xC7
-#define GD25Q64_CMD_POWER_DOWN          0xB9
-#define GD25Q64_CMD_RELEASE_POWER_DOWN  0xAB
-#define GD25Q64_CMD_READ_ID             0x9F
+#define BSP_FLASH_BASE_ADDR             (FLASH_BASE)        // Flash 基地址
+#define BSP_FLASH_BANK1_ADDR            (FLASH_BANK1_BASE)  // BANK 1 基地址
+#define BSP_FLASH_BANK2_ADDR            (FLASH_BANK2_BASE)  // BANK 2 基地址
 
-/* Nor Flash GD25Q64ESIG 参数 */
-#define GD25Q64_PAGE_SIZE               256
-#define GD25Q64_SECTOR_SIZE             4096
-#define GD25Q64_BLOCK_32K_SIZE          (32 * 1024)
-#define GD25Q64_BLOCK_64K_SIZE          (64 * 1024)
-#define GD25Q64_TOTAL_SIZE              (8 * 1024 * 1024)
+#define BSP_FLASH_PROG_GRANULARITY      32U    // 编程粒度32字节
+#define BSP_FLASH_ADDR_ALIGNMENT        4U     // 地址4字节对齐
+
+int bsp_flash_init(void);
+int bsp_flash_read(long offset, uint8_t *buf, size_t size);
+int bsp_flash_write(long offset, const uint8_t *buf, size_t size);
+int bsp_flash_erase(long offset, size_t size);
 
 #ifdef __cplusplus
 }

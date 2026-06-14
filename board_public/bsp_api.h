@@ -138,7 +138,20 @@ void bsp_set_run_led_toggle(void);
 void bsp_set_error_led_state(uint8_t state);
 /* 设置错误LED状态翻转 */
 void bsp_set_error_led_toggle(void);
-
+/* 文件传输参数配置 */
+void bsp_set_file_transfer_config(uint8_t file_type, uint32_t file_size, uint8_t file_dir);
+/* 固件升级配置 */
+void bsp_set_fw_upgrade_config(uint8_t fw_mode);
+/* 固件升级写入 */
+void bsp_set_fw_upgrade_write(uint16_t const index, uint16_t const length, void const *data);
+/* 获取固件升级当前文件传输完成帧索引 */
+uint32_t bsp_get_fw_file_index_complete(void);
+/* 获取固件升级当前文件传输状态 */
+APP_FILE_STATUS bsp_get_fw_file_status(void);
+/* 获取固件升级当前步骤 */
+int8_t bsp_get_fw_operating_steps(void);
+/* 固件升级运行主函数 */
+void bsp_run_fw_upgrade(void);
 #pragma endregion
 
 /** @} */ // end of MotorControl

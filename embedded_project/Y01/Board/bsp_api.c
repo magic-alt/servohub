@@ -790,5 +790,75 @@ void bsp_set_error_led_toggle(void)
 {
     LED_RED_TOGGLE();
 }
-
+/**
+ * @brief 文件传输参数配置
+ * @param[in] file_type 文件传输类型
+ * @param[in] file_size 文件传输大小
+ * @param[in] file_dir 文件传输方向
+ * @param[in] p_buffer 文件传输缓冲区指针
+ */
+void bsp_set_file_transfer_config(uint8_t file_type, uint32_t file_size, uint8_t file_dir)
+{
+    if ((APP_FILE_TYPE)file_type == APP_FILE_TYPE_FIRMWARE)
+    {
+        if ((APP_FILE_DIR)file_dir == APP_FILE_DIR_DOWNLOAD)
+        {
+            drv_upgrade_set_file_size(file_size);
+        }
+    }
+}
+/**
+ * @brief 固件升级配置
+ * @param[in] fw_mode 固件操作模式
+ */
+void bsp_set_fw_upgrade_config(uint8_t fw_mode)
+{
+    drv_upgrade_set_mode(fw_mode);
+}
+/**
+ * @brief 固件升级写入
+ * @param[in] index 固件升级写入索引
+ * @param[in] length 固件升级写入长度
+ * @param[in] data 固件升级写入数据指针
+ */
+void bsp_set_fw_upgrade_write(uint16_t const index, uint16_t const length, void const *data)
+{
+    drv_upgrade_write_data(index, length, data);
+}
+/**
+ * @brief 获取固件升级当前文件传输完成帧索引
+ * @return 固件升级当前文件传输完成帧索引
+ * @note
+ */
+uint32_t bsp_get_fw_file_index_complete(void)
+{
+    return (uint32_t)drv_upgrade_get_frame_index();
+}
+/**
+ * @brief 获取固件升级当前文件传输状态
+ * @return 固件升级当前文件传输状态
+ * @note
+ */
+APP_FILE_STATUS bsp_get_fw_file_status(void)
+{
+    return drv_upgrade_convert_status();
+}
+/**
+ * @brief 获取固件升级当前步骤
+ * @return 固件升级当前步骤
+ * @note
+ */
+int8_t bsp_get_fw_operating_steps(void)
+{
+    return (int8_t)drv_upgrade_get_state();
+}
+/**
+ * @brief 固件升级运行主函数
+ * @return
+ * @note
+ */
+void bsp_run_fw_upgrade(void)
+{
+    drv_upgrade_run();
+}
 #pragma endregion

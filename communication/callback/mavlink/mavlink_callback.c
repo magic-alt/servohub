@@ -29,6 +29,7 @@ mavlink_waveformdata_t waveform_data;
 mavlink_systemconfig_t system_config_t;
 mavlink_tableconfig_t table_config_t;
 mavlink_tabledata_t table_data_t;
+mavlink_appfiletransferstream_t appfile_transfer_stream_t;
 
 //DATABASE_CODE_START_1
 mavlink_pmsmconfig_t pmsm_config_t;
@@ -106,28 +107,45 @@ mavlink_simplantoutput_t sim_plant_output_t;
 mavlink_simplantconfig_t sim_plant_config_t;
 mavlink_appdebugparam_t app_debug_param_t;
 mavlink_appmavlinkconfig_t app_mavlink_config_t;
+mavlink_appfiletransferconfig_t app_file_transfer_config_t;
+mavlink_appfwupgradeparam_t app_fw_upgrade_param_t;
 //DATABASE_CODE_STOP_1
 
 static mavlink_message_t msg;
 static mavlink_status_t status;
 static mavlink_message_t send_msg;
+static uint16_t mavlink_parse_fail_cnt = 0;  // 解析失败计数器
+
 void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_t len)
 {
-    uint8_t mavlink_flag = 0;
-    
+    bool is_mavlink_parse_success = false;
 
-    if (len > MAVLINK_RECV_BUFF_SIZE){
+    if (len > MAVLINK_RECV_BUFF_SIZE) {
         len = MAVLINK_RECV_BUFF_SIZE;
     }
 
-    for (int i = 0; i < len; i++){
-        if (mavlink_parse_char(MAVLINK_COMM_0, rx_data[i], &msg, &status)){
-            mavlink_flag = 1;
+    for (uint32_t i = 0; i < len; i++) {
+        if (mavlink_parse_char(MAVLINK_COMM_0, rx_data[i], &msg, &status)) {
+            mavlink_parse_fail_cnt = 0;  // 解析成功，重置失败计数器
+            is_mavlink_parse_success = true;
             break;
+        }
+        else {
+            // 解析失败，增加计数器
+            mavlink_parse_fail_cnt++;
+            // 超过阈值时重置状态和缓存
+            if (mavlink_parse_fail_cnt >= MAVLINK_PARSE_ERROR_THRESHOLD) {
+                // 重置MAVLink通道状态、清零接收缓冲区
+                mavlink_reset_channel_status(MAVLINK_COMM_0);
+                mavlink_message_t *rx_buffer = mavlink_get_channel_buffer(MAVLINK_COMM_0);
+                memset(rx_buffer, 0, sizeof(mavlink_message_t));
+                // 重置失败计数器
+                mavlink_parse_fail_cnt = 0;
+            }
         }
     }
 
-    if (!mavlink_flag){
+    if (!is_mavlink_parse_success) {
         return;
     }
 
@@ -170,6 +188,9 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
             case MAVLINK_MSG_ID_TableData:
                 memcpy(&table_data_t.table_data, axis_dw->tq_fc_id_InstanceData.rtdw.com_table + table_config_t.table_index_offset * 20, sizeof(table_data_t.table_data));
                 mavlink_msg_tabledata_encode(sys_id, comp_id, &send_msg, (mavlink_tabledata_t *)&table_data_t);
+                break;
+            case MAVLINK_MSG_ID_AppFileTransferStream:
+                mavlink_msg_appfiletransferstream_decode(&msg, &appfile_transfer_stream_t);
                 break;
 //DATABASE_CODE_START_2
             case MAVLINK_MSG_ID_PmsmConfig:
@@ -805,6 +826,21 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 app_mavlink_config_t.Comp_id = get_app_Comp_id();
                 mavlink_msg_appmavlinkconfig_encode(sys_id, comp_id, &send_msg, (mavlink_appmavlinkconfig_t *)&app_mavlink_config_t);
                 break;
+            case MAVLINK_MSG_ID_AppFileTransferConfig:
+                app_file_transfer_config_t.File_type = get_app_File_type();
+                app_file_transfer_config_t.File_size = get_app_File_size();
+                app_file_transfer_config_t.File_direction = get_app_File_direction();
+                app_file_transfer_config_t.File_index_complete = get_app_File_index_complete();
+                app_file_transfer_config_t.File_status = get_app_File_status();
+                mavlink_msg_appfiletransferconfig_encode(sys_id, comp_id, &send_msg, (mavlink_appfiletransferconfig_t *)&app_file_transfer_config_t);
+                break;
+            case MAVLINK_MSG_ID_AppFwUpgradeParam:
+                app_fw_upgrade_param_t.Fw_mode = get_app_Fw_mode();
+                app_fw_upgrade_param_t.Fw_app_index = get_app_Fw_app_index();
+                app_fw_upgrade_param_t.Fw_flash_size = get_app_Fw_flash_size();
+                app_fw_upgrade_param_t.Fw_operating_steps = get_app_Fw_operating_steps();
+                mavlink_msg_appfwupgradeparam_encode(sys_id, comp_id, &send_msg, (mavlink_appfwupgradeparam_t *)&app_fw_upgrade_param_t);
+                break;
 //DATABASE_CODE_STOP_2
             default:
                 break;
@@ -843,6 +879,19 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 mavlink_msg_tabledata_decode(&msg, (mavlink_tabledata_t *)&table_data_t);
                 memcpy(axis_dw->tq_fc_id_InstanceData.rtdw.com_table + table_config_t.table_index_offset * 20, table_data_t.table_data, sizeof(table_data_t.table_data));
                 mavlink_msg_tableconfig_encode(sys_id, comp_id, &send_msg, (mavlink_tableconfig_t *)&table_config_t);
+                break;
+            case MAVLINK_MSG_ID_AppFileTransferStream:
+
+                mavlink_msg_appfiletransferstream_decode(&msg, (mavlink_appfiletransferstream_t *)&appfile_transfer_stream_t);
+
+                FwUpgradeOverMavlinkCallback(appfile_transfer_stream_t.Index, appfile_transfer_stream_t.Length, (uint8_t *)appfile_transfer_stream_t.File_buffer);
+
+                app_file_transfer_config_t.File_type = get_app_File_type();
+                app_file_transfer_config_t.File_size = get_app_File_size();
+                app_file_transfer_config_t.File_direction = get_app_File_direction();
+                app_file_transfer_config_t.File_index_complete = get_app_File_index_complete();
+                app_file_transfer_config_t.File_status = get_app_File_status();
+                mavlink_msg_appfiletransferconfig_encode(sys_id, comp_id, &send_msg, (mavlink_appfiletransferconfig_t *)&app_file_transfer_config_t);
                 break;
 //DATABASE_CODE_START_3
             case MAVLINK_MSG_ID_PmsmConfig:
@@ -1527,6 +1576,24 @@ void MavlinkRecvCallback(Axis *axis, AxisDw *axis_dw, uint8_t rx_data[], uint32_
                 if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Comp_id(app_mavlink_config_t.Comp_id);}
                 app_mavlink_config_t.Comp_id = get_app_Comp_id();
                 mavlink_msg_appmavlinkconfig_encode(sys_id, comp_id, &send_msg, (mavlink_appmavlinkconfig_t *)&app_mavlink_config_t);
+                break;
+            case MAVLINK_MSG_ID_AppFileTransferConfig:
+                mavlink_msg_appfiletransferconfig_decode(&msg, (mavlink_appfiletransferconfig_t *)&app_file_transfer_config_t);
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_File_type(app_file_transfer_config_t.File_type);}
+                app_file_transfer_config_t.File_type = get_app_File_type();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_File_size(app_file_transfer_config_t.File_size);}
+                app_file_transfer_config_t.File_size = get_app_File_size();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_File_direction(app_file_transfer_config_t.File_direction);}
+                app_file_transfer_config_t.File_direction = get_app_File_direction();
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_File_index_complete(app_file_transfer_config_t.File_index_complete);}
+                app_file_transfer_config_t.File_index_complete = get_app_File_index_complete();
+                mavlink_msg_appfiletransferconfig_encode(sys_id, comp_id, &send_msg, (mavlink_appfiletransferconfig_t *)&app_file_transfer_config_t);
+                break;
+            case MAVLINK_MSG_ID_AppFwUpgradeParam:
+                mavlink_msg_appfwupgradeparam_decode(&msg, (mavlink_appfwupgradeparam_t *)&app_fw_upgrade_param_t);
+                if(get_app_Comm_control_authority() == COMM_CONTROL_HOST){set_app_Fw_mode(app_fw_upgrade_param_t.Fw_mode);}
+                app_fw_upgrade_param_t.Fw_mode = get_app_Fw_mode();
+                mavlink_msg_appfwupgradeparam_encode(sys_id, comp_id, &send_msg, (mavlink_appfwupgradeparam_t *)&app_fw_upgrade_param_t);
                 break;
 //DATABASE_CODE_STOP_3
             default:

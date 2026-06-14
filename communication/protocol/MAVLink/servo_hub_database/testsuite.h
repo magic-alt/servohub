@@ -5583,6 +5583,192 @@ static void mavlink_test_appmavlinkconfig(uint8_t system_id, uint8_t component_i
 #endif
 }
 
+static void mavlink_test_appfiletransferconfig(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_AppFileTransferConfig >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_appfiletransferconfig_t packet_in = {
+        963497464,963497672,29,96,163
+    };
+    mavlink_appfiletransferconfig_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.File_size = packet_in.File_size;
+        packet1.File_index_complete = packet_in.File_index_complete;
+        packet1.File_type = packet_in.File_type;
+        packet1.File_direction = packet_in.File_direction;
+        packet1.File_status = packet_in.File_status;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_AppFileTransferConfig_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_AppFileTransferConfig_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appfiletransferconfig_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_appfiletransferconfig_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appfiletransferconfig_pack(system_id, component_id, &msg , packet1.File_type , packet1.File_size , packet1.File_direction , packet1.File_index_complete , packet1.File_status );
+    mavlink_msg_appfiletransferconfig_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appfiletransferconfig_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.File_type , packet1.File_size , packet1.File_direction , packet1.File_index_complete , packet1.File_status );
+    mavlink_msg_appfiletransferconfig_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_appfiletransferconfig_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appfiletransferconfig_send(MAVLINK_COMM_1 , packet1.File_type , packet1.File_size , packet1.File_direction , packet1.File_index_complete , packet1.File_status );
+    mavlink_msg_appfiletransferconfig_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+#ifdef MAVLINK_HAVE_GET_MESSAGE_INFO
+    MAVLINK_ASSERT(mavlink_get_message_info_by_name("AppFileTransferConfig") != NULL);
+    MAVLINK_ASSERT(mavlink_get_message_info_by_id(MAVLINK_MSG_ID_AppFileTransferConfig) != NULL);
+#endif
+}
+
+static void mavlink_test_appfwupgradeparam(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_AppFwUpgradeParam >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_appfwupgradeparam_t packet_in = {
+        963497464,17,84,151
+    };
+    mavlink_appfwupgradeparam_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.Fw_flash_size = packet_in.Fw_flash_size;
+        packet1.Fw_mode = packet_in.Fw_mode;
+        packet1.Fw_app_index = packet_in.Fw_app_index;
+        packet1.Fw_operating_steps = packet_in.Fw_operating_steps;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_AppFwUpgradeParam_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_AppFwUpgradeParam_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appfwupgradeparam_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_appfwupgradeparam_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appfwupgradeparam_pack(system_id, component_id, &msg , packet1.Fw_mode , packet1.Fw_app_index , packet1.Fw_flash_size , packet1.Fw_operating_steps );
+    mavlink_msg_appfwupgradeparam_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appfwupgradeparam_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.Fw_mode , packet1.Fw_app_index , packet1.Fw_flash_size , packet1.Fw_operating_steps );
+    mavlink_msg_appfwupgradeparam_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_appfwupgradeparam_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appfwupgradeparam_send(MAVLINK_COMM_1 , packet1.Fw_mode , packet1.Fw_app_index , packet1.Fw_flash_size , packet1.Fw_operating_steps );
+    mavlink_msg_appfwupgradeparam_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+#ifdef MAVLINK_HAVE_GET_MESSAGE_INFO
+    MAVLINK_ASSERT(mavlink_get_message_info_by_name("AppFwUpgradeParam") != NULL);
+    MAVLINK_ASSERT(mavlink_get_message_info_by_id(MAVLINK_MSG_ID_AppFwUpgradeParam) != NULL);
+#endif
+}
+
+static void mavlink_test_appfiletransferstream(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_AppFileTransferStream >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_appfiletransferstream_t packet_in = {
+        17235,139,{ 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201 }
+    };
+    mavlink_appfiletransferstream_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.Index = packet_in.Index;
+        packet1.Length = packet_in.Length;
+        
+        mav_array_memcpy(packet1.File_buffer, packet_in.File_buffer, sizeof(uint8_t)*252);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_AppFileTransferStream_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_AppFileTransferStream_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appfiletransferstream_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_appfiletransferstream_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appfiletransferstream_pack(system_id, component_id, &msg , packet1.Index , packet1.Length , packet1.File_buffer );
+    mavlink_msg_appfiletransferstream_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appfiletransferstream_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.Index , packet1.Length , packet1.File_buffer );
+    mavlink_msg_appfiletransferstream_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_appfiletransferstream_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_appfiletransferstream_send(MAVLINK_COMM_1 , packet1.Index , packet1.Length , packet1.File_buffer );
+    mavlink_msg_appfiletransferstream_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+#ifdef MAVLINK_HAVE_GET_MESSAGE_INFO
+    MAVLINK_ASSERT(mavlink_get_message_info_by_name("AppFileTransferStream") != NULL);
+    MAVLINK_ASSERT(mavlink_get_message_info_by_id(MAVLINK_MSG_ID_AppFileTransferStream) != NULL);
+#endif
+}
+
 static void mavlink_test_servo_hub_database(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
 {
     mavlink_test_command_long(system_id, component_id, last_msg);
@@ -5673,6 +5859,9 @@ static void mavlink_test_servo_hub_database(uint8_t system_id, uint8_t component
     mavlink_test_tabledata(system_id, component_id, last_msg);
     mavlink_test_tableconfig(system_id, component_id, last_msg);
     mavlink_test_appmavlinkconfig(system_id, component_id, last_msg);
+    mavlink_test_appfiletransferconfig(system_id, component_id, last_msg);
+    mavlink_test_appfwupgradeparam(system_id, component_id, last_msg);
+    mavlink_test_appfiletransferstream(system_id, component_id, last_msg);
 }
 
 #ifdef __cplusplus

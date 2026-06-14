@@ -26,7 +26,7 @@ typedef struct {
     uint32_t type;
 } InterVarStruct;
 
-extern const InterVarStruct kParamDataBase[408];
+extern const InterVarStruct kParamDataBase[417];
 
 #ifdef __cplusplus
 }

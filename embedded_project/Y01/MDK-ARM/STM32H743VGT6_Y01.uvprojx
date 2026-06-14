@@ -724,6 +724,11 @@
               <FilePath>..\Board\bsp_flash.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_nor_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\bsp_nor_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>drv_can_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Board\drv_can_app.c</FilePath>
@@ -734,9 +739,14 @@
               <FilePath>..\Board\drv_encoder.c</FilePath>
             </File>
             <File>
-              <FileName>drv_flash.c</FileName>
+              <FileName>drv_nor_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\drv_flash.c</FilePath>
+              <FilePath>..\Board\drv_nor_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_upgrade.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\drv_upgrade.c</FilePath>
             </File>
             <File>
               <FileName>system_timer.c</FileName>
@@ -1422,7 +1432,7 @@
             <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
-            <RunUserProg1>0</RunUserProg1>
+            <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
             <UserProg1Name>fromelf --bin -o "$L@L.bin" "#L</UserProg1Name>
             <UserProg2Name></UserProg2Name>
@@ -2066,6 +2076,11 @@
               <FilePath>..\Board\bsp_flash.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_nor_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\bsp_nor_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>drv_can_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Board\drv_can_app.c</FilePath>
@@ -2076,9 +2091,14 @@
               <FilePath>..\Board\drv_encoder.c</FilePath>
             </File>
             <File>
-              <FileName>drv_flash.c</FileName>
+              <FileName>drv_nor_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\drv_flash.c</FilePath>
+              <FilePath>..\Board\drv_nor_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_upgrade.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\drv_upgrade.c</FilePath>
             </File>
             <File>
               <FileName>system_timer.c</FileName>
@@ -2764,7 +2784,7 @@
             <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
-            <RunUserProg1>0</RunUserProg1>
+            <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
             <UserProg1Name>fromelf --bin -o "$L@L.bin" "#L</UserProg1Name>
             <UserProg2Name></UserProg2Name>
@@ -3408,6 +3428,11 @@
               <FilePath>..\Board\bsp_flash.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_nor_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\bsp_nor_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>drv_can_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Board\drv_can_app.c</FilePath>
@@ -3418,9 +3443,14 @@
               <FilePath>..\Board\drv_encoder.c</FilePath>
             </File>
             <File>
-              <FileName>drv_flash.c</FileName>
+              <FileName>drv_nor_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\drv_flash.c</FilePath>
+              <FilePath>..\Board\drv_nor_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_upgrade.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\drv_upgrade.c</FilePath>
             </File>
             <File>
               <FileName>system_timer.c</FileName>
@@ -4107,9 +4137,9 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
-            <RunUserProg2>0</RunUserProg2>
+            <RunUserProg2>1</RunUserProg2>
             <UserProg1Name>fromelf --bin -o "$L@L.bin" "#L</UserProg1Name>
-            <UserProg2Name></UserProg2Name>
+            <UserProg2Name>..\FwProcess\FwCalcCrc32.bat</UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
             <nStopA1X>0</nStopA1X>
@@ -4214,7 +4244,7 @@
             <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>1</hadIROM2>
-            <StupSel>8</StupSel>
+            <StupSel>16</StupSel>
             <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
@@ -4231,8 +4261,8 @@
             <Ro1Chk>0</Ro1Chk>
             <Ro2Chk>0</Ro2Chk>
             <Ro3Chk>0</Ro3Chk>
-            <Ir1Chk>1</Ir1Chk>
-            <Ir2Chk>0</Ir2Chk>
+            <Ir1Chk>0</Ir1Chk>
+            <Ir2Chk>1</Ir2Chk>
             <Ra1Chk>0</Ra1Chk>
             <Ra2Chk>0</Ra2Chk>
             <Ra3Chk>0</Ra3Chk>
@@ -4301,7 +4331,7 @@
               </OCR_RVCT3>
               <OCR_RVCT4>
                 <Type>1</Type>
-                <StartAddress>0x8020000</StartAddress>
+                <StartAddress>0x8000000</StartAddress>
                 <Size>0x80000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
@@ -4750,6 +4780,11 @@
               <FilePath>..\Board\bsp_flash.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_nor_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\bsp_nor_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>drv_can_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Board\drv_can_app.c</FilePath>
@@ -4760,9 +4795,14 @@
               <FilePath>..\Board\drv_encoder.c</FilePath>
             </File>
             <File>
-              <FileName>drv_flash.c</FileName>
+              <FileName>drv_nor_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\drv_flash.c</FilePath>
+              <FilePath>..\Board\drv_nor_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_upgrade.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\drv_upgrade.c</FilePath>
             </File>
             <File>
               <FileName>system_timer.c</FileName>
@@ -5449,9 +5489,9 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
-            <RunUserProg2>0</RunUserProg2>
+            <RunUserProg2>1</RunUserProg2>
             <UserProg1Name>fromelf --bin -o "$L@L.bin" "#L</UserProg1Name>
-            <UserProg2Name></UserProg2Name>
+            <UserProg2Name>..\FwProcess\FwCalcCrc32.bat</UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
             <nStopA1X>0</nStopA1X>
@@ -5556,7 +5596,7 @@
             <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>1</hadIROM2>
-            <StupSel>8</StupSel>
+            <StupSel>16</StupSel>
             <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
@@ -5573,8 +5613,8 @@
             <Ro1Chk>0</Ro1Chk>
             <Ro2Chk>0</Ro2Chk>
             <Ro3Chk>0</Ro3Chk>
-            <Ir1Chk>1</Ir1Chk>
-            <Ir2Chk>0</Ir2Chk>
+            <Ir1Chk>0</Ir1Chk>
+            <Ir2Chk>1</Ir2Chk>
             <Ra1Chk>0</Ra1Chk>
             <Ra2Chk>0</Ra2Chk>
             <Ra3Chk>0</Ra3Chk>
@@ -5643,7 +5683,7 @@
               </OCR_RVCT3>
               <OCR_RVCT4>
                 <Type>1</Type>
-                <StartAddress>0x8020000</StartAddress>
+                <StartAddress>0x8000000</StartAddress>
                 <Size>0x80000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
@@ -6092,6 +6132,11 @@
               <FilePath>..\Board\bsp_flash.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_nor_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\bsp_nor_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>drv_can_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Board\drv_can_app.c</FilePath>
@@ -6102,9 +6147,14 @@
               <FilePath>..\Board\drv_encoder.c</FilePath>
             </File>
             <File>
-              <FileName>drv_flash.c</FileName>
+              <FileName>drv_nor_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\drv_flash.c</FilePath>
+              <FilePath>..\Board\drv_nor_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_upgrade.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\drv_upgrade.c</FilePath>
             </File>
             <File>
               <FileName>system_timer.c</FileName>
@@ -7434,6 +7484,11 @@
               <FilePath>..\Board\bsp_flash.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_nor_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\bsp_nor_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>drv_can_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Board\drv_can_app.c</FilePath>
@@ -7444,9 +7499,14 @@
               <FilePath>..\Board\drv_encoder.c</FilePath>
             </File>
             <File>
-              <FileName>drv_flash.c</FileName>
+              <FileName>drv_nor_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Board\drv_flash.c</FilePath>
+              <FilePath>..\Board\drv_nor_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_upgrade.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Board\drv_upgrade.c</FilePath>
             </File>
             <File>
               <FileName>system_timer.c</FileName>

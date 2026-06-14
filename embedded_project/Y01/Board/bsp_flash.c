@@ -1,359 +1,327 @@
 #include "bsp_flash.h"
+#include "main.h"
 
-/* Nor Flash SPI操作函数 */
-static uint8_t spi_transfer(uint8_t data);
-static void spi_transfer_bulk(uint8_t *tx_data, uint8_t *rx_data, size_t size);
-static int wait_for_ready(void);
-static int write_enable(void);
-static uint8_t read_status_register(void);
-static int chip_erase(void);
-
-/* FlashDB 标准接口接口 */
-static int init(void);
-static int read(long offset, uint8_t *buf, size_t size);
-static int write(long offset, const uint8_t *buf, size_t size);
-static int erase(long offset, size_t size);
-
-struct fal_flash_dev nor_flash0 =
-{
-    .name       = FAL_USING_NOR_FLASH_DEV_NAME,
-    .addr       = 0,
-    .len        = 8 * 1024 * 1024,
-    .blk_size   = 4 * 1024,
-    .ops        = {init, read, write, erase},
-    .write_gran = FDB_WRITE_GRAN
-};
+static bool flash_offset_to_phys(long offset, uint32_t *phys_addr);
+static bool flash_get_bank_sector(long offset, uint32_t *bank, uint32_t *sector);
+static bool flash_check_param(long offset, size_t size);
 
 /**
- * @brief 初始化GD25Q64ESIG Flash
- * @return 0-成功, -1-失败
+ * @brief  Flash初始化（无额外硬件步骤）
+ * @retval 0=成功，-1=失败
  */
-static int init(void)
+int bsp_flash_init(void)
 {
-    uint8_t tx_buf[4] = {0};
-    uint8_t rx_buf[3] = {0}; // 存储MID(1B)+Memory Type(1B)+Capacity(1B)
-
-    /* 0. 释放其他从机片选信号（确保CS引脚为高电平） */
-    DRV_SPI_CS_DISABLE();
-
-    /* 1. 释放深度掉电模式（规格书7.29） */
-    FLASH_SPI_CS_ENABLE();
-    tx_buf[0] = GD25Q64_CMD_RELEASE_POWER_DOWN; // ABH命令
-    HAL_SPI_Transmit(&FLASH_SPI_HANDLE, tx_buf, 1, 10);
-    FLASH_SPI_CS_DISABLE();
-    HAL_Delay(1); // 远大于tRES1（20μs），确保设备唤醒
-
-    /* 2. 读取设备ID（9FH命令，规格书7.20） */
-    FLASH_SPI_CS_ENABLE();
-    tx_buf[0] = GD25Q64_CMD_READ_ID; // 9FH命令
-    // 发送命令后，读取3字节ID（MID+Memory Type+Capacity）
-    HAL_SPI_Transmit(&FLASH_SPI_HANDLE, tx_buf, 1, 10);
-    HAL_SPI_Receive(&FLASH_SPI_HANDLE, rx_buf, 3, 10);
-    FLASH_SPI_CS_DISABLE();
-
-    /* 3. 验证GD25Q128设备ID（规格书Table of ID Definitions） */
-    if (rx_buf[0] != 0xC8 || rx_buf[1] != 0x40 || rx_buf[2] != 0x17) {
-        return -1; // 设备ID不匹配
-    }
-
     return 0;
 }
 
 /**
- * @brief 高速读取Flash数据（用Fast Read命令0BH，支持最高133MHz）
- * @param offset 偏移地址
- * @param buf 数据缓冲区
- * @param size 读取大小
- * @return 实际读取的字节数, -1-失败
+ * @brief  从指定逻辑偏移读取数据
+ * @param  offset: 起始逻辑偏移
+ * @param  buf: 接收缓冲区
+ * @param  size: 读取长度
+ * @retval  实际读取的字节数, -1：失败
  */
-static int read(long offset, uint8_t *buf, size_t size)
+int bsp_flash_read(long offset, uint8_t *buf, size_t size)
 {
-    uint8_t tx_buf[5] = {0};
-
-    // 参数合法性检查
-    if (offset < 0 || offset + size > GD25Q64_TOTAL_SIZE || buf == NULL)
+    if (!flash_check_param(offset, size) || buf == NULL)
     {
         return -1;
     }
 
-    // 等待Flash就绪（WIP位为0）
-    if (wait_for_ready() != 0)
+    uint32_t phys_addr;
+    uint8_t *p_dst = buf;
+    size_t remain = size;
+    long current_offset = offset;
+
+    if (HAL_FLASH_Unlock() != HAL_OK)
     {
         return -1;
     }
 
-    FLASH_SPI_CS_ENABLE();
-
-    // 发送Fast Read命令（0BH）+ 24位地址 + 1个dummy字节（规格书7.7）
-    tx_buf[0] = GD25Q64_CMD_FAST_READ; // 复用原宏，实际为GD25Q128的FAST READ命令（0BH）
-    tx_buf[1] = (offset >> 16) & 0xFF; // 地址高位
-    tx_buf[2] = (offset >> 8) & 0xFF;  // 地址中位
-    tx_buf[3] = offset & 0xFF;         // 地址低位
-    tx_buf[4] = 0x00;                  // Dummy字节（高频下必须，补偿读取延迟）
-
-    // 发送命令+地址+dummy（共5字节）
-    if (HAL_SPI_Transmit(&FLASH_SPI_HANDLE, tx_buf, 5, HAL_MAX_DELAY) != HAL_OK)
+    while (remain > 0)
     {
-        FLASH_SPI_CS_DISABLE();
-        return -1;
-    }
+        // 每次转换当前偏移的物理地址（自动处理跨Bank）
+        if (!flash_offset_to_phys(current_offset, &phys_addr))
+        {
+            HAL_FLASH_Lock();
+            return -1;
+        }
 
-    // 读取数据（高速下用HAL_SPI_Receive直接读取，效率更高）
-    if (HAL_SPI_Receive(&FLASH_SPI_HANDLE, buf, size, HAL_MAX_DELAY) != HAL_OK)
-    {
-        FLASH_SPI_CS_DISABLE();
-        return -1;
-    }
+        // 计算当前Bank内可连续读取的最大长度
+        size_t chunk_size;
+        if (current_offset < BSP_FLASH_BANK_SIZE)
+        {
+            chunk_size = BSP_FLASH_BANK_SIZE - current_offset;
+        }
+        else
+        {
+            chunk_size = BSP_FLASH_TOTAL_SIZE - current_offset;
+        }
+        chunk_size = (chunk_size > remain) ? remain : chunk_size;
 
-    FLASH_SPI_CS_DISABLE();
+        // 连续读取当前Bank内的数据
+        for (size_t i = 0; i < chunk_size; i++)
+        {
+            p_dst[i] = *(uint8_t *)(phys_addr + i);
+        }
+
+        // 更新指针和偏移
+        p_dst += chunk_size;
+        current_offset += chunk_size;
+        remain -= chunk_size;
+    }
+    HAL_FLASH_Lock();
+
     return size;
 }
 
 /**
- * @brief 向Flash写入数据
- * @param offset 偏移地址
- * @param buf 数据缓冲区
- * @param size 写入大小
- * @return 实际写入的字节数, -1-失败
+ * @brief  擦除指定逻辑偏移区域（自动处理跨Bank）
+ * @param  offset: 起始逻辑偏移
+ * @param  size: 擦除长度
+ * @retval 0=成功，-1=失败
  */
-static int write(long offset, const uint8_t *buf, size_t size)
+int bsp_flash_erase(long offset, size_t size)
 {
-    int bytes_written = 0;
-    size_t page_remaining;
-    size_t write_size;
-
-    if (offset < 0 || offset + size > GD25Q64_TOTAL_SIZE || buf == NULL) {
+    if (!flash_check_param(offset, size))
+    {
         return -1;
     }
 
-    while (size > 0) {
-        /* 计算当前页剩余空间 */
-        page_remaining = GD25Q64_PAGE_SIZE - (offset % GD25Q64_PAGE_SIZE);
-        write_size = (size < page_remaining) ? size : page_remaining;
+    FLASH_EraseInitTypeDef erase_cfg;
+    uint32_t sector_error = 0;
+    uint32_t bank, start_sector, end_sector;
+    long current_offset = offset;
+    size_t remain_size = size;
 
-        /* 写使能 */
-        if (write_enable() != 0) {
-            return -1;
-        }
-
-        /* 等待Flash就绪 */
-        if (wait_for_ready() != 0) {
-            return -1;
-        }
-
-        FLASH_SPI_CS_ENABLE();
-
-        /* 发送页编程命令和地址 */
-        uint8_t tx_cmd[4] = {
-            GD25Q64_CMD_PAGE_PROGRAM,
-            (offset >> 16) & 0xFF,
-            (offset >> 8) & 0xFF,
-            offset & 0xFF
-        };
-
-        spi_transfer_bulk(tx_cmd, NULL, 4);
-
-        /* 写入数据 */
-        spi_transfer_bulk((uint8_t*)buf, NULL, write_size);
-
-        FLASH_SPI_CS_DISABLE();
-
-        /* 等待写入完成 */
-        if (wait_for_ready() != 0) {
-            return -1;
-        }
-
-        offset += write_size;
-        buf += write_size;
-        size -= write_size;
-        bytes_written += write_size;
-    }
-
-    return bytes_written;
-}
-
-/**
- * @brief 擦除Flash区域
- * @param offset 偏移地址
- * @param size 擦除大小
- * @return 0-成功, -1-失败
- */
-static int erase(long offset, size_t size)
-{
-    if (offset < 0 || offset + size > GD25Q64_TOTAL_SIZE) {
+    if (HAL_FLASH_Unlock() != HAL_OK)
+    {
         return -1;
     }
 
-    /* 对齐到扇区边界 */
-    long sector_start = offset & ~(GD25Q64_SECTOR_SIZE - 1);
-    long sector_end = (offset + size + GD25Q64_SECTOR_SIZE - 1) & ~(GD25Q64_SECTOR_SIZE - 1);
-    size_t erase_size = sector_end - sector_start;
+    // 循环处理每个Bank的擦除（支持跨Bank）
+    while (remain_size > 0)
+    {
+        // 获取当前偏移所在的Bank和起始扇区
+        if (!flash_get_bank_sector(current_offset, &bank, &start_sector))
+        {
+            HAL_FLASH_Lock();
+            return -1;
+        }
 
-    /* 检查是否需要整片擦除 */
-    if (erase_size == GD25Q64_TOTAL_SIZE) {
-        return chip_erase();
+        // 计算当前Bank内需要擦除的结束扇区
+        long bank_end_offset;
+        if (bank == FLASH_BANK_1)
+        {
+            bank_end_offset = BSP_FLASH_BANK_SIZE - 1;
+        }
+        else
+        {
+            bank_end_offset = BSP_FLASH_TOTAL_SIZE - 1;
+        }
+
+        long end_offset = current_offset + remain_size - 1;
+        if (end_offset > bank_end_offset)
+        {
+            end_offset = bank_end_offset;
+        }
+
+        if (!flash_get_bank_sector(end_offset, &bank, &end_sector))
+        {
+            HAL_FLASH_Lock();
+            return -1;
+        }
+
+        // 配置擦除参数
+        erase_cfg.TypeErase = FLASH_TYPEERASE_SECTORS;
+        erase_cfg.Banks = bank;
+        erase_cfg.Sector = start_sector;
+        erase_cfg.NbSectors = end_sector - start_sector + 1;
+        erase_cfg.VoltageRange = FLASH_VOLTAGE_RANGE_4;
+
+        // 执行当前Bank的擦除
+        if (HAL_FLASHEx_Erase(&erase_cfg, &sector_error) != HAL_OK)
+        {
+            HAL_FLASH_Lock();
+            return -1;
+        }
+
+        // 更新剩余擦除长度和偏移
+        remain_size -= (end_offset - current_offset + 1);
+        current_offset = end_offset + 1;
     }
-
-    /* 按扇区擦除 */
-    while (erase_size > 0) {
-        /* 写使能 */
-        if (write_enable() != 0) {
-            return -1;
-        }
-
-        /* 等待Flash就绪 */
-        if (wait_for_ready() != 0) {
-            return -1;
-        }
-
-        FLASH_SPI_CS_ENABLE();
-
-        /* 发送扇区擦除命令和地址 */
-        uint8_t tx_cmd[4] = {
-            GD25Q64_CMD_SECTOR_ERASE,
-            (sector_start >> 16) & 0xFF,
-            (sector_start >> 8) & 0xFF,
-            sector_start & 0xFF
-        };
-
-        spi_transfer_bulk(tx_cmd, NULL, 4);
-
-        FLASH_SPI_CS_DISABLE();
-
-        /* 等待擦除完成 */
-        if (wait_for_ready() != 0) {
-            return -1;
-        }
-
-        sector_start += GD25Q64_SECTOR_SIZE;
-        erase_size -= GD25Q64_SECTOR_SIZE;
-    }
+    HAL_FLASH_Lock();
 
     return 0;
 }
 
 /**
- * @brief SPI单字节传输（高频下减少函数调用开销）
- * @param data 发送数据
- * @return 接收数据
+ * @brief  向指定逻辑偏移写入数据（自动处理32字节粒度和跨Bank）
+ * @param  offset: 起始逻辑偏移
+ * @param  buf: 待写入数据
+ * @param  size: 写入长度
+ * @retval 实际写入的字节数, -1：失败
  */
-static uint8_t spi_transfer(uint8_t data)
+int bsp_flash_write(long offset, const uint8_t *buf, size_t size)
 {
-    uint8_t rx_data;
-
-    HAL_SPI_TransmitReceive(&FLASH_SPI_HANDLE, &data, &rx_data, 1, 10);
-
-    return rx_data;
-}
-/**
- * @brief SPI批量传输（优化高频下效率，减少分支判断）
- * @param tx_data 发送缓冲区（NULL表示仅接收）
- * @param rx_data 接收缓冲区（NULL表示仅发送）
- * @param size 传输字节数
- */
-static void spi_transfer_bulk(uint8_t *tx_data, uint8_t *rx_data, size_t size)
-{
-    if (size == 0) return;
-
-    // 全双工传输（TX+RX）
-    if (tx_data != NULL && rx_data != NULL)
+    if (!flash_check_param(offset, size) || buf == NULL)
     {
-        HAL_SPI_TransmitReceive(&FLASH_SPI_HANDLE, tx_data, rx_data, size, 100); // 超时100ms，避免死等
-    }
-    // 仅发送
-    else if (tx_data != NULL)
-    {
-        HAL_SPI_Transmit(&FLASH_SPI_HANDLE, tx_data, size, 100);
-    }
-    // 仅接收
-    else if (rx_data != NULL)
-    {
-        HAL_SPI_Receive(&FLASH_SPI_HANDLE, rx_data, size, 100);
-    }
-}
-
-/**
- * @brief 等待Flash就绪
- * @return 0-就绪, -1-超时
- */
-static int wait_for_ready(void)
-{
-    uint32_t timeout = 1000000; // 超时计数器
-
-    while (timeout--) {
-        uint8_t status = read_status_register();
-        if ((status & 0x01) == 0) { // 检查WIP位
-            return 0; // 就绪
-        }
-    }
-
-    return -1; // 超时
-}
-
-/**
- * @brief 写使能
- * @return 0-成功, -1-失败
- */
-static int write_enable(void)
-{
-    uint32_t retry = 3; // 重试3次，避免高频下偶发失败
-    const uint32_t short_delay = 100; // 短延时循环次数，根据实际情况调整
-    while (retry--)
-    {
-        FLASH_SPI_CS_ENABLE();
-        spi_transfer(GD25Q64_CMD_WRITE_ENABLE); // 06H命令
-        FLASH_SPI_CS_DISABLE();
-
-        // 读取状态寄存器，检查WEL位（S1位）是否置1（规格书6.1）
-        uint8_t status = read_status_register();
-        if ((status & 0x02) != 0)
-        {
-            return 0; // WEL位已置1
-        }
-        for (volatile uint32_t i = 0; i < short_delay; i++)
-        {
-            __NOP(); // 空操作，仅占用CPU周期
-        }
-    }
-    return -1; // 多次重试失败
-}
-
-/**
- * @brief 读取状态寄存器
- * @return 状态寄存器值
- */
-static uint8_t read_status_register(void)
-{
-    uint8_t status;
-
-    FLASH_SPI_CS_ENABLE();
-    spi_transfer(GD25Q64_CMD_READ_STATUS_REG1);
-    status = spi_transfer(0xFF);
-    FLASH_SPI_CS_DISABLE();
-
-    return status;
-}
-
-/**
- * @brief 整片擦除（可选功能）
- * @return 0-成功, -1-失败
- */
-static int chip_erase(void)
-{
-    /* 写使能 */
-    if (write_enable() != 0) {
         return -1;
     }
 
-    /* 等待Flash就绪 */
-    if (wait_for_ready() != 0) {
+    // 第一步：先擦除目标区域
+    if (bsp_flash_erase(offset, size) != 0)
+    {
         return -1;
     }
 
-    FLASH_SPI_CS_ENABLE();
-    spi_transfer(GD25Q64_CMD_CHIP_ERASE);
-    FLASH_SPI_CS_DISABLE();
+    uint32_t phys_addr;
+    const uint8_t *p_src = buf;
+    size_t remain = size;
+    size_t written = 0;
+    long current_offset = offset;
+    uint8_t temp_buf[BSP_FLASH_PROG_GRANULARITY] __attribute__((aligned(32))) = {0};
 
-    /* 等待擦除完成 */
-    return wait_for_ready();
+    if (HAL_FLASH_Unlock() != HAL_OK)
+    {
+        return -1;
+    }
+
+    while (remain > 0)
+    {
+        // 转换当前偏移的物理地址
+        if (!flash_offset_to_phys(current_offset, &phys_addr))
+        {
+            HAL_FLASH_Lock();
+            return -1;
+        }
+
+        // 计算本次可写入的长度（不超过32字节，且不跨Bank）
+        size_t write_len = (remain >= BSP_FLASH_PROG_GRANULARITY) ? BSP_FLASH_PROG_GRANULARITY : remain;
+
+        // 检查是否跨Bank边界，若跨则截断到Bank末尾
+        long bank_end_offset;
+        if (current_offset < BSP_FLASH_BANK_SIZE)
+        {
+            bank_end_offset = BSP_FLASH_BANK_SIZE - 1;
+        }
+        else
+        {
+            bank_end_offset = BSP_FLASH_TOTAL_SIZE - 1;
+        }
+
+        if ((current_offset + write_len - 1) > bank_end_offset)
+        {
+            write_len = bank_end_offset - current_offset + 1;
+        }
+
+        // 填充临时缓冲区（不足32字节补0）
+        memset(temp_buf, 0, BSP_FLASH_PROG_GRANULARITY);
+        memcpy(temp_buf, p_src, write_len);
+
+        // 执行32字节编程
+        if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_FLASHWORD, phys_addr, (uint32_t)temp_buf) != HAL_OK)
+        {
+            HAL_FLASH_Lock();
+            return -1;
+        }
+
+        // 校验写入数据
+        for (size_t i = 0; i < write_len; i++)
+        {
+            if (*(uint8_t *)(phys_addr + i) != temp_buf[i])
+            {
+                HAL_FLASH_Lock();
+                return -1;
+            }
+        }
+
+        // 更新指针和偏移
+        p_src += write_len;
+        current_offset += write_len;
+        remain -= write_len;
+        written += write_len;
+    }
+    HAL_FLASH_Lock();
+
+    return written;
+}
+
+/**
+ * @brief  逻辑偏移转换为物理地址（核心：处理双Bank不连续映射）
+ * @param  offset: 逻辑偏移（0~1048575）
+ * @param  phys_addr: 输出转换后的物理地址
+ * @retval true=转换成功，false=偏移非法
+ */
+static bool flash_offset_to_phys(long offset, uint32_t *phys_addr)
+{
+    if (offset < 0 || offset >= BSP_FLASH_TOTAL_SIZE)
+    {
+        return false;
+    }
+
+    if (offset < BSP_FLASH_BANK_SIZE)
+    {
+        // 0~511KB → Bank1
+        *phys_addr = BSP_FLASH_BANK1_ADDR + (uint32_t)offset;
+    }
+    else
+    {
+        // 512KB~1023KB → Bank2（跳过中间512KB保留区）
+        *phys_addr = BSP_FLASH_BANK2_ADDR + (uint32_t)(offset - BSP_FLASH_BANK_SIZE);
+    }
+
+    return true;
+}
+
+/**
+ * @brief  获取逻辑偏移所在的Bank编号和Bank内扇区编号
+ * @param  offset: 逻辑偏移
+ * @param  bank: 输出Bank编号（FLASH_BANK_1/FLASH_BANK_2）
+ * @param  sector: 输出Bank内扇区编号（0~3）
+ * @retval true=成功，false=偏移非法
+ */
+static bool flash_get_bank_sector(long offset, uint32_t *bank, uint32_t *sector)
+{
+    if (offset < 0 || offset >= BSP_FLASH_TOTAL_SIZE)
+    {
+        return false;
+    }
+
+    if (offset < BSP_FLASH_BANK_SIZE)
+    {
+        *bank = FLASH_BANK_1;
+        *sector = (uint32_t)offset / BSP_FLASH_SECTOR_SIZE;
+    }
+    else
+    {
+        *bank = FLASH_BANK_2;
+        *sector = (uint32_t)(offset - BSP_FLASH_BANK_SIZE) / BSP_FLASH_SECTOR_SIZE;
+    }
+
+    return true;
+}
+
+/**
+ * @brief  校验Flash操作参数合法性（含地址连续性检查）
+ * @param  offset: 起始逻辑偏移
+ * @param  size: 操作长度
+ * @retval true=合法，false=非法
+ */
+static bool flash_check_param(long offset, size_t size)
+{
+    if (offset < 0 || size == 0 || (offset + size) > BSP_FLASH_TOTAL_SIZE)
+    {
+        return false;
+    }
+
+    // 额外验证：转换后的物理地址必须在有效Bank范围内
+    uint32_t start_phys, end_phys;
+    if (!flash_offset_to_phys(offset, &start_phys) || \
+        !flash_offset_to_phys(offset + size - 1, &end_phys))
+    {
+        return false;
+    }
+
+    return true;
 }

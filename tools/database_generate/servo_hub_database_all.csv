@@ -127,7 +127,8 @@ error,错误代码,MotorCtlSmOutput,RO,uint32,1,0,,87,"0：无错误
 4：低温保护错误
 5：高温保护错误
 6：位置跟随误差过大保护错误
-7：过流保护",Visible,1,,,,,,
+7：过流保护
+8：nfault等硬件错误，由硬件触发",Visible,1,,,,,,
 warning,警告代码,MotorCtlSmOutput,RO,uint32,1,0,,88,0：无警告,Visible,1,,,,,,
 under_voltage_protection_V,欠压保护阈值,MotorCtlSmConfig,RW,single,1,15,V,90,低于该电压，进入欠压保护,Visible,1,,,,,,
 over_voltage_protection_V,过压保护阈值,MotorCtlSmConfig,RW,single,1,58,V,91,高于该电压，进入过压保护,Visible,1,,,,,,
@@ -653,8 +654,8 @@ Brake_engage_delay_time,抱闸延迟时间,AppBaseConfig,RW,single,1,0,s,623,,Vi
 Brake_release_delay_time,松闸延迟时间,AppBaseConfig,RW,single,1,0,s,624,,Visible,0,1,1,0,,0,
 Interp_time_value,插值时间基数,AppMotionParam,RW,uint8,1,1,s,625,,Visible,,1,1,,,,Interpolation_time_period_Ip_time_units
 Interp_time_index,插值时间指数,AppMotionParam,RW,int8,1,-3,,626,,Visible,0,1,1,-5,5,0,Interpolation_time_period_Ip_time_index
-Sys_id,mavlink系统ID,AppMavlinkConfig,RW,uint8,1,0,,630,,Visible,,1,1,,,,
-Comp_id,mavlink组件ID,AppMavlinkConfig,RW,uint8,1,0,,631,,Visible,,1,1,,,,
+Sys_id,mavlink系统ID,AppMavlinkConfig,RW,uint8,1,0,,630,,Invisible,,1,1,,,,
+Comp_id,mavlink组件ID,AppMavlinkConfig,RW,uint8,1,0,,631,,Invisible,,1,1,,,,
 iq_offset_A,iq 目标电流偏置,CurrentCtlInput,RW,single,1,0,A,632,iq 电流偏置，对应402字典 0x60B2,Visible,1,,,,,,Torque_offset
 position_offset_p,目标位置偏置,PosSpeedCtlInput,RW,int64,1,0,P,633,目标位置偏置，对应字典0X60B0,Visible,1,,,,,,Position_offset
 speed_offset_p_s,目标速度偏置,PosSpeedCtlInput,RW,single,1,0,P/s,634,目标速度偏置，对应字典 0X60B1,Visible,1,,,,,,Velocity_offset
@@ -680,3 +681,38 @@ Encoder_zero_crossing_state,编码器过零点状态,AppMotionInfo,RO,uint8,1,,,
 Homing_state,回零状态,AppMotionInfo,RO,int8,1,,,645,"-1, 回零失败/超时
 0, 初始化状态
 1, 回零成功",Visible,0,0,1,,,0,
+File_type,文件传输类型,AppFileTransferConfig,RW,uint8,1,0,,648,"0：空，无类型，复位状态
+1：固件",Visible,,,1,,,,
+File_size,文件传输大小,AppFileTransferConfig,RW,uint32,1,0,bytes,649,文件大小,Visible,,,1,,,,
+File_direction,文件传输方向,AppFileTransferConfig,RW,uint8,1,0,,650,"0：下载
+1：上传",Visible,,,1,,,,
+File_index_complete,文件传输完成帧索引,AppFileTransferConfig,RW,uint32,1,0,,651,文件传输完成帧索引号，用作帧收发闭环检测,Visible,,,1,,,,
+File_status,文件传输状态,AppFileTransferConfig,RO,int8,1,0,,652,"-2, 校验失败
+-1, 传输失败
+0,  空闲状态
+1,  传输准备
+2,  传输中
+3,  传输完成",Visible,,,1,,,,
+Fw_mode,固件传输模式,AppFwUpgradeParam,RW,uint8,1,0,,653,"0x00：空模式
+0x01：写入（升级）模式使能
+0x02：读取模式使能（保留）
+0xBC：备份固件拷贝",Visible,0,0,1,,,0,
+Fw_app_index,固件传输APP分区,AppFwUpgradeParam,RO,uint8,1,0,,660,目标固件传输所在APP分区索引,Visible,0,0,1,,,0,
+Fw_flash_size,固件存储空间大小,AppFwUpgradeParam,RO,uint32,1,0,bytes,661,固件写入目标Flash分区大小,Visible,0,0,1,,,0,
+Fw_operating_steps,固件当前操作步骤（状态）,AppFwUpgradeParam,RO,int8,1,0,,662,"-4, 文件写入/校验失败状态
+-3, 文件超限失败状态
+-2, 准备空间失败状态
+-1, 请求失败状态
+0,  空闲状态
+1,  写入请求状态
+2,  读取请求状态
+3,  正在写入状态
+4,  正在读取状态
+5,  成功状态",Visible,0,0,1,,,0,
+Index,数据帧索引,AppFileTransferStream,RW,uint16,1,,,664,,Invisible,,,,,,,
+Length,数据帧长度,AppFileTransferStream,RW,uint8,1,,,665,,Invisible,,,,,,,
+File_buffer,文件传输数据流缓存区,AppFileTransferStream,RW,uint8,252,,,666,"用于文件传输：
+场景1、固件通道定义：
+①、Index：Frame index
+②、Length：Frame data length
+③、File_buffer：Frame data（Max 252 Bytes）",Invisible,0,0,0,,,0,

@@ -537,5 +537,68 @@ void bsp_set_error_led_toggle(void)
 {
     return;
 }
-
+/**
+ * @brief 文件传输参数配置
+ * @param[in] file_type 文件传输类型
+ * @param[in] file_size 文件传输大小
+ * @param[in] file_dir 文件传输方向
+ */
+void bsp_set_file_transfer_config(uint8_t file_type, uint32_t file_size, uint8_t file_dir)
+{
+    return;
+}
+/**
+ * @brief 固件升级配置
+ * @param[in] fw_mode 固件操作模式
+ */
+void bsp_set_fw_upgrade_config(uint8_t fw_mode)
+{
+    return;
+}
+/**
+ * @brief 固件升级写入
+ * @param[in] index 固件升级写入索引
+ * @param[in] length 固件升级写入长度
+ * @param[in] data 固件升级写入数据指针
+ */
+void bsp_set_fw_upgrade_write(uint16_t const index, uint16_t const length, void const *data)
+{
+    return;
+}
+/**
+ * @brief 获取固件升级当前文件传输完成帧索引
+ * @return 固件升级当前文件传输完成帧索引
+ * @note
+ */
+uint32_t bsp_get_fw_file_index_complete(void)
+{
+    return 0;
+}
+/**
+ * @brief 获取固件升级当前文件传输状态
+ * @return 固件升级当前文件传输状态
+ * @note
+ */
+APP_FILE_STATUS bsp_get_fw_file_status(void)
+{
+    return APP_FILE_STATUS_IDLE;
+}
+/**
+ * @brief 获取固件升级当前步骤
+ * @return 固件升级当前步骤
+ * @note
+ */
+int8_t bsp_get_fw_operating_steps(void)
+{
+    return 0;
+}
+/**
+ * @brief 固件升级运行主函数
+ * @return
+ * @note
+ */
+void bsp_run_fw_upgrade(void)
+{
+    return;
+}
 #pragma endregion

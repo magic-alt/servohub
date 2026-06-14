@@ -36,6 +36,11 @@ void RegisterCheckIoInputsStatusCallback(void* callback) {
     callback_registry.get_check_di_io_val = (uint32_t (*)(void))callback;
 }
 
+// 处理Mavlink升级固件文件回调函数
+void FwUpgradeOverMavlinkCallback(uint16_t const index, uint16_t const length, void const *data) {
+    bsp_set_fw_upgrade_write(index, length, data);
+}
+
 static Axis *const axis = &kAxis;
 
 void AppParamInit(void)
@@ -217,6 +222,15 @@ void AppParamInit(void)
         kHistoricalInfo.Error_records_list[i] = 0;
     }
 
+    // 初始化文件传输配置
+    kAppFileTransferConfig.File_type = APP_FILE_TYPE_IDLE;          //文件传输类型
+    kAppFileTransferConfig.File_size = 0;                           //文件传输大小
+    kAppFileTransferConfig.File_direction = APP_FILE_DIR_DOWNLOAD;  //文件传输方向
+    kAppFileTransferConfig.File_index_complete = 0;                 //文件传输完成帧索引
+
+    // 初始化固件传输参数
+    kAppFwUpgradeParam.Fw_mode = 0;                                 //固件传输模式
+
     // 额定参数初始化
     set_app_Load_encoder_resolution(kAppEncoderConfig.Load_encoder_resolution);
     set_app_Motor_encoder_resolution(kAppEncoderConfig.Motor_encoder_resolution);
@@ -355,6 +369,8 @@ HeartBit kHeartBit;
 HistoricalInfo kHistoricalInfo;
 AppDebugParam kAppDebugParam;
 AppMavlinkConfig kAppMavlinkConfig;
+AppFileTransferConfig kAppFileTransferConfig;
+AppFwUpgradeParam kAppFwUpgradeParam;
 
 void app_param_update(void)
 {
@@ -528,6 +544,15 @@ void app_param_update(void)
     set_app_Homing_step(kAppMotionInfo.Homing_step);
     set_app_Encoder_zero_crossing_state(kAppMotionInfo.Encoder_zero_crossing_state);
     set_app_Homing_state(kAppMotionInfo.Homing_state);
+    set_app_File_type(kAppFileTransferConfig.File_type);
+    set_app_File_size(kAppFileTransferConfig.File_size);
+    set_app_File_direction(kAppFileTransferConfig.File_direction);
+    set_app_File_index_complete(kAppFileTransferConfig.File_index_complete);
+    set_app_File_status(kAppFileTransferConfig.File_status);
+    set_app_Fw_mode(kAppFwUpgradeParam.Fw_mode);
+    set_app_Fw_app_index(kAppFwUpgradeParam.Fw_app_index);
+    set_app_Fw_flash_size(kAppFwUpgradeParam.Fw_flash_size);
+    set_app_Fw_operating_steps(kAppFwUpgradeParam.Fw_operating_steps);
 }
 
 void app_param_sync(void)
@@ -702,6 +727,15 @@ void app_param_sync(void)
     get_app_Homing_step();
     get_app_Encoder_zero_crossing_state();
     get_app_Homing_state();
+    get_app_File_type();
+    get_app_File_size();
+    get_app_File_direction();
+    get_app_File_index_complete();
+    get_app_File_status();
+    get_app_Fw_mode();
+    get_app_Fw_app_index();
+    get_app_Fw_flash_size();
+    get_app_Fw_operating_steps();
 }
 
 uint32_t set_app_Controlword(uint16_t val)
@@ -4168,6 +4202,165 @@ uint8_t get_app_Comp_id(void)
     bsp_get_can_mav_id(&kAppMavlinkConfig.Sys_id, &kAppMavlinkConfig.Comp_id);
     /* USER CODE END get_app_Comp_id */
     return kAppMavlinkConfig.Comp_id;
+}
+
+uint32_t set_app_File_type(uint8_t val)
+{
+    /* USER CODE BEGIN set_app_File_type 0 */
+    /* USER CODE END set_app_File_type 0 */
+    kAppFileTransferConfig.File_type = val;
+    /* USER CODE BEGIN set_app_File_type 1 */
+    bsp_set_file_transfer_config(val, get_app_File_size(), get_app_File_direction());
+    /* USER CODE END set_app_File_type 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint8_t get_app_File_type(void)
+{
+    /* USER CODE BEGIN get_app_File_type */
+    /* USER CODE END get_app_File_type */
+    return kAppFileTransferConfig.File_type;
+}
+
+uint32_t set_app_File_size(uint32_t val)
+{
+    /* USER CODE BEGIN set_app_File_size 0 */
+    /* USER CODE END set_app_File_size 0 */
+    kAppFileTransferConfig.File_size = val;
+    /* USER CODE BEGIN set_app_File_size 1 */
+    bsp_set_file_transfer_config(get_app_File_type(), val, get_app_File_direction());
+    /* USER CODE END set_app_File_size 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint32_t get_app_File_size(void)
+{
+    /* USER CODE BEGIN get_app_File_size */
+    /* USER CODE END get_app_File_size */
+    return kAppFileTransferConfig.File_size;
+}
+
+uint32_t set_app_File_direction(uint8_t val)
+{
+    /* USER CODE BEGIN set_app_File_direction 0 */
+    /* USER CODE END set_app_File_direction 0 */
+    kAppFileTransferConfig.File_direction = val;
+    /* USER CODE BEGIN set_app_File_direction 1 */
+    bsp_set_file_transfer_config(get_app_File_type(), get_app_File_size(), val);
+    /* USER CODE END set_app_File_direction 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint8_t get_app_File_direction(void)
+{
+    /* USER CODE BEGIN get_app_File_direction */
+    /* USER CODE END get_app_File_direction */
+    return kAppFileTransferConfig.File_direction;
+}
+
+uint32_t set_app_File_index_complete(uint32_t val)
+{
+    /* USER CODE BEGIN set_app_File_index_complete 0 */
+    /* USER CODE END set_app_File_index_complete 0 */
+    kAppFileTransferConfig.File_index_complete = val;
+    /* USER CODE BEGIN set_app_File_index_complete 1 */
+    /* USER CODE END set_app_File_index_complete 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint32_t get_app_File_index_complete(void)
+{
+    /* USER CODE BEGIN get_app_File_index_complete */
+    APP_FILE_TYPE file_type = (APP_FILE_TYPE)get_app_File_type();
+    if (file_type == APP_FILE_TYPE_FIRMWARE)
+    {
+        kAppFileTransferConfig.File_index_complete = bsp_get_fw_file_index_complete();
+    }
+    /* USER CODE END get_app_File_index_complete */
+    return kAppFileTransferConfig.File_index_complete;
+}
+
+uint32_t set_app_File_status(int8_t val)
+{
+    /* USER CODE BEGIN set_app_File_status 0 */
+    /* USER CODE END set_app_File_status 0 */
+    kAppFileTransferConfig.File_status = val;
+    /* USER CODE BEGIN set_app_File_status 1 */
+    /* USER CODE END set_app_File_status 1 */
+    return APP_PARAM_SUCCESS;
+}
+int8_t get_app_File_status(void)
+{
+    /* USER CODE BEGIN get_app_File_status */
+    APP_FILE_TYPE file_type = (APP_FILE_TYPE)get_app_File_type();
+    if (file_type == APP_FILE_TYPE_FIRMWARE)
+    {
+        kAppFileTransferConfig.File_status = bsp_get_fw_file_status();
+    }
+    /* USER CODE END get_app_File_status */
+    return kAppFileTransferConfig.File_status;
+}
+
+uint32_t set_app_Fw_mode(uint8_t val)
+{
+    /* USER CODE BEGIN set_app_Fw_mode 0 */
+    /* USER CODE END set_app_Fw_mode 0 */
+    kAppFwUpgradeParam.Fw_mode = val;
+    /* USER CODE BEGIN set_app_Fw_mode 1 */
+    bsp_set_fw_upgrade_config(val);
+    /* USER CODE END set_app_Fw_mode 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint8_t get_app_Fw_mode(void)
+{
+    /* USER CODE BEGIN get_app_Fw_mode */
+    /* USER CODE END get_app_Fw_mode */
+    return kAppFwUpgradeParam.Fw_mode;
+}
+
+uint32_t set_app_Fw_app_index(uint8_t val)
+{
+    /* USER CODE BEGIN set_app_Fw_app_index 0 */
+    /* USER CODE END set_app_Fw_app_index 0 */
+    kAppFwUpgradeParam.Fw_app_index = val;
+    /* USER CODE BEGIN set_app_Fw_app_index 1 */
+    /* USER CODE END set_app_Fw_app_index 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint8_t get_app_Fw_app_index(void)
+{
+    /* USER CODE BEGIN get_app_Fw_app_index */
+    /* USER CODE END get_app_Fw_app_index */
+    return kAppFwUpgradeParam.Fw_app_index;
+}
+
+uint32_t set_app_Fw_flash_size(uint32_t val)
+{
+    /* USER CODE BEGIN set_app_Fw_flash_size 0 */
+    /* USER CODE END set_app_Fw_flash_size 0 */
+    kAppFwUpgradeParam.Fw_flash_size = val;
+    /* USER CODE BEGIN set_app_Fw_flash_size 1 */
+    /* USER CODE END set_app_Fw_flash_size 1 */
+    return APP_PARAM_SUCCESS;
+}
+uint32_t get_app_Fw_flash_size(void)
+{
+    /* USER CODE BEGIN get_app_Fw_flash_size */
+    /* USER CODE END get_app_Fw_flash_size */
+    return kAppFwUpgradeParam.Fw_flash_size;
+}
+
+uint32_t set_app_Fw_operating_steps(int8_t val)
+{
+    /* USER CODE BEGIN set_app_Fw_operating_steps 0 */
+    /* USER CODE END set_app_Fw_operating_steps 0 */
+    kAppFwUpgradeParam.Fw_operating_steps = val;
+    /* USER CODE BEGIN set_app_Fw_operating_steps 1 */
+    /* USER CODE END set_app_Fw_operating_steps 1 */
+    return APP_PARAM_SUCCESS;
+}
+int8_t get_app_Fw_operating_steps(void)
+{
+    /* USER CODE BEGIN get_app_Fw_operating_steps */
+    kAppFwUpgradeParam.Fw_operating_steps = bsp_get_fw_operating_steps();
+    /* USER CODE END get_app_Fw_operating_steps */
+    return kAppFwUpgradeParam.Fw_operating_steps;
 }
 
 

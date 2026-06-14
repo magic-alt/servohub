@@ -286,6 +286,23 @@ typedef struct
     uint8_t Comp_id; //mavlink组件ID
 }AppMavlinkConfig;
 
+typedef struct
+{
+    uint8_t File_type; //文件传输类型
+    uint32_t File_size; //文件传输大小
+    uint8_t File_direction; //文件传输方向
+    uint32_t File_index_complete; //文件传输完成帧索引
+    int8_t File_status; //文件传输状态
+}AppFileTransferConfig;
+
+typedef struct
+{
+    uint8_t Fw_mode; //固件传输模式
+    uint8_t Fw_app_index; //固件传输APP分区
+    uint32_t Fw_flash_size; //固件存储空间大小
+    int8_t Fw_operating_steps; //固件当前操作步骤（状态）
+}AppFwUpgradeParam;
+
 uint32_t set_app_Controlword(uint16_t val);
 uint16_t get_app_Controlword(void);
 
@@ -800,6 +817,33 @@ uint8_t get_app_Encoder_zero_crossing_state(void);
 uint32_t set_app_Homing_state(int8_t val);
 int8_t get_app_Homing_state(void);
 
+uint32_t set_app_File_type(uint8_t val);
+uint8_t get_app_File_type(void);
+
+uint32_t set_app_File_size(uint32_t val);
+uint32_t get_app_File_size(void);
+
+uint32_t set_app_File_direction(uint8_t val);
+uint8_t get_app_File_direction(void);
+
+uint32_t set_app_File_index_complete(uint32_t val);
+uint32_t get_app_File_index_complete(void);
+
+uint32_t set_app_File_status(int8_t val);
+int8_t get_app_File_status(void);
+
+uint32_t set_app_Fw_mode(uint8_t val);
+uint8_t get_app_Fw_mode(void);
+
+uint32_t set_app_Fw_app_index(uint8_t val);
+uint8_t get_app_Fw_app_index(void);
+
+uint32_t set_app_Fw_flash_size(uint32_t val);
+uint32_t get_app_Fw_flash_size(void);
+
+uint32_t set_app_Fw_operating_steps(int8_t val);
+int8_t get_app_Fw_operating_steps(void);
+
 extern AppControlWord kAppControlWord;
 extern AppStatusInfo kAppStatusInfo;
 extern AppOpMode kAppOpMode;
@@ -821,6 +865,8 @@ extern HeartBit kHeartBit;
 extern HistoricalInfo kHistoricalInfo;
 extern AppDebugParam kAppDebugParam;
 extern AppMavlinkConfig kAppMavlinkConfig;
+extern AppFileTransferConfig kAppFileTransferConfig;
+extern AppFwUpgradeParam kAppFwUpgradeParam;
 
 /* USER CODE BEGIN AREA 1 */
 #define ERROR_RECORD_NUM    (sizeof(kHistoricalInfo.Error_records_list) / \
@@ -851,5 +897,6 @@ void RegisterCheckErrorCallback(void* callback);
 void RegisterCheckWarningCallback(void* callback);
 void RegisterCheckStatusCallback(void* callback);
 void RegisterCheckIoInputsStatusCallback(void* callback);
+void FwUpgradeOverMavlinkCallback(uint16_t const index, uint16_t const length, void const *data);
 /* USER CODE END AREA 1 */
 

@@ -12,7 +12,8 @@
 #include "bsp_fdcan.h"
 #include "drv_can_app.h"
 #include "drv_encoder.h"
-#include "drv_flash.h"
+#include "drv_nor_flash.h"
+#include "drv_upgrade.h"
 
 typedef enum
 {

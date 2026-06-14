@@ -59,6 +59,11 @@ static void EcatTaskInit(void);
 
 void BspInit(void)
 {
+    // 初始化固件升级
+#ifdef YH_RELEASE
+    drv_upgrade_init();
+#endif // YH_RELEASE
+
     // 初始化抱闸定时器，输出抱闸信号为合闸状态
     __HAL_TIM_SET_COMPARE(&BRAKE_PWM_TIM_HANDLE, BRAKE_PWM_TIM_CHANNEL, BRAKE_PWM_DUTY_CCR_ENGAGED);
     HAL_TIM_PWM_Start(&BRAKE_PWM_TIM_HANDLE, BRAKE_PWM_TIM_CHANNEL);

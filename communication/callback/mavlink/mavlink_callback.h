@@ -19,9 +19,9 @@
 #include "hpm_common.h"
 #endif
 
-#define MAVLINK_SEND_BUFF_SIZE       512
-#define MAVLINK_RECV_BUFF_SIZE       512
-
+#define MAVLINK_SEND_BUFF_SIZE          512
+#define MAVLINK_RECV_BUFF_SIZE          512
+#define MAVLINK_PARSE_ERROR_THRESHOLD   (MAVLINK_RECV_BUFF_SIZE + 100)  // 解析失败阈值
 
 typedef enum
 {

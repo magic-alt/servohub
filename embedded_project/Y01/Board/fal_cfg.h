@@ -7,6 +7,8 @@
 #ifndef _FAL_CFG_H_
 #define _FAL_CFG_H_
 
+#include "bsp_memorymap.h"
+
 #define FAL_DEBUG 0
 #define FAL_PART_HAS_TABLE_CFG
 
@@ -28,11 +30,13 @@ extern struct fal_flash_dev nor_flash0;
 /* partition table */
 #define FAL_PART_TABLE                                                                                              \
 {                                                                                                                   \
-    {FAL_PART_MAGIC_WORD,         "bl",    "norflash0",         0,  128*1024, 0}, /* Bootloader: 128K */            \
-    {FAL_PART_MAGIC_WORD,        "app",    "norflash0",  128*1024, 2048*1024, 0}, /* Application: 2048K */          \
-    {FAL_PART_MAGIC_WORD, "app_backup",    "norflash0", 2176*1024, 1024*1024, 0}, /* Application Backup: 1024K */   \
-    {FAL_PART_MAGIC_WORD,   "kv_param",    "norflash0", 3200*1024, 2048*1024, 0}, /* kv_param: 2048K */             \
-    /* ...  more partition norflash0 max size: 8192K */ \
+    {FAL_PART_MAGIC_WORD,  "app_backup",  "norflash0",  BSP_FLASH_EXT_APP_BACKUP_ADDR,    BSP_FLASH_EXT_APP_BACKUP_SIZE,  0}, \
+    {FAL_PART_MAGIC_WORD, "app_upgrade",  "norflash0",  BSP_FLASH_EXT_APP_UPGRADE_ADDR,   BSP_FLASH_EXT_APP_UPGRADE_SIZE, 0}, \
+    {FAL_PART_MAGIC_WORD,  "app_buffer",  "norflash0",  BSP_FLASH_EXT_APP_CACHE_ADDR,     BSP_FLASH_EXT_APP_CACHE_SIZE,   0}, \
+    {FAL_PART_MAGIC_WORD,    "app_user",  "norflash0",  BSP_FLASH_EXT_APP_USER_ADDR,      BSP_FLASH_EXT_APP_USER_SIZE,    0}, \
+    {FAL_PART_MAGIC_WORD,   "reserved0",  "norflash0",  BSP_FLASH_EXT_RESERVED0_ADDR,     BSP_FLASH_EXT_RESERVED0_SIZE,   0}, \
+    {FAL_PART_MAGIC_WORD,  "flashdb_kv",  "norflash0",  BSP_FLASH_EXT_FLASHDB_KV_ADDR,    BSP_FLASH_EXT_FLASHDB_KV_SIZE,  0}, \
+    {FAL_PART_MAGIC_WORD,   "reserved1",  "norflash0",  BSP_FLASH_EXT_RESERVED1_ADDR,     BSP_FLASH_EXT_RESERVED1_SIZE,   0}, \
 }
 #endif /* FAL_PART_HAS_TABLE_CFG */
 

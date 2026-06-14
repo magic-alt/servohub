@@ -12,7 +12,7 @@
 #include "motor_ctl_sm.h"
 #include "servo_system_cfg.h"
 
-// 编码器参数定义
+// 编码器数量定义
 #define ENCODER_NUM             (2u)                    // 每轴的编码器数量（最大值）
 #define ENCODER_ID_MAX          (ENCODER_NUM - 1)       // 编码器ID最大值
 
@@ -300,5 +300,31 @@ typedef enum
     FLASH_STORE_STATUS_BUSY    = 1,     // 存储中
     FLASH_STORE_STATUS_SUCCESS = 2,     // 存储成功
 } FLASH_STORE_STATUS;
+
+typedef enum
+{
+    APP_FILE_TYPE_IDLE      = 0,        // 无类型/复位状态
+    APP_FILE_TYPE_FIRMWARE  = 1,        // 固件文件类型
+    // ...
+} APP_FILE_TYPE;
+
+typedef enum
+{
+    APP_FILE_DIR_DOWNLOAD   = 0,        // 文件传输下载
+    APP_FILE_DIR_UPLOAD     = 1,        // 文件传输上传
+    // ...
+} APP_FILE_DIR;
+
+typedef enum
+{
+    // ...
+    APP_FILE_STATUS_CHECK_ERR       = -2,   // 文件传输校验错误状态
+    APP_FILE_STATUS_TRANSFER_ERR    = -1,   // 文件传输错误状态
+    APP_FILE_STATUS_IDLE            = 0,    // 文件传输空闲状态
+    APP_FILE_STATUS_READY           = 1,    // 文件传输准备状态
+    APP_FILE_STATUS_BUSY            = 2,    // 文件传输进行中状态
+    APP_FILE_STATUS_SUCCESS         = 3,    // 文件传输成功状态
+    // ...
+} APP_FILE_STATUS;
 
 #endif // DATA_TYPE_DEFINE_H

@@ -163,6 +163,11 @@ void UnrealTimeBase1ms(void)
     // 9. flash参数存储
     AppStoreUpdata1ms();
 
+    // 10. 固件升级运行主函数
+#ifdef YH_RELEASE
+    bsp_run_fw_upgrade();
+#endif // YH_RELEASE
+
 #ifdef MOTOR_CTL_TEST // 控制层示例测试代码
     motor_ctl_test();
 #endif
