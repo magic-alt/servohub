@@ -86,9 +86,10 @@ void sys_current_calibration_step(void)
  * @return
  * @note
  */
+BspErrorCode_t kBspErrorCodeVir;
 void sys_get_bsp_error_state(BspErrorCode_t* *p_bsp_error)
 {
-    return;
+    *p_bsp_error = &kBspErrorCodeVir;
 }
 /**
  * @brief 设置PWM输出状态

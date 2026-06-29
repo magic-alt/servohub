@@ -263,7 +263,7 @@ void PosSpeedLoopCtrl(void)
  */
 void SimPlantStep(void)
 {
-    // 运行虚拟电机模型,在电流环中断中调用,一个电流环执行5次虚拟模型计算
+    // 运行虚拟电机模型,在电流环中断中调用,一个电流环执行1次虚拟模型计算
     for (uint8_t i = 0; i < 1; i++)
     {
         sim_plant(&kAxis.sim_plant_input, &kAxis.sim_plant_config,

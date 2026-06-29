@@ -4,6 +4,8 @@
 #include "zmq_handler.h"
 #include "mavlink_callback.h"
 #include "app_scheduler.h"
+#include "app_brake_control.h"
+#include "app_motion_precondition.h"
 
 int main(void)
 {
@@ -13,10 +15,15 @@ int main(void)
     RegisterCheckStatusCallback(app_get_check_status_val);
     RegisterCheckIoInputsStatusCallback(app_get_check_di_io_val);
 
-    ScopeInit();
     AppParamInit();
-    MotorCtrlInit();
+    MotorCtrlInit();  //电机控制相关初始化
     AppInit();
+    AppStatusScanInit();
+    ScopeInit();
+    AppBrakeControlInit();
+    AppMotionPreConditionInit();
+
+
 
     int rc = ZmqHandlerInit();
     if (rc != 0)
