@@ -1,0 +1,176 @@
+name: Upgrade Phase 1c conversion contract
+
+on:
+  push:
+    branches: [feature/product-contract-phase1c-conversions]
+    paths: [.github/workflows/product-contract-phase1c-upgrade.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  upgrade:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/product-contract-phase1c-conversions
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Upgrade schema, generators and checks
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, re
+
+          root = Path('.')
+          schema = root / 'contract/schema'
+          contract_path = schema / 'product_contract.json'
+          params_path = schema / 'parameters.json'
+          signals_path = schema / 'signals.json'
+
+          contract = json.loads(contract_path.read_text(encoding='utf-8'))
+          contract['contract_version'] = '1.2.0'
+          contract['schema_version'] = 3
+          contract['generator_version'] = 3
+          contract['status'] = 'phase1c_verified_cia402_conversions'
+          contract['coverage']['canopen'] = (
+              'Covered OD metadata and EDS subset are generated. Position/count, velocity, '
+              'rated-current-relative torque/current/max-current, rated current and DC-link voltage '
+              'conversions are now firmware-evidence-backed; parameterized conversions retain explicit dependencies.'
+          )
+          contract['unit_catalog']['rpm'] = {'symbol': 'rpm'}
+          contract['unit_catalog']['ampere_rms'] = {'symbol': 'A_rms', 'note': 'RMS phase-current convention used by Motor_rated_current.'}
+          contract['unit_catalog']['ampere_peak'] = {'symbol': 'A_peak', 'note': 'Peak torque-producing current used by the current/torque control path.'}
+          contract_path.write_text(json.dumps(contract, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
+
+          params = json.loads(params_path.read_text(encoding='utf-8'))
+          signals = json.loads(signals_path.read_text(encoding='utf-8'))
+          by_name = {x['name']: x for x in params + signals}
+          callback = 'communication/callback/cia402_od/Cia402_ObjectDictionary_Variable.c'
+
+          def evidence(*symbols, support_sources=()):
+              return {
+                  'source': callback,
+                  'symbols': list(symbols),
+                  'support_sources': list(support_sources),
+                  'status': 'firmware_verified'
+              }
+
+          def physical(name, unit, dimension, note=None):
+              p = by_name[name]['physical']
+              p.update({'unit': unit, 'dimension': dimension, 'scale': 1.0, 'offset': 0.0, 'status': 'verified'})
+              if note:
+                  p['note'] = note
+
+          def linear(name, scale, direction, *, rounding='truncate_toward_zero', overflow='reject', symbols=(), support=(), standard_semantics=''):
+              by_name[name]['canopen']['conversion'] = {
+                  'kind': 'linear', 'status': 'verified', 'direction': direction,
+                  'scale': scale, 'offset': 0.0, 'rounding': rounding, 'overflow': overflow,
+                  'dependencies': [], 'formula_id': 'fixed_linear', 'golden_context': {},
+                  'evidence': evidence(*symbols, support_sources=support),
+                  'standard_semantics': standard_semantics
+              }
+
+          def parameterized(name, formula_id, dependencies, context, direction, *, symbols=(), support=(), standard_semantics='', overflow='firmware_cast'):
+              by_name[name]['canopen']['conversion'] = {
+                  'kind': 'parameterized_linear', 'status': 'verified', 'direction': direction,
+                  'scale': None, 'offset': 0.0, 'rounding': 'truncate_toward_zero', 'overflow': overflow,
+                  'dependencies': list(dependencies), 'formula_id': formula_id,
+                  'golden_context': context,
+                  'evidence': evidence(*symbols, support_sources=support),
+                  'standard_semantics': standard_semantics
+              }
+
+          physical('motion.target_position', 'position_count', 'position')
+          linear('motion.target_position', 1.0, 'bidirectional', rounding='exact', overflow='firmware_cast',
+                 symbols=('set_Target_position', 'get_Target_position'),
+                 standard_semantics='CiA402 target-position user count; current firmware maps it directly to the internal position count.')
+          physical('feedback.position', 'position_count', 'position')
+          linear('feedback.position', 1.0, 'wire_to_product', rounding='exact', overflow='firmware_cast',
+                 symbols=('get_Position_actual_value',),
+                 standard_semantics='CiA402 position actual value; current firmware narrows the internal count to the 32-bit wire object.')
+
+          physical('motion.target_velocity', 'rpm', 'velocity')
+          parameterized('motion.target_velocity', 'load_pps_to_rpm', ['encoder.load_control_resolution'], {'encoder.load_control_resolution': 524288.0}, 'bidirectional',
+                        symbols=('set_Target_velocity', 'get_Target_velocity'), support=('database/data_param.c',),
+                        standard_semantics='Wire count rate is converted to load RPM using Load_pps_2_rpm=60/Load_control_resolution.')
+          physical('feedback.velocity', 'rpm', 'velocity')
+          parameterized('feedback.velocity', 'load_pps_to_rpm', ['encoder.load_control_resolution'], {'encoder.load_control_resolution': 524288.0}, 'wire_to_product',
+                        symbols=('get_Velocity_actual_value',), support=('database/data_param.c',),
+                        standard_semantics='Actual load RPM is converted to the CiA402 velocity count-rate domain using Load_rpm_2_pps.')
+
+          for name, direction, symbols in [
+              ('motion.target_torque', 'bidirectional', ('set_Target_torque', 'get_Target_torque')),
+              ('feedback.torque', 'wire_to_product', ('get_Torque_actual_value',)),
+              ('feedback.current', 'wire_to_product', ('get_Current_actual_value',)),
+              ('limits.max_current', 'bidirectional', ('set_Max_current', 'get_Max_current')),
+          ]:
+              physical(name, 'ampere_peak', 'electric_current',
+                       'Firmware native value is peak torque-producing current; the stable semantic name is retained for compatibility.')
+              parameterized(name, 'rated_current_per_mille_peak', ['motor.rated_current'], {'motor.rated_current': 10.0}, direction,
+                            symbols=symbols, support=('common/math_lib/yuanhub_math.h',),
+                            standard_semantics='CiA402 relative current/torque quantity in per-mille of Motor rated current; firmware converts RMS rated current to peak with MATH_ARMS2APEAK.')
+
+          physical('motor.rated_current', 'ampere_rms', 'electric_current')
+          linear('motor.rated_current', 0.001, 'bidirectional', symbols=('set_Motor_rated_current', 'get_Motor_rated_current'),
+                 standard_semantics='0x6075 Motor rated current is represented in mA on the wire and A RMS in the firmware database.')
+          physical('feedback.dc_link_voltage', 'volt', 'voltage')
+          linear('feedback.dc_link_voltage', 0.001, 'wire_to_product', symbols=('get_DC_link_circuit_voltage',),
+                 standard_semantics='0x6079 DC link circuit voltage is represented in mV on the wire and V in the firmware database.')
+
+          params_path.write_text(json.dumps(params, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
+          signals_path.write_text(json.dumps(signals, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
+
+          model_path = root / 'contract/tools/schema_model.py'
+          text = model_path.read_text(encoding='utf-8')
+          text = text.replace('CONVERSION_KIND = {"identity", "linear", "adapter_defined"}', 'CONVERSION_KIND = {"identity", "linear", "parameterized_linear", "adapter_defined"}')
+          text = text.replace('CONVERSION_DIRECTION = {"bidirectional", "product_to_wire", "wire_to_product"}', 'CONVERSION_DIRECTION = {"bidirectional", "product_to_wire", "wire_to_product"}\nCONVERSION_OVERFLOW = {"reject", "firmware_cast"}\nCONVERSION_ROUNDING = {"exact", "truncate_toward_zero", "adapter_defined"}')
+          old_start = text.index('def validate_conversion(')
+          old_end = text.index('\ndef validate(contract:', old_start)
+          new_func = '''def validate_conversion(name: str, item: dict, co: dict) -> None:\n    conversion = co.get("conversion")\n    if not isinstance(conversion, dict):\n        fail(f"{name}: conversion specification required")\n    required = {"kind", "status", "direction", "scale", "offset", "rounding", "overflow"}\n    optional = {"dependencies", "formula_id", "golden_context", "evidence", "standard_semantics"}\n    if not required <= set(conversion) or set(conversion) - required - optional:\n        fail(f"{name}: invalid conversion specification keys")\n    if conversion["kind"] not in CONVERSION_KIND or conversion["status"] not in CONVERSION_STATUS or conversion["direction"] not in CONVERSION_DIRECTION:\n        fail(f"{name}: invalid conversion kind/status/direction")\n    if conversion["overflow"] not in CONVERSION_OVERFLOW or conversion["rounding"] not in CONVERSION_ROUNDING:\n        fail(f"{name}: invalid conversion overflow/rounding policy")\n    if conversion["status"] == "unverified":\n        if conversion["kind"] != "adapter_defined" or conversion["scale"] is not None or conversion["offset"] is not None:\n            fail(f"{name}: unverified conversion must be adapter_defined with null scale/offset")\n        if conversion["rounding"] != "adapter_defined":\n            fail(f"{name}: unverified conversion rounding must remain adapter_defined")\n        return\n    if conversion["kind"] == "identity":\n        if item["product_type"] != co["wire_type"] or conversion["scale"] != 1.0 or conversion["offset"] != 0.0 or conversion["rounding"] != "exact":\n            fail(f"{name}: verified identity conversion must be same type, scale=1, offset=0, exact")\n    elif conversion["kind"] == "linear":\n        if not isinstance(conversion["scale"], (int, float)) or not isinstance(conversion["offset"], (int, float)):\n            fail(f"{name}: verified linear conversion requires numeric scale/offset")\n    elif conversion["kind"] == "parameterized_linear":\n        deps = conversion.get("dependencies")\n        context = conversion.get("golden_context")\n        if conversion["scale"] is not None or not isinstance(conversion["offset"], (int, float)):\n            fail(f"{name}: parameterized conversion keeps fixed scale null and explicit numeric offset")\n        if not isinstance(deps, list) or not deps or any(not isinstance(x, str) or not x for x in deps):\n            fail(f"{name}: parameterized conversion requires dependencies")\n        if not isinstance(context, dict) or any(dep not in context for dep in deps):\n            fail(f"{name}: parameterized conversion requires deterministic golden context")\n        if conversion.get("formula_id") not in {"load_pps_to_rpm", "rated_current_per_mille_peak"}:\n            fail(f"{name}: unsupported parameterized conversion formula")\n    else:\n        fail(f"{name}: adapter_defined conversion cannot be marked verified")\n    evidence = conversion.get("evidence")\n    if conversion["kind"] != "identity" and (not isinstance(evidence, dict) or evidence.get("status") != "firmware_verified"):\n        fail(f"{name}: verified non-identity conversion requires firmware evidence")\n\n'''
+          text = text[:old_start] + new_func + text[old_end+1:]
+          text = text.replace("if contract[\"schema_version\"] != 2 or contract[\"generator_version\"] != 2:\n        fail(\"Phase 1b expects schema_version=2 and generator_version=2\")", "if contract[\"schema_version\"] != 3 or contract[\"generator_version\"] != 3:\n        fail(\"Phase 1c expects schema_version=3 and generator_version=3\")")
+          model_path.write_text(text, encoding='utf-8')
+
+          gen_path = root / 'contract/tools/generators.py'
+          text = gen_path.read_text(encoding='utf-8')
+          text = text.replace('SEMANTIC_HEADER = ["id", "name", "aliases", "product_type", "access", "persistence", "storage_commit", "safety_preconditions", "safety_status", "unit", "physical_dimension", "physical_status", "physical_scale", "physical_offset", "range_min", "range_max", "range_status", "firmware_struct", "firmware_field", "canopen_index", "canopen_subindex", "canopen_wire_type", "canopen_access", "canopen_pdo_mappable", "canopen_conversion_kind", "canopen_conversion_status", "canopen_conversion_direction", "canopen_scale", "canopen_offset", "canopen_rounding", "canopen_overflow", "eds_parameter_name"]', 'SEMANTIC_HEADER = ["id", "name", "aliases", "product_type", "access", "persistence", "storage_commit", "safety_preconditions", "safety_status", "unit", "physical_dimension", "physical_status", "physical_scale", "physical_offset", "range_min", "range_max", "range_status", "firmware_struct", "firmware_field", "canopen_index", "canopen_subindex", "canopen_wire_type", "canopen_access", "canopen_pdo_mappable", "canopen_conversion_kind", "canopen_conversion_status", "canopen_conversion_direction", "canopen_scale", "canopen_offset", "canopen_rounding", "canopen_overflow", "canopen_formula_id", "canopen_dependencies", "canopen_evidence_status", "eds_parameter_name"]')
+          old = 'conversion["kind"], conversion["status"], conversion["direction"], display(conversion["scale"]), display(conversion["offset"]), conversion["rounding"], conversion["overflow"], co["eds_parameter_name"]])'
+          new = 'conversion["kind"], conversion["status"], conversion["direction"], display(conversion["scale"]), display(conversion["offset"]), conversion["rounding"], conversion["overflow"], conversion.get("formula_id", ""), "|".join(conversion.get("dependencies", [])), conversion.get("evidence", {}).get("status", ""), co["eds_parameter_name"]])'
+          if old not in text: raise SystemExit('semantic_rows marker not found')
+          text = text.replace(old, new)
+          start = text.index('def render_golden_vectors(')
+          end = text.index('\ndef render_outputs(', start)
+          new_golden = '''def representative_wire_cases(wire_type: str) -> list[int]:\n    signed = wire_type.startswith("int")\n    bits = int("".join(ch for ch in wire_type if ch.isdigit()))\n    if signed:\n        lo, hi = -(1 << (bits - 1)), (1 << (bits - 1)) - 1\n        return [max(lo, -1000), -1, 0, 1, min(hi, 1000)]\n    hi = (1 << bits) - 1\n    return [0, 1, min(hi, 1000), min(hi, 48000)]\n\n\ndef effective_scale(conversion: dict) -> float:\n    if conversion["kind"] in {"identity", "linear"}:\n        return float(conversion["scale"])\n    context = conversion["golden_context"]\n    if conversion["formula_id"] == "load_pps_to_rpm":\n        return 60.0 / float(context["encoder.load_control_resolution"])\n    if conversion["formula_id"] == "rated_current_per_mille_peak":\n        return float(context["motor.rated_current"]) * 1.414213562373 / 1000.0\n    fail(f"unsupported formula {conversion.get('formula_id')}")\n\n\ndef render_golden_vectors(contract: dict) -> str:\n    vectors = []\n    for item in all_items(contract):\n        co, conversion = item["canopen"], item["canopen"]["conversion"]\n        if conversion["status"] != "verified":\n            continue\n        scale = effective_scale(conversion); offset = float(conversion["offset"])\n        wire_values = identity_cases(co["wire_type"]) if conversion["kind"] == "identity" else representative_wire_cases(co["wire_type"])\n        cases = []\n        for wire in wire_values:\n            product = wire * scale + offset\n            reverse = (product - offset) / scale if scale else 0.0\n            roundtrip_wire = int(round(reverse))\n            cases.append({"wire_value": wire, "wire_le_hex": wire_bytes(co["wire_type"], wire), "product_value": product, "roundtrip_wire": roundtrip_wire})\n        vectors.append({"id": f"0x{item['id']:08X}", "name": item["name"], "product_type": item["product_type"], "wire_type": co["wire_type"], "direction": conversion["direction"], "conversion": conversion, "effective_scale": scale, "context": conversion.get("golden_context", {}), "cases": cases})\n    return json.dumps({"schema_version": contract["schema_version"], "scope": "All verified fixed and parameterized conversions; parameterized vectors carry deterministic dependency context.", "vectors": vectors}, indent=2) + "\\n"\n\n'''
+          text = text[:start] + new_golden + text[end+1:]
+          gen_path.write_text(text, encoding='utf-8')
+
+          checks_path = root / 'contract/tools/checks.py'
+          text = checks_path.read_text(encoding='utf-8')
+          text = text.replace('from generators import wire_bytes', 'from generators import effective_scale, wire_bytes')
+          start = text.index('def check_golden_vectors(')
+          new_check = '''def check_conversion_evidence(contract: dict) -> None:\n    for item in all_items(contract):\n        conversion = item["canopen"]["conversion"]\n        if conversion["status"] != "verified" or conversion["kind"] == "identity":\n            continue\n        evidence = conversion["evidence"]\n        paths = [ROOT / evidence["source"]] + [ROOT / x for x in evidence.get("support_sources", [])]\n        combined = "\\n".join(path.read_text(encoding="utf-8") for path in paths)\n        missing = [token for token in evidence["symbols"] if token not in combined]\n        if missing:\n            fail(f"{item['name']}: firmware conversion evidence tokens missing: {missing}")\n\n\ndef check_golden_vectors(contract: dict) -> None:\n    payload = json.loads((GENERATED / "golden/canopen_conversion_vectors.json").read_text(encoding="utf-8"))\n    names = {x["name"] for x in payload["vectors"]}\n    expected = {item["name"] for item in all_items(contract) if item["canopen"]["conversion"]["status"] == "verified"}\n    if names != expected:\n        fail(f"golden vector coverage drift: {sorted(names)} != {sorted(expected)}")\n    by_name = {item["name"]: item for item in all_items(contract)}\n    for vector in payload["vectors"]:\n        conversion = by_name[vector["name"]]["canopen"]["conversion"]\n        scale = effective_scale(conversion); offset = float(conversion["offset"])\n        if abs(float(vector["effective_scale"]) - scale) > 1e-12:\n            fail(f"{vector['name']}: effective scale drift")\n        for case in vector["cases"]:\n            expected_product = case["wire_value"] * scale + offset\n            if abs(float(case["product_value"]) - expected_product) > max(1e-9, abs(expected_product) * 1e-9):\n                fail(f"{vector['name']}: product conversion mismatch")\n            if case["roundtrip_wire"] != case["wire_value"]:\n                fail(f"{vector['name']}: roundtrip mismatch")\n            if wire_bytes(vector["wire_type"], case["wire_value"]) != case["wire_le_hex"]:\n                fail(f"{vector['name']}: golden wire bytes mismatch")\n'''
+          text = text[:start] + new_check + '\n'
+          checks_path.write_text(text, encoding='utf-8')
+
+          tool_path = root / 'contract/tools/contract_tool.py'
+          text = tool_path.read_text(encoding='utf-8')
+          text = text.replace('from checks import check_golden_vectors, check_mavlink_provenance, check_sources', 'from checks import check_conversion_evidence, check_golden_vectors, check_mavlink_provenance, check_sources')
+          text = text.replace('elif args.command == "all": generate(contract, check=True); check_sources(contract); check_golden_vectors(contract); check_mavlink_provenance()', 'elif args.command == "all": generate(contract, check=True); check_sources(contract); check_conversion_evidence(contract); check_golden_vectors(contract); check_mavlink_provenance()')
+          tool_path.write_text(text, encoding='utf-8')
+          PY
+          python contract/tools/contract_tool.py generate
+          python contract/tools/contract_tool.py all
+      - name: Commit Phase 1c
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add contract
+          git commit -m 'Verify priority CiA402 conversion semantics'
+          git push origin HEAD:feature/product-contract-phase1c-conversions
