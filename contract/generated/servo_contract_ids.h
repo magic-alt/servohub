@@ -1,13 +1,13 @@
 #pragma once
 
 /* GENERATED FILE. DO NOT EDIT.
- * Source: contract/schema/product_contract.json
- * Contract: 1.0.0 / schema 1 / protocol 1
+ * Source: contract/schema/*
+ * Contract: 1.1.0 / schema 2 / protocol 1
  */
 
 #include <stdint.h>
 
-#define SERVO_CONTRACT_SCHEMA_VERSION 1U
+#define SERVO_CONTRACT_SCHEMA_VERSION 2U
 #define SERVO_CONTRACT_PROTOCOL_REVISION 1U
 
 typedef enum ServoContractId {
