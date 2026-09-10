@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import re
 
-from generators import wire_bytes
+from generators import effective_scale, wire_bytes
 from schema_model import DATA_PARAM, EDS, EDS_TYPE_CODE, GENERATED, MAVLINK_PROVENANCE, MAVLINK_ROOT, ROOT, all_items, fail, git_blob_sha, normalized_index
 
 
@@ -56,11 +56,37 @@ def check_mavlink_provenance() -> None:
             if fields.get(field_name) != field_type: fail(f"MAVLink field drift for {item['message']}.{field_name}: {fields.get(field_name)!r} != {field_type!r}")
 
 
+def check_conversion_evidence(contract: dict) -> None:
+    for item in all_items(contract):
+        conversion = item["canopen"]["conversion"]
+        if conversion["status"] != "verified" or conversion["kind"] == "identity":
+            continue
+        evidence = conversion["evidence"]
+        paths = [ROOT / evidence["source"]] + [ROOT / x for x in evidence.get("support_sources", [])]
+        combined = "\n".join(path.read_text(encoding="utf-8") for path in paths)
+        missing = [token for token in evidence["symbols"] if token not in combined]
+        if missing:
+            fail(f"{item['name']}: firmware conversion evidence tokens missing: {missing}")
+
+
 def check_golden_vectors(contract: dict) -> None:
     payload = json.loads((GENERATED / "golden/canopen_conversion_vectors.json").read_text(encoding="utf-8"))
-    names = {x["name"] for x in payload["vectors"]}; expected = {item["name"] for item in all_items(contract) if item["canopen"]["conversion"]["status"] == "verified"}
-    if names != expected: fail(f"golden vector coverage drift: {sorted(names)} != {sorted(expected)}")
+    names = {x["name"] for x in payload["vectors"]}
+    expected = {item["name"] for item in all_items(contract) if item["canopen"]["conversion"]["status"] == "verified"}
+    if names != expected:
+        fail(f"golden vector coverage drift: {sorted(names)} != {sorted(expected)}")
+    by_name = {item["name"]: item for item in all_items(contract)}
     for vector in payload["vectors"]:
+        conversion = by_name[vector["name"]]["canopen"]["conversion"]
+        scale = effective_scale(conversion); offset = float(conversion["offset"])
+        if abs(float(vector["effective_scale"]) - scale) > 1e-12:
+            fail(f"{vector['name']}: effective scale drift")
         for case in vector["cases"]:
-            if case["product_value"] != case["wire_value"] or case["roundtrip_product"] != case["product_value"]: fail(f"{vector['name']}: identity roundtrip mismatch")
-            if wire_bytes(vector["wire_type"], case["wire_value"]) != case["wire_le_hex"]: fail(f"{vector['name']}: golden wire bytes mismatch")
+            expected_product = case["wire_value"] * scale + offset
+            if abs(float(case["product_value"]) - expected_product) > max(1e-9, abs(expected_product) * 1e-9):
+                fail(f"{vector['name']}: product conversion mismatch")
+            if case["roundtrip_wire"] != case["wire_value"]:
+                fail(f"{vector['name']}: roundtrip mismatch")
+            if wire_bytes(vector["wire_type"], case["wire_value"]) != case["wire_le_hex"]:
+                fail(f"{vector['name']}: golden wire bytes mismatch")
+

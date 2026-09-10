@@ -43,7 +43,7 @@ def render_aliases(contract: dict) -> str:
     return "\n".join(lines)
 
 
-SEMANTIC_HEADER = ["id", "name", "aliases", "product_type", "access", "persistence", "storage_commit", "safety_preconditions", "safety_status", "unit", "physical_dimension", "physical_status", "physical_scale", "physical_offset", "range_min", "range_max", "range_status", "firmware_struct", "firmware_field", "canopen_index", "canopen_subindex", "canopen_wire_type", "canopen_access", "canopen_pdo_mappable", "canopen_conversion_kind", "canopen_conversion_status", "canopen_conversion_direction", "canopen_scale", "canopen_offset", "canopen_rounding", "canopen_overflow", "eds_parameter_name"]
+SEMANTIC_HEADER = ["id", "name", "aliases", "product_type", "access", "persistence", "storage_commit", "safety_preconditions", "safety_status", "unit", "physical_dimension", "physical_status", "physical_scale", "physical_offset", "range_min", "range_max", "range_status", "firmware_struct", "firmware_field", "canopen_index", "canopen_subindex", "canopen_wire_type", "canopen_access", "canopen_pdo_mappable", "canopen_conversion_kind", "canopen_conversion_status", "canopen_conversion_direction", "canopen_scale", "canopen_offset", "canopen_rounding", "canopen_overflow", "canopen_formula_id", "canopen_dependencies", "canopen_evidence_status", "eds_parameter_name"]
 
 
 def semantic_rows(items: list[dict]) -> list[list[object]]:
@@ -51,7 +51,7 @@ def semantic_rows(items: list[dict]) -> list[list[object]]:
     for item in items:
         fw, co, physical, value_range = item["firmware"], item["canopen"], item["physical"], item["range"]
         conversion = co["conversion"]
-        rows.append([f"0x{item['id']:08X}", item["name"], "|".join(item["aliases"]), item["product_type"], item["access"], item["persistence"], item.get("storage_commit", "none"), "|".join(item["safety_preconditions"]["required"]), item["safety_preconditions"]["status"], physical["unit"], physical["dimension"], physical["status"], display(physical["scale"]), display(physical["offset"]), display(value_range["min"]), display(value_range["max"]), value_range["status"], fw["struct"], fw["field"], co["index"], co["subindex"], co["wire_type"], co["access"], int(co["pdo_mappable"]), conversion["kind"], conversion["status"], conversion["direction"], display(conversion["scale"]), display(conversion["offset"]), conversion["rounding"], conversion["overflow"], co["eds_parameter_name"]])
+        rows.append([f"0x{item['id']:08X}", item["name"], "|".join(item["aliases"]), item["product_type"], item["access"], item["persistence"], item.get("storage_commit", "none"), "|".join(item["safety_preconditions"]["required"]), item["safety_preconditions"]["status"], physical["unit"], physical["dimension"], physical["status"], display(physical["scale"]), display(physical["offset"]), display(value_range["min"]), display(value_range["max"]), value_range["status"], fw["struct"], fw["field"], co["index"], co["subindex"], co["wire_type"], co["access"], int(co["pdo_mappable"]), conversion["kind"], conversion["status"], conversion["direction"], display(conversion["scale"]), display(conversion["offset"]), conversion["rounding"], conversion["overflow"], conversion.get("formula_id", ""), "|".join(conversion.get("dependencies", [])), conversion.get("evidence", {}).get("status", ""), co["eds_parameter_name"]])
     return rows
 
 
@@ -93,16 +93,43 @@ def identity_cases(value_type: str) -> list[int]:
     return cases[value_type]
 
 
+def representative_wire_cases(wire_type: str) -> list[int]:
+    signed = wire_type.startswith("int")
+    bits = int("".join(ch for ch in wire_type if ch.isdigit()))
+    if signed:
+        lo, hi = -(1 << (bits - 1)), (1 << (bits - 1)) - 1
+        return [max(lo, -1000), -1, 0, 1, min(hi, 1000)]
+    hi = (1 << bits) - 1
+    return [0, 1, min(hi, 1000), min(hi, 48000)]
+
+
+def effective_scale(conversion: dict) -> float:
+    if conversion["kind"] in {"identity", "linear"}:
+        return float(conversion["scale"])
+    context = conversion["golden_context"]
+    if conversion["formula_id"] == "load_pps_to_rpm":
+        return 60.0 / float(context["encoder.load_control_resolution"])
+    if conversion["formula_id"] == "rated_current_per_mille_peak":
+        return float(context["motor.rated_current"]) * 1.414213562373 / 1000.0
+    fail(f"unsupported formula {conversion.get('formula_id')}")
+
+
 def render_golden_vectors(contract: dict) -> str:
     vectors = []
     for item in all_items(contract):
         co, conversion = item["canopen"], item["canopen"]["conversion"]
-        if conversion["status"] != "verified": continue
-        if conversion["kind"] != "identity": fail(f"{item['name']}: verified non-identity conversion needs explicit vectors")
-        cases = [{"product_value": value, "wire_value": value, "wire_le_hex": wire_bytes(co["wire_type"], value), "roundtrip_product": value} for value in identity_cases(co["wire_type"])]
-        vectors.append({"id": f"0x{item['id']:08X}", "name": item["name"], "product_type": item["product_type"], "wire_type": co["wire_type"], "direction": conversion["direction"], "conversion": conversion, "cases": cases})
-    return json.dumps({"schema_version": contract["schema_version"], "scope": "Only verified conversions. Unverified adapter conversions are deliberately absent.", "vectors": vectors}, indent=2) + "\n"
-
+        if conversion["status"] != "verified":
+            continue
+        scale = effective_scale(conversion); offset = float(conversion["offset"])
+        wire_values = identity_cases(co["wire_type"]) if conversion["kind"] == "identity" else representative_wire_cases(co["wire_type"])
+        cases = []
+        for wire in wire_values:
+            product = wire * scale + offset
+            reverse = (product - offset) / scale if scale else 0.0
+            roundtrip_wire = int(round(reverse))
+            cases.append({"wire_value": wire, "wire_le_hex": wire_bytes(co["wire_type"], wire), "product_value": product, "roundtrip_wire": roundtrip_wire})
+        vectors.append({"id": f"0x{item['id']:08X}", "name": item["name"], "product_type": item["product_type"], "wire_type": co["wire_type"], "direction": conversion["direction"], "conversion": conversion, "effective_scale": scale, "context": conversion.get("golden_context", {}), "cases": cases})
+    return json.dumps({"schema_version": contract["schema_version"], "scope": "All verified fixed and parameterized conversions; parameterized vectors carry deterministic dependency context.", "vectors": vectors}, indent=2) + "\n"
 
 def render_outputs(contract: dict) -> dict[Path, str]:
     generated_files = ["servo_contract_ids.h", "servo_contract_aliases.h", "product_metadata.json", "host/servo_parameters.csv", "host/servo_signals.csv", "host/error_code.csv", "host/warning_code.csv", "canopen/od_metadata.csv", "canopen/covered_objects.eds", "golden/canopen_conversion_vectors.json"]

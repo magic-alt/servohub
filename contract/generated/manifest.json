@@ -1,9 +1,9 @@
 {
-  "contract_version": "1.1.0",
-  "schema_version": 2,
+  "contract_version": "1.2.0",
+  "schema_version": 3,
   "protocol_revision": 1,
-  "generator_version": 2,
-  "schema_git_blob_sha": "b12627b7ad099a4837eaf574feb4b06c162c3c12",
+  "generator_version": 3,
+  "schema_git_blob_sha": "6f7c1a75b205cee92a36c992861485784ef168fd",
   "schema_files": [
     {
       "path": "contract/schema/capabilities.json",
@@ -15,18 +15,18 @@
     },
     {
       "path": "contract/schema/parameters.json",
-      "git_blob_sha": "4f9fab71e61f04d7480f09e18078a51b2816ebcd"
+      "git_blob_sha": "3562e08c487774be2a27e649591cb8fdb210002f"
     },
     {
       "path": "contract/schema/product_contract.json",
-      "git_blob_sha": "b12627b7ad099a4837eaf574feb4b06c162c3c12"
+      "git_blob_sha": "6f7c1a75b205cee92a36c992861485784ef168fd"
     },
     {
       "path": "contract/schema/signals.json",
-      "git_blob_sha": "74cd42377fc6e93f1ac8c555013570d07c448e49"
+      "git_blob_sha": "c03d4a051a6aa8725c7cd04302ca1f1bdca7712a"
     }
   ],
-  "schema_bundle_sha256": "a37209d1a9ce885bb780705a8077705e29e5f168ceac86a49c2dac1a07eb4124",
+  "schema_bundle_sha256": "ca017b51210bdde0a15c539930445d21c9a5443c032c6a210e4a417f2b9c5502",
   "generated_files": [
     "servo_contract_ids.h",
     "servo_contract_aliases.h",
