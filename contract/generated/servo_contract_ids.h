@@ -1,7 +1,7 @@
 #pragma once
 
 /* GENERATED FILE. DO NOT EDIT.
- * Source: contract/schema/*
+ * Source: contract/schema bundle
  * Contract: 1.1.0 / schema 2 / protocol 1
  */
 

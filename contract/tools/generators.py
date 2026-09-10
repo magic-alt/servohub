@@ -21,7 +21,7 @@ def display(value: object) -> object:
 
 
 def render_ids(contract: dict) -> str:
-    lines = ["#pragma once", "", "/* GENERATED FILE. DO NOT EDIT.", " * Source: contract/schema/*", f" * Contract: {contract['contract_version']} / schema {contract['schema_version']} / protocol {contract['protocol_revision']}", " */", "", "#include <stdint.h>", "", f"#define SERVO_CONTRACT_SCHEMA_VERSION {contract['schema_version']}U", f"#define SERVO_CONTRACT_PROTOCOL_REVISION {contract['protocol_revision']}U", "", "typedef enum ServoContractId {"]
+    lines = ["#pragma once", "", "/* GENERATED FILE. DO NOT EDIT.", " * Source: contract/schema bundle", f" * Contract: {contract['contract_version']} / schema {contract['schema_version']} / protocol {contract['protocol_revision']}", " */", "", "#include <stdint.h>", "", f"#define SERVO_CONTRACT_SCHEMA_VERSION {contract['schema_version']}U", f"#define SERVO_CONTRACT_PROTOCOL_REVISION {contract['protocol_revision']}U", "", "typedef enum ServoContractId {"]
     for item in all_items(contract):
         lines.append(f"    SERVO_CONTRACT_{enum_name(item['name'])} = 0x{item['id']:08X}U,")
     lines += ["} ServoContractId;", "", "typedef enum ServoCapabilityId {"]
@@ -36,7 +36,7 @@ def c_string(value: str) -> str:
 
 def render_aliases(contract: dict) -> str:
     pairs = [(item["name"], alias) for item in all_items(contract) for alias in item["aliases"]]
-    lines = ["#pragma once", "", "/* GENERATED FILE. DO NOT EDIT.", " * Source: contract/schema/*", " * Canonical semantic names and compatibility aliases only.", " */", "", "#include <stddef.h>", "", "typedef struct ServoContractAlias {", "    const char* canonical;", "    const char* alias;", "} ServoContractAlias;", "", "static const ServoContractAlias SERVO_CONTRACT_ALIASES[] = {"]
+    lines = ["#pragma once", "", "/* GENERATED FILE. DO NOT EDIT.", " * Source: contract/schema bundle", " * Canonical semantic names and compatibility aliases only.", " */", "", "#include <stddef.h>", "", "typedef struct ServoContractAlias {", "    const char* canonical;", "    const char* alias;", "} ServoContractAlias;", "", "static const ServoContractAlias SERVO_CONTRACT_ALIASES[] = {"]
     for canonical, alias in pairs:
         lines.append(f'    {{"{c_string(canonical)}", "{c_string(alias)}"}},')
     lines += ["};", "", "#define SERVO_CONTRACT_ALIAS_COUNT (sizeof(SERVO_CONTRACT_ALIASES) / sizeof(SERVO_CONTRACT_ALIASES[0]))", ""]

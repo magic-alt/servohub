@@ -1,7 +1,7 @@
 #pragma once
 
 /* GENERATED FILE. DO NOT EDIT.
- * Source: contract/schema/*
+ * Source: contract/schema bundle
  * Canonical semantic names and compatibility aliases only.
  */
 
