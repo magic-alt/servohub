@@ -1,0 +1,234 @@
+{
+  "schema_version": 2,
+  "scope": "Only verified conversions. Unverified adapter conversions are deliberately absent.",
+  "vectors": [
+    {
+      "id": "0x00010002",
+      "name": "operation.mode",
+      "product_type": "int8",
+      "wire_type": "int8",
+      "direction": "bidirectional",
+      "conversion": {
+        "kind": "identity",
+        "status": "verified",
+        "direction": "bidirectional",
+        "scale": 1.0,
+        "offset": 0.0,
+        "rounding": "exact",
+        "overflow": "reject"
+      },
+      "cases": [
+        {
+          "product_value": -128,
+          "wire_value": -128,
+          "wire_le_hex": "80",
+          "roundtrip_product": -128
+        },
+        {
+          "product_value": -1,
+          "wire_value": -1,
+          "wire_le_hex": "FF",
+          "roundtrip_product": -1
+        },
+        {
+          "product_value": 0,
+          "wire_value": 0,
+          "wire_le_hex": "00",
+          "roundtrip_product": 0
+        },
+        {
+          "product_value": 1,
+          "wire_value": 1,
+          "wire_le_hex": "01",
+          "roundtrip_product": 1
+        },
+        {
+          "product_value": 127,
+          "wire_value": 127,
+          "wire_le_hex": "7F",
+          "roundtrip_product": 127
+        }
+      ]
+    },
+    {
+      "id": "0x00050001",
+      "name": "motor.reduction_ratio_numerator",
+      "product_type": "uint32",
+      "wire_type": "uint32",
+      "direction": "bidirectional",
+      "conversion": {
+        "kind": "identity",
+        "status": "verified",
+        "direction": "bidirectional",
+        "scale": 1.0,
+        "offset": 0.0,
+        "rounding": "exact",
+        "overflow": "reject"
+      },
+      "cases": [
+        {
+          "product_value": 0,
+          "wire_value": 0,
+          "wire_le_hex": "00000000",
+          "roundtrip_product": 0
+        },
+        {
+          "product_value": 1,
+          "wire_value": 1,
+          "wire_le_hex": "01000000",
+          "roundtrip_product": 1
+        },
+        {
+          "product_value": 65535,
+          "wire_value": 65535,
+          "wire_le_hex": "FFFF0000",
+          "roundtrip_product": 65535
+        },
+        {
+          "product_value": 4294967295,
+          "wire_value": 4294967295,
+          "wire_le_hex": "FFFFFFFF",
+          "roundtrip_product": 4294967295
+        }
+      ]
+    },
+    {
+      "id": "0x00050002",
+      "name": "motor.reduction_ratio_denominator",
+      "product_type": "uint32",
+      "wire_type": "uint32",
+      "direction": "bidirectional",
+      "conversion": {
+        "kind": "identity",
+        "status": "verified",
+        "direction": "bidirectional",
+        "scale": 1.0,
+        "offset": 0.0,
+        "rounding": "exact",
+        "overflow": "reject"
+      },
+      "cases": [
+        {
+          "product_value": 0,
+          "wire_value": 0,
+          "wire_le_hex": "00000000",
+          "roundtrip_product": 0
+        },
+        {
+          "product_value": 1,
+          "wire_value": 1,
+          "wire_le_hex": "01000000",
+          "roundtrip_product": 1
+        },
+        {
+          "product_value": 65535,
+          "wire_value": 65535,
+          "wire_le_hex": "FFFF0000",
+          "roundtrip_product": 65535
+        },
+        {
+          "product_value": 4294967295,
+          "wire_value": 4294967295,
+          "wire_le_hex": "FFFFFFFF",
+          "roundtrip_product": 4294967295
+        }
+      ]
+    },
+    {
+      "id": "0x00020008",
+      "name": "motion.homing_method",
+      "product_type": "int8",
+      "wire_type": "int8",
+      "direction": "bidirectional",
+      "conversion": {
+        "kind": "identity",
+        "status": "verified",
+        "direction": "bidirectional",
+        "scale": 1.0,
+        "offset": 0.0,
+        "rounding": "exact",
+        "overflow": "reject"
+      },
+      "cases": [
+        {
+          "product_value": -128,
+          "wire_value": -128,
+          "wire_le_hex": "80",
+          "roundtrip_product": -128
+        },
+        {
+          "product_value": -1,
+          "wire_value": -1,
+          "wire_le_hex": "FF",
+          "roundtrip_product": -1
+        },
+        {
+          "product_value": 0,
+          "wire_value": 0,
+          "wire_le_hex": "00",
+          "roundtrip_product": 0
+        },
+        {
+          "product_value": 1,
+          "wire_value": 1,
+          "wire_le_hex": "01",
+          "roundtrip_product": 1
+        },
+        {
+          "product_value": 127,
+          "wire_value": 127,
+          "wire_le_hex": "7F",
+          "roundtrip_product": 127
+        }
+      ]
+    },
+    {
+      "id": "0x10000002",
+      "name": "status.operation_mode",
+      "product_type": "int8",
+      "wire_type": "int8",
+      "direction": "wire_to_product",
+      "conversion": {
+        "kind": "identity",
+        "status": "verified",
+        "direction": "wire_to_product",
+        "scale": 1.0,
+        "offset": 0.0,
+        "rounding": "exact",
+        "overflow": "reject"
+      },
+      "cases": [
+        {
+          "product_value": -128,
+          "wire_value": -128,
+          "wire_le_hex": "80",
+          "roundtrip_product": -128
+        },
+        {
+          "product_value": -1,
+          "wire_value": -1,
+          "wire_le_hex": "FF",
+          "roundtrip_product": -1
+        },
+        {
+          "product_value": 0,
+          "wire_value": 0,
+          "wire_le_hex": "00",
+          "roundtrip_product": 0
+        },
+        {
+          "product_value": 1,
+          "wire_value": 1,
+          "wire_le_hex": "01",
+          "roundtrip_product": 1
+        },
+        {
+          "product_value": 127,
+          "wire_value": 127,
+          "wire_le_hex": "7F",
+          "roundtrip_product": 127
+        }
+      ]
+    }
+  ]
+}
