@@ -61,7 +61,7 @@ def clean_contract(contract: dict) -> dict:
 
 def render_product_metadata(contract: dict) -> str:
     keep = {key: clean_contract(contract)[key] for key in ("contract_version", "schema_version", "protocol_revision", "unit_catalog", "parameters", "signals", "capabilities")}
-    return json.dumps(keep, ensure_ascii=False, indent=2) + "\n"
+    return json.dumps(keep, ensure_ascii=False, separators=(",", ":")) + "\n"
 
 
 def render_od_csv(contract: dict) -> str:
@@ -107,7 +107,7 @@ def render_golden_vectors(contract: dict) -> str:
 def render_outputs(contract: dict) -> dict[Path, str]:
     generated_files = ["servo_contract_ids.h", "servo_contract_aliases.h", "product_metadata.json", "host/servo_parameters.csv", "host/servo_signals.csv", "host/error_code.csv", "host/warning_code.csv", "canopen/od_metadata.csv", "canopen/covered_objects.eds", "golden/canopen_conversion_vectors.json"]
     schema_files, bundle_sha = schema_manifest(contract)
-    manifest = {"contract_version": contract["contract_version"], "schema_version": contract["schema_version"], "protocol_revision": contract["protocol_revision"], "generator_version": contract["generator_version"], "schema_git_blob_sha": schema_files[0]["git_blob_sha"], "schema_files": schema_files, "schema_bundle_sha256": bundle_sha, "generated_files": generated_files}
+    manifest = {"contract_version": contract["contract_version"], "schema_version": contract["schema_version"], "protocol_revision": contract["protocol_revision"], "generator_version": contract["generator_version"], "schema_git_blob_sha": next(x["git_blob_sha"] for x in schema_files if x["path"].endswith("/product_contract.json")), "schema_files": schema_files, "schema_bundle_sha256": bundle_sha, "generated_files": generated_files}
     errors = [[x["text_zh"], x["code"], x.get("cause_zh", ""), x["bit"]] for x in contract["errors"]]
     warnings = [[x["text_zh"], x["code"], x.get("cause_zh", "")] for x in contract["warnings"]]
     return {GENERATED / "servo_contract_ids.h": render_ids(contract), GENERATED / "servo_contract_aliases.h": render_aliases(contract), GENERATED / "product_metadata.json": render_product_metadata(contract), GENERATED / "host/servo_parameters.csv": csv_text(SEMANTIC_HEADER, semantic_rows(contract["parameters"])), GENERATED / "host/servo_signals.csv": csv_text(SEMANTIC_HEADER, semantic_rows(contract["signals"])), GENERATED / "host/error_code.csv": csv_text(["文本", "错误代码", "可能原因", "对应bit位（序号-1）"], errors), GENERATED / "host/warning_code.csv": csv_text(["文本", "告警代码", "可能原因"], warnings), GENERATED / "canopen/od_metadata.csv": render_od_csv(contract), GENERATED / "canopen/covered_objects.eds": render_eds_subset(contract), GENERATED / "golden/canopen_conversion_vectors.json": render_golden_vectors(contract), GENERATED / "manifest.json": json.dumps(manifest, indent=2) + "\n"}
