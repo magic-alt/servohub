@@ -1,0 +1,47 @@
+name: Product contract
+
+on:
+  pull_request:
+    paths:
+      - "contract/**"
+      - "database/data_param.h"
+      - "communication/protocol/CANopen/SlaveOD/SlaveOD.eds"
+      - ".github/workflows/product-contract.yml"
+  push:
+    branches: [main]
+    paths:
+      - "contract/**"
+      - "database/data_param.h"
+      - "communication/protocol/CANopen/SlaveOD/SlaveOD.eds"
+      - ".github/workflows/product-contract.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate schema, generated freshness, and firmware/EDS bindings
+        run: python contract/tools/contract_tool.py all
+
+      - name: Compile generated C contract IDs
+        shell: bash
+        run: |
+          cat > /tmp/contract_smoke.c <<'EOF'
+          #include "contract/generated/servo_contract_ids.h"
+          int main(void) {
+              return SERVO_CONTRACT_SCHEMA_VERSION == 1U &&
+                     SERVO_CONTRACT_MOTION_TARGET_POSITION != 0U ? 0 : 1;
+          }
+          EOF
+          cc -std=c11 -Wall -Wextra -Werror -I. /tmp/contract_smoke.c -o /tmp/contract_smoke
+          /tmp/contract_smoke
