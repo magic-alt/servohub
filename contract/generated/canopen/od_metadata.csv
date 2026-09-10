@@ -1,0 +1,24 @@
+semantic_name,index,subindex,wire_type,eds_data_type,access,pdo_mappable,eds_parameter_name,conversion_kind,conversion_status,conversion_direction,scale,offset
+operation.mode,0x6060,0,int8,0x0002,rw,1,Modes of operation,identity,verified,bidirectional,1.0,0.0
+motion.target_torque,0x6071,0,int16,0x0003,rw,1,Target torque,adapter_defined,unverified,bidirectional,,
+limits.max_current,0x6073,0,uint16,0x0006,rw,1,Max current,adapter_defined,unverified,bidirectional,,
+motor.rated_current,0x6075,0,uint32,0x0007,rw,1,Motor rated current,adapter_defined,unverified,bidirectional,,
+motion.target_position,0x607A,0,int32,0x0004,rw,1,Target position,adapter_defined,unverified,bidirectional,,
+limits.software_position_min,0x607D,1,int32,0x0004,rw,0,Minimal position limit,adapter_defined,unverified,bidirectional,,
+limits.software_position_max,0x607D,2,int32,0x0004,rw,0,Maximal position limit,adapter_defined,unverified,bidirectional,,
+motion.profile_velocity,0x6081,0,uint32,0x0007,rw,1,Profile velocity,adapter_defined,unverified,bidirectional,,
+motion.profile_acceleration,0x6083,0,uint32,0x0007,rw,1,Profile acceleration,adapter_defined,unverified,bidirectional,,
+motion.profile_deceleration,0x6084,0,uint32,0x0007,rw,1,Profile deceleration,adapter_defined,unverified,bidirectional,,
+motion.quick_stop_deceleration,0x6085,0,uint32,0x0007,rw,1,Quick stop deceleration,adapter_defined,unverified,bidirectional,,
+motor.reduction_ratio_numerator,0x6091,1,uint32,0x0007,rw,1,Motor revolutions,identity,verified,bidirectional,1.0,0.0
+motor.reduction_ratio_denominator,0x6091,2,uint32,0x0007,rw,1,Shaft revolutions,identity,verified,bidirectional,1.0,0.0
+motion.homing_method,0x6098,0,int8,0x0002,rw,1,Homing method,identity,verified,bidirectional,1.0,0.0
+motion.target_velocity,0x60FF,0,int32,0x0004,rw,1,Target velocity,adapter_defined,unverified,bidirectional,,
+status.statusword,0x6041,0,uint16,0x0006,ro,1,Statusword,adapter_defined,unverified,wire_to_product,,
+status.operation_mode,0x6061,0,int8,0x0002,ro,1,Modes of operation display,identity,verified,wire_to_product,1.0,0.0
+feedback.position,0x6064,0,int32,0x0004,ro,1,Position actual value,adapter_defined,unverified,wire_to_product,,
+feedback.velocity,0x606C,0,int32,0x0004,ro,1,Velocity actual value,adapter_defined,unverified,wire_to_product,,
+feedback.torque,0x6077,0,int16,0x0003,rw,1,Torque actual value,adapter_defined,unverified,wire_to_product,,
+feedback.current,0x6078,0,int16,0x0003,ro,1,Current actual value,adapter_defined,unverified,wire_to_product,,
+feedback.dc_link_voltage,0x6079,0,uint32,0x0007,ro,1,DC link circuit voltage,adapter_defined,unverified,wire_to_product,,
+feedback.following_error,0x60F4,0,int32,0x0004,ro,1,Following error actual value,adapter_defined,unverified,wire_to_product,,

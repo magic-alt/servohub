@@ -6,6 +6,7 @@ on:
       - "contract/**"
       - "database/data_param.h"
       - "communication/protocol/CANopen/SlaveOD/SlaveOD.eds"
+      - "communication/protocol/MAVLink/servo_hub_database/**"
       - ".github/workflows/product-contract.yml"
   push:
     branches: [main]
@@ -13,6 +14,7 @@ on:
       - "contract/**"
       - "database/data_param.h"
       - "communication/protocol/CANopen/SlaveOD/SlaveOD.eds"
+      - "communication/protocol/MAVLink/servo_hub_database/**"
       - ".github/workflows/product-contract.yml"
   workflow_dispatch:
 
@@ -30,17 +32,20 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Validate schema, generated freshness, and firmware/EDS bindings
+      - name: Validate schema, generated freshness, firmware/EDS bindings, golden vectors and MAVLink provenance
         run: python contract/tools/contract_tool.py all
 
-      - name: Compile generated C contract IDs
+      - name: Compile generated C contract surface
         shell: bash
         run: |
           cat > /tmp/contract_smoke.c <<'EOF'
           #include "contract/generated/servo_contract_ids.h"
+          #include "contract/generated/servo_contract_aliases.h"
           int main(void) {
-              return SERVO_CONTRACT_SCHEMA_VERSION == 1U &&
-                     SERVO_CONTRACT_MOTION_TARGET_POSITION != 0U ? 0 : 1;
+              return SERVO_CONTRACT_SCHEMA_VERSION == 2U &&
+                     SERVO_CONTRACT_PROTOCOL_REVISION == 1U &&
+                     SERVO_CONTRACT_MOTION_TARGET_POSITION != 0U &&
+                     SERVO_CONTRACT_ALIAS_COUNT > 0U ? 0 : 1;
           }
           EOF
           cc -std=c11 -Wall -Wextra -Werror -I. /tmp/contract_smoke.c -o /tmp/contract_smoke

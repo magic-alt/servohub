@@ -1,0 +1,44 @@
+{
+  "status": "generated_headers_without_source_xml",
+  "generated_root": "communication/protocol/MAVLink/servo_hub_database",
+  "source_dialect": null,
+  "rule": "Do not regenerate or treat host XML as authoritative until the firmware source dialect is recovered and reviewed.",
+  "representative_headers": [
+    {
+      "path": "communication/protocol/MAVLink/servo_hub_database/mavlink_msg_appopmode.h",
+      "git_blob_sha": "cfb77c6cbc9ccacc0d9f5ad8c3fd122109e5c723",
+      "message": "AppOpMode",
+      "message_id": 30056,
+      "fields": {"Modes_of_operation": "int8_t"}
+    },
+    {
+      "path": "communication/protocol/MAVLink/servo_hub_database/mavlink_msg_appmotionparam.h",
+      "git_blob_sha": "02f59be8a953dab77e776cc35892ee4141478d03",
+      "message": "AppMotionParam",
+      "message_id": 30059,
+      "fields": {
+        "Target_position": "int64_t",
+        "Profile_velocity": "float",
+        "Profile_acceleration": "float",
+        "Profile_deceleration": "float",
+        "Quick_stop_deceleration": "float",
+        "Homing_method": "int8_t",
+        "Target_velocity": "float",
+        "Target_torque": "float"
+      }
+    }
+  ],
+  "known_non_authoritative_consumer_source": {
+    "repository": "magic-alt/servo_host",
+    "path": "resources/protocol_file/servo_hub_database.xml",
+    "git_blob_sha": "12454574eeb9c976c051f0f5d16ec19d0f769d20",
+    "status": "legacy_host_dialect_not_promoted",
+    "evidence": "Host XML uses low message IDs (e.g. READ_PARAM=9, PmsmConfig=10), while current firmware generated headers use AppOpMode=30056 and AppMotionParam=30059."
+  },
+  "recovery_acceptance": [
+    "Recover or reconstruct the exact firmware source XML/dialect input.",
+    "Re-generate headers reproducibly and match existing message IDs, field order/types, lengths and CRCs.",
+    "Pin the generator version and source dialect blob.",
+    "Only then add per-product MAVLink bindings to the Product Contract."
+  ]
+}

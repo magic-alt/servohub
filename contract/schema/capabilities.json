@@ -1,0 +1,1 @@
+[{"id":1,"name":"parameter.read","status":"current"},{"id":2,"name":"parameter.write","status":"current"},{"id":3,"name":"motion.command","status":"current"},{"id":4,"name":"telemetry","status":"current"},{"id":5,"name":"group.command","status":"planned"},{"id":6,"name":"firmware.update","status":"planned"}]
