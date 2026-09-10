@@ -5,6 +5,8 @@ on:
     paths:
       - "contract/**"
       - "database/data_param.h"
+      - "communication/callback/cia402_od/Cia402_ObjectDictionary_Variable.c"
+      - "common/math_lib/yuanhub_math.h"
       - "communication/protocol/CANopen/SlaveOD/SlaveOD.eds"
       - "communication/protocol/MAVLink/servo_hub_database/**"
       - ".github/workflows/product-contract.yml"
@@ -13,6 +15,8 @@ on:
     paths:
       - "contract/**"
       - "database/data_param.h"
+      - "communication/callback/cia402_od/Cia402_ObjectDictionary_Variable.c"
+      - "common/math_lib/yuanhub_math.h"
       - "communication/protocol/CANopen/SlaveOD/SlaveOD.eds"
       - "communication/protocol/MAVLink/servo_hub_database/**"
       - ".github/workflows/product-contract.yml"
@@ -32,7 +36,7 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Validate schema, generated freshness, firmware/EDS bindings, golden vectors and MAVLink provenance
+      - name: Validate schema, generated freshness, firmware/EDS bindings, conversion evidence, golden vectors and MAVLink provenance
         run: python contract/tools/contract_tool.py all
 
       - name: Compile generated C contract surface
@@ -42,7 +46,7 @@ jobs:
           #include "contract/generated/servo_contract_ids.h"
           #include "contract/generated/servo_contract_aliases.h"
           int main(void) {
-              return SERVO_CONTRACT_SCHEMA_VERSION == 2U &&
+              return SERVO_CONTRACT_SCHEMA_VERSION == 3U &&
                      SERVO_CONTRACT_PROTOCOL_REVISION == 1U &&
                      SERVO_CONTRACT_MOTION_TARGET_POSITION != 0U &&
                      SERVO_CONTRACT_ALIAS_COUNT > 0U ? 0 : 1;
