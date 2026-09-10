@@ -1,0 +1,16 @@
+id,name,product_type,access,persistent,requires_disabled,firmware_struct,firmware_field,canopen_index,canopen_subindex,canopen_wire_type,canopen_conversion,eds_parameter_name
+0x00010002,operation.mode,int8,rw,0,0,AppOpMode,Modes_of_operation,0x6060,0,int8,protocol_adapter,Modes of operation
+0x00020001,motion.target_torque,float32,rw,0,0,AppMotionParam,Target_torque,0x6071,0,int16,protocol_adapter,Target torque
+0x00030001,limits.max_current,float32,rw,1,1,AppRestrictParam,Max_current,0x6073,0,uint16,protocol_adapter,Max current
+0x00040001,motor.rated_current,float32,rw,1,1,AppMotorConfig,Motor_rated_current,0x6075,0,uint32,protocol_adapter,Motor rated current
+0x00020002,motion.target_position,int64,rw,0,0,AppMotionParam,Target_position,0x607A,0,int32,protocol_adapter,Target position
+0x00030002,limits.software_position_min,int64,rw,1,1,AppRestrictParam,Software_position_limit_Minimal_position_limit,0x607D,1,int32,protocol_adapter,Minimal position limit
+0x00030003,limits.software_position_max,int64,rw,1,1,AppRestrictParam,Software_position_limit_Maximal_position_limit,0x607D,2,int32,protocol_adapter,Maximal position limit
+0x00020003,motion.profile_velocity,float32,rw,0,0,AppMotionParam,Profile_velocity,0x6081,0,uint32,protocol_adapter,Profile velocity
+0x00020004,motion.profile_acceleration,float32,rw,0,0,AppMotionParam,Profile_acceleration,0x6083,0,uint32,protocol_adapter,Profile acceleration
+0x00020005,motion.profile_deceleration,float32,rw,0,0,AppMotionParam,Profile_deceleration,0x6084,0,uint32,protocol_adapter,Profile deceleration
+0x00020006,motion.quick_stop_deceleration,float32,rw,0,0,AppMotionParam,Quick_stop_deceleration,0x6085,0,uint32,protocol_adapter,Quick stop deceleration
+0x00050001,motor.reduction_ratio_numerator,uint32,rw,1,1,AppMotorConfig,Reduction_ratio_num,0x6091,1,uint32,protocol_adapter,Motor revolutions
+0x00050002,motor.reduction_ratio_denominator,uint32,rw,1,1,AppMotorConfig,Reduction_ratio_den,0x6091,2,uint32,protocol_adapter,Shaft revolutions
+0x00020008,motion.homing_method,int8,rw,0,0,AppMotionParam,Homing_method,0x6098,0,int8,protocol_adapter,Homing method
+0x0002000E,motion.target_velocity,float32,rw,0,0,AppMotionParam,Target_velocity,0x60FF,0,int32,protocol_adapter,Target velocity
