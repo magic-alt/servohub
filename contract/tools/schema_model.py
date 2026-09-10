@@ -22,8 +22,10 @@ PHYSICAL_STATUS = {"verified", "inferred", "unverified"}
 RANGE_STATUS = {"verified", "declared", "unspecified"}
 SAFETY_STATUS = {"verified", "declared_phase1", "unverified", "not_applicable"}
 CONVERSION_STATUS = {"verified", "unverified"}
-CONVERSION_KIND = {"identity", "linear", "adapter_defined"}
+CONVERSION_KIND = {"identity", "linear", "parameterized_linear", "adapter_defined"}
 CONVERSION_DIRECTION = {"bidirectional", "product_to_wire", "wire_to_product"}
+CONVERSION_OVERFLOW = {"reject", "firmware_cast"}
+CONVERSION_ROUNDING = {"exact", "truncate_toward_zero", "adapter_defined"}
 EDS_TYPE_CODE = {"int8": "0x0002", "int16": "0x0003", "int32": "0x0004", "uint8": "0x0005", "uint16": "0x0006", "uint32": "0x0007", "float32": "0x0008"}
 STRUCT_FORMAT = {"int8": "<b", "uint8": "<B", "int16": "<h", "uint16": "<H", "int32": "<i", "uint32": "<I", "int64": "<q", "uint64": "<Q", "float32": "<f", "float64": "<d"}
 
@@ -118,12 +120,13 @@ def validate_conversion(name: str, item: dict, co: dict) -> None:
     if not isinstance(conversion, dict):
         fail(f"{name}: conversion specification required")
     required = {"kind", "status", "direction", "scale", "offset", "rounding", "overflow"}
-    if set(conversion) != required:
-        fail(f"{name}: conversion specification keys must be {sorted(required)}")
+    optional = {"dependencies", "formula_id", "golden_context", "evidence", "standard_semantics"}
+    if not required <= set(conversion) or set(conversion) - required - optional:
+        fail(f"{name}: invalid conversion specification keys")
     if conversion["kind"] not in CONVERSION_KIND or conversion["status"] not in CONVERSION_STATUS or conversion["direction"] not in CONVERSION_DIRECTION:
         fail(f"{name}: invalid conversion kind/status/direction")
-    if conversion["overflow"] != "reject":
-        fail(f"{name}: Phase 1b conversion overflow policy must fail closed")
+    if conversion["overflow"] not in CONVERSION_OVERFLOW or conversion["rounding"] not in CONVERSION_ROUNDING:
+        fail(f"{name}: invalid conversion overflow/rounding policy")
     if conversion["status"] == "unverified":
         if conversion["kind"] != "adapter_defined" or conversion["scale"] is not None or conversion["offset"] is not None:
             fail(f"{name}: unverified conversion must be adapter_defined with null scale/offset")
@@ -136,9 +139,22 @@ def validate_conversion(name: str, item: dict, co: dict) -> None:
     elif conversion["kind"] == "linear":
         if not isinstance(conversion["scale"], (int, float)) or not isinstance(conversion["offset"], (int, float)):
             fail(f"{name}: verified linear conversion requires numeric scale/offset")
+    elif conversion["kind"] == "parameterized_linear":
+        deps = conversion.get("dependencies")
+        context = conversion.get("golden_context")
+        if conversion["scale"] is not None or not isinstance(conversion["offset"], (int, float)):
+            fail(f"{name}: parameterized conversion keeps fixed scale null and explicit numeric offset")
+        if not isinstance(deps, list) or not deps or any(not isinstance(x, str) or not x for x in deps):
+            fail(f"{name}: parameterized conversion requires dependencies")
+        if not isinstance(context, dict) or any(dep not in context for dep in deps):
+            fail(f"{name}: parameterized conversion requires deterministic golden context")
+        if conversion.get("formula_id") not in {"load_pps_to_rpm", "rated_current_per_mille_peak"}:
+            fail(f"{name}: unsupported parameterized conversion formula")
     else:
         fail(f"{name}: adapter_defined conversion cannot be marked verified")
-
+    evidence = conversion.get("evidence")
+    if conversion["kind"] != "identity" and (not isinstance(evidence, dict) or evidence.get("status") != "firmware_verified"):
+        fail(f"{name}: verified non-identity conversion requires firmware evidence")
 
 def validate(contract: dict) -> None:
     required_top = {"contract_version", "schema_version", "protocol_revision", "generator_version", "status", "ownership", "coverage", "unit_catalog", "parameters", "signals", "errors", "warnings", "capabilities"}
@@ -147,8 +163,8 @@ def validate(contract: dict) -> None:
         fail(f"missing top-level keys: {sorted(missing)}")
     if contract["ownership"].get("canonical_repository") != "magic-alt/servohub":
         fail("canonical repository must remain magic-alt/servohub")
-    if contract["schema_version"] != 2 or contract["generator_version"] != 2:
-        fail("Phase 1b expects schema_version=2 and generator_version=2")
+    if contract["schema_version"] != 3 or contract["generator_version"] != 3:
+        fail("Phase 1c expects schema_version=3 and generator_version=3")
     if not isinstance(contract["unit_catalog"], dict) or not contract["unit_catalog"]:
         fail("unit_catalog must be non-empty")
 

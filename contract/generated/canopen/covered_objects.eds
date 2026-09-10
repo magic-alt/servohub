@@ -2,7 +2,7 @@
 ; Product Contract CANopen covered-object EDS fragment.
 ; This is intentionally NOT a standalone device EDS. Runtime SlaveOD.eds
 ; remains unchanged until full OD generation is migrated.
-; Contract 1.1.0 schema 2
+; Contract 1.2.0 schema 3
 
 ; semantic=status.statusword
 [6041]

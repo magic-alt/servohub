@@ -2,12 +2,12 @@
 
 /* GENERATED FILE. DO NOT EDIT.
  * Source: contract/schema bundle
- * Contract: 1.1.0 / schema 2 / protocol 1
+ * Contract: 1.2.0 / schema 3 / protocol 1
  */
 
 #include <stdint.h>
 
-#define SERVO_CONTRACT_SCHEMA_VERSION 2U
+#define SERVO_CONTRACT_SCHEMA_VERSION 3U
 #define SERVO_CONTRACT_PROTOCOL_REVISION 1U
 
 typedef enum ServoContractId {

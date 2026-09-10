@@ -7,7 +7,7 @@ import json
 import struct
 import sys
 
-from checks import check_golden_vectors, check_mavlink_provenance, check_sources
+from checks import check_conversion_evidence, check_golden_vectors, check_mavlink_provenance, check_sources
 from generators import generate
 from schema_model import load_contract, validate
 
@@ -23,7 +23,7 @@ def main() -> int:
         elif args.command == "sources": check_sources(contract)
         elif args.command == "golden": generate(contract, check=True); check_golden_vectors(contract)
         elif args.command == "mavlink": check_mavlink_provenance()
-        elif args.command == "all": generate(contract, check=True); check_sources(contract); check_golden_vectors(contract); check_mavlink_provenance()
+        elif args.command == "all": generate(contract, check=True); check_sources(contract); check_conversion_evidence(contract); check_golden_vectors(contract); check_mavlink_provenance()
     except (OSError, ValueError, json.JSONDecodeError, struct.error) as exc:
         print(f"product-contract: FAIL: {exc}", file=sys.stderr); return 1
     print(f"product-contract: PASS ({args.command})"); return 0
