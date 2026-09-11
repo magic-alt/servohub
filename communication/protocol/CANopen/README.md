@@ -4,9 +4,9 @@ Latest work done:
 
 - Fix some big endian issues and remove compiler warnings by adding explicit casts. Thanks to Casey Klimasuskas for sharing.
 
-- The Canopen dictionary editor Objdictedit.py now allows to define the size of each string or domain, thanks to Mattes Standfu√ü for his work 
+- The Canopen dictionary editor Objdictedit.py now allows to define the size of each string or domain, thanks to Mattes Standfuﬂ for his work 
 
-- The stack can now be compiled as a .so shared lib, thanks to Mattes Standfu√ü for this also
+- The stack can now be compiled as a .so shared lib, thanks to Mattes Standfuﬂ for this also
 
 - New example added : examples/linux/dcf
 
@@ -22,16 +22,3 @@ Any feedback, comment, is welcome.
 
 You can contact me at : 
 fbeaulier < a t > orange < d o t > fr
-
-## ServoHub reproducible object-dictionary generation
-
-ServoHub now keeps the CanFestival runtime in this directory but uses the
-maintained Python 3 `objdictgen`/`odg` tool for local object-dictionary
-generation. The repository-specific wrapper, pinned dependency, CiA 402 typed
-contract, JSONC migration command, and CMake targets live under:
-
-`tools/canopen_codegen/`
-
-Do not edit `SlaveOD.c` or `SlaveOD.h` manually. Edit the canonical OD source
-(currently `SlaveOD.eds`; planned migration target `SlaveOD.jsonc`) and
-regenerate the artifacts. See `tools/canopen_codegen/README.md`.
