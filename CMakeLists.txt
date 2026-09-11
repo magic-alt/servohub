@@ -73,3 +73,13 @@ if(WIN32 AND MINGW)
         endif()
     endforeach()
 endif()
+
+# Developer tooling: reproducible CANopen/CiA402 object-dictionary generation.
+# Disabled by default so normal SIL builds do not require Python/objdictgen.
+option(SERVOHUB_ENABLE_CANOPEN_CODEGEN
+    "Enable CANopen/CiA402 object-dictionary generation targets"
+    OFF
+)
+if(SERVOHUB_ENABLE_CANOPEN_CODEGEN)
+    include("${PROJECT_SOURCE_DIR}/cmake/CanopenCodegen.cmake")
+endif()

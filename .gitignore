@@ -59,3 +59,7 @@ octave-workspace
 
 # Sil Build Output
 /out
+
+# CANopen codegen local Python environment/cache
+/tools/canopen_codegen/.venv/
+/tools/canopen_codegen/__pycache__/
