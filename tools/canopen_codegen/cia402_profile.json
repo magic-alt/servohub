@@ -1,0 +1,159 @@
+{
+  "profile": "CiA 402",
+  "revision": "ServoHub baseline 2026-09",
+  "objects": [
+    {
+      "index": "0x603F",
+      "subindex": 0,
+      "name": "Error code",
+      "c_type": "uint16_t",
+      "access": "ro",
+      "pdo": "tx",
+      "unit": "-"
+    },
+    {
+      "index": "0x6040",
+      "subindex": 0,
+      "name": "Controlword",
+      "c_type": "uint16_t",
+      "access": "rw",
+      "pdo": "rx",
+      "unit": "-"
+    },
+    {
+      "index": "0x6041",
+      "subindex": 0,
+      "name": "Statusword",
+      "c_type": "uint16_t",
+      "access": "ro",
+      "pdo": "tx",
+      "unit": "-"
+    },
+    {
+      "index": "0x6060",
+      "subindex": 0,
+      "name": "Modes of operation",
+      "c_type": "int8_t",
+      "access": "rw",
+      "pdo": "rx",
+      "unit": "-"
+    },
+    {
+      "index": "0x6061",
+      "subindex": 0,
+      "name": "Modes of operation display",
+      "c_type": "int8_t",
+      "access": "ro",
+      "pdo": "tx",
+      "unit": "-"
+    },
+    {
+      "index": "0x6064",
+      "subindex": 0,
+      "name": "Position actual value",
+      "c_type": "int32_t",
+      "access": "ro",
+      "pdo": "tx",
+      "unit": "inc"
+    },
+    {
+      "index": "0x606C",
+      "subindex": 0,
+      "name": "Velocity actual value",
+      "c_type": "int32_t",
+      "access": "ro",
+      "pdo": "tx",
+      "unit": "inc/s"
+    },
+    {
+      "index": "0x6071",
+      "subindex": 0,
+      "name": "Target torque",
+      "c_type": "int16_t",
+      "access": "rw",
+      "pdo": "rx",
+      "unit": "0.1% rated torque"
+    },
+    {
+      "index": "0x6072",
+      "subindex": 0,
+      "name": "Max torque",
+      "c_type": "uint16_t",
+      "access": "rw",
+      "pdo": "optional",
+      "unit": "0.1% rated torque"
+    },
+    {
+      "index": "0x6077",
+      "subindex": 0,
+      "name": "Torque actual value",
+      "c_type": "int16_t",
+      "access": "ro",
+      "pdo": "tx",
+      "unit": "0.1% rated torque"
+    },
+    {
+      "index": "0x607A",
+      "subindex": 0,
+      "name": "Target position",
+      "c_type": "int32_t",
+      "access": "rw",
+      "pdo": "rx",
+      "unit": "inc"
+    },
+    {
+      "index": "0x6081",
+      "subindex": 0,
+      "name": "Profile velocity",
+      "c_type": "uint32_t",
+      "access": "rw",
+      "pdo": "optional",
+      "unit": "inc/s"
+    },
+    {
+      "index": "0x6083",
+      "subindex": 0,
+      "name": "Profile acceleration",
+      "c_type": "uint32_t",
+      "access": "rw",
+      "pdo": "optional",
+      "unit": "inc/s^2"
+    },
+    {
+      "index": "0x6084",
+      "subindex": 0,
+      "name": "Profile deceleration",
+      "c_type": "uint32_t",
+      "access": "rw",
+      "pdo": "optional",
+      "unit": "inc/s^2"
+    },
+    {
+      "index": "0x6085",
+      "subindex": 0,
+      "name": "Quick stop deceleration",
+      "c_type": "uint32_t",
+      "access": "rw",
+      "pdo": "optional",
+      "unit": "inc/s^2"
+    },
+    {
+      "index": "0x60FF",
+      "subindex": 0,
+      "name": "Target velocity",
+      "c_type": "int32_t",
+      "access": "rw",
+      "pdo": "rx",
+      "unit": "inc/s"
+    }
+  ],
+  "modes_of_operation": {
+    "Profile position": 1,
+    "Profile velocity": 3,
+    "Profile torque": 4,
+    "Homing": 6,
+    "Cyclic synchronous position": 8,
+    "Cyclic synchronous velocity": 9,
+    "Cyclic synchronous torque": 10
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "object_dictionary": {
+    "source": "communication/protocol/CANopen/SlaveOD/SlaveOD.eds",
+    "output_c": "communication/protocol/CANopen/SlaveOD/SlaveOD.c",
+    "jsonc_migration_target": "communication/protocol/CANopen/SlaveOD/SlaveOD.jsonc"
+  },
+  "cia402": {
+    "profile": "tools/canopen_codegen/cia402_profile.json",
+    "output_header": "communication/protocol/CiA402/generated/cia402_od_generated.h",
+    "output_doc": "communication/protocol/CiA402/generated/OBJECT_DICTIONARY.md"
+  },
+  "policy": {
+    "generated_files_are_tracked": true,
+    "canonical_od_source": "EDS now; JSONC after reviewed migration",
+    "do_not_edit_generated_c_h": true
+  }
+}

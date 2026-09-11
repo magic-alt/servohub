@@ -19,6 +19,15 @@
                 "PATH": "${sourceDir}/../mingw64/bin;",
                 "MY_DEBUG_ENV": "true"
             }
+        },
+        {
+            "name": "servo_hil_demo_codegen",
+            "inherits": "servo_hil_demo",
+            "displayName": "servo_hil_demo + CANopen codegen",
+            "description": "ServoHub SIL configuration with CANopen/CiA402 developer codegen targets enabled",
+            "cacheVariables": {
+                "SERVOHUB_ENABLE_CANOPEN_CODEGEN": "ON"
+            }
         }
     ]
 }
