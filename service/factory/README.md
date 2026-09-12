@@ -24,7 +24,11 @@ The v1 schema only names quantities currently available at the `CurrentLoopCtrl(
 
 `FactoryServiceTracePushFocIsr()` is the firmware-side ISR entry point. The intended hook is immediately after `CurrentCtlLoopTask()` in `CurrentLoopCtrl()`, using `kAxis.current_ctl_input` and `kAxis.current_ctl_output`. A factory-enabled firmware build must call `FactoryServiceInit(CURRENT_FREQUENCY_HZ)` once during motor-control initialization and `FactoryServiceTracePushFocIsr()` once per current-loop invocation.
 
-This first slice implements and host-tests the recorder/service core but does not yet claim that the production ISR hook or CANopen transport objects are wired. Those integrations must land as explicit follow-up commits with firmware/SIL evidence.
+The core is compile-time optional (`SERVOHUB_ENABLE_FACTORY_SERVICE_TRACE=OFF` by default). This slice deliberately keeps the production motor-control call site unchanged until target build, SRAM footprint and ISR-overhead evidence are collected. Wiring the hook is the next firmware integration step, not an implicit claim of this core PR.
+
+## Diagnostics validity
+
+`FactoryDiagnosticSnapshot.valid_fields` marks which BSP/control values are actually wired. Reading a known but unwired diagnostic returns `FACTORY_TRACE_NOT_READY`; it never returns a default zero as if that were measured evidence. Current-offset, gate-driver and ISR-timing diagnostics therefore remain not-ready until their authoritative firmware sources are connected.
 
 ## CANopen binding
 
