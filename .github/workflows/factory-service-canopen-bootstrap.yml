@@ -1,0 +1,47 @@
+name: factory-service-canopen-bootstrap
+
+on:
+  push:
+    branches:
+      - feature/issue-2-factory-service-canopen
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-wire:
+    if: ${{ !contains(github.event.head_commit.message, '[factory-service-generated]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install CANopen generator
+        run: python -m pip install -r tools/canopen_codegen/requirements.txt
+      - name: Generate Factory Service identifiers
+        run: python tools/factory_service_codegen/generate.py generate
+      - name: Synchronize Factory Service EDS objects
+        run: python tools/canopen_codegen/factory_service_eds.py apply
+      - name: Regenerate CanFestival object dictionary
+        run: python tools/canopen_codegen/generate.py generate
+      - name: Wire Y01 target
+        run: python tools/factory_service_codegen/y01_target_integration.py apply
+      - name: Verify deterministic outputs
+        run: |
+          python tools/factory_service_codegen/generate.py check
+          python tools/canopen_codegen/factory_service_eds.py check
+          python tools/canopen_codegen/generate.py check
+          python tools/factory_service_codegen/y01_target_integration.py check
+      - name: Commit generated artifacts
+        run: |
+          if git diff --quiet; then
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add service/factory/generated communication/protocol/CANopen/SlaveOD embedded_project/Y01/Board/drv_can_app.c embedded_project/Y01/MDK-ARM/STM32H743VGT6_Y01.uvprojx
+          git commit -m "chore: regenerate Factory Service CANopen binding [factory-service-generated]"
+          git push
