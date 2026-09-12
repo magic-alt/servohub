@@ -1,0 +1,18 @@
+{
+  "binding": {
+    "manufacturer_specific_range": "0x2200-0x2206",
+    "objects": [
+      {"access": "ro", "index": "0x2200", "name": "Factory service info"},
+      {"access": "rw", "index": "0x2201", "name": "Trace configuration window"},
+      {"access": "wo", "index": "0x2202", "name": "Trace command"},
+      {"access": "ro", "index": "0x2203", "name": "Trace status"},
+      {"access": "ro", "index": "0x2204", "name": "Trace data window"},
+      {"access": "rw", "index": "0x2205", "name": "Diagnostic selector"},
+      {"access": "ro", "index": "0x2206", "name": "Diagnostic value"}
+    ],
+    "status": "reserved_generated_binding_not_wired_to_SlaveOD_yet"
+  },
+  "protocol_revision": 1,
+  "schema": "servohub.factory_service",
+  "schema_version": 1
+}

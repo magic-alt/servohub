@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": {
+    "name": "servohub.factory_service",
+    "schema_version": 1,
+    "protocol_revision": 1,
+    "visibility": "factory_rnd_only",
+    "product_contract_dependency": {
+      "product_schema_version": 3,
+      "protocol_revision": 1
+    }
+  },
+  "capabilities": [
+    {"name": "diagnostics.read", "bit": 0},
+    {"name": "trace.capture", "bit": 1},
+    {"name": "trace.pretrigger", "bit": 2},
+    {"name": "trace.manual_trigger", "bit": 3},
+    {"name": "trace.threshold_trigger", "bit": 4},
+    {"name": "trace.bulk_read", "bit": 5}
+  ],
+  "diagnostics": [
+    {"id": "0x0001", "name": "power.dc_bus_voltage", "type": "float32", "unit": "V"},
+    {"id": "0x0002", "name": "temperature.driver", "type": "float32", "unit": "degC"},
+    {"id": "0x0003", "name": "temperature.mcu", "type": "float32", "unit": "degC"},
+    {"id": "0x0004", "name": "temperature.motor", "type": "float32", "unit": "degC"},
+    {"id": "0x0010", "name": "current.offset.phase_a", "type": "float32", "unit": "A"},
+    {"id": "0x0011", "name": "current.offset.phase_b", "type": "float32", "unit": "A"},
+    {"id": "0x0012", "name": "current.offset.phase_c", "type": "float32", "unit": "A"},
+    {"id": "0x0020", "name": "encoder.motor.raw_count", "type": "uint32", "unit": "count"},
+    {"id": "0x0021", "name": "encoder.load.raw_count", "type": "uint32", "unit": "count"},
+    {"id": "0x0030", "name": "gate_driver.fault_bits", "type": "uint32", "unit": "bitmask"},
+    {"id": "0x0040", "name": "timing.current_isr_overrun_count", "type": "uint32", "unit": "count"}
+  ],
+  "trace": {
+    "max_channels": 8,
+    "default_capacity_samples": 1024,
+    "capacity_override_macro": "FACTORY_TRACE_CAPACITY",
+    "base_clock": "current_control_isr",
+    "trigger_modes": ["immediate", "manual", "rising", "falling"],
+    "signals": [
+      {"id": "0x0101", "name": "foc.id_ref", "type": "float32", "unit": "A"},
+      {"id": "0x0102", "name": "foc.iq_ref", "type": "float32", "unit": "A"},
+      {"id": "0x0103", "name": "foc.id_fb", "type": "float32", "unit": "A"},
+      {"id": "0x0104", "name": "foc.iq_fb", "type": "float32", "unit": "A"},
+      {"id": "0x0105", "name": "phase_current.a", "type": "float32", "unit": "A"},
+      {"id": "0x0106", "name": "phase_current.b", "type": "float32", "unit": "A"},
+      {"id": "0x0107", "name": "phase_current.c", "type": "float32", "unit": "A"},
+      {"id": "0x0108", "name": "power.dc_bus_voltage", "type": "float32", "unit": "V"}
+    ]
+  },
+  "canopen_binding": {
+    "status": "reserved_generated_binding_not_wired_to_SlaveOD_yet",
+    "manufacturer_specific_range": "0x2200-0x2206",
+    "objects": [
+      {"index": "0x2200", "name": "Factory service info", "access": "ro"},
+      {"index": "0x2201", "name": "Trace configuration window", "access": "rw"},
+      {"index": "0x2202", "name": "Trace command", "access": "wo"},
+      {"index": "0x2203", "name": "Trace status", "access": "ro"},
+      {"index": "0x2204", "name": "Trace data window", "access": "ro"},
+      {"index": "0x2205", "name": "Diagnostic selector", "access": "rw"},
+      {"index": "0x2206", "name": "Diagnostic value", "access": "ro"}
+    ]
+  },
+  "safety": {
+    "destructive_fault_injection": false,
+    "host_rate_telemetry_is_trace_evidence": false,
+    "unknown_schema_revision_policy": "fail_closed"
+  }
+}
