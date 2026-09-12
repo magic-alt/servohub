@@ -5,6 +5,9 @@
 
 #if defined (USE_CANOPEN)
 #include "SlaveOD.h"
+#if defined(FACTORY_SERVICE_TRACE_USED)
+#include "../../../service/factory/canopen/factory_service_canopen.h"
+#endif
 #define CANOPEN_MSG_QUEUE_SIZE      8
 typedef struct
 {
@@ -124,6 +127,9 @@ static inline void fdcan_canopen_init(FDCAN_DeviceTypeDef* bsp_fdcan)
     }
     HAL_TIM_Base_Start_IT(&CANOPEN_TIM_HANDLE);
     setNodeId(&SlaveOD_Data, bsp_fdcan->id);
+#if defined(FACTORY_SERVICE_TRACE_USED)
+    FactoryServiceCanopenInit(&SlaveOD_Data, (uint32_t)CURRENT_FREQUENCY_HZ);
+#endif
     setState(&SlaveOD_Data, Initialisation);
     setState(&SlaveOD_Data, Operational);
 }

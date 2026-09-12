@@ -37,7 +37,7 @@
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
-          <IncludePath></IncludePath>
+          <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
           <LibPath></LibPath>
           <RegisterFilePath></RegisterFilePath>
           <DBRegisterFilePath></DBRegisterFilePath>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,ARM_MATH_CM7</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/CANopen;../../../communication/protocol/CANopen/inc;../../../communication/protocol/CANopen/inc/hw_cm7;../../../communication/protocol/CANopen/SlaveOD;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/CANopen;../../../communication/protocol/CANopen/inc;../../../communication/protocol/CANopen/inc/hw_cm7;../../../communication/protocol/CANopen/SlaveOD;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage;..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -357,7 +357,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
             </VariousControls>
           </Aads>
           <LDads>
@@ -908,7 +908,18 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\simulink_code_gen\cst_planning.c</FilePath>
             </File>
-          </Files>
+          
+              <File>
+                <FileName>factory_service.c</FileName>
+                <FileType>1</FileType>
+                <FilePath>..\..\..\service\factory\factory_service.c</FilePath>
+              </File>
+              <File>
+                <FileName>factory_trace_recorder.c</FileName>
+                <FileType>1</FileType>
+                <FilePath>..\..\..\service\factory\trace\factory_trace_recorder.c</FilePath>
+              </File>
+            </Files>
         </Group>
         <Group>
           <GroupName>communication</GroupName>
@@ -1018,7 +1029,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -1036,7 +1047,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Aads>
             </GroupArmAds>
@@ -1157,7 +1168,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -1175,7 +1186,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Aads>
             </GroupArmAds>
@@ -1389,7 +1400,7 @@
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
-          <IncludePath></IncludePath>
+          <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
           <LibPath></LibPath>
           <RegisterFilePath></RegisterFilePath>
           <DBRegisterFilePath></DBRegisterFilePath>
@@ -1691,7 +1702,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,ARM_MATH_CM7,MINOR_VERSION=V_CANOPEN_CIA402</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/CANopen;../../../communication/protocol/CANopen/inc;../../../communication/protocol/CANopen/inc/hw_cm7;../../../communication/protocol/CANopen/SlaveOD;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/CANopen;../../../communication/protocol/CANopen/inc;../../../communication/protocol/CANopen/inc/hw_cm7;../../../communication/protocol/CANopen/SlaveOD;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage;..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1709,7 +1720,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
             </VariousControls>
           </Aads>
           <LDads>
@@ -2440,7 +2451,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -2458,7 +2469,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Aads>
             </GroupArmAds>
@@ -2684,7 +2695,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -2702,7 +2713,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Aads>
             </GroupArmAds>
@@ -2741,7 +2752,7 @@
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
-          <IncludePath></IncludePath>
+          <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
           <LibPath></LibPath>
           <RegisterFilePath></RegisterFilePath>
           <DBRegisterFilePath></DBRegisterFilePath>
@@ -3043,7 +3054,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,ARM_MATH_CM7,MINOR_VERSION=V_ECAT_CIA402</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/CANopen;../../../communication/protocol/CANopen/inc;../../../communication/protocol/CANopen/inc/hw_cm7;../../../communication/protocol/CANopen/SlaveOD;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/CANopen;../../../communication/protocol/CANopen/inc;../../../communication/protocol/CANopen/inc/hw_cm7;../../../communication/protocol/CANopen/SlaveOD;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage;..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -3061,7 +3072,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
             </VariousControls>
           </Aads>
           <LDads>
@@ -3722,7 +3733,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -3740,7 +3751,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Aads>
             </GroupArmAds>
@@ -4036,7 +4047,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -4054,7 +4065,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Aads>
             </GroupArmAds>
@@ -4093,7 +4104,7 @@
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
-          <IncludePath></IncludePath>
+          <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
           <LibPath></LibPath>
           <RegisterFilePath></RegisterFilePath>
           <DBRegisterFilePath></DBRegisterFilePath>
@@ -4395,7 +4406,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,ARM_MATH_CM7,MINOR_VERSION=V_CANOPEN_CIA402,YH_RELEASE</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/CANopen;../../../communication/protocol/CANopen/inc;../../../communication/protocol/CANopen/inc/hw_cm7;../../../communication/protocol/CANopen/SlaveOD;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/CANopen;../../../communication/protocol/CANopen/inc;../../../communication/protocol/CANopen/inc/hw_cm7;../../../communication/protocol/CANopen/SlaveOD;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage;..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -4413,7 +4424,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
             </VariousControls>
           </Aads>
           <LDads>
@@ -5144,7 +5155,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -5162,7 +5173,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Aads>
             </GroupArmAds>
@@ -5388,7 +5399,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -5406,7 +5417,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Aads>
             </GroupArmAds>
@@ -5445,7 +5456,7 @@
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
-          <IncludePath></IncludePath>
+          <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
           <LibPath></LibPath>
           <RegisterFilePath></RegisterFilePath>
           <DBRegisterFilePath></DBRegisterFilePath>
@@ -5747,7 +5758,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,ARM_MATH_CM7,MINOR_VERSION=V_ECAT_CIA402,YH_RELEASE</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/CANopen;../../../communication/protocol/CANopen/inc;../../../communication/protocol/CANopen/inc/hw_cm7;../../../communication/protocol/CANopen/SlaveOD;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/CANopen;../../../communication/protocol/CANopen/inc;../../../communication/protocol/CANopen/inc/hw_cm7;../../../communication/protocol/CANopen/SlaveOD;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage;..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -5765,7 +5776,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
             </VariousControls>
           </Aads>
           <LDads>
@@ -6426,7 +6437,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -6444,7 +6455,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Aads>
             </GroupArmAds>
@@ -6728,7 +6739,7 @@
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
-          <IncludePath></IncludePath>
+          <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
           <LibPath></LibPath>
           <RegisterFilePath></RegisterFilePath>
           <DBRegisterFilePath></DBRegisterFilePath>
@@ -7030,7 +7041,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,ARM_MATH_CM7,VIRTUAL_MOTOR_MODEL</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/CANopen;../../../communication/protocol/CANopen/inc;../../../communication/protocol/CANopen/inc/hw_cm7;../../../communication/protocol/CANopen/SlaveOD;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../../../database;../../../board_public;../../../common/math_lib;../../../common/ring_buff;../../../common/software_scope;../../../common/unit_conversion;../../../communication/callback/MAVLink;../../../communication/callback/cia402_od;../../../communication/protocol/MAVLink;../../../communication/protocol/MAVLink/servo_hub_database;../../../communication/protocol/CiA402/PDS_FSA;../../../communication/protocol/CANopen;../../../communication/protocol/CANopen/inc;../../../communication/protocol/CANopen/inc/hw_cm7;../../../communication/protocol/CANopen/SlaveOD;../../../communication/protocol/EtherCAT_LAN925x;../../../communication/protocol/EtherCAT_LAN925x/Src;../../../simulink_code_gen;../../../motor_control;../Board;../Board/EtherCAT;../../../app;../../../app/Identify;../../../board_public/flash_db/inc;../../../board_public/flash_db/port/fal/inc;../../../board_public/system_manage;..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -7048,7 +7059,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
             </VariousControls>
           </Aads>
           <LDads>
@@ -7324,7 +7335,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -7342,7 +7353,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Aads>
             </GroupArmAds>
@@ -7778,7 +7789,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -7796,7 +7807,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Aads>
             </GroupArmAds>
@@ -7917,7 +7928,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -7935,7 +7946,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath></IncludePath>
+                  <IncludePath>..\..\..\service\factory;..\..\..\service\factory\trace;..\..\..\service\factory\generated</IncludePath>
                 </VariousControls>
               </Aads>
             </GroupArmAds>

@@ -5,7 +5,6 @@
 #define SLAVEOD_H
 
 #include "data.h"
-#include "drv_can_app.h"
 
 /* Prototypes of function provided by object dictionnary */
 UNS32 SlaveOD_valueRangeTest (UNS8 typeValue, void * value);
@@ -13,6 +12,64 @@ const indextable * SlaveOD_scanIndexOD (CO_Data *d, UNS16 wIndex, UNS32 * errorC
 
 /* Master node data struct */
 extern CO_Data SlaveOD_Data;
+extern UNS16 Factory_service_info_Schema_version;		/* Mapped at index 0x2200, subindex 0x01 */
+extern UNS16 Factory_service_info_Protocol_revision;		/* Mapped at index 0x2200, subindex 0x02 */
+extern UNS32 Factory_service_info_Capabilities;		/* Mapped at index 0x2200, subindex 0x03 */
+extern UNS16 Factory_service_info_Trace_capacity;		/* Mapped at index 0x2200, subindex 0x04 */
+extern UNS8 Factory_service_info_Trace_max_channels;		/* Mapped at index 0x2200, subindex 0x05 */
+extern UNS32 Factory_service_info_Base_sample_rate_Hz;		/* Mapped at index 0x2200, subindex 0x06 */
+extern UNS8 Trace_configuration_window_Channel_count;		/* Mapped at index 0x2201, subindex 0x01 */
+extern UNS16 Trace_configuration_window_Channel_1;		/* Mapped at index 0x2201, subindex 0x02 */
+extern UNS16 Trace_configuration_window_Channel_2;		/* Mapped at index 0x2201, subindex 0x03 */
+extern UNS16 Trace_configuration_window_Channel_3;		/* Mapped at index 0x2201, subindex 0x04 */
+extern UNS16 Trace_configuration_window_Channel_4;		/* Mapped at index 0x2201, subindex 0x05 */
+extern UNS16 Trace_configuration_window_Channel_5;		/* Mapped at index 0x2201, subindex 0x06 */
+extern UNS16 Trace_configuration_window_Channel_6;		/* Mapped at index 0x2201, subindex 0x07 */
+extern UNS16 Trace_configuration_window_Channel_7;		/* Mapped at index 0x2201, subindex 0x08 */
+extern UNS16 Trace_configuration_window_Channel_8;		/* Mapped at index 0x2201, subindex 0x09 */
+extern UNS8 Trace_configuration_window_Compatibility_Entry;		/* Mapped at index 0x2201, subindex 0x0A */
+extern UNS8 Trace_configuration_window_Compatibility_Entry;		/* Mapped at index 0x2201, subindex 0x0B */
+extern UNS8 Trace_configuration_window_Compatibility_Entry;		/* Mapped at index 0x2201, subindex 0x0C */
+extern UNS8 Trace_configuration_window_Compatibility_Entry;		/* Mapped at index 0x2201, subindex 0x0D */
+extern UNS8 Trace_configuration_window_Compatibility_Entry;		/* Mapped at index 0x2201, subindex 0x0E */
+extern UNS8 Trace_configuration_window_Compatibility_Entry;		/* Mapped at index 0x2201, subindex 0x0F */
+extern UNS16 Trace_configuration_window_Sample_divider;		/* Mapped at index 0x2201, subindex 0x10 */
+extern UNS16 Trace_configuration_window_Pretrigger_samples;		/* Mapped at index 0x2201, subindex 0x11 */
+extern UNS16 Trace_configuration_window_Posttrigger_samples;		/* Mapped at index 0x2201, subindex 0x12 */
+extern UNS8 Trace_configuration_window_Trigger_mode;		/* Mapped at index 0x2201, subindex 0x13 */
+extern UNS8 Trace_configuration_window_Trigger_channel;		/* Mapped at index 0x2201, subindex 0x14 */
+extern REAL32 Trace_configuration_window_Trigger_threshold;		/* Mapped at index 0x2201, subindex 0x15 */
+extern UNS8 Trace_command_Command;		/* Mapped at index 0x2202, subindex 0x01 */
+extern INTEGER32 Trace_command_Last_result;		/* Mapped at index 0x2202, subindex 0x02 */
+extern UNS8 Trace_status_State;		/* Mapped at index 0x2203, subindex 0x01 */
+extern UNS32 Trace_status_Capture_id;		/* Mapped at index 0x2203, subindex 0x02 */
+extern UNS32 Trace_status_Base_sample_rate_Hz;		/* Mapped at index 0x2203, subindex 0x03 */
+extern UNS32 Trace_status_Effective_sample_rate_Hz;		/* Mapped at index 0x2203, subindex 0x04 */
+extern UNS16 Trace_status_Sample_count;		/* Mapped at index 0x2203, subindex 0x05 */
+extern UNS16 Trace_status_Trigger_sample_offset;		/* Mapped at index 0x2203, subindex 0x06 */
+extern UNS8 Trace_status_Channel_count;		/* Mapped at index 0x2203, subindex 0x07 */
+extern UNS16 Trace_status_Sample_divider;		/* Mapped at index 0x2203, subindex 0x08 */
+extern UNS16 Trace_data_window_Logical_index;		/* Mapped at index 0x2204, subindex 0x01 */
+extern INTEGER32 Trace_data_window_Read_result;		/* Mapped at index 0x2204, subindex 0x02 */
+extern UNS32 Trace_data_window_Sequence;		/* Mapped at index 0x2204, subindex 0x03 */
+extern UNS8 Trace_data_window_Value_count;		/* Mapped at index 0x2204, subindex 0x04 */
+extern REAL32 Trace_data_window_Value_1;		/* Mapped at index 0x2204, subindex 0x05 */
+extern REAL32 Trace_data_window_Value_2;		/* Mapped at index 0x2204, subindex 0x06 */
+extern REAL32 Trace_data_window_Value_3;		/* Mapped at index 0x2204, subindex 0x07 */
+extern REAL32 Trace_data_window_Value_4;		/* Mapped at index 0x2204, subindex 0x08 */
+extern REAL32 Trace_data_window_Value_5;		/* Mapped at index 0x2204, subindex 0x09 */
+extern UNS8 Trace_data_window_Compatibility_Entry;		/* Mapped at index 0x2204, subindex 0x0A */
+extern UNS8 Trace_data_window_Compatibility_Entry;		/* Mapped at index 0x2204, subindex 0x0B */
+extern UNS8 Trace_data_window_Compatibility_Entry;		/* Mapped at index 0x2204, subindex 0x0C */
+extern UNS8 Trace_data_window_Compatibility_Entry;		/* Mapped at index 0x2204, subindex 0x0D */
+extern UNS8 Trace_data_window_Compatibility_Entry;		/* Mapped at index 0x2204, subindex 0x0E */
+extern UNS8 Trace_data_window_Compatibility_Entry;		/* Mapped at index 0x2204, subindex 0x0F */
+extern REAL32 Trace_data_window_Value_6;		/* Mapped at index 0x2204, subindex 0x10 */
+extern REAL32 Trace_data_window_Value_7;		/* Mapped at index 0x2204, subindex 0x11 */
+extern REAL32 Trace_data_window_Value_8;		/* Mapped at index 0x2204, subindex 0x12 */
+extern UNS16 Diagnostic_selector;		/* Mapped at index 0x2205, subindex 0x00*/
+extern INTEGER32 Diagnostic_value_Read_result;		/* Mapped at index 0x2206, subindex 0x01 */
+extern REAL32 Diagnostic_value_Value;		/* Mapped at index 0x2206, subindex 0x02 */
 extern UNS16 ErrorCode;		/* Mapped at index 0x603F, subindex 0x00*/
 extern UNS16 Controlword;		/* Mapped at index 0x6040, subindex 0x00*/
 extern UNS16 Statusword;		/* Mapped at index 0x6041, subindex 0x00*/
@@ -22,7 +79,7 @@ extern INTEGER8 Modes_of_operation_display;		/* Mapped at index 0x6061, subindex
 extern INTEGER32 Position_demannd_value;		/* Mapped at index 0x6062, subindex 0x00*/
 extern INTEGER32 Motor_Position_actual_value;		/* Mapped at index 0x6063, subindex 0x00*/
 extern INTEGER32 Position_actual_value;		/* Mapped at index 0x6064, subindex 0x00*/
-extern UNS32 Following_error_window;		/* Mapped at index 0x6065, subindex 0x00*/
+extern UNS32 Maximal_following_error;		/* Mapped at index 0x6065, subindex 0x00*/
 extern UNS16 Following_error_time_out;		/* Mapped at index 0x6066, subindex 0x00*/
 extern UNS32 Position_window;		/* Mapped at index 0x6067, subindex 0x00*/
 extern UNS16 Position_window_time;		/* Mapped at index 0x6068, subindex 0x00*/

@@ -115,7 +115,7 @@ DefaultValue=0
 PDOMapping=0
 
 [OptionalObjects]
-SupportedObjects=89
+SupportedObjects=96
 1=0x1008
 2=0x1016
 3=0x1017
@@ -205,6 +205,13 @@ SupportedObjects=89
 87=0x6402
 88=0x6410
 89=0x6502
+90=0x2200
+91=0x2201
+92=0x2202
+93=0x2203
+94=0x2204
+95=0x2205
+96=0x2206
 
 [1008]
 ParameterName=Manufacturer Device Name
@@ -2144,4 +2151,450 @@ ObjectType=0x7
 DataType=0x0007
 AccessType=ro
 DefaultValue=0
+PDOMapping=0
+
+[2200]
+ParameterName=Factory service info
+ObjectType=0x9
+SubNumber=7
+
+[2200sub0]
+ParameterName=Number of entries
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=6
+PDOMapping=0
+
+[2200sub1]
+ParameterName=Schema version
+ObjectType=0x7
+DataType=0x0006
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2200sub2]
+ParameterName=Protocol revision
+ObjectType=0x7
+DataType=0x0006
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2200sub3]
+ParameterName=Capabilities
+ObjectType=0x7
+DataType=0x0007
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2200sub4]
+ParameterName=Trace capacity
+ObjectType=0x7
+DataType=0x0006
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2200sub5]
+ParameterName=Trace max channels
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2200sub6]
+ParameterName=Base sample rate Hz
+ObjectType=0x7
+DataType=0x0007
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2201]
+ParameterName=Trace configuration window
+ObjectType=0x9
+SubNumber=16
+
+[2201sub0]
+ParameterName=Number of entries
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=15
+PDOMapping=0
+
+[2201sub1]
+ParameterName=Channel count
+ObjectType=0x7
+DataType=0x0005
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2201sub2]
+ParameterName=Channel 1
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2201sub3]
+ParameterName=Channel 2
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2201sub4]
+ParameterName=Channel 3
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2201sub5]
+ParameterName=Channel 4
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2201sub6]
+ParameterName=Channel 5
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2201sub7]
+ParameterName=Channel 6
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2201sub8]
+ParameterName=Channel 7
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2201sub9]
+ParameterName=Channel 8
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2201sub10]
+ParameterName=Sample divider
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=1
+PDOMapping=0
+
+[2201sub11]
+ParameterName=Pretrigger samples
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2201sub12]
+ParameterName=Posttrigger samples
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2201sub13]
+ParameterName=Trigger mode
+ObjectType=0x7
+DataType=0x0005
+AccessType=rw
+DefaultValue=1
+PDOMapping=0
+
+[2201sub14]
+ParameterName=Trigger channel
+ObjectType=0x7
+DataType=0x0005
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2201sub15]
+ParameterName=Trigger threshold
+ObjectType=0x7
+DataType=0x0008
+AccessType=rw
+DefaultValue=0.0
+PDOMapping=0
+
+[2202]
+ParameterName=Trace command
+ObjectType=0x9
+SubNumber=3
+
+[2202sub0]
+ParameterName=Number of entries
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=2
+PDOMapping=0
+
+[2202sub1]
+ParameterName=Command
+ObjectType=0x7
+DataType=0x0005
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2202sub2]
+ParameterName=Last result
+ObjectType=0x7
+DataType=0x0004
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2203]
+ParameterName=Trace status
+ObjectType=0x9
+SubNumber=9
+
+[2203sub0]
+ParameterName=Number of entries
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=8
+PDOMapping=0
+
+[2203sub1]
+ParameterName=State
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2203sub2]
+ParameterName=Capture id
+ObjectType=0x7
+DataType=0x0007
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2203sub3]
+ParameterName=Base sample rate Hz
+ObjectType=0x7
+DataType=0x0007
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2203sub4]
+ParameterName=Effective sample rate Hz
+ObjectType=0x7
+DataType=0x0007
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2203sub5]
+ParameterName=Sample count
+ObjectType=0x7
+DataType=0x0006
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2203sub6]
+ParameterName=Trigger sample offset
+ObjectType=0x7
+DataType=0x0006
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2203sub7]
+ParameterName=Channel count
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2203sub8]
+ParameterName=Sample divider
+ObjectType=0x7
+DataType=0x0006
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2204]
+ParameterName=Trace data window
+ObjectType=0x9
+SubNumber=13
+
+[2204sub0]
+ParameterName=Number of entries
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=12
+PDOMapping=0
+
+[2204sub1]
+ParameterName=Logical index
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2204sub2]
+ParameterName=Read result
+ObjectType=0x7
+DataType=0x0004
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2204sub3]
+ParameterName=Sequence
+ObjectType=0x7
+DataType=0x0007
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2204sub4]
+ParameterName=Value count
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2204sub5]
+ParameterName=Value 1
+ObjectType=0x7
+DataType=0x0008
+AccessType=ro
+DefaultValue=0.0
+PDOMapping=0
+
+[2204sub6]
+ParameterName=Value 2
+ObjectType=0x7
+DataType=0x0008
+AccessType=ro
+DefaultValue=0.0
+PDOMapping=0
+
+[2204sub7]
+ParameterName=Value 3
+ObjectType=0x7
+DataType=0x0008
+AccessType=ro
+DefaultValue=0.0
+PDOMapping=0
+
+[2204sub8]
+ParameterName=Value 4
+ObjectType=0x7
+DataType=0x0008
+AccessType=ro
+DefaultValue=0.0
+PDOMapping=0
+
+[2204sub9]
+ParameterName=Value 5
+ObjectType=0x7
+DataType=0x0008
+AccessType=ro
+DefaultValue=0.0
+PDOMapping=0
+
+[2204sub10]
+ParameterName=Value 6
+ObjectType=0x7
+DataType=0x0008
+AccessType=ro
+DefaultValue=0.0
+PDOMapping=0
+
+[2204sub11]
+ParameterName=Value 7
+ObjectType=0x7
+DataType=0x0008
+AccessType=ro
+DefaultValue=0.0
+PDOMapping=0
+
+[2204sub12]
+ParameterName=Value 8
+ObjectType=0x7
+DataType=0x0008
+AccessType=ro
+DefaultValue=0.0
+PDOMapping=0
+
+[2205]
+ParameterName=Diagnostic selector
+ObjectType=0x7
+DataType=0x0006
+AccessType=rw
+DefaultValue=0
+PDOMapping=0
+
+[2206]
+ParameterName=Diagnostic value
+ObjectType=0x9
+SubNumber=3
+
+[2206sub0]
+ParameterName=Number of entries
+ObjectType=0x7
+DataType=0x0005
+AccessType=ro
+DefaultValue=2
+PDOMapping=0
+
+[2206sub1]
+ParameterName=Read result
+ObjectType=0x7
+DataType=0x0004
+AccessType=ro
+DefaultValue=0
+PDOMapping=0
+
+[2206sub2]
+ParameterName=Value
+ObjectType=0x7
+DataType=0x0008
+AccessType=ro
+DefaultValue=0.0
 PDOMapping=0

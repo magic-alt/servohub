@@ -1,16 +1,447 @@
 {
   "binding": {
+    "binding_revision": 1,
     "manufacturer_specific_range": "0x2200-0x2206",
     "objects": [
-      {"access": "ro", "index": "0x2200", "name": "Factory service info"},
-      {"access": "rw", "index": "0x2201", "name": "Trace configuration window"},
-      {"access": "wo", "index": "0x2202", "name": "Trace command"},
-      {"access": "ro", "index": "0x2203", "name": "Trace status"},
-      {"access": "ro", "index": "0x2204", "name": "Trace data window"},
-      {"access": "rw", "index": "0x2205", "name": "Diagnostic selector"},
-      {"access": "ro", "index": "0x2206", "name": "Diagnostic value"}
+      {
+        "index": "0x2200",
+        "name": "Factory service info",
+        "object_type": "record",
+        "subindices": [
+          {
+            "access": "ro",
+            "default": 6,
+            "name": "Number of entries",
+            "subindex": 0,
+            "type": "uint8"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Schema version",
+            "subindex": 1,
+            "type": "uint16"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Protocol revision",
+            "subindex": 2,
+            "type": "uint16"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Capabilities",
+            "subindex": 3,
+            "type": "uint32"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Trace capacity",
+            "subindex": 4,
+            "type": "uint16"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Trace max channels",
+            "subindex": 5,
+            "type": "uint8"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Base sample rate Hz",
+            "subindex": 6,
+            "type": "uint32"
+          }
+        ]
+      },
+      {
+        "index": "0x2201",
+        "name": "Trace configuration window",
+        "object_type": "record",
+        "subindices": [
+          {
+            "access": "ro",
+            "default": 15,
+            "name": "Number of entries",
+            "subindex": 0,
+            "type": "uint8"
+          },
+          {
+            "access": "rw",
+            "default": 0,
+            "name": "Channel count",
+            "subindex": 1,
+            "type": "uint8"
+          },
+          {
+            "access": "rw",
+            "default": 0,
+            "name": "Channel 1",
+            "subindex": 2,
+            "type": "uint16"
+          },
+          {
+            "access": "rw",
+            "default": 0,
+            "name": "Channel 2",
+            "subindex": 3,
+            "type": "uint16"
+          },
+          {
+            "access": "rw",
+            "default": 0,
+            "name": "Channel 3",
+            "subindex": 4,
+            "type": "uint16"
+          },
+          {
+            "access": "rw",
+            "default": 0,
+            "name": "Channel 4",
+            "subindex": 5,
+            "type": "uint16"
+          },
+          {
+            "access": "rw",
+            "default": 0,
+            "name": "Channel 5",
+            "subindex": 6,
+            "type": "uint16"
+          },
+          {
+            "access": "rw",
+            "default": 0,
+            "name": "Channel 6",
+            "subindex": 7,
+            "type": "uint16"
+          },
+          {
+            "access": "rw",
+            "default": 0,
+            "name": "Channel 7",
+            "subindex": 8,
+            "type": "uint16"
+          },
+          {
+            "access": "rw",
+            "default": 0,
+            "name": "Channel 8",
+            "subindex": 9,
+            "type": "uint16"
+          },
+          {
+            "access": "rw",
+            "default": 1,
+            "name": "Sample divider",
+            "subindex": 10,
+            "type": "uint16"
+          },
+          {
+            "access": "rw",
+            "default": 0,
+            "name": "Pretrigger samples",
+            "subindex": 11,
+            "type": "uint16"
+          },
+          {
+            "access": "rw",
+            "default": 0,
+            "name": "Posttrigger samples",
+            "subindex": 12,
+            "type": "uint16"
+          },
+          {
+            "access": "rw",
+            "default": 1,
+            "name": "Trigger mode",
+            "subindex": 13,
+            "type": "uint8"
+          },
+          {
+            "access": "rw",
+            "default": 0,
+            "name": "Trigger channel",
+            "subindex": 14,
+            "type": "uint8"
+          },
+          {
+            "access": "rw",
+            "default": 0.0,
+            "name": "Trigger threshold",
+            "subindex": 15,
+            "type": "float32"
+          }
+        ]
+      },
+      {
+        "index": "0x2202",
+        "name": "Trace command",
+        "object_type": "record",
+        "subindices": [
+          {
+            "access": "ro",
+            "default": 2,
+            "name": "Number of entries",
+            "subindex": 0,
+            "type": "uint8"
+          },
+          {
+            "access": "rw",
+            "default": 0,
+            "name": "Command",
+            "subindex": 1,
+            "type": "uint8"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Last result",
+            "subindex": 2,
+            "type": "int32"
+          }
+        ]
+      },
+      {
+        "index": "0x2203",
+        "name": "Trace status",
+        "object_type": "record",
+        "subindices": [
+          {
+            "access": "ro",
+            "default": 8,
+            "name": "Number of entries",
+            "subindex": 0,
+            "type": "uint8"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "State",
+            "subindex": 1,
+            "type": "uint8"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Capture id",
+            "subindex": 2,
+            "type": "uint32"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Base sample rate Hz",
+            "subindex": 3,
+            "type": "uint32"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Effective sample rate Hz",
+            "subindex": 4,
+            "type": "uint32"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Sample count",
+            "subindex": 5,
+            "type": "uint16"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Trigger sample offset",
+            "subindex": 6,
+            "type": "uint16"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Channel count",
+            "subindex": 7,
+            "type": "uint8"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Sample divider",
+            "subindex": 8,
+            "type": "uint16"
+          }
+        ]
+      },
+      {
+        "index": "0x2204",
+        "name": "Trace data window",
+        "object_type": "record",
+        "subindices": [
+          {
+            "access": "ro",
+            "default": 12,
+            "name": "Number of entries",
+            "subindex": 0,
+            "type": "uint8"
+          },
+          {
+            "access": "rw",
+            "default": 0,
+            "name": "Logical index",
+            "subindex": 1,
+            "type": "uint16"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Read result",
+            "subindex": 2,
+            "type": "int32"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Sequence",
+            "subindex": 3,
+            "type": "uint32"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Value count",
+            "subindex": 4,
+            "type": "uint8"
+          },
+          {
+            "access": "ro",
+            "default": 0.0,
+            "name": "Value 1",
+            "subindex": 5,
+            "type": "float32"
+          },
+          {
+            "access": "ro",
+            "default": 0.0,
+            "name": "Value 2",
+            "subindex": 6,
+            "type": "float32"
+          },
+          {
+            "access": "ro",
+            "default": 0.0,
+            "name": "Value 3",
+            "subindex": 7,
+            "type": "float32"
+          },
+          {
+            "access": "ro",
+            "default": 0.0,
+            "name": "Value 4",
+            "subindex": 8,
+            "type": "float32"
+          },
+          {
+            "access": "ro",
+            "default": 0.0,
+            "name": "Value 5",
+            "subindex": 9,
+            "type": "float32"
+          },
+          {
+            "access": "ro",
+            "default": 0.0,
+            "name": "Value 6",
+            "subindex": 10,
+            "type": "float32"
+          },
+          {
+            "access": "ro",
+            "default": 0.0,
+            "name": "Value 7",
+            "subindex": 11,
+            "type": "float32"
+          },
+          {
+            "access": "ro",
+            "default": 0.0,
+            "name": "Value 8",
+            "subindex": 12,
+            "type": "float32"
+          }
+        ]
+      },
+      {
+        "access": "rw",
+        "default": 0,
+        "index": "0x2205",
+        "name": "Diagnostic selector",
+        "object_type": "variable",
+        "type": "uint16"
+      },
+      {
+        "index": "0x2206",
+        "name": "Diagnostic value",
+        "object_type": "record",
+        "subindices": [
+          {
+            "access": "ro",
+            "default": 2,
+            "name": "Number of entries",
+            "subindex": 0,
+            "type": "uint8"
+          },
+          {
+            "access": "ro",
+            "default": 0,
+            "name": "Read result",
+            "subindex": 1,
+            "type": "int32"
+          },
+          {
+            "access": "ro",
+            "default": 0.0,
+            "name": "Value",
+            "subindex": 2,
+            "type": "float32"
+          }
+        ]
+      }
     ],
-    "status": "reserved_generated_binding_not_wired_to_SlaveOD_yet"
+    "sdo_transfer": "expedited_only",
+    "status": "wired",
+    "transport": "canopen_sdo"
+  },
+  "protocol_enums": {
+    "command": {
+      "apply_config": 1,
+      "arm": 2,
+      "manual_trigger": 3,
+      "refresh_status": 4
+    },
+    "status_code": {
+      "busy": -2,
+      "invalid_argument": -1,
+      "not_ready": -3,
+      "ok": 0,
+      "out_of_range": -4
+    },
+    "trace_state": {
+      "armed": 1,
+      "complete": 3,
+      "error": 4,
+      "idle": 0,
+      "triggered": 2
+    },
+    "trigger_mode": {
+      "falling": 3,
+      "immediate": 0,
+      "manual": 1,
+      "rising": 2
+    }
   },
   "protocol_revision": 1,
   "schema": "servohub.factory_service",
